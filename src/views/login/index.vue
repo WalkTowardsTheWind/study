@@ -53,24 +53,6 @@
         </el-form-item>
       </el-tooltip>
 
-      <!-- 验证码 -->
-      <el-form-item prop="verifyCode">
-        <span class="p-2 text-white">
-          <svg-icon icon-class="verify_code" />
-        </span>
-        <el-input
-          v-model="loginData.verifyCode"
-          auto-complete="off"
-          :placeholder="$t('login.verifyCode')"
-          class="w-[60%]"
-          @keyup.enter="handleLogin"
-        />
-
-        <div class="captcha">
-          <img :src="captchaBase64" @click="getCaptcha" />
-        </div>
-      </el-form-item>
-
       <el-button
         size="default"
         :loading="loading"
@@ -79,12 +61,6 @@
         @click.prevent="handleLogin"
         >{{ $t("login.login") }}
       </el-button>
-
-      <!-- 账号密码提示 -->
-      <div class="mt-4 text-white text-sm">
-        <span>{{ $t("login.username") }}: admin</span>
-        <span class="ml-4"> {{ $t("login.password") }}: 123456</span>
-      </div>
     </el-form>
   </div>
 </template>
@@ -99,7 +75,6 @@ import { useUserStore } from "@/store/modules/user";
 
 // API依赖
 import { LocationQuery, LocationQueryValue, useRoute } from "vue-router";
-import { getCaptchaApi } from "@/api/auth";
 import { LoginData } from "@/api/auth/types";
 
 const userStore = useUserStore();
@@ -117,10 +92,6 @@ const isCapslock = ref(false);
  * 密码是否可见
  */
 const passwordVisible = ref(false);
-/**
- * 验证码图片Base64字符串
- */
-const captchaBase64 = ref();
 
 /**
  * 登录表单引用
@@ -135,7 +106,6 @@ const loginData = ref<LoginData>({
 const loginRules = {
   username: [{ required: true, trigger: "blur" }],
   password: [{ required: true, trigger: "blur", validator: passwordValidator }],
-  verifyCode: [{ required: true, trigger: "blur" }],
 };
 
 /**
@@ -155,17 +125,6 @@ function passwordValidator(rule: any, value: any, callback: any) {
 function checkCapslock(e: any) {
   const { key } = e;
   isCapslock.value = key && key.length === 1 && key >= "A" && key <= "Z";
-}
-
-/**
- * 获取验证码
- */
-function getCaptcha() {
-  getCaptchaApi().then(({ data }) => {
-    const { verifyCodeBase64, verifyCodeKey } = data;
-    loginData.value.verifyCodeKey = verifyCodeKey;
-    captchaBase64.value = verifyCodeBase64;
-  });
 }
 
 /**
@@ -196,7 +155,6 @@ function handleLogin() {
         })
         .catch(() => {
           // 验证失败，重新生成验证码
-          getCaptcha();
         })
         .finally(() => {
           loading.value = false;
@@ -205,9 +163,7 @@ function handleLogin() {
   });
 }
 
-onMounted(() => {
-  getCaptcha();
-});
+onMounted(() => {});
 </script>
 
 <style lang="scss" scoped>

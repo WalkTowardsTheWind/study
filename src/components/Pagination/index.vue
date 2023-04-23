@@ -79,6 +79,8 @@ function handleCurrentChange(val: number) {
 
 <style lang="scss" scoped>
 .pagination {
+  display: flex;
+  justify-content: flex-end;
   padding: 12px;
 
   &.hidden {
