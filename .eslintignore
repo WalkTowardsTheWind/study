@@ -6,7 +6,7 @@ public
 .idea
 *.sh
 *.md
-
+index.html
 src/assets
 
 .eslintrc.cjs
