@@ -21,6 +21,37 @@ export interface LoginData {
    */
   verifyCode?: string;
 }
+/**
+ * 忘记密码请求参数
+ */
+export interface RegisterData {
+  /**
+   * 用户名
+   */
+  phone?: number | null;
+  /**
+   *  验证码
+   */
+  code?: string;
+  /**
+   * 密码
+   */
+  password?: string;
+  /**
+   * 密码2
+   */
+  password2?: string;
+
+  /**
+   * 验证码缓存key
+   */
+  verifyCodeKey?: string;
+
+  /**
+   * 验证码
+   */
+  verifyCode?: string;
+}
 
 /**
  * 登录响应
@@ -57,4 +88,3 @@ export interface CaptchaResult {
    */
   verifyCodeBase64: string;
 }
-
