@@ -13,6 +13,7 @@ declare module "@vue/runtime-core" {
     ElButton: typeof import("element-plus/es")["ElButton"];
     ElCard: typeof import("element-plus/es")["ElCard"];
     ElCol: typeof import("element-plus/es")["ElCol"];
+    ElDatePicker: typeof import("element-plus/es")["ElDatePicker"];
     ElDialog: typeof import("element-plus/es")["ElDialog"];
     ElDivider: typeof import("element-plus/es")["ElDivider"];
     ElDropdown: typeof import("element-plus/es")["ElDropdown"];
@@ -38,6 +39,8 @@ declare module "@vue/runtime-core" {
     ElSwitch: typeof import("element-plus/es")["ElSwitch"];
     ElTable: typeof import("element-plus/es")["ElTable"];
     ElTableColumn: typeof import("element-plus/es")["ElTableColumn"];
+    ElTabPane: typeof import("element-plus/es")["ElTabPane"];
+    ElTabs: typeof import("element-plus/es")["ElTabs"];
     ElTag: typeof import("element-plus/es")["ElTag"];
     ElTooltip: typeof import("element-plus/es")["ElTooltip"];
     ElTree: typeof import("element-plus/es")["ElTree"];
@@ -49,6 +52,7 @@ declare module "@vue/runtime-core" {
     IEpCaretBottom: typeof import("~icons/ep/caret-bottom")["default"];
     IEpCaretTop: typeof import("~icons/ep/caret-top")["default"];
     IEpClose: typeof import("~icons/ep/close")["default"];
+    IEpCollection: typeof import("~icons/ep/collection")["default"];
     IEpDelete: typeof import("~icons/ep/delete")["default"];
     IEpDownload: typeof import("~icons/ep/download")["default"];
     IEpEdit: typeof import("~icons/ep/edit")["default"];
@@ -60,7 +64,6 @@ declare module "@vue/runtime-core" {
     IEpSetting: typeof import("~icons/ep/setting")["default"];
     IEpTop: typeof import("~icons/ep/top")["default"];
     IEpUploadFilled: typeof import("~icons/ep/upload-filled")["default"];
-    IntegrationTable: typeof import("./../components/IntegrationTable/index.vue")["default"];
     LangSelect: typeof import("./../components/LangSelect/index.vue")["default"];
     MultiUpload: typeof import("./../components/Upload/MultiUpload.vue")["default"];
     Pagination: typeof import("./../components/Pagination/index.vue")["default"];
@@ -72,6 +75,10 @@ declare module "@vue/runtime-core" {
     SizeSelect: typeof import("./../components/SizeSelect/index.vue")["default"];
     SvgIcon: typeof import("./../components/SvgIcon/index.vue")["default"];
     WangEditor: typeof import("./../components/WangEditor/index.vue")["default"];
+    ZxnButtonGroup: typeof import("./../components/zxnButtonGroup/index.vue")["default"];
+    ZxnSearch: typeof import("./../components/zxnSearch/index.vue")["default"];
+    ZxnTable: typeof import("./../components/zxnTable/index.vue")["default"];
+    ZxnTabs: typeof import("./../components/zxnTabs/index.vue")["default"];
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import("element-plus/es")["ElLoadingDirective"];
