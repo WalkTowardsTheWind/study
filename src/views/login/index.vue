@@ -107,8 +107,8 @@
         />
 
         <div class="captcha">
-          <!-- <img :src="captchaBase64" @click="getCaptcha" />
-          <el-button
+          <!-- <img :src="captchaBase64" @click="getCaptcha" /> -->
+          <!-- <el-button
         size="default"
         :loading="loading"
         type="primary"
