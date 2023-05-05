@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <zxn-plan>
     <integration-table :table-data="tableData" :column-list="columnList">
       <template #operation="{ row }">
         <el-button type="text">{{ row.value }}</el-button>
       </template>
     </integration-table>
-  </div>
+  </zxn-plan>
 </template>
 <script setup lang="ts">
 const tableData = [{ value: "2222", name: "wwww" }];
