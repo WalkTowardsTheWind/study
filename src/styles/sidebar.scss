@@ -16,6 +16,8 @@
     height: 100%;
     overflow: hidden;
     background-color: $menuBg;
+    border: 1px solid #f5f5f5;
+    border-radius: 0 24px 0 0;
     transition: width 0.28s;
 
     // reset element-ui css
@@ -38,7 +40,7 @@
 
     &.has-logo {
       .el-scrollbar {
-        height: calc(100% - 50px);
+        height: calc(100% - 56px);
       }
     }
 
@@ -61,8 +63,30 @@
       border: none;
     }
 
+    .el-menu-item {
+      height: 48px;
+      padding: 0 8px !important;
+      margin-top: 10px;
+      font-family: SourceHanSansSC-Medium, SourceHanSansSC, serif;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 4px;
+
+      &.is-active {
+        background-color: $menuHover !important;
+      }
+    }
+
     // menu hover
     .el-sub-menu__title {
+      height: 48px;
+      padding: 0 8px !important;
+      margin-top: 10px;
+      font-family: SourceHanSansSC-Medium, SourceHanSansSC, serif;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 4px;
+
       &:hover {
         background-color: $menuHover !important;
       }
@@ -77,6 +101,10 @@
       min-width: $sideBarWidth !important;
       background-color: $subMenuBg !important;
 
+      &.is-active {
+        background-color: $menuHover !important;
+      }
+
       &:hover {
         background-color: $subMenuHover !important;
       }
@@ -85,7 +113,7 @@
 
   .hideSidebar {
     .sidebar-container {
-      width: 54px !important;
+      width: 56px !important;
 
       .svg-icon {
         margin-right: 0;
@@ -93,7 +121,7 @@
     }
 
     .main-container {
-      margin-left: 54px;
+      margin-left: 56px;
     }
 
     .el-sub-menu {
@@ -103,7 +131,7 @@
         padding: 0 !important;
 
         .svg-icon {
-          margin-left: 20px;
+          margin-left: 8px;
         }
 
         .sub-el-icon {
