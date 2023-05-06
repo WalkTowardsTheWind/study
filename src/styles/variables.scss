@@ -2,22 +2,22 @@
 
 //background: #356FF3;
 :root {
+  --baseColor: #356ff3;
   --menuBg: #fff;
   --menuText: #474747;
-  --menuActiveText: #356ff3;
   --menuHover: rgb(53 111 243 / 16%);
   --subMenuBg: #fff;
-  --subMenuActiveText: #356ff3;
   --subMenuHover: rgb(53 111 243 / 16%);
 }
 
+$baseColor: var(--baseColor);
 $menuBg: var(--menuBg);
 $menuText: var(--menuText);
-$menuActiveText: var(--menuActiveText);
+$menuActiveText: var(--baseColor);
 $menuHover: var(--menuHover);
 
 $subMenuBg: var(--subMenuBg);
-$subMenuActiveText: var(--subMenuActiveText);
+$subMenuActiveText: var(--baseColor);
 $subMenuHover: var(--subMenuHover);
 
 $sideBarWidth: 160px;

@@ -121,7 +121,7 @@
 <script setup lang="ts">
 import zxnTagSelect from "@/privateComponents/zxnTagSelect/index.vue";
 let isEdit = ref(false);
-let dialogVisible = ref(true);
+let dialogVisible = ref(false);
 const handleClose = () => {};
 const formItem: object = reactive({
   name: "",

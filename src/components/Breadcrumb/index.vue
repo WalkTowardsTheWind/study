@@ -93,7 +93,7 @@ onBeforeMount(() => {
 
 <style lang="scss" scoped>
 .app-breadcrumb {
-  font-family: SourceHanSansSC-Medium, SourceHanSansSC, serif;
+  font-family: SourceHanSansSC-Medium, SourceHanSansSC, sans-serif;
 }
 
 // 覆盖 element-plus 的样式

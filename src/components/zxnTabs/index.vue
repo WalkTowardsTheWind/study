@@ -26,7 +26,40 @@ const handleClick = (value: string): void => {
   emit("tab-click", value);
 };
 </script>
-<!--<style scoped lang="scss">-->
-<!--.zxn-tabs {-->
-<!--}-->
-<!--</style>-->
+<style scoped lang="scss">
+.zxn-tabs {
+  :deep(.el-tabs__header) {
+    margin-bottom: 0;
+
+    .el-tabs__nav-wrap {
+      &::after {
+        height: 1px;
+        background-color: #f5f5f5;
+      }
+    }
+
+    .el-tabs__active-bar {
+      height: 4px;
+      background-color: $baseColor;
+      border-radius: 2px;
+    }
+
+    .el-tabs__nav {
+      padding-left: 53px;
+    }
+
+    .el-tabs__item {
+      height: 63px;
+      font-family: SourceHanSansSC-Medium, SourceHanSansSC, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 63px;
+      color: #474747;
+
+      &.is-active {
+        color: $baseColor;
+      }
+    }
+  }
+}
+</style>

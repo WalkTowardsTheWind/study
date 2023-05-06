@@ -1,34 +1,53 @@
 <template>
-  <div class="app-container">
-    <div class="app-container-block">
-      <zxn-tabs :activeName="activeName" :tabsList="tabsList"></zxn-tabs>
+  <zxn-plan>
+    <zxn-tabs :activeName="activeName" :tabsList="tabsList"></zxn-tabs>
+    <div class="p-[24px] p-b-[0]">
       <zxn-search :formItem="formItem">
-        <el-form-item label="任务状态:" style="width: 100%">
-          <zxn-button-group :options="statusOption" v-model="formItem.status" />
-        </el-form-item>
-        <el-form-item label="关键字:">
-          <el-input v-model="formItem.user" placeholder="Approved by" />
-        </el-form-item>
-        <el-form-item label="行业类型:">
-          <el-select v-model="formItem.status" class="m-2" placeholder="Select">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item prop="date" label="申请日期:">
-          <el-date-picker
-            v-model="formItem.date"
-            type="daterange"
-            unlink-panels
-            range-separator="~"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          />
-        </el-form-item>
+        <el-row>
+          <el-col :span="8">
+            <el-input v-model="formItem.user" placeholder="请输入关键字">
+              <template #prefix>
+                <el-icon><i-ep-Search /></el-icon>
+              </template>
+            </el-input>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="任务状态">
+              <el-select v-model="formItem.status" placeholder="Select">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="行业类型">
+              <el-select v-model="formItem.status" placeholder="Select">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="date" label="申请日期">
+              <el-date-picker
+                v-model="formItem.date"
+                type="daterange"
+                unlink-panels
+                range-separator="~"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </zxn-search>
       <zxn-table :table-data="tableData" :column-list="columnList" hasSelect>
         <template #tableTop>
@@ -52,7 +71,7 @@
       </zxn-table>
     </div>
     <viewDialog />
-  </div>
+  </zxn-plan>
 </template>
 <script setup lang="ts">
 import viewDialog from "./components/viewDialog.vue";
@@ -64,16 +83,16 @@ const tabsList = [
   },
   {
     name: "manual",
-    label: "人任务",
+    label: "人工任务",
   },
 ];
-const statusOption = [
-  { label: "申请中", value: 1 },
-  { label: "报名中", value: 2 },
-  { label: "进行中", value: 3 },
-  { label: "已验收", value: 4 },
-  { label: "异常", value: 5 },
-];
+// const statusOption = [
+//   { label: "申请中", value: 1 },
+//   { label: "报名中", value: 2 },
+//   { label: "进行中", value: 3 },
+//   { label: "已验收", value: 4 },
+//   { label: "异常", value: 5 },
+// ];
 const options = [];
 const formItem = reactive({
   user: "",
@@ -93,7 +112,7 @@ const columnList = [
   { label: "需求人数" },
   { label: "行业" },
   { label: "金额" },
-  { label: "申请时间", sortable: "custom" },
+  { label: "申请时间", sortable: "custom", width: 120 },
   { label: "任务描述" },
   { label: "状态" },
   { label: "操作", slot: "operation", fixed: "right", width: 250 },
