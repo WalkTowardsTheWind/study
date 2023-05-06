@@ -21,6 +21,11 @@ export const constantRoutes: RouteRecordRaw[] = [
     component: () => import("@/views/login/index.vue"),
     meta: { hidden: true },
   },
+  {
+    path: "/demo",
+    component: () => import("@/views/login/demo.vue"),
+    meta: { hidden: true },
+  },
 
   {
     path: "/",
@@ -54,6 +59,56 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/test/index.vue"),
         name: "test2",
         meta: { title: "测试", icon: "homepage", affix: true },
+      },
+    ],
+  },
+  // 合同中心
+  {
+    path: "/contractCenter",
+    component: Layout,
+    meta: { title: "合同中心", icon: "homepage" },
+    children: [
+      {
+        path: "enterprise-contract",
+        component: () =>
+          import("@/views/contractCenter/enterpriseContract/index.vue"),
+        name: "enterprise-contract",
+        meta: { title: "企业合同", icon: "homepage" },
+      },
+      {
+        path: "channel-contract",
+        component: () =>
+          import("@/views/contractCenter/channelContract/index.vue"),
+        name: "channel-contract",
+        meta: { title: "渠道合同", icon: "homepage" },
+      },
+      {
+        path: "tax-contract",
+        component: () => import("@/views/contractCenter/taxContract/index.vue"),
+        name: "tax-contract",
+        meta: { title: "税地合同", icon: "homepage" },
+      },
+    ],
+  },
+  // 结算中心
+  {
+    path: "/settlementCenter",
+    component: Layout,
+    meta: { title: "结算中心", icon: "homepage" },
+    children: [
+      {
+        path: "enterprise-settlement",
+        component: () =>
+          import("@/views/settlementCenter/enterpriseSettlement/index.vue"),
+        name: "enterprise-settlement",
+        meta: { title: "企业结算", icon: "homepage" },
+      },
+      {
+        path: "channel-settlement",
+        component: () =>
+          import("@/views/settlementCenter/channelSettlement/index.vue"),
+        name: "channel-settlement",
+        meta: { title: "渠道结算", icon: "homepage" },
       },
     ],
   },

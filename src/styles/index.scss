@@ -13,4 +13,22 @@
     border-radius: 4px;
     box-shadow: var(--el-box-shadow-light);
   }
+
+  .resetBtn {
+    font-weight: 500;
+    border: none;
+  }
+
+  .moreBtn {
+    font-weight: 500;
+    color: #356ff3;
+    background: #fff;
+    border: 1px solid #356ff3;
+    border-radius: 4px;
+  }
+
+  .moreBtn:hover {
+    color: #fff;
+    background: #356ff3;
+  }
 }
