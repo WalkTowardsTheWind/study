@@ -1,15 +1,17 @@
 <template>
-  <div :class="'pagination ' + { hidden: hidden }">
+  <div :class="'zxn-pagination ' + { hidden: hidden }">
+    <div class="zxn-pagination-left">共132条记录</div>
     <el-pagination
       :background="background"
       v-model:current-page="currentPage"
       v-model:page-size="pageSize"
       :layout="layout"
-      :page-sizes="pageSizes"
+      :page-sizes="pageSizes as []"
       :total="total"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-    />
+    >
+    </el-pagination>
   </div>
 </template>
 
@@ -39,7 +41,7 @@ const props = defineProps({
   },
   layout: {
     type: String,
-    default: "total, sizes, prev, pager, next, jumper",
+    default: "slot, prev, pager, next, sizes, jumper",
   },
   background: {
     type: Boolean,
@@ -78,10 +80,66 @@ function handleCurrentChange(val: number) {
 </script>
 
 <style lang="scss" scoped>
-.pagination {
+.zxn-pagination {
   display: flex;
-  justify-content: flex-end;
-  padding: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+
+  &-left {
+    flex: none;
+    font-family: SourceHanSansSC-Medium, SourceHanSansSC, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  :deep(.el-pagination) {
+    .btn-prev,
+    .btn-next {
+      width: 36px;
+      height: 36px;
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 4px;
+
+      .el-icon {
+        font-size: 14px;
+        color: #333;
+      }
+    }
+
+    .number {
+      width: 36px;
+      height: 36px;
+      font-family: SourceHanSansSC-Medium, SourceHanSansSC, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 4px;
+      opacity: 1;
+
+      &.is-active {
+        color: #366ff3;
+        background: #fff;
+        border-color: #366ff3;
+      }
+    }
+
+    > .el-input {
+      width: 100px;
+    }
+
+    .el-pagination__jump {
+      color: #333;
+
+      .el-input {
+        width: 56px;
+      }
+    }
+  }
 
   &.hidden {
     display: none;

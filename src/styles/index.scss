@@ -1,6 +1,7 @@
 @import "./sidebar";
 @import "./reset";
 @import "./dark";
+@import "./element";
 
 .app-container {
   padding: 20px;
@@ -14,21 +15,10 @@
     box-shadow: var(--el-box-shadow-light);
   }
 
-  .resetBtn {
-    font-weight: 500;
-    border: none;
-  }
-
-  .moreBtn {
-    font-weight: 500;
-    color: #356ff3;
-    background: #fff;
-    border: 1px solid #356ff3;
+  &-block {
+    background-color: var(--el-bg-color-overlay);
+    border: 1px solid var(--el-border-color-light);
     border-radius: 4px;
-  }
-
-  .moreBtn:hover {
-    color: #fff;
-    background: #356ff3;
+    box-shadow: var(--el-box-shadow-light);
   }
 }

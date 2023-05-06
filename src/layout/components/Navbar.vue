@@ -52,42 +52,36 @@ function logout() {
     <!-- 右侧导航设置 -->
     <div class="flex">
       <!-- 导航栏设置(窄屏隐藏)-->
-
       <div v-if="device !== 'mobile'" class="flex items-center">
-        <!--全屏 -->
-        <screenfull class="navbar-setting-item" />
-        <!-- 布局大小 -->
-        <el-tooltip content="布局大小" effect="dark" placement="bottom">
-          <size-select class="navbar-setting-item" />
-        </el-tooltip>
-        <!--语言选择-->
-        <lang-select class="navbar-setting-item" />
+        <el-icon size="16" color="#333333" class="m-r-[20px]"
+          ><i-ep-search
+        /></el-icon>
+        <el-icon size="16" color="#333333" class="m-r-[20px]"
+          ><i-ep-ChatDotRound
+        /></el-icon>
+        <tax-source-select />
       </div>
 
       <!-- 用户头像 -->
       <el-dropdown trigger="click">
-        <div class="flex justify-center items-center mx-2">
+        <div class="flex justify-center items-center mx-2 cursor-pointer">
           <img
             :src="userStore.avatar + '?imageView2/1/w/80/h/80'"
-            class="w-[40px] h-[40px] rounded-lg"
+            class="w-[24px] h-[24px] b-rd-50%"
           />
-          <i-ep-caret-bottom class="w-3 h-3" />
+          <span class="fs14 c-[#333] m-l-[8px] m-r-[8px]">{{
+            userStore.nickname
+          }}</span>
+          <el-icon class="">
+            <i-ep-arrow-down />
+          </el-icon>
         </div>
         <template #dropdown>
           <el-dropdown-menu>
             <router-link to="/">
               <el-dropdown-item>{{ $t("navbar.dashboard") }}</el-dropdown-item>
             </router-link>
-            <a target="_blank" href="https://github.com/hxrui">
-              <el-dropdown-item>Github</el-dropdown-item>
-            </a>
-            <a target="_blank" href="https://gitee.com/haoxr">
-              <el-dropdown-item>{{ $t("navbar.gitee") }}</el-dropdown-item>
-            </a>
-            <a target="_blank" href="https://www.cnblogs.com/haoxianrui/">
-              <el-dropdown-item>{{ $t("navbar.document") }}</el-dropdown-item>
-            </a>
-            <el-dropdown-item divided @click="logout">
+            <el-dropdown-item @click="logout">
               {{ $t("navbar.logout") }}
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -102,9 +96,9 @@ function logout() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 50px;
+  height: 56px;
   background-color: #fff;
-  box-shadow: 0 0 1px #0003;
+  //box-shadow: 0 0 1px #0003;
 
   .navbar-setting-item {
     display: inline-block;

@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
+import { useRoute } from "vue-router";
 
-import SidebarItem from './SidebarItem.vue';
-import Logo from './Logo.vue';
+import SidebarItem from "./SidebarItem.vue";
+import Logo from "./Logo.vue";
 
-import { useSettingsStore } from '@/store/modules/settings';
-import { usePermissionStore } from '@/store/modules/permission';
-import { useAppStore } from '@/store/modules/app';
-import { storeToRefs } from 'pinia';
-import variables from '@/styles/variables.module.scss';
+import { useSettingsStore } from "@/store/modules/settings";
+import { usePermissionStore } from "@/store/modules/permission";
+import { useAppStore } from "@/store/modules/app";
+import { storeToRefs } from "pinia";
+import variables from "@/styles/variables.module.scss";
 
 const settingsStore = useSettingsStore();
 const permissionStore = usePermissionStore();
@@ -21,7 +21,7 @@ const route = useRoute();
 <template>
   <div :class="{ 'has-logo': sidebarLogo }">
     <logo v-if="sidebarLogo" :collapse="!appStore.sidebar.opened" />
-    <el-scrollbar>
+    <el-scrollbar class="p-l-[12px] p-r-[12px]">
       <el-menu
         :default-active="route.path"
         :collapse="!appStore.sidebar.opened"

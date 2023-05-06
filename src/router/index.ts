@@ -112,6 +112,19 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
+  {
+    path: "/taskManager",
+    component: Layout,
+    meta: { title: "任务管理", icon: "homepage" },
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/taskManager/index.vue"),
+        name: "taskManagerIndex",
+        meta: { title: "任务中心", icon: "homepage", affix: true },
+      },
+    ],
+  },
 ];
 
 /**

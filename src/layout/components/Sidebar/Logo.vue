@@ -1,43 +1,43 @@
 <script lang="ts" setup>
-import { useSettingsStore } from '@/store/modules/settings';
+import { useSettingsStore } from "@/store/modules/settings";
 
 const settingsStore = useSettingsStore();
 
 defineProps({
   collapse: {
     type: Boolean,
-    required: true
-  }
+    required: true,
+  },
 });
 
-const logo = ref(new URL(`../../../assets/logo.png`, import.meta.url).href);
+// const logo = ref(new URL(`../../../assets/logo.png`, import.meta.url).href);
 </script>
 
 <template>
-  <div class="w-full h-[50px] bg-gray-800 dark:bg-[var(--el-bg-color-overlay)]">
+  <div class="w-full h-[56px] bg-white dark:bg-[var(--el-bg-color-overlay)]">
     <transition name="sidebarLogoFade">
       <router-link
         v-if="collapse"
         key="collapse"
-        class="h-full w-full flex items-center justify-center"
+        class="h-full w-full flex items-center flex-start p-l-16px"
         to="/"
       >
-        <img v-if="settingsStore.sidebarLogo" :src="logo" class="w-5 h-5" />
-        <span v-else class="ml-3 text-white text-sm font-bold"
-          >vue3-element-admin</span
-        >
+        <span
+          v-if="settingsStore.sidebarLogo"
+          class="w-[24px] h-[24px] bg-#3661E9 b-rd-50%"
+        />
       </router-link>
 
       <router-link
         v-else
         key="expand"
-        class="h-full w-full flex items-center justify-center"
+        class="h-full w-full flex items-center flex-start p-l-16px"
         to="/"
       >
-        <img v-if="settingsStore.sidebarLogo" :src="logo" class="w-5 h-5" />
-        <span class="ml-3 text-white text-sm font-bold"
-          >vue3-element-admin</span
-        >
+        <span
+          v-if="settingsStore.sidebarLogo"
+          class="w-[24px] h-[24px] bg-#3661E9 b-rd-50%"
+        />
       </router-link>
     </transition>
   </div>
