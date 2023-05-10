@@ -14,7 +14,7 @@
     :on-preview="previewImg"
     :limit="props.limit"
   >
-    <i-ep-plus />
+    <i-ep-plus style="width: 3em; height: 3em" />
   </el-upload>
 
   <el-dialog v-model="dialogVisible">
@@ -28,11 +28,11 @@ import {
   UploadRequestOptions,
   UploadUserFile,
   UploadFile,
-  UploadProps
-} from 'element-plus';
-import { uploadFileApi, deleteFileApi } from '@/api/file';
+  UploadProps,
+} from "element-plus";
+import { uploadFileApi, deleteFileApi } from "@/api/file";
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(["update:modelValue"]);
 
 const props = defineProps({
   /**
@@ -40,36 +40,36 @@ const props = defineProps({
    */
   modelValue: {
     type: Array<string>,
-    default: [] as Array<string>
+    default: [] as Array<string>,
   },
   /**
    * 文件上传数量限制
    */
   limit: {
     type: Number,
-    default: 5
-  }
+    default: 5,
+  },
 });
 
-const previewImgUrl = ref('');
+const previewImgUrl = ref("");
 const dialogVisible = ref(false);
 
 const fileList = ref([] as UploadUserFile[]);
 watch(
   () => props.modelValue,
   (newVal: string[]) => {
-    const filePaths = fileList.value.map(file => file.url);
+    const filePaths = fileList.value.map((file) => file.url);
     // 监听modelValue文件集合值未变化时，跳过赋值
     if (
       filePaths.length > 0 &&
       filePaths.length === newVal.length &&
-      filePaths.every(x => newVal.some(y => y === x)) &&
-      newVal.every(y => filePaths.some(x => x === y))
+      filePaths.every((x) => newVal.some((y) => y === x)) &&
+      newVal.every((y) => filePaths.some((x) => x === y))
     ) {
       return;
     }
 
-    fileList.value = newVal.map(filePath => {
+    fileList.value = newVal.map((filePath) => {
       return { url: filePath } as UploadUserFile;
     });
   },
@@ -87,17 +87,17 @@ async function handleUpload(options: UploadRequestOptions): Promise<any> {
 
   // 上传成功需手动替换文件路径为远程URL，否则图片地址为预览地址 blob:http://
   const fileIndex = fileList.value.findIndex(
-    file => file.uid == (options.file as any).uid
+    (file) => file.uid == (options.file as any).uid
   );
 
   fileList.value.splice(fileIndex, 1, {
     name: fileInfo.name,
-    url: fileInfo.url
+    url: fileInfo.url,
   } as UploadUserFile);
 
   emit(
-    'update:modelValue',
-    fileList.value.map(file => file.url)
+    "update:modelValue",
+    fileList.value.map((file) => file.url)
   );
 }
 
@@ -111,8 +111,8 @@ function handleRemove(removeFile: UploadFile) {
     deleteFileApi(filePath).then(() => {
       // 删除成功回调
       emit(
-        'update:modelValue',
-        fileList.value.map(file => file.url)
+        "update:modelValue",
+        fileList.value.map((file) => file.url)
       );
     });
   }
@@ -123,7 +123,7 @@ function handleRemove(removeFile: UploadFile) {
  */
 function handleBeforeUpload(file: UploadRawFile) {
   if (file.size > 2 * 1048 * 1048) {
-    ElMessage.warning('上传图片不能大于2M');
+    ElMessage.warning("上传图片不能大于2M");
     return false;
   }
   return true;
@@ -132,8 +132,23 @@ function handleBeforeUpload(file: UploadRawFile) {
 /**
  * 预览图片
  */
-const previewImg: UploadProps['onPreview'] = uploadFile => {
+const previewImg: UploadProps["onPreview"] = (uploadFile) => {
   previewImgUrl.value = uploadFile.url!;
   dialogVisible.value = true;
 };
 </script>
+<style lang="scss">
+//修改图片上传样式
+.el-upload-list--picture-card .el-upload-list__item {
+  width: 88px;
+  height: 88px;
+}
+
+.el-upload--picture-card {
+  --el-upload-picture-card-size: 88px;
+
+  background: #e5e5e5;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+}
+</style>

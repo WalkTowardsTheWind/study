@@ -25,6 +25,7 @@
 </template>
 <script lang="ts" setup>
 import { nextTick, PropType } from "vue";
+import type { TabsPaneContext } from "element-plus";
 import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 const route = useRoute();
@@ -40,9 +41,9 @@ const props = defineProps({
 });
 const emit = defineEmits(["update:activeName", "tab-click"]);
 const activeValue = computed(() => props.activeName);
-const handleClick = (value: string): void => {
-  emit("update:activeName", value);
-  emit("tab-click", value);
+const handleClick = (tab: TabsPaneContext, event: Event) => {
+  console.log(tab, event);
+  emit("update:activeName", tab.props.name);
 };
 const handleClickRight = () => {
   if (props.hasBack) {

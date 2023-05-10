@@ -124,7 +124,7 @@ import zxnTagSelect from "@/privateComponents/zxnTagSelect/index.vue";
 let isEdit = ref(false);
 let dialogVisible = ref(false);
 const handleClose = () => {};
-const formItem: object = reactive({
+const formItem = reactive({
   name: "",
   tags: [{ id: 2, label: "不限学历" }],
 });
