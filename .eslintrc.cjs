@@ -24,6 +24,7 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off", // 关闭any类型的警告
     "vue/no-v-model-argument": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
   },
   // https://eslint.org/docs/latest/use/configure/language-options#specifying-globals
   globals: {

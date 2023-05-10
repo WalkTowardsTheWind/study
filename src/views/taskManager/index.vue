@@ -1,8 +1,8 @@
 <template>
   <zxn-plan>
-    <zxn-tabs :activeName="activeName" :tabsList="tabsList"></zxn-tabs>
+    <zxn-tabs v-model:activeName="activeName" :tabsList="tabsList"></zxn-tabs>
     <div class="p-[24px] p-b-[0]">
-      <zxn-search :formItem="formItem">
+      <zxn-search :formItem="formItem" @on-search="handleSearch">
         <el-row>
           <el-col :span="8">
             <el-input v-model="formItem.user" placeholder="请输入关键字">
@@ -25,9 +25,9 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="行业类型">
-              <el-select v-model="formItem.status" placeholder="Select">
+              <el-select v-model="formItem.status" placeholder="请选择">
                 <el-option
-                  v-for="item in options"
+                  v-for="item in proxy.$const['statusEnum.IndustryType']"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
@@ -37,14 +37,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item prop="date" label="申请日期">
-              <el-date-picker
-                v-model="formItem.date"
-                type="daterange"
-                unlink-panels
-                range-separator="~"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-              />
+              <zxn-date-range v-model="formItem.date" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -76,6 +69,7 @@
 <script setup lang="ts">
 import viewDialog from "./components/viewDialog.vue";
 const activeName = "auto";
+const { proxy } = getCurrentInstance() as any;
 const tabsList = [
   {
     name: "auto",
@@ -86,25 +80,13 @@ const tabsList = [
     label: "人工任务",
   },
 ];
-// const statusOption = [
-//   { label: "申请中", value: 1 },
-//   { label: "报名中", value: 2 },
-//   { label: "进行中", value: 3 },
-//   { label: "已验收", value: 4 },
-//   { label: "异常", value: 5 },
-// ];
 const options = [];
 const formItem = reactive({
   user: "",
   status: "",
-  date: "",
+  date: ["2023/05/06"],
 });
-const tableData = reactive([
-  { value: "2" },
-  { value: "3" },
-  { value: "4" },
-  { value: "5" },
-]);
+const tableData = reactive([{ value: "2", status: "1" }]);
 const columnList = [
   { label: "任务编号", prop: "value" },
   { label: "任务名称", prop: "name" },
@@ -114,7 +96,16 @@ const columnList = [
   { label: "金额" },
   { label: "申请时间", sortable: "custom", width: 120 },
   { label: "任务描述" },
-  { label: "状态" },
+  {
+    label: "状态",
+    type: "enum",
+    path: "statusEnum.IndustryType",
+    prop: "status",
+    color: { 0: "blue", 1: "red" },
+  },
   { label: "操作", slot: "operation", fixed: "right", width: 250 },
 ];
+const handleSearch = () => {
+  console.log(unref(formItem), "2222");
+};
 </script>

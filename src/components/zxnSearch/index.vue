@@ -10,8 +10,9 @@
       <slot />
     </el-form>
     <div class="zxn-search-btn">
-      <el-button type="primary">查询</el-button>
+      <el-button type="primary" @click="handleSearch">查询</el-button>
       <el-button type="info">重置</el-button>
+      <slot name="rightBtn" />
     </div>
   </div>
 </template>
@@ -20,6 +21,10 @@ defineProps({
   formItem: { type: Object, default: () => ({}) },
   labelWidth: { type: [String, Number], default: 90 },
 });
+const emit = defineEmits(["on-search"]);
+const handleSearch = () => {
+  emit("on-search");
+};
 </script>
 <style scoped lang="scss">
 .zxn-search {

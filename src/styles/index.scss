@@ -22,3 +22,34 @@
     box-shadow: var(--el-box-shadow-light);
   }
 }
+
+.zxn-table-label {
+  display: inline-block;
+  height: 24px;
+  padding: 0 8px;
+  font-family: SourceHanSansSC-Medium, SourceHanSansSC, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  border-radius: 12px;
+
+  &.blue {
+    color: #356ff3;
+    background: #dfe8fd;
+  }
+
+  &.red {
+    color: #f35135;
+    background: #fde3df;
+  }
+
+  &.skyBlue {
+    color: #35c5f3;
+    background: #dff6fd;
+  }
+
+  &.grey {
+    color: #333;
+    background: #dedede;
+  }
+}

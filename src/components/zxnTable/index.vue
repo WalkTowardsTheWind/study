@@ -1,6 +1,6 @@
 <template>
   <div class="integration-table">
-    <div class="integration-table-top">
+    <div v-if="$slots.tableTop" class="integration-table-top">
       <slot name="tableTop" />
     </div>
     <div v-if="selectedNumber" class="integration-table-selected">
@@ -22,8 +22,12 @@
           </template>
         </el-table-column>
         <el-table-column v-else-if="item.type" v-bind="item">
-          <template #default>
-            <div v-if="type === 'enum'"></div>
+          <template #default="{ row }">
+            <div
+              v-if="item.type === 'enum'"
+              v-text="proxy.$enumSet[item.path][row[item.prop]]"
+              :class="`zxn-table-label ${item.color[[row[item.prop]]]}`"
+            />
           </template>
         </el-table-column>
         <el-table-column v-else v-bind="item" />
@@ -40,6 +44,7 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 import type { SortParams } from "./tableType";
+const { proxy } = getCurrentInstance() as any;
 const props = defineProps({
   hasSelect: { type: Boolean as PropType<boolean>, default: false },
   hasIndex: { type: Boolean as PropType<boolean>, default: true },
@@ -69,3 +74,10 @@ const handlePageChange = (current: { page: number; limit: number }) => {
   emit("page-change", current);
 };
 </script>
+<style lang="scss" scoped>
+.integration-table {
+  &-top {
+    margin-bottom: 16px;
+  }
+}
+</style>
