@@ -137,6 +137,12 @@ export const constantRoutes: RouteRecordRaw[] = [
         meta: { title: "任务中心", icon: "homepage", affix: true },
       },
       {
+        path: "view",
+        component: () => import("@/views/taskManager/taskView.vue"),
+        name: "taskManagerView",
+        meta: { title: "任务详情", hidden: true },
+      },
+      {
         path: "log",
         component: () => import("@/views/system/log/index.vue"),
         name: "log",

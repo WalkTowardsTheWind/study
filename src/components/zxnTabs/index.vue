@@ -1,6 +1,6 @@
 <template>
   <div class="zxn-tabs">
-    <el-tabs v-model="activeValue" @tab-click="handleClick">
+    <el-tabs :model-value="activeValue as string" @tab-change="handleClick">
       <el-tab-pane
         v-for="item in tabsList"
         :key="item.name"
@@ -17,15 +17,14 @@
     >
       <el-icon size="14" color="#474747">
         <i-ep-ArrowLeft v-if="hasBack" />
-        <i-ep-RefreshRight v-if="hasUpdate" />
+        <i-ep-RefreshRight v-if="hasUpdate && !hasBack" />
       </el-icon>
-      <span>{{ hasUpdate ? "更新" : "返回上一级" }}</span>
+      <span>{{ hasBack ? "返回上一级" : "更新" }}</span>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import { nextTick, PropType } from "vue";
-import type { TabsPaneContext } from "element-plus";
 import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 const route = useRoute();
@@ -39,11 +38,11 @@ const props = defineProps({
   hasBack: { type: Boolean, default: false },
   hasUpdate: { type: Boolean, default: true },
 });
-const emit = defineEmits(["update:activeName", "tab-click"]);
+const emit = defineEmits(["update:activeName", "tab-change"]);
 const activeValue = computed(() => props.activeName);
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event);
-  emit("update:activeName", tab.props.name);
+const handleClick = (tab: string) => {
+  emit("update:activeName", tab);
+  emit("tab-change", tab);
 };
 const handleClickRight = () => {
   if (props.hasBack) {
@@ -59,26 +58,19 @@ const handleClickRight = () => {
 </script>
 <style scoped lang="scss">
 .zxn-tabs {
-  display: flex;
-  justify-content: space-between;
-  padding-right: 24px;
+  position: relative;
 
   &-back {
-    position: relative;
+    position: absolute;
+    top: 0;
+    right: 0;
     display: flex;
     flex: none;
     align-items: center;
+    height: 63px;
+    padding-right: 24px;
+    line-height: 63px;
     cursor: pointer;
-
-    &::after {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 1px;
-      content: "";
-      background-color: #f5f5f5;
-    }
 
     > span {
       font-family: SourceHanSansSC-Medium, SourceHanSansSC, sans-serif;
@@ -89,8 +81,6 @@ const handleClickRight = () => {
   }
 
   :deep(.el-tabs) {
-    flex: 1 auto;
-
     .el-tabs__header {
       margin-bottom: 0;
 

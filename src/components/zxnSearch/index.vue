@@ -8,12 +8,12 @@
       class="zxn-search-content"
     >
       <slot />
+      <div ref="searchBtn" class="zxn-search-btn">
+        <el-button type="primary" @click="handleSearch">查询</el-button>
+        <el-button type="info">重置</el-button>
+        <slot name="rightBtn" />
+      </div>
     </el-form>
-    <div class="zxn-search-btn">
-      <el-button type="primary" @click="handleSearch">查询</el-button>
-      <el-button type="info">重置</el-button>
-      <slot name="rightBtn" />
-    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -25,17 +25,20 @@ const emit = defineEmits(["on-search"]);
 const handleSearch = () => {
   emit("on-search");
 };
+const searchBtn = ref(Element);
+let itemWidth = ref("");
+onMounted(() => {
+  itemWidth.value = `calc((100% - ${searchBtn.value.clientWidth}px) / 3)`;
+});
 </script>
 <style scoped lang="scss">
 .zxn-search {
-  display: flex;
-  align-items: flex-end;
-
   &-content {
-    flex: 1 auto;
+    display: flex;
+    flex-wrap: wrap;
 
     :deep(.el-form-item) {
-      width: 100%;
+      width: v-bind(itemwidth);
       margin-right: 0;
       margin-bottom: 16px;
 
@@ -56,7 +59,6 @@ const handleSearch = () => {
   }
 
   &-btn {
-    flex: none;
     padding-bottom: 16px;
     padding-left: 16px;
   }

@@ -2,17 +2,13 @@
   <zxn-plan>
     <div class="p-[24px] p-b-[0]">
       <zxn-search>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item>
-              <el-input v-model="formItem.user" placeholder="请输入关键字">
-                <template #prefix>
-                  <el-icon><i-ep-Search /></el-icon>
-                </template>
-              </el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
+        <el-form-item>
+          <el-input v-model="formItem.user" placeholder="请输入关键字">
+            <template #prefix>
+              <el-icon><i-ep-Search /></el-icon>
+            </template>
+          </el-input>
+        </el-form-item>
       </zxn-search>
       <zxn-table :table-data="tableData" :column-list="columnList" hasSelect>
         <template #tableTop>

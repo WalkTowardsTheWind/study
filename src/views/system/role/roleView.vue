@@ -1,6 +1,6 @@
 <template>
   <zxn-plan has-bottom>
-    <zxn-title>新增角色</zxn-title>
+    <zxn-tabs :tabsList="[{ name: 'role', label: '新增角色' }]" has-back />
     <div class="mt-10px">
       <el-form label-width="120px">
         <el-row>
