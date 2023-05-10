@@ -90,7 +90,7 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
-  // 结算中心
+  // 资产
   {
     path: "/settlementCenter",
     component: Layout,
@@ -109,6 +109,19 @@ export const constantRoutes: RouteRecordRaw[] = [
           import("@/views/settlementCenter/channelSettlement/index.vue"),
         name: "channel-settlement",
         meta: { title: "渠道结算", icon: "homepage" },
+      },
+    ],
+  },
+  {
+    path: "/taxLandManagement",
+    component: Layout,
+    meta: { title: "税地管理", icon: "homepage" },
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/taxLandManagement/index.vue"),
+        name: "taxLandManagementIndex",
+        meta: { title: "税地管理", icon: "homepage", affix: true },
       },
     ],
   },

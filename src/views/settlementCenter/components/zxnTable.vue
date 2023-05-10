@@ -13,17 +13,16 @@
       @sort-change="handleSort"
       class="zxn-table"
     >
-      <el-table-column v-if="hasSelect" type="selection" />
       <el-table-column v-if="hasIndex" type="index" label="序号" width="65" />
       <template v-for="(item, index) in columnList" :key="index">
-        <el-table-column v-if="item.slot" v-bind="item">
+        <el-table-column v-if="(item as any).slot" v-bind="item">
           <template #default="scope">
-            <slot :name="item.slot" v-bind="scope" />
+            <slot :name="(item as any).slot" v-bind="scope" />
           </template>
         </el-table-column>
-        <el-table-column v-else-if="item.type" v-bind="item">
+        <el-table-column v-else-if="(item as any).type" v-bind="item">
           <template #default="scope">
-            <div v-if="item.type == 'enum'">
+            <div v-if="(item as any).type == 'enum'">
               <el-tag v-if="scope.row.state === 1" type="success">上线</el-tag>
               <el-tag v-else-if="scope.row.state === 2" type="info"
                 >下架</el-tag
@@ -46,7 +45,6 @@
 import { PropType } from "vue";
 import type { SortParams } from "./tableType";
 const props = defineProps({
-  hasSelect: { type: Boolean as PropType<boolean>, default: false },
   hasIndex: { type: Boolean as PropType<boolean>, default: true },
   tableData: { type: Array, default: () => [] },
   columnList: { type: Array, default: () => [] },
@@ -74,3 +72,8 @@ const handlePageChange = (current: { page: number; limit: number }) => {
   emit("page-change", current);
 };
 </script>
+<style lang="scss" scoped>
+.integration-table {
+  width: 100%;
+}
+</style>

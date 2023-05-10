@@ -20,7 +20,7 @@ const props = defineProps({
   activeName: { type: String, default: "" },
   tabsList: { type: Array as PropType<tabsListType>, default: () => [] },
 });
-const emit = defineEmits(["update:activeName", "tab-click"]);
+const emit = defineEmits(["update:activeName"]);
 const activeValue = computed(() => props.activeName);
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event);
@@ -46,7 +46,7 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
     }
 
     .el-tabs__nav {
-      padding-left: 53px;
+      padding-left: 0;
     }
 
     .el-tabs__item {

@@ -1,395 +1,297 @@
 <template>
-  <div class="app-container">
-    <el-card>
-      <div>累计下发： 124.543.23元</div>
-      <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-        <el-tab-pane label="企业合同" name="first">
-          <div>
-            任务状态：
-            <el-button color="#000" :plain="false">全部</el-button>
-            <el-button color="#000" plain>待下发</el-button>
-            <el-button color="#000" plain>已下发</el-button>
-            <el-button color="#000" plain>下发异常</el-button>
-          </div>
-          <div class="mt-4">
-            <el-input v-model="search" placeholder="请输入" class="w-100 h-10">
-              <template #append>
-                <el-button>搜索</el-button>
+  <zxn-plan>
+    <zxn-tabs v-model:activeName="activeName" :tabsList="tabsList"></zxn-tabs>
+    {{ activeName }}
+    <div class="p-[24px] p-b-[0]">
+      <zxn-search :formItem="formItem">
+        <el-row>
+          <el-col :span="8">
+            <el-input v-model="formItem.search" placeholder="请输入关键字">
+              <template #prefix>
+                <el-icon><i-ep-Search /></el-icon>
               </template>
             </el-input>
-          </div>
-          <div class="mt-4">
-            任务日期：
-            <el-config-provider :locale="local">
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="税地状态">
+              <el-select v-model="formItem.state" placeholder="Select">
+                <el-option
+                  v-for="item in stateOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="厂商">
+              <el-select v-model="formItem.manufacturer" placeholder="Select">
+                <el-option
+                  v-for="item in manufacturerOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="发票类型">
+              <el-select v-model="formItem.Invoice" placeholder="Select">
+                <el-option
+                  v-for="item in InvoiceOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="税率形式">
+              <el-select v-model="formItem.tax" placeholder="Select">
+                <el-option
+                  v-for="item in taxOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="date" label="申请日期">
               <el-date-picker
-                size="large"
-                v-model="dateValue"
+                v-model="formItem.date"
                 type="daterange"
-                start-placeholder="Start date"
-                end-placeholder="End date"
+                unlink-panels
+                range-separator="~"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
               />
-            </el-config-provider>
-            <el-button class="ml-5" color="#000" plain>查询</el-button>
-            <el-button color="#000" plain>重置</el-button>
-          </div>
-          <div class="mt-4">
-            <el-button color="#000" plain>今</el-button>
-            <el-button color="#000" plain>昨</el-button>
-            <el-button color="#000" plain>本月</el-button>
-            <el-button color="#000" plain>上月</el-button>
-            <el-button color="#000" plain>今年</el-button>
-          </div>
-          <div class="mt-4">
-            <p>下发趋势图</p>
-          </div>
-          <div class="mt-4">
-            <el-dropdown class="ml-5" @command="handleNewbuilt">
-              <el-button type="primary"> 新建 </el-button>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item command="1">线上合同</el-dropdown-item>
-                  <el-dropdown-item command="2">线下合同</el-dropdown-item>
-                  <!-- <el-dropdown-item command="c">Action 3</el-dropdown-item>
-                                    <el-dropdown-item command="d" disabled>Action 4</el-dropdown-item>
-                                    <el-dropdown-item command="e" divided>Action 5</el-dropdown-item> -->
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
-            <!-- <el-button @click="handle">{{selection}}批量操作</el-button> -->
-            <el-dropdown class="ml-5" @command="handleBulkOperation">
-              <el-button type="primary"> 批量处理 </el-button>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item command="1">批量1</el-dropdown-item>
-                  <el-dropdown-item command="2">批量2</el-dropdown-item>
-                  <!-- <el-dropdown-item command="c">Action 3</el-dropdown-item>
-                                    <el-dropdown-item command="d" disabled>Action 4</el-dropdown-item>
-                                    <el-dropdown-item command="e" divided>Action 5</el-dropdown-item> -->
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
-          </div>
-          <div class="mt-4">
-            <el-table
-              ref="table"
-              :data="tableData"
-              style="width: 100%"
-              row-key="id"
-              @selection-change="handleSelectionChange"
-            >
-              <el-table-column
-                type="selection"
-                width="55"
-                :reserve-selection="true"
-              />
-              <el-table-column label="Date" width="120">
-                <template #default="scope">{{ scope.row.date }}</template>
-              </el-table-column>
-              <el-table-column property="name" label="Name" width="120" />
-              <el-table-column
-                property="address"
-                label="Address"
-                show-overflow-tooltip
-              />
-              <el-table-column label="操作">
-                <template #default="scope">
-                  <el-button size="small" @click="handleEdit()"
-                    >编辑{{ scope }}</el-button
-                  >
-                  <el-button size="small" @click="handleDetails()"
-                    >详情</el-button
-                  >
-                  <el-button size="small" type="danger" @click="handleDelete()"
-                    >删除</el-button
-                  >
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
-          <pagination
-            v-if="total > 0"
-            v-model:total="total"
-            v-model:page="queryParams.pageNum"
-            v-model:limit="queryParams.pageSize"
-            @pagination="handleQuery"
-          />
-        </el-tab-pane>
-        <el-tab-pane label="渠道合同" name="second">Config</el-tab-pane>
-        <el-tab-pane label="税源地合同" name="third">Role</el-tab-pane>
-      </el-tabs>
-    </el-card>
-    <!-- 结算任务详情页弹窗 -->
-    <el-dialog v-model="dialogSettlement1" width="600px" @close="closeDialog">
-      <template #header>
-        <div class="my-header">
-          <template>
-            <el-steps :space="200" :active="1" finish-status="success">
-              <el-step title="Done" />
-              <el-step title="Processing" />
-              <el-step title="Step 3" />
-            </el-steps>
-          </template>
-        </div>
-      </template>
-      <hr />
-      This is dialog content.
-    </el-dialog>
-    <!-- 成员详情弹窗 -->
-    <el-dialog
-      title="新建合同"
-      v-model="dialogSettlement2"
-      width="700px"
-      append-to-body
-      @close="closeDialog"
-    >
-      <el-form
-        :inline="true"
-        ref="dataNewbuilt2FormRef"
-        :model="dataNewbuilt2"
-        :rules="dataNewbuilt2Rules"
-        label-position="right"
-        label-width="100px"
-        class="demo-form-inline"
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </zxn-search>
+      <BarChart
+        id="barChart"
+        height="400px"
+        width="60%"
+        class="bg-[var(--el-bg-color-overlay)]"
+      />
+      <zxn-table
+        class="mt-4"
+        :table-data="tableData"
+        :column-list="columnList"
+        hasSelect
+        @selection-change="handleC"
       >
-        <el-form-item prop="user" label="合同名称">
-          <el-input v-model="dataNewbuilt2.user" placeholder="Approved by" />
-        </el-form-item>
-        <el-form-item prop="pwss" label="合同类型">
-          <el-input v-model="dataNewbuilt2.pwss" placeholder="Approved by" />
-        </el-form-item>
-        <el-form-item prop="pwss" label="合同编号">
-          <el-input v-model="dataNewbuilt2.pwss" placeholder="Approved by" />
-        </el-form-item>
-        <el-form-item prop="pwss" label="合同期限">
-          <el-input v-model="dataNewbuilt2.pwss" placeholder="Approved by" />
-        </el-form-item>
-        <el-form-item prop="pwss" label="甲方">
-          <el-input v-model="dataNewbuilt2.pwss" placeholder="Approved by" />
-        </el-form-item>
-        <el-form-item prop="pwss" label="乙方">
-          <el-input v-model="dataNewbuilt2.pwss" placeholder="Approved by" />
-        </el-form-item>
-      </el-form>
-      <el-form
-        ref="dataNewbuilt2FormRef"
-        :model="dataNewbuilt2"
-        :rules="dataNewbuilt2Rules"
-        class="demo-form-inline"
-      >
-        <el-form-item class="ml-6" prop="pwss" label="备注要求">
-          <el-input v-model="dataNewbuilt2.pwss" type="textarea" />
-        </el-form-item>
-        <el-form-item class="ml-8" label="多图上传">
-          <multi-upload v-model="multiPicUrls"></multi-upload>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
-          <el-button type="primary" @click="handleSubmit">确 定</el-button>
-        </div>
-      </template>
-    </el-dialog>
-  </div>
+        <template #tableTop>
+          <el-dropdown trigger="click" @command="handleDD">
+            <el-button type="primary">+ 新建</el-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item command="1">线下</el-dropdown-item>
+                <el-dropdown-item command="2">新建2</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+          <el-dropdown class="ml-4" trigger="click" @command="handleD">
+            <el-button type="primary">批量操作</el-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item command="1">删除</el-dropdown-item>
+                <el-dropdown-item command="2">下载</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </template>
+        <template #operation="scope">
+          <el-button
+            link
+            type="primary"
+            v-show="scope.row.state == 1"
+            @click="handleA(scope)"
+            >去解冻</el-button
+          >
+          <el-button link type="primary" @click="handleB(scope)"
+            >详情</el-button
+          >
+          <el-button link type="primary" @click="handleCC(scope)"
+            >编辑</el-button
+          >
+          <el-button link type="primary" @click="handleDDDD(scope)"
+            >删除</el-button
+          >
+        </template>
+      </zxn-table>
+    </div>
+    <viewDialog v-model:dialogVisible="dialogVisible" :title="title" />
+  </zxn-plan>
 </template>
-<script lang="ts" setup>
-import { ref } from "vue";
-import type { TabsPaneContext } from "element-plus";
-// import { CircleCloseFilled } from '@element-plus/icons-vue'
-import zhcn from "element-plus/lib/locale/lang/zh-cn";
-import MultiUpload from "@/components/Upload/MultiUpload.vue";
-/**
- * tabs
- */
-const activeName = ref("first");
-/**
- * 搜索
- */
-const search = ref();
-/**
- * 文件上传
- */
-const multiPicUrls = ref([
-  "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  "https://oss.youlai.tech/default/2022/11/20/13dbfd7feaf848c2acec2b21675eb9d3.webp",
+<script setup lang="ts">
+import viewDialog from "../components/viewDialog.vue";
+
+// import { useRouter } from "vue-router";
+import BarChart from "../components/BarChart.vue";
+const dialogVisible = ref(false);
+const title = ref("");
+const activeName = ref("1");
+const tabsList = [
+  {
+    name: "1",
+    label: "企业合同",
+  },
+  {
+    name: "2",
+    label: "渠道合同",
+  },
+  {
+    name: "3",
+    label: "税源地合同",
+  },
+];
+// const statusOption = [
+//   { label: "申请中", value: 1 },
+//   { label: "报名中", value: 2 },
+//   { label: "进行中", value: 3 },
+//   { label: "已验收", value: 4 },
+//   { label: "异常", value: 5 },
+// ];
+// 状态
+const stateOptions = ref([] as any);
+// 厂商
+const manufacturerOptions = [
+  { label: "薪龙网", value: 1 },
+  { label: "某某网", value: 2 },
+  { label: "某某网", value: 3 },
+  { label: "某某网", value: 4 },
+] as any;
+// 发票类型
+const InvoiceOptions = [
+  { label: "全部", value: 1 },
+  { label: "6%增值税发票(万元版)", value: 2 },
+  { label: "普通发票(万元版)", value: 3 },
+  { label: "6%增值税发票/普通发票(十万元版)", value: 4 },
+] as any;
+// 税率形式
+const taxOptions = [
+  { label: "全部", value: 1 },
+  { label: "内扣", value: 2 },
+  { label: "外扣", value: 3 },
+] as any;
+
+const formItem = reactive({
+  search: "",
+  state: "",
+  manufacturer: "",
+  Invoice: "",
+  tax: "",
+  date: "",
+});
+const tableData = reactive([
+  { value: "1", name: "shshhud", state: 1 },
+  { value: "2", name: "shshhud", state: 1 },
+  { value: "3", name: "shshhud", state: 1 },
+  { value: "4", name: "shshhud", state: 1 },
+  { value: "5", name: "shshhud", state: 1 },
 ]);
+const columnList = [
+  { label: "合同编号", prop: "value" },
+  { label: "合同类型", prop: "name" },
+  { label: "签署形式" },
+  { label: "甲方" },
+  { label: "乙方" },
+  { label: "产品" },
+  { label: "签约时间", sortable: "custom", width: 120 },
+  { label: "到期时间", sortable: "custom", width: 120 },
+  { label: "状态", prop: "state", type: "enum" },
+  { label: "操作", slot: "operation", fixed: "right", width: 250 },
+];
+// 操作
+const handleA = (scope: any) => {
+  title.value = "去解冻";
+  dialogVisible.value = true;
 
-/**
- * 结算详情弹窗
- */
-const dialogSettlement1 = ref(false);
-const dialogSettlement2 = ref(false);
-/**
- * 税源地
- */
-// const taxValue = ref()
-/**
- * 日期
- */
-const dateValue = ref("");
-let local = zhcn;
-/**
- * 分页
- */
-const total = ref(100);
-const queryParams = reactive({
-  pageNum: 1,
-  pageSize: 10,
-});
-/**
- * 线下合同表单
- */
-const dataNewbuilt2FormRef = ref(ElForm);
-const dataNewbuilt2 = reactive({
-  user: 1,
-  pwss: 10,
-});
-const dataNewbuilt2Rules = {
-  user: [{ required: true, trigger: "blur" }],
-  pwss: [{ required: true, trigger: "blur" }],
+  console.log("去解冻");
+  console.log(scope.row.value.$index);
 };
+const handleB = (scope: any) => {
+  title.value = "详情";
+  dialogVisible.value = true;
 
+  console.log("详情", dialogVisible.value);
+  console.log(scope.row.value);
+};
+const handleCC = (scope: any) => {
+  console.log("编辑");
+  console.log(scope.row.value.$index);
+  tableData.splice(scope.$index, 1);
+};
+const handleDDDD = (scope: any) => {
+  console.log("删除");
+  console.log(scope.row.value.$index);
+};
 /**
- * 分页
+ * 批量选择
  */
-const handleQuery = () => {};
+//选中的数据
+const selectionData = ref([]);
+const handleC = (data: any) => {
+  selectionData.value = data;
+  console.log(selectionData.value);
+};
+/**
+ * 新建
+ */
+const handleDD = (command: string | number | object) => {
+  if (command == 1) {
+    console.log("线下合同");
+    title.value = "新建合同";
+    dialogVisible.value = true;
+  } else if (command == 2) {
+    console.log("新建2");
+  }
+};
 /**
  * 批量操作
  */
-const handleNewbuilt = (command: string | number | object) => {
+const handleD = (command: string | number | object) => {
+  var data = selectionData.value.map((item, index) => {
+    return index;
+  });
   if (command == 1) {
-    dialogSettlement1.value = true;
-    console.log("结算xian'qu");
+    console.log("删除", data);
   } else if (command == 2) {
-    dialogSettlement2.value = true;
-    console.log("线下合同");
+    console.log("下载");
   }
 };
-const handleBulkOperation = (command: string | number | object) => {
-  console.log(multipleSelection.value);
-  if (command == 1) {
-    console.log(multipleSelection.value[0]);
-    console.log("上");
-  } else if (command == 2) {
-    console.log(multipleSelection.value[0]);
-    console.log("下");
-  }
-};
-
 /**
- * 取消
+ * 下拉选择外部导入
  */
-
-const closeDialog = () => {
-  dialogSettlement1.value = false;
+const handleS = () => {
+  let a = 8;
+  stateOptions.value = [
+    { label: `全部 (${a})`, value: 1 },
+    { label: `启用中 (${a})`, value: 2 },
+    { label: `待启用 (${a})`, value: 3 },
+    { label: `预警 (${a})`, value: 4 },
+    { label: `下架 (${a})`, value: 5 },
+  ];
 };
-/**
- * 确定
- */
-
-const handleSubmit = () => {};
-
-/**
- * 表格数据
- */
-interface User {
-  id: number;
-  date: string;
-  name: string;
-  address: string;
-}
-const tableData: User[] = [
-  {
-    id: 1,
-    date: "2016-05-03",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    id: 2,
-    date: "2016-05-02",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    id: 3,
-    date: "2016-05-04",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    id: 4,
-    date: "2016-05-01",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    id: 5,
-    date: "2016-05-08",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-];
-
-// const table = ref<InstanceType<typeof ElTable>>()
-const multipleSelection = ref<User[]>([]);
-const handleSelectionChange = (val: User[]) => {
-  multipleSelection.value = val;
-};
-/**
- * tabs
- */
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event);
-};
-
-// const handle = () => {
-//     console.log(multipleSelection.value);
+handleS();
+// const router = useRouter();
+// //路由跳转
+// const rou=()=>{
+//   const uid = router.currentRoute.value.meta.title;
+//   if(uid=="渠道合同"){
+//     activeName.value="2"
+//    console.log(uid)
+//   }
 // }
-/**
- * 编辑
- */
-const handleEdit = () => {};
-/**
- * 详情
- */
-const handleDetails = () => {};
-/**
- * 删除
- */
-const handleDelete = () => {};
+
+onMounted(() => {
+  // rou()
+});
 </script>
-<style lang="scss">
-/* 修改tabs样式 */
-.el-tabs__active-bar {
-  top: 0;
-
-  /* 只需要找到该节点修改就可以，新增top,去掉bottom */
-  bottom: none;
-
-  /* color: #f40; */
-  background-color: #f40;
-}
-
-.el-tabs__item {
-  &.is-active {
-    color: #000;
-  }
-
-  &:hover {
-    color: gray;
-  }
-}
-
-.el-tabs__nav-wrap::after {
-  top: 0;
-
-  /* 只需要找到该节点修改就可以，新增top,去掉bottom */
-  bottom: none;
-}
-
-// .demo-tabs>.el-tabs__content {
-//     /* color: #6b778c; */
-//     // color: #f40c;
-// }
-</style>

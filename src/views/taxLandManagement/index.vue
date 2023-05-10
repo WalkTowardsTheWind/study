@@ -1,7 +1,6 @@
 <template>
   <zxn-plan>
-    <zxn-tabs v-model:activeName="activeName" :tabsList="tabsList"></zxn-tabs>
-    {{ activeName }}
+    <zxn-tabs :activeName="activeName" :tabsList="tabsList"></zxn-tabs>
     <div class="p-[24px] p-b-[0]">
       <zxn-search :formItem="formItem">
         <el-row>
@@ -85,7 +84,7 @@
             <el-button type="primary">+ 新建</el-button>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item command="1">线下</el-dropdown-item>
+                <el-dropdown-item command="1">新建1</el-dropdown-item>
                 <el-dropdown-item command="2">新建2</el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -94,24 +93,28 @@
             <el-button type="primary">批量操作</el-button>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item command="1">删除</el-dropdown-item>
-                <el-dropdown-item command="2">下载</el-dropdown-item>
+                <el-dropdown-item command="1">上架</el-dropdown-item>
+                <el-dropdown-item command="2">删除</el-dropdown-item>
+                <el-dropdown-item command="3">导出</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
         </template>
         <template #operation="scope">
-          <el-button link type="primary" @click="handleA(scope)"
-            >详情</el-button
-          >
+          <el-button link type="primary" @click="handleA(scope)">{{
+            scope.row.state == 1 ? "下架" : "上架"
+          }}</el-button>
           <el-button link type="primary" @click="handleB(scope)"
             >编辑</el-button
           >
-          <el-button link type="primary" @click="handleCC(scope)"
+          <el-button link type="primary" @click="handleE(scope)"
             >删除</el-button
           >
-          <el-button link type="primary" @click="handleDDDD(scope)"
-            >下载</el-button
+          <el-button link type="primary" @click="handleF(scope)"
+            >导出</el-button
+          >
+          <el-button link type="primary" @click="handleG(scope)"
+            >详情</el-button
           >
         </template>
       </zxn-table>
@@ -120,23 +123,18 @@
   </zxn-plan>
 </template>
 <script setup lang="ts">
-import viewDialog from "../components/viewDialog.vue";
-// import { useRouter } from "vue-router";
+import viewDialog from "./components/viewDialog.vue";
 const dialogVisible = ref(false);
 const title = ref("");
-const activeName = ref("1");
+const activeName = "1";
 const tabsList = [
   {
     name: "1",
-    label: "企业合同",
+    label: "自营税地",
   },
   {
     name: "2",
-    label: "渠道合同",
-  },
-  {
-    name: "3",
-    label: "税源地合同",
+    label: "采购税地",
   },
 ];
 // const statusOption = [
@@ -185,48 +183,61 @@ const tableData = reactive([
   { value: "5", name: "shshhud", state: 1 },
 ]);
 const columnList = [
-  { label: "合同编号", prop: "value" },
-  { label: "合同类型", prop: "name" },
-  { label: "签署形式" },
-  { label: "甲方" },
-  { label: "乙方" },
-  { label: "产品" },
-  { label: "签约时间", sortable: "custom", width: 120 },
-  { label: "到期时间", sortable: "custom", width: 120 },
+  { label: "编号", prop: "value" },
   { label: "状态", prop: "state", type: "enum" },
+  { label: "来源", prop: "a" },
+  { label: "厂商", prop: "b" },
+  { label: "成本" },
+  { label: "签约数量" },
+  { label: "税率形式" },
+  { label: "对接人" },
+  { label: "申请时间", sortable: "custom", width: 120 },
   { label: "操作", slot: "operation", fixed: "right", width: 250 },
 ];
-// 操作
+/**
+ * 上下架
+ */
 const handleA = (scope: any) => {
-  title.value = "合同详情";
-  dialogVisible.value = true;
-
-  console.log("详情");
-  console.log(scope.row.value.$index);
+  console.log(tableData[scope.$index].state, "下架");
+  if (tableData[scope.$index].state == 1) {
+    tableData[scope.$index].state = 2;
+  } else if (tableData[scope.$index].state == 2) {
+    tableData[scope.$index].state = 1;
+  }
 };
+/**
+ * 编辑
+ */
 const handleB = (scope: any) => {
-  title.value = "合同编辑";
+  title.value = "编辑";
   dialogVisible.value = true;
-
-  console.log("编辑", dialogVisible.value);
-  console.log(scope.row.value);
+  console.log(scope.row.value, "编辑");
 };
-const handleCC = (scope: any) => {
-  console.log("删除");
-  console.log(scope.row.value.$index);
+/**
+ * 删除
+ */
+const handleE = (scope: any) => {
+  console.log(scope.row.value, "删除");
   tableData.splice(scope.$index, 1);
 };
-const handleDDDD = (scope: any) => {
-  console.log("下载");
-  console.log(scope.row.value.$index);
+/**
+ * 导出
+ */
+const handleF = (scope: any) => {
+  console.log(scope.row.value, "导出");
+};
+/**
+ * 详情
+ */
+const handleG = (scope: any) => {
+  console.log(scope.row.value, "详情");
 };
 /**
  * 批量选择
  */
-//选中的数据
 const selectionData = ref([]);
-const handleC = (data: any) => {
-  selectionData.value = data;
+const handleC = (sss: any) => {
+  selectionData.value = sss;
   console.log(selectionData.value);
 };
 /**
@@ -234,9 +245,7 @@ const handleC = (data: any) => {
  */
 const handleDD = (command: string | number | object) => {
   if (command == 1) {
-    console.log("线下合同");
-    title.value = "新建合同";
-    dialogVisible.value = true;
+    console.log("新建1");
   } else if (command == 2) {
     console.log("新建2");
   }
@@ -249,13 +258,17 @@ const handleD = (command: string | number | object) => {
     return index;
   });
   if (command == 1) {
-    console.log("删除", data);
+    data.forEach((item) => (tableData[item].state = 1));
+
+    console.log("上架", selectionData.value, data);
   } else if (command == 2) {
-    console.log("下载");
+    console.log("删除");
+  } else if (command == 3) {
+    console.log("导出");
   }
 };
 /**
- * 下拉选择外部导入
+ *
  */
 const handleS = () => {
   let a = 8;
@@ -268,17 +281,7 @@ const handleS = () => {
   ];
 };
 handleS();
-// const router = useRouter();
-// //路由跳转
-// const rou=()=>{
-//   const uid = router.currentRoute.value.meta.title;
-//   if(uid=="渠道合同"){
-//     activeName.value="2"
-//    console.log(uid)
-//   }
-// }
-
 onMounted(() => {
-  // rou()
+  // handleS()
 });
 </script>

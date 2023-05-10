@@ -1,8 +1,5 @@
 <template>
   <div class="login-container">
-    <div class="loginLogo">
-      <img class="imgs" src="@/assets/zxn.jpg" alt="" />
-    </div>
     <div class="login">
       <el-form
         ref="loginFormRef"
@@ -10,6 +7,9 @@
         :rules="loginRules"
         class="login-form"
       >
+        <div class="loginLogo">
+          <img class="imgs" src="@/assets/zxn.jpg" alt="" />
+        </div>
         <div class="flex text-black items-center py-4">
           <span class="text-2xl flex-1 text-center">欢迎登录</span>
         </div>
@@ -22,7 +22,9 @@
             v-model="loginData.username"
             placeholder="用户名"
             name="username"
+            clearable
           />
+          <div class="underline"></div>
         </el-form-item>
         <el-form-item prop="password">
           <el-input
@@ -34,6 +36,7 @@
             name="password"
             @keyup="checkCapslock"
             @keyup.enter="handleLogin"
+            clearable
           />
         </el-form-item>
         <el-form-item prop="verifyCode">
@@ -44,6 +47,7 @@
             size="large"
             class="w-[60%]"
             @keyup.enter="handleLogin"
+            clearable
           />
 
           <div class="captcha1">
@@ -70,7 +74,7 @@
         <el-button
           size="default"
           :loading="loading"
-          color="#356FF3"
+          color="#366FF4"
           class="w-full mt-4 mb-4"
           @click.prevent="handleLogin"
           >登录
@@ -423,7 +427,7 @@ onMounted(() => {
 
   .loginLogo {
     position: absolute;
-    top: 10%;
+    top: -20%;
     left: calc(50% - 25px);
 
     .imgs {
@@ -439,7 +443,7 @@ onMounted(() => {
     width: 460px;
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 0 36px 0 #000;
+    box-shadow: 0 0 36px 0 #ececec;
 
     .login-form {
       width: 520px;
@@ -495,5 +499,25 @@ onMounted(() => {
     // flex: 1;
     text-align: center;
   }
+}
+
+::v-deep.el-input .el-input__wrapper {
+  // outline: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: 0 -1px 0 0 #e5e5e5 inset;
+  // border-bottom: 2px solid red;
+  // // border-bottom: 2px solid silver;
+  &.is-focus {
+    box-shadow: 0 -1px 0 0 #366ff4 inset;
+  }
+}
+
+::v-deep .el-input .el-input__clear {
+  color: black;
+}
+
+::v-deep.el-form-item.is-error .el-input__wrapper {
+  box-shadow: 0 -1px 0 0 var(--el-color-danger) inset;
 }
 </style>

@@ -93,7 +93,7 @@ const tabsList = [
 //   { label: "已验收", value: 4 },
 //   { label: "异常", value: 5 },
 // ];
-const options = [];
+const options = [] as any;
 const formItem = reactive({
   user: "",
   status: "",
