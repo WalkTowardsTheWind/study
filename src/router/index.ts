@@ -136,6 +136,24 @@ export const constantRoutes: RouteRecordRaw[] = [
         name: "taskManagerIndex",
         meta: { title: "任务中心", icon: "homepage", affix: true },
       },
+      {
+        path: "log",
+        component: () => import("@/views/system/log/index.vue"),
+        name: "log",
+        meta: { title: "日志中心", icon: "homepage", affix: true },
+      },
+      {
+        path: "account",
+        component: () => import("@/views/system/account/index.vue"),
+        name: "account",
+        meta: { title: "账号设置", icon: "homepage", affix: true },
+      },
+      {
+        path: "addRole",
+        component: () => import("@/views/system/role/roleView.vue"),
+        name: "addRole",
+        meta: { title: "新增角色", hidden: true },
+      },
     ],
   },
 ];

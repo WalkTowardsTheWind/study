@@ -13,6 +13,9 @@ const route = useRoute();
 const router = useRouter();
 
 const { device } = storeToRefs(appStore); // 设备类型：desktop-宽屏设备 || mobile-窄屏设备
+const logo = ref(
+  new URL(`../../assets/20230506141258.jpg`, import.meta.url).href
+);
 
 function toggleSideBar() {
   appStore.toggleSidebar(true);
@@ -65,10 +68,7 @@ function logout() {
       <!-- 用户头像 -->
       <el-dropdown trigger="click">
         <div class="flex justify-center items-center mx-2 cursor-pointer">
-          <img
-            :src="userStore.avatar + '?imageView2/1/w/80/h/80'"
-            class="w-[24px] h-[24px] b-rd-50%"
-          />
+          <img :src="logo" class="w-[24px] h-[24px] b-rd-50% scalc" />
           <span class="fs14 c-[#333] m-l-[8px] m-r-[8px]">{{
             userStore.nickname
           }}</span>

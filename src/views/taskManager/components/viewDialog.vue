@@ -4,6 +4,7 @@
     :title="isEdit ? '合同详情' : '合同编辑'"
     width="50%"
     :before-close="handleClose"
+    class="my-dialog"
   >
     <div>
       <div>任务内容</div>
@@ -128,3 +129,8 @@ const formItem = reactive({
   tags: [{ id: 2, label: "不限学历" }],
 });
 </script>
+<style lang="scss" scoped>
+:deep(.my-dialog) {
+  color: red;
+}
+</style>
