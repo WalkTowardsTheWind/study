@@ -63,19 +63,19 @@
           </el-col>
         </el-row>
         <el-row>
-          <zxnTabs
+          <ly-tabs
             v-model:activeName="activeName"
             :tabsList="tabsList"
-          ></zxnTabs>
+          ></ly-tabs>
         </el-row>
         <el-row>
-          <zxn-table :table-data="tableData" :column-list="columnList">
+          <ly-table :table-data="tableData" :column-list="columnList">
             <template #operation="scope">
               <el-button link type="primary" @click="handleA(scope)"
                 >查看</el-button
               >
             </template>
-          </zxn-table>
+          </ly-table>
         </el-row>
       </el-form>
 
@@ -87,8 +87,8 @@
 import { ref, reactive } from "vue";
 import viewDialogA from "../components/viewDialogA.vue";
 
-import zxnTabs from "./zxnTabs.vue";
-import zxnTable from "./zxnTable.vue";
+import lyTabs from "./lyTabs.vue";
+import lyTable from "./lyTable.vue";
 const emit = defineEmits(["update:dialogVisible"]);
 const props = defineProps({
   dialogVisible: { type: Boolean, default: false },

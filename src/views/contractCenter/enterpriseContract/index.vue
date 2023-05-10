@@ -12,7 +12,7 @@
             </el-input>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="税地状态">
+            <el-form-item label="合同状态">
               <el-select v-model="formItem.state" placeholder="Select">
                 <el-option
                   v-for="item in stateOptions"
@@ -24,7 +24,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="厂商">
+            <el-form-item label="税源地">
               <el-select v-model="formItem.manufacturer" placeholder="Select">
                 <el-option
                   v-for="item in manufacturerOptions"
@@ -36,31 +36,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="发票类型">
-              <el-select v-model="formItem.Invoice" placeholder="Select">
-                <el-option
-                  v-for="item in InvoiceOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="税率形式">
-              <el-select v-model="formItem.tax" placeholder="Select">
-                <el-option
-                  v-for="item in taxOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item prop="date" label="申请日期">
+            <el-form-item prop="date" label="创建日期">
               <el-date-picker
                 v-model="formItem.date"
                 type="daterange"
@@ -89,15 +65,8 @@
               </el-dropdown-menu>
             </template>
           </el-dropdown>
-          <el-dropdown class="ml-4" trigger="click" @command="handleD">
-            <el-button type="primary">批量操作</el-button>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item command="1">删除</el-dropdown-item>
-                <el-dropdown-item command="2">下载</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
+          <el-button class="ml-4" color="#366FF4" plain>导出</el-button>
+          <el-button class="ml-4" color="#366FF4" plain>导入</el-button>
         </template>
         <template #operation="scope">
           <el-button link type="primary" @click="handleA(scope)"
@@ -154,19 +123,8 @@ const manufacturerOptions = [
   { label: "某某网", value: 3 },
   { label: "某某网", value: 4 },
 ] as any;
-// 发票类型
-const InvoiceOptions = [
-  { label: "全部", value: 1 },
-  { label: "6%增值税发票(万元版)", value: 2 },
-  { label: "普通发票(万元版)", value: 3 },
-  { label: "6%增值税发票/普通发票(十万元版)", value: 4 },
-] as any;
+
 // 税率形式
-const taxOptions = [
-  { label: "全部", value: 1 },
-  { label: "内扣", value: 2 },
-  { label: "外扣", value: 3 },
-] as any;
 
 const formItem = reactive({
   search: "",
@@ -243,16 +201,16 @@ const handleDD = (command: string | number | object) => {
 /**
  * 批量操作
  */
-const handleD = (command: string | number | object) => {
-  var data = selectionData.value.map((item, index) => {
-    return index;
-  });
-  if (command == 1) {
-    console.log("删除", data);
-  } else if (command == 2) {
-    console.log("下载");
-  }
-};
+// const handleD = (command: string | number | object) => {
+//   var data = selectionData.value.map((item, index) => {
+//     return index;
+//   });
+//   if (command == 1) {
+//     console.log("删除", data);
+//   } else if (command == 2) {
+//     console.log("下载");
+//   }
+// };
 /**
  * 下拉选择外部导入
  */

@@ -8,6 +8,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Breadcrumb: typeof import('./../components/Breadcrumb/index.vue')['default']
+    ElAlert: typeof import('element-plus/es')['ElAlert']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
     ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -32,6 +33,7 @@ declare module '@vue/runtime-core' {
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElPagination: typeof import('element-plus/es')['ElPagination']
+    ElPopover: typeof import('element-plus/es')['ElPopover']
     ElRadio: typeof import('element-plus/es')['ElRadio']
     ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     ElRow: typeof import('element-plus/es')['ElRow']
@@ -53,9 +55,12 @@ declare module '@vue/runtime-core' {
     Hamburger: typeof import('./../components/Hamburger/index.vue')['default']
     IconSelect: typeof import('./../components/IconSelect/index.vue')['default']
     IEpArrowDown: typeof import('~icons/ep/arrow-down')['default']
+    IEpCaretBottom: typeof import('~icons/ep/caret-bottom')['default']
+    IEpCaretTop: typeof import('~icons/ep/caret-top')['default']
     IEpChatDotRound: typeof import('~icons/ep/chat-dot-round')['default']
     IEpCircleCloseFilled: typeof import('~icons/ep/circle-close-filled')['default']
     IEpClose: typeof import('~icons/ep/close')['default']
+    IEpEdit: typeof import('~icons/ep/edit')['default']
     IEpPlus: typeof import('~icons/ep/plus')['default']
     IEpSearch: typeof import('~icons/ep/search')['default']
     IEpSetting: typeof import('~icons/ep/setting')['default']

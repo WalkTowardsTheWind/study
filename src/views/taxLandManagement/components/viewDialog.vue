@@ -6,7 +6,9 @@
     :before-close="handleClose"
   >
     <div>
-      <viewSteps v-model:active?="active" />
+      <viewSteps v-model:active="active" />
+      {{ active }}
+      <el-button @click="active--">active++</el-button>
     </div>
     <template #footer>
       <span class="dialog-footer">

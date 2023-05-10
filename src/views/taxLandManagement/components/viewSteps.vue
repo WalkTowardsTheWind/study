@@ -1,30 +1,41 @@
 <template>
   <el-steps :active="active" finish-status="success">
     <el-step title="Step 1" />
+    <!-- <div slot="icon">
+      <el-icon><i-ep-Edit /></el-icon>
+    </div> -->
     <el-step title="Step 2" />
     <el-step title="Step 3" />
   </el-steps>
 
   <el-button style="margin-top: 12px" @click="next"
-    >Next step{{ act }}</el-button
+    >Next step{{ active }}</el-button
   >
 </template>
 
 <script lang="ts" setup>
-// import { ref } from "vue";
+import { ref } from "vue";
 //
 const emit = defineEmits(["update:active"]);
 const props = defineProps({
   active: { type: Number, default: 0 },
-  //   title: { type: String, equired: true },
 });
-var active = computed(() => props.active);
+
+var active = ref(props.active);
+watch(
+  () => props.active,
+  (newVal, oldVal) => {
+    console.log("监听基本类型数据testStr");
+    active.value = newVal;
+    console.log("new", newVal);
+    console.log("old", oldVal);
+  }
+);
+
 //
-var act = <any>active;
 
 const next = () => {
-  act.value++;
-  emit("update:active", act);
+  emit("update:active", ++active.value);
 };
 </script>
 <style scoped lang="scss">
