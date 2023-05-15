@@ -25,10 +25,10 @@ const emit = defineEmits(["on-search"]);
 const handleSearch = () => {
   emit("on-search");
 };
-const searchBtn = ref(Element);
-let itemWidth = ref("");
+const searchBtn = ref(HTMLElement);
+let item_width = ref("");
 onMounted(() => {
-  itemWidth.value = `calc((100% - ${searchBtn.value.clientWidth}px) / 3)`;
+  item_width.value = `calc((100% - ${searchBtn.value.clientWidth}px) / 3)`;
 });
 </script>
 <style scoped lang="scss">
@@ -37,8 +37,12 @@ onMounted(() => {
     display: flex;
     flex-wrap: wrap;
 
+    :deep(.zxn-date-range) {
+      width: 100%;
+    }
+
     :deep(.el-form-item) {
-      width: v-bind(itemwidth);
+      width: v-bind(item_width);
       margin-right: 0;
       margin-bottom: 16px;
 

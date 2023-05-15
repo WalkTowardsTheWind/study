@@ -1,8 +1,12 @@
 <template>
-  <zxn-plan has-bottom>
-    <zxn-tabs :tabsList="[{ name: 'role', label: '新增角色' }]" has-back />
-    <div class="mt-10px">
-      <el-form label-width="120px">
+  <zxn-plan has-bottom class="role-view">
+    <zxn-tabs
+      :tabsList="[{ name: 'role', label: '新增角色' }]"
+      active-name="role"
+      has-back
+    />
+    <div class="mt-10px pl-40px">
+      <el-form label-width="70px">
         <el-row>
           <el-col :span="8">
             <el-form-item label="角色名称">
@@ -10,9 +14,10 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
+        <zxn-title>地区</zxn-title>
+        <el-row class="mt-16px">
           <el-col :span="24">
-            <el-form-item label="地区">
+            <el-form-item label="" label-width="0">
               <area-select
                 v-model="formItem.area"
                 :area-list="areaList as []"
@@ -20,9 +25,10 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <zxn-title>功能权限</zxn-title>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="功能权限">
+            <el-form-item label="" label-width="0">
               <role-select :role-list="roleList" />
             </el-form-item>
           </el-col>
@@ -38,6 +44,7 @@
 <script setup lang="ts">
 import areaSelect from "./components/areaSelect.vue";
 import roleSelect from "./components/roleSelect.vue";
+import { ElButton } from "element-plus";
 const formItem = reactive({
   name: "",
   area: [2, 4],
@@ -90,6 +97,30 @@ const roleList = reactive([
           { label: "详情", code: 3 },
         ],
       },
+      {
+        label: "个人账户",
+        children: [
+          { label: "新增", code: 1 },
+          { label: "编辑", code: 2 },
+          { label: "详情", code: 3 },
+        ],
+      },
+      {
+        label: "个人账户",
+        children: [
+          { label: "新增", code: 1 },
+          { label: "编辑", code: 2 },
+          { label: "详情", code: 3 },
+        ],
+      },
+      {
+        label: "个人账户",
+        children: [
+          { label: "新增", code: 1 },
+          { label: "编辑", code: 2 },
+          { label: "详情", code: 3 },
+        ],
+      },
     ],
   },
   {
@@ -119,7 +150,30 @@ const roleList = reactive([
           { label: "详情", code: 3 },
         ],
       },
+      {
+        label: "自动任务",
+        children: [
+          { label: "新增", code: 1 },
+          { label: "编辑", code: 2 },
+          { label: "详情", code: 3 },
+        ],
+      },
     ],
   },
 ]);
 </script>
+<style lang="scss">
+.role-view {
+  .el-checkbox {
+    .el-checkbox__inner {
+      width: 16px;
+      height: 16px;
+
+      &::after {
+        top: 2px;
+        left: 5px;
+      }
+    }
+  }
+}
+</style>

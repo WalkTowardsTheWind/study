@@ -11,12 +11,12 @@
         :key="item.label"
       >
         <div class="area-select-province-checkbox">
+          <span>{{ item.label }}</span>
           <el-checkbox
             v-model="item.checked"
             :indeterminate="item.indeterminate"
             @change="handleCityAllChange(item)"
           />
-          <span>{{ item.label }}</span>
         </div>
         <div class="area-select-province-box">
           <div
@@ -99,26 +99,32 @@ const handleWheel = useThrottleFn((e: MouseEvent) => {
   white-space: nowrap;
 
   &-province {
-    padding: 10px;
     margin-right: 16px;
     background: #fff;
-    border: 1px solid #e5e5e5;
-    border-radius: 4px;
+    border-bottom: 1px solid #e5e5e5;
 
     &-checkbox {
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      padding: 0 20px;
+      background-color: #eff4fe;
 
       > span {
-        margin-left: 10px;
+        font-family: SourceHanSansSC-Medium, SourceHanSansSC, sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
       }
     }
 
     &-box {
       display: grid;
       grid-template-rows: repeat(1, 36px);
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
       grid-gap: 10px;
+      padding: 16px 0 16px 20px;
     }
 
     &-city {
@@ -127,6 +133,7 @@ const handleWheel = useThrottleFn((e: MouseEvent) => {
       font-size: 14px;
       font-weight: 500;
       color: #333;
+      text-align: center;
       cursor: pointer;
       border: 1px solid #e5e5e5;
       border-radius: 4px;

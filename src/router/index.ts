@@ -162,6 +162,25 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
+  {
+    path: "/invoice",
+    component: Layout,
+    meta: { title: "发票中心", icon: "homepage" },
+    children: [
+      {
+        path: "manager",
+        component: () => import("@/views/invoice/invoiceManager/index.vue"),
+        name: "invoiceManager",
+        meta: { title: "发票管理", icon: "homepage" },
+      },
+      {
+        path: "invoiceView",
+        component: () => import("@/views/invoice/invoiceManager/view.vue"),
+        name: "invoiceView",
+        meta: { title: "发票详情", hidden: true },
+      },
+    ],
+  },
 ];
 
 /**
