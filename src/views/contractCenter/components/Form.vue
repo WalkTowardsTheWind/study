@@ -12,7 +12,6 @@
             class="zxn-box"
             ref="ruleFormRef"
             :model="formData"
-            :rules="(rules as any)"
             label-width="100px"
           >
             <div class="flex">
@@ -108,7 +107,7 @@ const formData = reactive({
 
 const emit = defineEmits(["sort-change", "selection-change", "page-change"]);
 const changeOptions = (val: any, data: any) => {
-  console.log(val, "value", data, props.formData);
+  console.log(val, "value", data, props);
   emit("selection-change", val);
 };
 
