@@ -275,6 +275,12 @@ export const constantRoutes: RouteRecordRaw[] = [
         meta: { title: "任务中心", icon: "homepage", affix: true },
       },
       {
+        path: "view",
+        component: () => import("@/views/taskManager/taskView.vue"),
+        name: "taskManagerView",
+        meta: { title: "任务详情", hidden: true },
+      },
+      {
         path: "log",
         component: () => import("@/views/system/log/index.vue"),
         name: "log",
@@ -291,6 +297,25 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/system/role/roleView.vue"),
         name: "addRole",
         meta: { title: "新增角色", hidden: true },
+      },
+    ],
+  },
+  {
+    path: "/invoice",
+    component: Layout,
+    meta: { title: "发票中心", icon: "homepage" },
+    children: [
+      {
+        path: "manager",
+        component: () => import("@/views/invoice/invoiceManager/index.vue"),
+        name: "invoiceManager",
+        meta: { title: "发票管理", icon: "homepage" },
+      },
+      {
+        path: "invoiceView",
+        component: () => import("@/views/invoice/invoiceManager/view.vue"),
+        name: "invoiceView",
+        meta: { title: "发票详情", hidden: true },
       },
     ],
   },

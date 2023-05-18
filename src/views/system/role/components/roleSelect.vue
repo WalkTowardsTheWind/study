@@ -6,11 +6,11 @@
       :key="module.label"
     >
       <div class="role-select-module-top">
-        <span>{{ module.label }}</span>
         <el-checkbox
           v-model="module.checked"
           :indeterminate="module.indeterminate"
         />
+        <span>{{ module.label }}</span>
       </div>
       <div class="role-select-module-content">
         <div
@@ -47,13 +47,18 @@ defineProps({
 </script>
 <style lang="scss" scoped>
 .role-select {
+  width: 100%;
+
   &-module {
+    width: 100%;
+    margin-top: 16px;
+
     &-top {
       display: flex;
       align-items: center;
 
       > span {
-        margin-right: 8px;
+        margin-left: 8px;
         font-family: SourceHanSansSC-Medium, SourceHanSansSC, sans-serif;
         font-size: 14px;
         font-weight: 500;
@@ -66,34 +71,48 @@ defineProps({
       flex-wrap: wrap;
 
       .page-select {
-        padding: 10px;
-        margin-right: 16px;
+        width: 25%;
+        padding-right: 16px;
+        margin-bottom: 16px;
         background: #fff;
-        border: 1px solid #e5e5e5;
-        border-radius: 4px;
 
         &-checkbox {
           display: flex;
           align-items: center;
           justify-content: space-between;
+          height: 56px;
+          padding: 0 20px;
+          background-color: #eff4fe;
 
           > span {
-            //margin-left: 10px;
+            font-family: SourceHanSansSC-Medium, SourceHanSansSC, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
           }
         }
 
         &-box {
-          display: grid;
-          grid-template-rows: repeat(1, 36px);
-          grid-template-columns: 1fr 1fr 1fr;
-          grid-gap: 10px;
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          padding-bottom: 16px;
+          border-bottom: 1px solid #e5e5e5;
+          //display: grid;
+          //grid-template-rows: repeat(1, 36px);
+          //grid-template-columns: 1fr 1fr 1fr;
+          //grid-gap: 10px;
         }
 
         &-operation {
+          height: 36px;
           padding: 0 10px;
+          margin-top: 16px;
+          margin-right: 16px;
           font-family: SourceHanSansSC-Medium, SourceHanSansSC, sans-serif;
           font-size: 14px;
           font-weight: 500;
+          line-height: 36px;
           color: #333;
           cursor: pointer;
           border: 1px solid #e5e5e5;

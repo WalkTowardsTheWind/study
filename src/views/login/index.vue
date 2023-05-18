@@ -532,7 +532,7 @@ onMounted(() => {
   }
 }
 
-::v-deep.el-input .el-input__wrapper {
+:deep(.el-input .el-input__wrapper) {
   // outline: none;
   border: none;
   border-radius: 0;
@@ -544,11 +544,11 @@ onMounted(() => {
   }
 }
 
-::v-deep .el-input .el-input__clear {
+:deep(.el-input .el-input__clear) {
   color: black;
 }
 
-::v-deep.el-form-item.is-error .el-input__wrapper {
+:deep(.el-form-item.is-error .el-input__wrapper) {
   box-shadow: 0 -1px 0 0 var(--el-color-danger) inset;
 }
 </style>

@@ -48,8 +48,32 @@
     background: #dff6fd;
   }
 
+  &.green {
+    color: #19b56b;
+    background: #daf3e7;
+  }
+
   &.grey {
     color: #333;
     background: #dedede;
+  }
+}
+
+// 表单详情样式
+.zxn-view-form {
+  .el-form-item {
+    .el-form-item__label {
+      font-family: SourceHanSansSC-Medium, SourceHanSansSC, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #656565;
+    }
+
+    .el-form-item__content {
+      font-family: SourceHanSansSC-Medium, SourceHanSansSC, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+    }
   }
 }
