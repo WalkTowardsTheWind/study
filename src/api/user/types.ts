@@ -1,4 +1,13 @@
 /**
+ * 验证码
+ */
+export interface Captcha {
+  nickname: string;
+  avatar: string;
+  roles: string[];
+  perms: string[];
+}
+/**
  * 登录用户信息
  */
 export interface UserInfo {

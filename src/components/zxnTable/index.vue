@@ -18,7 +18,7 @@
       <template v-for="(item, index) in columnList" :key="index">
         <el-table-column v-if="item.slot" v-bind="item">
           <template #default="scope">
-            <slot :name="item.slot" v-bind="scope" />
+            <slot :name="item.slot" v-bind="scope" />1
           </template>
         </el-table-column>
         <el-table-column v-else-if="item.type" v-bind="item">

@@ -29,6 +29,15 @@ const props = defineProps({
     required: true,
   },
 });
+// const widthValue = computed(() => props.width);
+// watch(
+//   () => props.width,
+//   (newVal, oldVal) => {
+//     console.log("监听基本类型数据testStr");
+//     console.log("new", newVal);
+//     console.log("old", oldVal);
+//   }
+// );
 
 const options = {
   xAxis: {
@@ -62,6 +71,7 @@ const options = {
 
 onMounted(() => {
   // 图表初始化
+  console.log(props.width);
   const chart = echarts.init(
     document.getElementById(props.id) as HTMLDivElement
   );

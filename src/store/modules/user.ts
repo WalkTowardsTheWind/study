@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
 
-import { loginApi, logoutApi } from "@/api/auth";
+import { logoutApi, loginApis } from "@/api/auth";
 import { getUserInfo } from "@/api/user";
 import { resetRouter } from "@/router";
 import { store } from "@/store";
 
-import { LoginData } from "@/api/auth/types";
+// import { LoginData } from "@/api/auth/types";
 import { UserInfo } from "@/api/user/types";
 
 import { useStorage } from "@vueuse/core";
@@ -25,12 +25,31 @@ export const useUserStore = defineStore("user", () => {
    * @param {LoginData}
    * @returns
    */
-  function login(loginData: LoginData) {
+  function login(loginData: any) {
+    console.log(2);
     return new Promise<void>((resolve, reject) => {
-      loginApi(loginData)
+      // const data={account:loginData.username,pwd:loginData.password,imgcode:loginData.imgcode}
+      const data2 = {
+        username: loginData.username,
+        password: loginData.password,
+      };
+      // loginApis(data2).then(
+      //   (response) => {
+      //     const { tokenType, accessToken } = response.data;
+      //     token.value = tokenType + ' ' + accessToken; // Bearer eyJhbGciOiJIUzI1NiJ9.xxx.xxx
+      //     resolve();
+      //   }
+
+      // ).catch((error) => {
+      //   reject(error);
+      // });
+      loginApis(data2)
         .then((response) => {
           const { tokenType, accessToken } = response.data;
+
           token.value = tokenType + " " + accessToken; // Bearer eyJhbGciOiJIUzI1NiJ9.xxx.xxx
+          console.log(tokenType + " " + accessToken);
+          console.log(token.value);
           resolve();
         })
         .catch((error) => {

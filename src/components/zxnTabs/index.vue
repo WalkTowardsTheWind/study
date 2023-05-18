@@ -7,7 +7,8 @@
         :label="item.label"
         :name="item.name"
       >
-        <slot :name="item.name" />
+        <slot :name="item.name"></slot>
+        <component :is="item.subassembly"></component>
       </el-tab-pane>
     </el-tabs>
     <div
@@ -32,6 +33,7 @@ const route = useRoute();
 type tabsListType = {
   label: string;
   name: string;
+  subassembly?: any;
 }[];
 const props = defineProps({
   activeName: { type: String, default: "" },

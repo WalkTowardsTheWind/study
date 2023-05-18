@@ -80,7 +80,7 @@ const tabsList = [
     label: "人工任务",
   },
 ];
-const options = [];
+const options = [] as any;
 const formItem = reactive({
   user: "",
   status: "",

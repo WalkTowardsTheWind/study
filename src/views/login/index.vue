@@ -39,9 +39,9 @@
             clearable
           />
         </el-form-item>
-        <el-form-item prop="verifyCode">
+        <el-form-item prop="imgcode">
           <el-input
-            v-model="loginData.verifyCode"
+            v-model="loginData.imgcode"
             autocomplete="off"
             placeholder="请输入验证码"
             size="large"
@@ -51,7 +51,7 @@
           />
 
           <div class="captcha1">
-            <img src="@/assets/zxn.jpg" @click="getCaptcha" />
+            <img :src="imgSrc" @click="getCaptchaImg" />
           </div>
         </el-form-item>
 
@@ -83,91 +83,96 @@
     </div>
     <div class="register"></div>
 
-    <el-dialog
-      v-model="registerVisible"
-      title="密码重置"
-      width="35%"
-      :before-close="handle"
-      :center="true"
-    >
-      <el-form
-        ref="registerFormRef"
-        :model="registerData"
-        :rules="registerRules"
-        class="register-form"
+    <div class="dialog">
+      <el-dialog
+        v-model="registerVisible"
+        title="密码重置"
+        width="460px"
+        :before-close="handle"
+        :center="true"
       >
-        <el-form-item prop="phone">
-          <el-input
-            class="flex-1"
-            ref="phone"
-            size="large"
-            v-model="registerData.phone"
-            placeholder="手机号"
-            name="phone"
-          />
-        </el-form-item>
-        <el-form-item prop="verifyCode">
-          <el-input
-            v-model="registerData.verifyCode"
-            auto-complete="off"
-            placeholder="验证码"
-            size="large"
-            @keyup.enter="handleRegister"
-          />
+        <el-form
+          ref="registerFormRef"
+          :model="registerData"
+          :rules="registerRules"
+          class="register-form"
+        >
+          <el-form-item prop="phone">
+            <el-input
+              class="flex-1"
+              ref="phone"
+              size="large"
+              v-model="registerData.phone"
+              placeholder="手机号"
+              name="phone"
+            />
+          </el-form-item>
+          <el-form-item prop="verifyCode">
+            <el-input
+              v-model="registerData.verifyCode"
+              auto-complete="off"
+              placeholder="验证码"
+              size="large"
+              @keyup.enter="handleRegister"
+            />
 
-          <div class="captcha2 mr-5 text-centen mt-1">
-            <span class="but" style="color: #356ff3" @click="getPhoneCaptcha">{{
-              (countNum as number) > 0 ? countNum : "获取验证码"
-            }}</span>
-          </div>
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input
-            class="flex-1"
-            v-model="registerData.password"
-            placeholder="密码"
-            :type="passwordVisible === false ? 'password' : 'input'"
-            size="large"
-            name="password"
-            @keyup="checkCapslock"
-            @keyup.enter="handleRegister"
-          />
-        </el-form-item>
+            <div class="captcha2 mr-5 text-centen mt-1">
+              <span
+                class="but"
+                style="color: #356ff3"
+                @click="getPhoneCaptcha"
+                >{{ (countNum as number) > 0 ? countNum : "获取验证码" }}</span
+              >
+            </div>
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input
+              class="flex-1"
+              v-model="registerData.password"
+              placeholder="密码"
+              :type="passwordVisible === false ? 'password' : 'input'"
+              size="large"
+              name="password"
+              @keyup="checkCapslock"
+              @keyup.enter="handleRegister"
+            />
+          </el-form-item>
 
-        <el-form-item prop="password2">
-          <el-input
-            class="flex-1"
-            v-model="registerData.password2"
-            placeholder="确认密码"
-            :type="password2Visible === false ? 'password' : 'input'"
-            size="large"
-            name="password2"
-            @keyup="checkCapslock"
-            @keyup.enter="handleRegister"
-          />
-        </el-form-item>
-      </el-form>
+          <el-form-item prop="password2">
+            <el-input
+              class="flex-1"
+              v-model="registerData.password2"
+              placeholder="确认密码"
+              :type="password2Visible === false ? 'password' : 'input'"
+              size="large"
+              name="password2"
+              @keyup="checkCapslock"
+              @keyup.enter="handleRegister"
+            />
+          </el-form-item>
+        </el-form>
 
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button
-            color="#356FF3"
-            size="large"
-            class="resetButton-cancel w-[35%]"
-            @click="registerVisible = false"
-            >取消
-          </el-button>
-          <el-button
-            color="#356FF3"
-            size="large"
-            class="resetButton-confirm w-[35%]"
-            @click="registerVisible = false"
-          >
-            确认
-          </el-button>
-        </span>
-      </template>
-    </el-dialog>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button
+              color="#356FF3"
+              size="large"
+              class="resetButton-cancel w-[35%]"
+              @click="registerVisible = false"
+              >取消
+            </el-button>
+            <el-button
+              color="#356FF3"
+              size="large"
+              class="resetButton-confirm w-[35%]"
+              @click="registerVisible = false"
+            >
+              确认
+            </el-button>
+          </span>
+        </template>
+      </el-dialog>
+    </div>
 
     <div class="loginBanquan">
       版权所有@copyRight北京惠通智云信息技术有限公司 保留一切版权
@@ -184,7 +189,8 @@ import { useUserStore } from "@/store/modules/user";
 
 // API依赖
 import { LocationQuery, LocationQueryValue, useRoute } from "vue-router";
-import { LoginData, RegisterData } from "@/api/auth/types";
+import { RegisterData } from "@/api/auth/types";
+// import { getCaptcha,loginApi } from "@/api/auth/index"
 
 const userStore = useUserStore();
 const route = useRoute();
@@ -193,6 +199,10 @@ const route = useRoute();
  * 按钮loading
  */
 const loading = ref(false);
+/**
+ * 记住密码
+ */
+const imgSrc = ref("http://localhost:3000/dev-api/ly/adminapi/getCaptcha");
 /**
  * 记住密码
  */
@@ -239,9 +249,10 @@ const countNum = ref<number>();
  */
 const loginFormRef = ref(ElForm);
 
-const loginData = ref<LoginData>({
+const loginData = ref<any>({
   username: "admin",
   password: "123456",
+  imgcode: "",
 });
 
 const loginRules = {
@@ -327,14 +338,12 @@ const debounce = (fn: () => void, time?: any) => {
 
 /**
  * 获取验证码
+ *
  */
-function getCaptcha() {
-  // getCaptchaApi().then(({ data }) => {
-  //   const { verifyCodeBase64, verifyCodeKey } = data;
-  //   loginData.value.verifyCodeKey = verifyCodeKey;
-  //   captchaBase64.value = verifyCodeBase64;
-  // });
-}
+const getCaptchaImg = () => {
+  var num = Math.ceil(Math.random() * 10);
+  imgSrc.value = "http://localhost:3000/dev-api/ly/adminapi/getCaptcha?" + num;
+};
 /**
  * 获取手机验证码
  */
@@ -364,10 +373,12 @@ function getPhoneCaptcha() {
 function handleLogin() {
   loginFormRef.value.validate((valid: boolean) => {
     if (valid) {
+      console.log(1);
       loading.value = true;
       userStore
         .login(loginData.value)
         .then(() => {
+          console.log(4);
           const query: LocationQuery = route.query;
 
           const redirect = (query.redirect as LocationQueryValue) ?? "/";
@@ -385,8 +396,9 @@ function handleLogin() {
           router.push({ path: redirect, query: otherQueryParams });
         })
         .catch(() => {
+          console.log("失败");
           // 验证失败，重新生成验证码
-          getCaptcha();
+          // getCaptchaImg();
         })
         .finally(() => {
           loading.value = false;
@@ -413,7 +425,7 @@ function handle() {
 }
 
 onMounted(() => {
-  // getCaptcha();
+  getCaptchaImg();
 });
 </script>
 
@@ -464,6 +476,25 @@ onMounted(() => {
           cursor: pointer;
         }
       }
+    }
+  }
+
+  .dialog {
+    :deep(.el-dialog) {
+      position: absolute;
+      top: calc(50% - 12px);
+      left: 50%;
+      display: flex;
+      flex-direction: column;
+      max-width: calc(100% - 30px);
+      max-height: calc(100% - 30px);
+      margin: 0 !important;
+      transform: translate(-50%, -50%);
+    }
+
+    :deep(.el-dialog .el-dialog__body) {
+      flex: 1;
+      overflow: auto;
     }
   }
 

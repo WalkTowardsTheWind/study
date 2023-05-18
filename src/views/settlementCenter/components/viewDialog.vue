@@ -7,7 +7,7 @@
   >
     <template #header>
       <div class="my-header">
-        <h4>企业基础信息</h4>
+        <h4>{{ title }}</h4>
       </div>
     </template>
     <div>

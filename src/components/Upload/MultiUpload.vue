@@ -140,8 +140,8 @@ const previewImg: UploadProps["onPreview"] = (uploadFile) => {
 <style lang="scss">
 //修改图片上传样式
 .el-upload-list--picture-card .el-upload-list__item {
-  width: 88px;
-  height: 88px;
+  width: 90px;
+  height: 90px;
 }
 
 .el-upload--picture-card {
