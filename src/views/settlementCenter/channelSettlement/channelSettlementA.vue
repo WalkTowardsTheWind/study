@@ -10,9 +10,7 @@
         <div class="p-[24px] p-l-[53px] p-b-[0]">
           <div class="top">
             <!-- <span class="title">结算单号</span> -->
-            <el-text
-              >结算单号&nbsp;&nbsp;{{ formItem.settlement_order_no }}</el-text
-            >
+            <el-text>结算单号&nbsp;&nbsp;{{ formItem.name }}</el-text>
           </div>
           <div class="tabTop m-t-[20px]">
             <div class="box"></div>
@@ -99,12 +97,11 @@ const tabsList = [
 ];
 const router = useRouter();
 const handleTo = () => {
-  router.push({ name: "enterpriseSettlementA", query: { activeName: "1" } });
+  router.push({ name: "channelSettlementB", query: { activeName: "1" } });
 };
 
 //表单信息
 const formItem = reactive({
-  settlement_order_no: "",
   name: "name",
   date: "date",
   tags: [{ id: 2, label: "不限学历" }],

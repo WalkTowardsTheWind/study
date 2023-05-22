@@ -1,39 +1,33 @@
 <template>
   <div class="p-[24px] p-b-[0]">
     <zxn-search :formItem="formItem">
-      <el-row>
-        <el-col :span="8">
-          <el-input v-model="formItem.search" placeholder="请输入关键字">
-            <template #prefix>
-              <el-icon><i-ep-Search /></el-icon>
-            </template>
-          </el-input>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="任务状态">
-            <el-select v-model="formItem.state" placeholder="Select">
-              <el-option
-                v-for="item in stateOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item prop="date" label="申请日期">
-            <el-date-picker
-              v-model="formItem.date"
-              type="daterange"
-              unlink-panels
-              range-separator="~"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-            />
-          </el-form-item>
-        </el-col>
-      </el-row>
+      <el-form-item>
+        <el-input v-model="formItem.search" placeholder="请输入关键字">
+          <template #prefix>
+            <el-icon><i-ep-Search /></el-icon>
+          </template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="任务状态">
+        <el-select v-model="formItem.state" placeholder="Select">
+          <el-option
+            v-for="item in stateOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="date" label="申请日期">
+        <el-date-picker
+          v-model="formItem.date"
+          type="daterange"
+          unlink-panels
+          range-separator="~"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        />
+      </el-form-item>
     </zxn-search>
     <zxn-table
       :table-data="tableData"
@@ -90,15 +84,9 @@ const formItem = reactive({
   tax: "",
   date: "",
 });
-const tableData = reactive([
-  { value: "企业结算", name: "shshhud", status: 0 },
-  { value: "企业结算", name: "shshhud", status: 1 },
-  { value: "企业结算", name: "shshhud", status: 2 },
-  { value: "企业结算", name: "shshhud", status: 1 },
-  { value: "企业结算", name: "shshhud", status: 2 },
-]);
+const tableData = reactive([{ settlement_order_no: "企业结算", status: 0 }]);
 const columnList = [
-  { label: "结算单号", prop: "value" },
+  { label: "结算单号", prop: "settlement_order_no" },
   {
     label: "状态",
     type: "enum",
@@ -106,11 +94,15 @@ const columnList = [
     prop: "status",
     color: { 0: "blue", 1: "gray", 2: "red" },
   },
-  { label: "任务数量", prop: "name" },
-  { label: "结算企业" },
-  { label: "税源地" },
-  { label: "结算人数" },
-  { label: "实际人数" },
+  { label: "任务数量", prop: "task_count" },
+  { label: "结算企业", prop: "company_name" },
+  { label: "税源地", prop: "tax_land_name" },
+  { label: "结算人数", prop: "total_people" },
+  { label: "实际人数", prop: "total_people" },
+  { label: "点位", prop: "total_people" },
+  { label: "打款金额", prop: "total_money" },
+  { label: "实际下发", prop: "real_money" },
+  { label: "个人回单", prop: "total_people" },
   {
     label: "操作",
     slot: "operation",

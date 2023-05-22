@@ -1,6 +1,6 @@
 <template>
   <div class="integration-table">
-    <div class="integration-table-top">
+    <div v-if="$slots.tableTop" class="integration-table-top">
       <slot name="tableTop" />
     </div>
     <div v-if="selectedNumber" class="integration-table-selected">
@@ -13,6 +13,7 @@
       @sort-change="handleSort"
       class="zxn-table"
     >
+      <el-table-column v-if="hasSelect" type="selection" />
       <el-table-column v-if="hasIndex" type="index" label="序号" width="65" />
       <template v-for="(item, index) in columnList" :key="index">
         <el-table-column v-if="(item as any).slot" v-bind="item">
@@ -21,13 +22,12 @@
           </template>
         </el-table-column>
         <el-table-column v-else-if="(item as any).type" v-bind="item">
-          <template #default="scope">
-            <div v-if="(item as any).type == 'enum'">
-              <el-tag v-if="scope.row.state === 1" type="success">上线</el-tag>
-              <el-tag v-else-if="scope.row.state === 2" type="info"
-                >下架</el-tag
-              >
-            </div>
+          <template #default="{ row }">
+            <div
+              v-if="(item as any).type === 'enum'"
+              v-text="proxy.$enumSet[(item as any).path][row[(item as any).prop]]"
+              :class="`zxn-table-label ${item.color[[row[item.prop]]]}`"
+            />
           </template>
         </el-table-column>
         <el-table-column v-else v-bind="item" />
@@ -44,7 +44,9 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 import type { SortParams } from "./tableType";
+const { proxy } = getCurrentInstance() as any;
 const props = defineProps({
+  hasSelect: { type: Boolean as PropType<boolean>, default: false },
   hasIndex: { type: Boolean as PropType<boolean>, default: true },
   tableData: { type: Array, default: () => [] },
   columnList: { type: Array, default: () => [] },
@@ -74,6 +76,8 @@ const handlePageChange = (current: { page: number; limit: number }) => {
 </script>
 <style lang="scss" scoped>
 .integration-table {
-  width: 100%;
+  &-top {
+    margin-bottom: 16px;
+  }
 }
 </style>

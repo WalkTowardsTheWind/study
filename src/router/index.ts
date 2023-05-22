@@ -142,46 +142,30 @@ export const constantRoutes: RouteRecordRaw[] = [
         meta: { title: "渠道合同详情", icon: "homepage", hidden: true }, //hidden: true
       },
       {
-        path: "taxContractAdd",
+        path: "supplyContractAdd",
         component: () =>
-          import("@/views/contractCenter/taxContract/taxContractAdd.vue"),
-        name: "taxContractAdd",
+          import("@/views/contractCenter/supplyContract/supplyContractAdd.vue"),
+        name: "supplyContractAdd",
         meta: { title: "供应合同新建", icon: "homepage", hidden: true },
       },
       {
-        path: "taxContractEdit",
+        path: "supplyContractEdit",
         component: () =>
-          import("@/views/contractCenter/taxContract/taxContractEdit.vue"),
-        name: "taxContractEdit",
+          import(
+            "@/views/contractCenter/supplyContract/supplyContractEdit.vue"
+          ),
+        name: "supplyContractEdit",
         meta: { title: "供应合同编辑", icon: "homepage", hidden: true }, //hidden: true
       },
       {
-        path: "taxContractDetails",
+        path: "supplyContractDetails",
         component: () =>
-          import("@/views/contractCenter/taxContract/taxContractDetails.vue"),
-        name: "taxContractDetails",
+          import(
+            "@/views/contractCenter/supplyContract/supplyContractDetails.vue"
+          ),
+        name: "supplyContractDetails",
         meta: { title: "供应合同详情", icon: "homepage", hidden: true }, //hidden: true
       },
-      // {
-      //   path: "enterprise-contract",
-      //   component: () =>
-      //     import("@/views/contractCenter/enterpriseContract/index.vue"),
-      //   name: "enterprise-contract",
-      //   meta: { title: "企业合同", icon: "homepage" },
-      // },
-      // {
-      //   path: "channel-contract",
-      //   component: () =>
-      //     import("@/views/contractCenter/channelContract/index.vue"),
-      //   name: "channel-contract",
-      //   meta: { title: "渠道合同", icon: "homepage" },
-      // },
-      // {
-      //   path: "tax-contract",
-      //   component: () => import("@/views/contractCenter/taxContract/index.vue"),
-      //   name: "tax-contract",
-      //   meta: { title: "税地合同", icon: "homepage" },
-      // },
     ],
   },
   // 资产
@@ -206,20 +190,33 @@ export const constantRoutes: RouteRecordRaw[] = [
         name: "enterpriseSettlementDetails",
         meta: { title: "企业结算详情", icon: "homepage" },
       },
-      // {
-      //   path: "enterprise-settlement",
-      //   component: () =>
-      //     import("@/views/settlementCenter/enterpriseSettlement/index.vue"),
-      //   name: "enterprise-settlement",
-      //   meta: { title: "企业结算", icon: "homepage" },
-      // },
-      // {
-      //   path: "channel-settlement",
-      //   component: () =>
-      //     import("@/views/settlementCenter/channelSettlement/index.vue"),
-      //   name: "channel-settlement",
-      //   meta: { title: "渠道结算", icon: "homepage" },
-      // },
+      {
+        path: "enterpriseSettlementA",
+        component: () =>
+          import(
+            "@/views/settlementCenter/enterpriseSettlement/enterpriseSettlementA.vue"
+          ),
+        name: "enterpriseSettlementA",
+        meta: { title: "企业", icon: "homepage" },
+      },
+      {
+        path: "channelSettlementA",
+        component: () =>
+          import(
+            "@/views/settlementCenter/channelSettlement/channelSettlementA.vue"
+          ),
+        name: "channelSettlementA",
+        meta: { title: "渠道佣金介绍", icon: "homepage" },
+      },
+      {
+        path: "channelSettlementB",
+        component: () =>
+          import(
+            "@/views/settlementCenter/channelSettlement/channelSettlementB.vue"
+          ),
+        name: "channelSettlementB",
+        meta: { title: "任务", icon: "homepage" },
+      },
     ],
   },
   {

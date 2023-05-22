@@ -3,7 +3,7 @@ import { AxiosPromise } from "axios";
 import { LoginData, LoginResult } from "./types";
 
 /**
- * 登录APIs
+ * 登录API
  *
  * @param data {LoginData}
  * @returns

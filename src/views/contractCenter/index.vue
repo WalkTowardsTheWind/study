@@ -12,7 +12,7 @@
 // import { useRouter } from "vue-router";
 import enterpriseContract from "./enterpriseContract/index.vue";
 import channelContract from "./channelContract/index.vue";
-import taxContract from "./taxContract/index.vue";
+import supplyContract from "./supplyContract/index.vue";
 const activeName = ref("1");
 const tabsList = [
   {
@@ -28,7 +28,7 @@ const tabsList = [
   {
     name: "3",
     label: "供应合同",
-    subassembly: taxContract,
+    subassembly: supplyContract,
   },
 ];
 //路由跳转

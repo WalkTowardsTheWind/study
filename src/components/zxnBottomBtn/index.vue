@@ -42,7 +42,7 @@ onMounted(() => {
 
   :deep(.el-affix) {
     .el-affix--fixed {
-      right: v-bind(styleright);
+      right: v-bind(style_right);
     }
   }
 }

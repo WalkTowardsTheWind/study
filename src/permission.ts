@@ -14,7 +14,9 @@ const whiteList = ["/login"];
 router.beforeEach(async (to, from, next) => {
   NProgress.start();
   const hasToken = localStorage.getItem("accessToken");
+  console.log(hasToken, "hasToken");
   if (hasToken) {
+    next({ path: "/" });
     if (to.path === "/login") {
       // 如果已登录，跳转首页
       next({ path: "/" });
@@ -22,6 +24,7 @@ router.beforeEach(async (to, from, next) => {
     } else {
       const userStore = useUserStoreHook();
       const hasRoles = userStore.roles && userStore.roles.length > 0;
+      next();
       if (hasRoles) {
         // 未匹配到任何路由，跳转404
         if (to.matched.length === 0) {
