@@ -1,5 +1,5 @@
 <template>
-  <div class="zxn-search">
+  <div ref="zxnSearch" class="zxn-search">
     <el-form
       :inline="true"
       label-position="right"
@@ -17,6 +17,9 @@
   </div>
 </template>
 <script setup lang="ts">
+import { TabsContextKey } from "@/components/constants";
+const tabsContext = inject(TabsContextKey, undefined);
+console.log(tabsContext);
 defineProps({
   formItem: { type: Object, default: () => ({}) },
   labelWidth: { type: [String, Number], default: 90 },
@@ -27,8 +30,22 @@ const handleSearch = () => {
 };
 const searchBtn = ref(HTMLElement);
 let item_width = ref("");
+const resetWidth = () => {
+  nextTick(() => {
+    item_width.value = `calc((100% - ${searchBtn.value.clientWidth}px) / 3)`;
+  });
+};
+const zxnSearch = ref<HTMLDivElement>();
+const context = reactive({
+  $el: zxnSearch,
+  resetWidth,
+});
 onMounted(() => {
-  item_width.value = `calc((100% - ${searchBtn.value.clientWidth}px) / 3)`;
+  resetWidth();
+  tabsContext?.addSearch(context);
+});
+defineExpose({
+  resetWidth,
 });
 </script>
 <style scoped lang="scss">

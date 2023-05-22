@@ -1,146 +1,146 @@
 <!--  线 + 柱混合图 -->
 <template>
-  <el-card>
-    <template #header> 业绩柱状图 </template>
-    <div :id="id" :class="className" :style="{ height, width }" />
-  </el-card>
+  <div
+    ref="dashboardBar"
+    class="dashboard-bar"
+    :style="{ width, height: `${boxHeight}px` }"
+  >
+    <div class="dashboard-title mt-30px">盈利看板</div>
+    <div class="dashboard-bar-content">
+      <div class="dashboard-bar-content-search">
+        <div class="dashboard-bar-content-search-quick">
+          <span>今年</span>
+          <span>本季度</span>
+          <span>本月</span>
+          <span>本周</span>
+        </div>
+        <div class="dashboard-bar-content-search-date">
+          <zxn-date-range class="w-272px mr-16px" />
+          <el-button type="primary">查询</el-button>
+        </div>
+      </div>
+      <div
+        :id="id"
+        :class="className"
+        :style="{ height: `${boxHeight - 130}px`, width }"
+      />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import * as echarts from 'echarts';
+import * as echarts from "echarts";
 
 const props = defineProps({
   id: {
     type: String,
-    default: 'barChart'
+    default: "barChart",
   },
   className: {
     type: String,
-    default: ''
+    default: "",
   },
   width: {
     type: String,
-    default: '200px',
-    required: true
+    default: "200px",
+    required: true,
   },
-  height: {
-    type: String,
-    default: '200px',
-    required: true
-  }
 });
 
 const options = {
-  grid: {
-    left: '2%',
-    right: '2%',
-    bottom: '10%',
-    containLabel: true
-  },
   tooltip: {
-    trigger: 'axis',
+    trigger: "axis",
     axisPointer: {
-      type: 'cross',
-      crossStyle: {
-        color: '#999'
-      }
-    }
+      type: "shadow",
+    },
   },
-  legend: {
-    x: 'center',
-    y: 'bottom',
-    data: ['收入', '毛利润', '收入增长率', '利润增长率'],
-    textStyle: {
-      color: '#999'
-    }
+  grid: {
+    left: "3%",
+    right: "0",
+    bottom: "3%",
+    containLabel: true,
   },
   xAxis: [
     {
-      type: 'category',
-      data: ['浙江', '北京', '上海', '广东', '深圳'],
-      axisPointer: {
-        type: 'shadow'
-      }
-    }
+      type: "category",
+      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      axisTick: {
+        alignWithLabel: true,
+      },
+    },
   ],
   yAxis: [
     {
-      type: 'value',
-      min: 0,
-      max: 10000,
-      interval: 2000,
-      axisLabel: {
-        formatter: '{value} '
-      }
+      type: "value",
     },
-    {
-      type: 'value',
-      min: 0,
-      max: 100,
-      interval: 20,
-      axisLabel: {
-        formatter: '{value}%'
-      }
-    }
   ],
   series: [
     {
-      name: '收入',
-      type: 'bar',
-      data: [7000, 7100, 7200, 7300, 7400],
-      barWidth: 20,
+      name: "Direct",
+      type: "bar",
+      barWidth: "60%",
       itemStyle: {
-        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          { offset: 0, color: '#83bff6' },
-          { offset: 0.5, color: '#188df0' },
-          { offset: 1, color: '#188df0' }
-        ])
-      }
+        color: "#356FF3",
+      },
+      data: [10, 52, 200, 334, 390, 330, 220],
     },
-    {
-      name: '毛利润',
-      type: 'bar',
-      data: [8000, 8200, 8400, 8600, 8800],
-      barWidth: 20,
-      itemStyle: {
-        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          { offset: 0, color: '#25d73c' },
-          { offset: 0.5, color: '#1bc23d' },
-          { offset: 1, color: '#179e61' }
-        ])
-      }
-    },
-    {
-      name: '收入增长率',
-      type: 'line',
-      yAxisIndex: 1,
-      data: [60, 65, 70, 75, 80],
-      itemStyle: {
-        color: '#67C23A'
-      }
-    },
-    {
-      name: '利润增长率',
-      type: 'line',
-      yAxisIndex: 1,
-      data: [70, 75, 80, 85, 90],
-      itemStyle: {
-        color: '#409EFF'
-      }
-    }
-  ]
+  ],
 };
+const dashboardBar = ref<HTMLDivElement>();
+let boxHeight = ref(0);
 
 onMounted(() => {
-  // 图表初始化
-  const chart = echarts.init(
-    document.getElementById(props.id) as HTMLDivElement
-  );
-  chart.setOption(options);
-
-  // 大小自适应
-  window.addEventListener('resize', () => {
-    chart.resize();
+  const { bottom } = (dashboardBar as any).value.getBoundingClientRect();
+  boxHeight.value = bottom < 360 ? 360 : bottom;
+  console.log(bottom, "222222222");
+  nextTick(() => {
+    // 图表初始化
+    const chart = echarts.init(
+      document.getElementById(props.id) as HTMLDivElement
+    );
+    chart.setOption(options);
+    // 大小自适应
+    window.addEventListener("resize", () => {
+      chart.resize();
+    });
   });
 });
 </script>
+<style lang="scss" scoped>
+.dashboard-bar {
+  &-content {
+    margin-top: 16px;
+    background: #fff;
+    border-radius: 4px;
+
+    &-search {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 24px 0;
+
+      &-quick {
+        display: flex;
+
+        > span {
+          box-sizing: border-box;
+          width: 56px;
+          height: 36px;
+          margin-right: 8px;
+          font-size: 14px;
+          line-height: 36px;
+          text-align: center;
+          cursor: pointer;
+          background: #fff;
+          border: 1px solid #e5e5e5;
+          border-radius: 4px;
+        }
+      }
+
+      &-date {
+        display: flex;
+      }
+    }
+  }
+}
+</style>

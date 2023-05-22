@@ -26,12 +26,14 @@
 <script lang="ts" setup>
 import { nextTick, PropType } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { TabsContextKey } from "@/components/constants";
 const router = useRouter();
 const route = useRoute();
 type tabsListType = {
   label: string;
   name: string;
 }[];
+
 const props = defineProps({
   activeName: { type: String, default: "" },
   tabsList: { type: Array as PropType<tabsListType>, default: () => [] },
@@ -43,6 +45,7 @@ const activeValue = computed(() => props.activeName);
 const handleClick = (tab: string) => {
   emit("update:activeName", tab);
   emit("tab-change", tab);
+  nextTick(resizeSearch);
 };
 const handleClickRight = () => {
   if (props.hasBack) {
@@ -55,6 +58,23 @@ const handleClickRight = () => {
     });
   });
 };
+const searchEl: any[] = [];
+const addSearch = (searchBox: any) => {
+  searchEl.push(searchBox);
+};
+const resizeSearch = () => {
+  searchEl.forEach((it) => {
+    if (it.$el.clientWidth) {
+      it.resetWidth();
+    }
+  });
+};
+provide(
+  TabsContextKey,
+  reactive({
+    addSearch,
+  })
+);
 </script>
 <style scoped lang="scss">
 .zxn-tabs {
