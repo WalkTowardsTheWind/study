@@ -8,8 +8,6 @@ export {};
 declare module "@vue/runtime-core" {
   export interface GlobalComponents {
     Breadcrumb: typeof import("./../components/Breadcrumb/index.vue")["default"];
-    ElAffix: typeof import("element-plus/es")["ElAffix"];
-    ElAlert: typeof import("element-plus/es")["ElAlert"];
     ElBreadcrumb: typeof import("element-plus/es")["ElBreadcrumb"];
     ElBreadcrumbItem: typeof import("element-plus/es")["ElBreadcrumbItem"];
     ElButton: typeof import("element-plus/es")["ElButton"];
@@ -25,9 +23,7 @@ declare module "@vue/runtime-core" {
     ElDropdownMenu: typeof import("element-plus/es")["ElDropdownMenu"];
     ElForm: typeof import("element-plus/es")["ElForm"];
     ElFormItem: typeof import("element-plus/es")["ElFormItem"];
-    ElFrom: typeof import("element-plus/es")["ElFrom"];
     ElIcon: typeof import("element-plus/es")["ElIcon"];
-    ElImage: typeof import("element-plus/es")["ElImage"];
     ElInput: typeof import("element-plus/es")["ElInput"];
     ElLink: typeof import("element-plus/es")["ElLink"];
     ElMenu: typeof import("element-plus/es")["ElMenu"];
@@ -43,10 +39,8 @@ declare module "@vue/runtime-core" {
     ElTableColumn: typeof import("element-plus/es")["ElTableColumn"];
     ElTabPane: typeof import("element-plus/es")["ElTabPane"];
     ElTabs: typeof import("element-plus/es")["ElTabs"];
-    ElTag: typeof import("element-plus/es")["ElTag"];
     ElText: typeof import("element-plus/es")["ElText"];
     ElTooltip: typeof import("element-plus/es")["ElTooltip"];
-    ElUpload: typeof import("element-plus/es")["ElUpload"];
     GithubCorner: typeof import("./../components/GithubCorner/index.vue")["default"];
     Hamburger: typeof import("./../components/Hamburger/index.vue")["default"];
     IconSelect: typeof import("./../components/IconSelect/index.vue")["default"];
@@ -56,8 +50,6 @@ declare module "@vue/runtime-core" {
     IEpChatDotRound: typeof import("~icons/ep/chat-dot-round")["default"];
     IEpCircleCloseFilled: typeof import("~icons/ep/circle-close-filled")["default"];
     IEpClose: typeof import("~icons/ep/close")["default"];
-    IEpDArrowRight: typeof import("~icons/ep/d-arrow-right")["default"];
-    IEpPlus: typeof import("~icons/ep/plus")["default"];
     IEpRefreshRight: typeof import("~icons/ep/refresh-right")["default"];
     IEpSearch: typeof import("~icons/ep/search")["default"];
     IEpSetting: typeof import("~icons/ep/setting")["default"];
