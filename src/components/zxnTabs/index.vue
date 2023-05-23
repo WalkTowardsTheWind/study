@@ -8,7 +8,8 @@
         :name="item.name"
         :disabled="item.disabled"
       >
-        <slot :name="item.name" />
+        <slot :name="item.name"></slot>
+        <component :is="item.subassembly"></component>
       </el-tab-pane>
     </el-tabs>
     <div
@@ -33,6 +34,7 @@ const route = useRoute();
 type tabsListType = {
   label: string;
   name: string;
+  subassembly?: any;
   disabled?: boolean;
 }[];
 

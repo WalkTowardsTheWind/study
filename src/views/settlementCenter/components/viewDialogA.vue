@@ -110,7 +110,7 @@
         </el-row> -->
       </el-form>
       <el-row>
-        <zxnTabs v-model:activeName="activeName" :tabsList="tabsList"></zxnTabs>
+        <ly-tabs v-model:activeName="activeName" :tabsList="tabsList"></ly-tabs>
       </el-row>
       <el-form
         v-if="activeName == '1'"
@@ -180,21 +180,21 @@
         </el-row>
       </el-form>
       <el-row v-if="activeName == '2'">
-        <zxn-table :table-data="tableData" :column-list="columnList">
+        <ly-table :table-data="tableData" :column-list="columnList">
           <template #operation="scope">
             <el-button link type="primary" @click="handleA(scope)"
               >查看</el-button
             >
           </template>
-        </zxn-table>
+        </ly-table>
       </el-row>
     </div>
   </el-dialog>
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import zxnTabs from "./zxnTabs.vue";
-import zxnTable from "./zxnTable.vue";
+import lyTabs from "./lyTabs.vue";
+import lyTable from "./lyTable.vue";
 const emit = defineEmits(["update:dialogVisibleA"]);
 const props = defineProps({
   dialogVisibleA: { type: Boolean, default: false },
