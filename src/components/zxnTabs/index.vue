@@ -6,6 +6,7 @@
         :key="item.name"
         :label="item.label"
         :name="item.name"
+        :disabled="item.disabled"
       >
         <slot :name="item.name" />
       </el-tab-pane>
@@ -32,6 +33,7 @@ const route = useRoute();
 type tabsListType = {
   label: string;
   name: string;
+  disabled?: boolean;
 }[];
 
 const props = defineProps({
@@ -62,10 +64,19 @@ const searchEl: any[] = [];
 const addSearch = (searchBox: any) => {
   searchEl.push(searchBox);
 };
+const TableEl: any[] = [];
+const addTable = (tableBox: any) => {
+  TableEl.push(tableBox);
+};
 const resizeSearch = () => {
   searchEl.forEach((it) => {
     if (it.$el.clientWidth) {
       it.resetWidth();
+    }
+  });
+  TableEl.forEach((it) => {
+    if (it.$el.clientWidth) {
+      it.resetHeight();
     }
   });
 };
@@ -73,6 +84,7 @@ provide(
   TabsContextKey,
   reactive({
     addSearch,
+    addTable,
   })
 );
 </script>
@@ -131,6 +143,10 @@ provide(
 
         &.is-active {
           color: $baseColor;
+        }
+
+        &.is-disabled {
+          display: none;
         }
       }
     }

@@ -33,6 +33,17 @@
     background-color: transparent;
     border: none;
   }
+
+  &.is-plain.el-button--primary {
+    color: #356ff3;
+    background-color: transparent;
+    border-color: #356ff3;
+
+    &:hover {
+      color: #fff;
+      background-color: #356ff3;
+    }
+  }
 }
 
 .zxn-table {
@@ -64,4 +75,8 @@
       }
     }
   }
+}
+
+.el-dropdown-menu {
+  padding: 0 !important;
 }

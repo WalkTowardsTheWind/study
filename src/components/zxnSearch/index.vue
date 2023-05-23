@@ -1,6 +1,7 @@
 <template>
   <div ref="zxnSearch" class="zxn-search">
     <el-form
+      ref="form"
       :inline="true"
       label-position="right"
       :label-width="labelWidth"
@@ -10,7 +11,7 @@
       <slot />
       <div ref="searchBtn" class="zxn-search-btn">
         <el-button type="primary" @click="handleSearch">查询</el-button>
-        <el-button type="info">重置</el-button>
+        <el-button type="info" @click="handleReset">重置</el-button>
         <slot name="rightBtn" />
       </div>
     </el-form>
@@ -18,15 +19,20 @@
 </template>
 <script setup lang="ts">
 import { TabsContextKey } from "@/components/constants";
+import { ElForm } from "element-plus";
 const tabsContext = inject(TabsContextKey, undefined);
-console.log(tabsContext);
 defineProps({
   formItem: { type: Object, default: () => ({}) },
   labelWidth: { type: [String, Number], default: 90 },
 });
-const emit = defineEmits(["on-search"]);
+const emit = defineEmits(["on-search", "on-reset"]);
 const handleSearch = () => {
   emit("on-search");
+};
+const form = ref(ElForm);
+const handleReset = () => {
+  form.value.resetFields();
+  emit("on-reset");
 };
 const searchBtn = ref(HTMLElement);
 let item_width = ref("");

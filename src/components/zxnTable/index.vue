@@ -7,13 +7,19 @@
       已选择 {{ selectedNumber }} 项
     </div>
     <el-table
+      ref="zxnTable"
       :data="tableData"
       style="width: 100%"
       @selection-change="handleSelect"
       @sort-change="handleSort"
+      :max-height="maxHeight"
       class="zxn-table"
     >
-      <el-table-column v-if="hasSelect" type="selection" />
+      <el-table-column
+        v-if="hasSelect"
+        type="selection"
+        :selectable="selectable"
+      />
       <el-table-column v-if="hasIndex" type="index" label="序号" width="65" />
       <template v-for="(item, index) in columnList" :key="index">
         <el-table-column v-if="item.slot" v-bind="item">
@@ -26,8 +32,10 @@
             <div
               v-if="item.type === 'enum'"
               v-text="proxy.$enumSet[item.path][row[item.prop]]"
-              :class="`zxn-table-label ${item.color[[row[item.prop]]]}`"
+              class="zxn-table-label"
+              :style="item.color[row[item.prop]]"
             />
+            <div v-if="item.type === 'deep'">{{ deepRender(row, item) }}</div>
           </template>
         </el-table-column>
         <el-table-column v-else v-bind="item" />
@@ -43,7 +51,9 @@
 </template>
 <script setup lang="ts">
 import { PropType } from "vue";
+import { TabsContextKey } from "@/components/constants";
 import type { SortParams } from "./tableType";
+const tabsContext = inject(TabsContextKey, undefined);
 const { proxy } = getCurrentInstance() as any;
 const props = defineProps({
   hasSelect: { type: Boolean as PropType<boolean>, default: false },
@@ -52,15 +62,20 @@ const props = defineProps({
   columnList: { type: Array, default: () => [] },
   hasPagination: { type: Boolean, default: true },
   pageInfo: { type: Object, default: () => ({}) },
+  selectable: { type: Function },
 });
 const emit = defineEmits(["sort-change", "selection-change", "page-change"]);
 const handleSort = ({ column, prop, order }: SortParams<any>) => {
   emit("sort-change", { column, prop, order });
 };
+const zxnTable = ref();
 let selectedNumber = ref(0);
 const handleSelect = (value: any) => {
   selectedNumber.value = value.length;
   emit("selection-change", value);
+};
+const getSelectionRows = () => {
+  return zxnTable.value.getSelectionRows();
 };
 let _total = ref(0);
 let _page = ref(1);
@@ -70,9 +85,35 @@ watchEffect(() => {
   _total.value = total;
   _page.value = page;
 });
+const deepRender = (row, item) => {
+  const fields = item.prop.split(".");
+  return fields.reduce((acc, cur) => {
+    return acc[cur];
+  }, row);
+};
 const handlePageChange = (current: { page: number; limit: number }) => {
   emit("page-change", current);
 };
+let maxHeight = ref(600);
+const resetHeight = () => {
+  nextTick(() => {
+    const el = zxnTable.value?.$el;
+    const { top } = el.getBoundingClientRect();
+    maxHeight.value = window.innerHeight - top - (props.hasPagination ? 68 : 0);
+  });
+};
+onMounted(() => {
+  resetHeight();
+  const context = reactive({
+    $el: zxnTable.value?.$el,
+    resetHeight,
+  });
+  tabsContext?.addTable(context);
+});
+defineExpose({
+  resetHeight,
+  getSelectionRows,
+});
 </script>
 <style lang="scss" scoped>
 .integration-table {

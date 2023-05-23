@@ -20,6 +20,8 @@ router.beforeEach(async (to, from, next) => {
       next({ path: "/" });
       NProgress.done();
     } else {
+      next();
+      return;
       const userStore = useUserStoreHook();
       const hasRoles = userStore.roles && userStore.roles.length > 0;
       if (hasRoles) {
@@ -46,6 +48,8 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   } else {
+    next();
+    return;
     // 未登录可以访问白名单页面
     if (whiteList.indexOf(to.path) !== -1) {
       next();
