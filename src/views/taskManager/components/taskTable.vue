@@ -13,7 +13,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="任务状态" prop="status">
-        <el-select v-model="formItem.status" placeholder="请选择">
+        <el-select v-model="formItem.status" placeholder="全部">
           <el-option
             v-for="item in proxy.$const['statusEnum.TaskEnum']"
             :key="item.value"

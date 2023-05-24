@@ -1,9 +1,7 @@
-import { pages } from "@/types/api";
-
 /**
  * 任务列表
  */
-export interface taskList extends pages {
+export interface taskList extends PageQuery {
   task_name: string;
   status: number;
   start_time: number;

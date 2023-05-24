@@ -108,9 +108,13 @@
       </el-form>
     </div>
     <div class="p-24px" v-show="activeName === 'member'">
-      <zxn-table :column-list="columnList" :hasPagination="false">
+      <zxn-table
+        :column-list="columnList"
+        :table-data="tableData"
+        :hasPagination="false"
+      >
         <template #operation>
-          <el-button link type="primary">操作</el-button>
+          <el-button link type="primary">详情</el-button>
         </template>
       </zxn-table>
     </div>
@@ -175,18 +179,17 @@ const tabsList: TabsType[] = reactive([
   },
 ]);
 const columnList = [
-  { label: "账户ID", prop: "value" },
+  { label: "账户ID", prop: "user_id" },
   {
     label: "状态",
     type: "enum",
-    path: "statusEnum.IndustryType",
+    path: "statusEnum.personnelType",
     prop: "status",
-    color: { 0: "blue", 1: "red" },
   },
-  { label: "姓名", prop: "value" },
-  { label: "联系方式", prop: "value" },
-  { label: "申请时间", prop: "value" },
-  { label: "操作", slot: "operation", fixed: "right", width: 250 },
+  { label: "姓名", prop: "real_name" },
+  { label: "联系方式", prop: "phone" },
+  { label: "申请时间", prop: "settlement_time" },
+  { label: "操作", slot: "operation", fixed: "right", width: 75 },
 ];
 const formItem = reactive({
   status: "",
@@ -207,7 +210,10 @@ const formItem = reactive({
   check_time: "",
   pass_time: "",
 });
+const tableData = reactive([]);
 const getView = async () => {
+  tabsList[1].disabled = true;
+  tabsList[2].disabled = true;
   const { id } = route.query;
   const loading = ElLoading.service({
     text: "加载中...",
@@ -215,7 +221,6 @@ const getView = async () => {
   try {
     const { data } = await getTaskView(id * 1);
     loading.close();
-    console.log(data);
     const taskAttribute = data.taskAttribute || {};
     formItem.status = data.status;
     formItem.task_name = data.task_name;
@@ -252,6 +257,10 @@ const getView = async () => {
     formItem.add_time = data.add_time;
     formItem.check_time = data.check_time;
     formItem.pass_time = data.pass_time;
+    if (data.taskUser && data.taskUser.length) {
+      tabsList[1].disabled = false;
+      tableData.push(...data.taskUser);
+    }
   } catch (err) {
     loading.close();
   }

@@ -33,7 +33,7 @@
               v-if="item.type === 'enum'"
               v-text="proxy.$enumSet[item.path][row[item.prop]]"
               class="zxn-table-label"
-              :style="item.color[row[item.prop]]"
+              :style="item.color ? item.color[row[item.prop]] : {}"
             />
             <div v-if="item.type === 'deep'">{{ deepRender(row, item) }}</div>
           </template>
@@ -96,7 +96,7 @@ const handlePageChange = (current: { page: number; limit: number }) => {
 };
 let maxHeight = ref(600);
 const resetHeight = () => {
-  nextTick(() => {
+  setTimeout(() => {
     const el = zxnTable.value?.$el;
     const { top } = el.getBoundingClientRect();
     maxHeight.value = window.innerHeight - top - (props.hasPagination ? 68 : 0);

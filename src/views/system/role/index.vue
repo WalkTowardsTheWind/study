@@ -12,13 +12,13 @@
       </zxn-search>
       <zxn-table :table-data="tableData" :column-list="columnList" hasSelect>
         <template #tableTop>
-          <el-button type="primary" class="mr-[8px]">新建</el-button>
+          <el-button type="primary" class="mr-[8px]">+ 新建</el-button>
           <el-dropdown trigger="click">
-            <el-button>批量操作</el-button>
+            <el-button type="primary" plain>批量操作</el-button>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item>驳回</el-dropdown-item>
-                <el-dropdown-item>通过</el-dropdown-item>
+                <el-dropdown-item>停用</el-dropdown-item>
+                <el-dropdown-item>启用</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>

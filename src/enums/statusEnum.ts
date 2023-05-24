@@ -23,3 +23,23 @@ export enum settlementType {
   "冻结",
   "异常",
 }
+
+export enum personnelType {
+  "已报名",
+  "驳回",
+  "已录取",
+  "已完结",
+}
+
+export enum invoiceStatus {
+  "待开票",
+  "已开票",
+  "已邮寄",
+  "驳回",
+  "冲红",
+}
+
+export enum invoiceType {
+  "普票",
+  "专票",
+}

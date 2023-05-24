@@ -78,7 +78,8 @@ defineExpose({
 
       .el-form-item__content {
         .el-select,
-        .el-input {
+        .el-input,
+        .el-cascader {
           width: 100%;
         }
       }
