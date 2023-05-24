@@ -6,6 +6,7 @@
         :key="item.name"
         :label="item.label"
         :name="item.name"
+        :disabled="item.disabled"
       >
         <slot :name="item.name"></slot>
         <component :is="item.subassembly"></component>
@@ -27,13 +28,16 @@
 <script lang="ts" setup>
 import { nextTick, PropType } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { TabsContextKey } from "@/components/constants";
 const router = useRouter();
 const route = useRoute();
 type tabsListType = {
   label: string;
   name: string;
   subassembly?: any;
+  disabled?: boolean;
 }[];
+
 const props = defineProps({
   activeName: { type: String, default: "" },
   tabsList: { type: Array as PropType<tabsListType>, default: () => [] },
@@ -45,6 +49,7 @@ const activeValue = computed(() => props.activeName);
 const handleClick = (tab: string) => {
   emit("update:activeName", tab);
   emit("tab-change", tab);
+  nextTick(resizeSearch);
 };
 const handleClickRight = () => {
   if (props.hasBack) {
@@ -57,6 +62,33 @@ const handleClickRight = () => {
     });
   });
 };
+const searchEl: any[] = [];
+const addSearch = (searchBox: any) => {
+  searchEl.push(searchBox);
+};
+const TableEl: any[] = [];
+const addTable = (tableBox: any) => {
+  TableEl.push(tableBox);
+};
+const resizeSearch = () => {
+  searchEl.forEach((it) => {
+    if (it.$el.clientWidth) {
+      it.resetWidth();
+    }
+  });
+  TableEl.forEach((it) => {
+    if (it.$el.clientWidth) {
+      it.resetHeight();
+    }
+  });
+};
+provide(
+  TabsContextKey,
+  reactive({
+    addSearch,
+    addTable,
+  })
+);
 </script>
 <style scoped lang="scss">
 .zxn-tabs {
@@ -113,6 +145,10 @@ const handleClickRight = () => {
 
         &.is-active {
           color: $baseColor;
+        }
+
+        &.is-disabled {
+          display: none;
         }
       }
     }

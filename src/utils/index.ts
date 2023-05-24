@@ -37,3 +37,12 @@ export function isExternal(path: string) {
   const isExternal = /^(https?:|http?:|mailto:|tel:)/.test(path);
   return isExternal;
 }
+
+export function transformTimeRange(params: any, oldField = "timeData") {
+  if (params[oldField] && params[oldField].length) {
+    params.start_time = params[oldField][0] || "";
+    params.end_time = params[oldField][1] || "";
+  }
+  delete params[oldField];
+  return params;
+}

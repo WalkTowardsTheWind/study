@@ -1,0 +1,35 @@
+<template>
+  <div class="risk-ring">
+    <div class="dashboard-title">风险类型占比</div>
+    <div class="risk-ring-content">
+      <pie-chart
+        height="100%"
+        width="100%"
+        :chart-data="chartData"
+        :color="['#366ff4', '#5a85e8', '#7e9add', '#36c5f4', '#7ec5dd']"
+      />
+    </div>
+  </div>
+</template>
+<script setup lang="ts">
+import PieChart from "./PieChart.vue";
+const chartData = reactive([
+  { value: 36, name: "任务" },
+  { value: 20, name: "结算" },
+  { value: 16, name: "充值" },
+  { value: 9, name: "认证审核" },
+  { value: 19, name: "发票" },
+]);
+</script>
+<style lang="scss" scoped>
+.risk-ring {
+  flex: 1;
+
+  &-content {
+    height: 240px;
+    margin-top: 16px;
+    background: #fff;
+    border-radius: 4px;
+  }
+}
+</style>
