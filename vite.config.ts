@@ -38,7 +38,10 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
           changeOrigin: true,
           rewrite: (path) =>
             // localhost:3000/dev-api/users/me → http://vapi.youlai.tech/users/me
-            path.replace(new RegExp("^" + env.VITE_APP_BASE_API), ""),
+            path.replace(
+              new RegExp("^" + env.VITE_APP_BASE_API),
+              env.VITE_APP_BASE_API
+            ),
         },
         // [env.VITE_APP_BASE_API]: {
         //   // 线上接口API地址
