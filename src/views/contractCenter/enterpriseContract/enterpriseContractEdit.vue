@@ -12,10 +12,10 @@
             <div class="flex">
               <div class="w-[33%]">
                 <el-form-item label="合同名称">
-                  <el-text class="mx-1">{{ formItem.contract_name }}</el-text>
+                  <span class="mx-1">{{ formItem.contract_name }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="编号">
-                  <el-text class="mx-1">{{ formItem.contract_no }}</el-text>
+                  <span class="mx-1">{{ formItem.contract_no }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="合同类型">
                   <el-select
@@ -75,19 +75,21 @@
                 </el-form-item>
               </div>
               <div class="w-[33%]">
-                <el-form-item class="mb-[0]" label="合同文件">
+                <!-- <el-form-item class="mb-[0]" label="合同文件">
                   <multi-upload v-model="formItem.file_url"></multi-upload>
                 </el-form-item>
                 <el-form-item class="mt-13px" label="附件">
                   <multi-upload v-model="formItem.annex_url"></multi-upload>
-                </el-form-item>
+                </el-form-item> -->
               </div>
             </div>
           </el-form>
         </div>
         <zxn-bottom-btn>
           <div class="but">
-            <el-button type="primary" @click="handleSubmit">确 定</el-button>
+            <el-button type="primary" @click="handleEnterpriseContractEdit"
+              >确 定</el-button
+            >
             <el-button @click="handleClose">取 消</el-button>
           </div>
         </zxn-bottom-btn>
@@ -106,6 +108,8 @@
 </template>
 <script setup lang="ts">
 import { useRoute } from "vue-router";
+import { enterpriseContractEdit } from "@/api/contractCenter/enterpriseContract";
+import { getContractDetails } from "@/api/contractCenter";
 const activeName = ref("1");
 const tabsList = [
   {
@@ -118,11 +122,33 @@ const tabsList = [
   },
 ];
 //
-const contract_kindOptions = ref([] as any);
-const contract_termOptions = ref([] as any);
+const contract_kindOptions = [
+  {
+    value: "1",
+    label: "业务拓展协议(个人)",
+  },
+  {
+    value: "2",
+    label: "业务拓展协议(企业)",
+  },
+  {
+    value: "3",
+    label: "共享经济服务协议",
+  },
+  {
+    value: "4",
+    label: "自由职业者服务协议",
+  },
+];
+const contract_termOptions = [
+  {
+    value: "1",
+    label: "一年",
+  },
+];
 
 //表单信息
-const formItem = reactive({
+var formItem = ref({
   contract_name: "",
   contract_no: "",
   contract_kind: "",
@@ -132,16 +158,21 @@ const formItem = reactive({
   contract_term: "",
   sign_time: "",
   end_time: "",
-
   remarks: "",
-  file_url: [
-    "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  ],
-  annex_url: [
-    "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  ],
+  // file_url: [
+  //   "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
+  // ],
+  // annex_url: [
+  //   "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
+  // ],
 });
-const handleSubmit = () => {};
+const handleEnterpriseContractEdit = () => {
+  const ID = Number(route.query.id);
+  enterpriseContractEdit(ID, formItem).then().catch();
+};
+const handleSubmit = () => {
+  getData();
+};
 const handleClose = () => {};
 
 const route = useRoute();
@@ -155,10 +186,46 @@ console.log(route.query.activeName);
 //   }
 // }
 
-onMounted(() => {
-  activeName.value = route.query.activeName + "";
-  // rou()
-});
+const getData = () => {
+  const ID = Number(route.query.id);
+  getContractDetails(ID)
+    .then((response) => {
+      console.log(typeof response.data.info.contract_name);
+      activeName.value = response.data.info.online_type + "";
+      var {
+        contract_name,
+        contract_no,
+        contract_kind,
+        party_a,
+        party_b,
+        tax_location,
+        contract_term,
+        sign_time,
+        end_time,
+        remarks,
+        // file_url,
+        // annex_url,
+      } = response.data.info;
+      console.log(contract_name);
+      formItem.value = {
+        contract_name,
+        contract_no,
+        contract_kind: contract_kind + "",
+        party_a,
+        party_b,
+        tax_location,
+        contract_term,
+        sign_time,
+        end_time,
+        remarks,
+        // file_url,
+        // annex_url,
+      };
+    })
+    .catch();
+};
+getData();
+onMounted(() => {});
 </script>
 <style lang="scss" scoped>
 .zxn-box {

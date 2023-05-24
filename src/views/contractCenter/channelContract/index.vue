@@ -1,15 +1,19 @@
 <template>
   <div class="p-[24px] p-b-[0]">
-    <zxn-search :formItem="formItem">
+    <zxn-search
+      :formItem="formItem"
+      :on-search="handleSearch"
+      :on-reset="handleReset"
+    >
       <el-form-item>
-        <el-input v-model="formItem.search" placeholder="请输入关键字">
+        <el-input v-model="formItem.keywords" placeholder="请输入关键字">
           <template #prefix>
             <el-icon><i-ep-Search /></el-icon>
           </template>
         </el-input>
       </el-form-item>
       <el-form-item label="合同状态">
-        <el-select v-model="formItem.state" placeholder="Select">
+        <el-select v-model="formItem.keywords" placeholder="Select">
           <el-option
             v-for="item in stateOptions"
             :key="item.value"
@@ -19,7 +23,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="税源地">
-        <el-select v-model="formItem.manufacturer" placeholder="Select">
+        <el-select v-model="formItem.keywords" placeholder="Select">
           <el-option
             v-for="item in manufacturerOptions"
             :key="item.value"
@@ -30,7 +34,7 @@
       </el-form-item>
       <el-form-item prop="date" label="创建日期">
         <el-date-picker
-          v-model="formItem.date"
+          v-model="formItem.keywords"
           type="daterange"
           unlink-panels
           range-separator="~"
@@ -42,11 +46,12 @@
     <zxn-table
       :table-data="tableData"
       :column-list="columnList"
+      :page-info="pageInfo"
       hasSelect
       @selection-change="handleSelect"
     >
       <template #tableTop>
-        <el-dropdown trigger="click" @command="handleNewBuilt">
+        <el-dropdown trigger="click" @command="handleAdd">
           <el-button type="primary">+ 新建</el-button>
           <template #dropdown>
             <el-dropdown-menu>
@@ -67,13 +72,12 @@
           v-if="scope.row.status != 1"
           link
           type="primary"
-          @click="handleDelete(scope)"
+          @click="handleUpdateStatus(scope)"
           >{{ scope.row.status == 0 ? "停用" : "启用" }}</el-button
         >
         <el-button link type="primary" @click="handleEdit(scope)"
           >编辑</el-button
         >
-
         <el-button link type="primary" @click="handleDownload(scope)"
           >下载</el-button
         >
@@ -84,6 +88,12 @@
 </template>
 <script setup lang="ts">
 import { useRouter } from "vue-router";
+import { getChannelContractList } from "@/api/contractCenter/channelContract";
+import { updateStatus } from "@/api/contractCenter";
+import type { ComponentInternalInstance } from "vue";
+import { reactive } from "vue";
+const { proxy } = getCurrentInstance() as ComponentInternalInstance;
+
 // 状态
 const stateOptions = ref([] as any);
 // 厂商
@@ -93,15 +103,23 @@ const manufacturerOptions = [
   { label: "某某网", value: 3 },
   { label: "某某网", value: 4 },
 ] as any;
+// 查询重置
+const handleSearch = () => {};
+const handleReset = () => {};
 const formItem = reactive({
-  search: "",
-  state: "",
-  manufacturer: "",
-  Invoice: "",
-  tax: "",
-  date: "",
+  keywords: "",
+  start_time: "",
+  end_time: "",
+  contract_kind: "",
+  page: "",
+  limit: "",
+  status: "",
 });
-const tableData = reactive([{ contract_no: "2", status: "企业合同" }]);
+var pageInfo = ref({
+  total: 1, //总数
+  page: 1, //页数
+} as any);
+var tableData = reactive([] as any);
 const columnList = [
   { label: "合同编号", prop: "contract_no" },
   {
@@ -127,45 +145,40 @@ const columnList = [
 ];
 // 操作
 const handleDetails = (scope: any) => {
+  console.log(scope.row.id, "scope");
   router.push({
-    name: "enterpriseContractDetails",
-    query: { activeName: "1", id: "1" },
+    name: "channelContractDetails",
+    query: { activeName: "1", id: scope.row.id },
   });
-
-  console.log("详情");
-  console.log(scope.row.value.$index);
 };
 const handleEdit = (scope: any) => {
   router.push({
     name: "channelContractEdit",
-    query: { activeName: "1", id: "1" },
+    query: { activeName: "1", id: scope.row.id },
   });
-
-  console.log("编辑");
-  console.log(scope.row.value);
 };
-const handleDelete = (scope: any) => {
-  console.log("删除");
-  console.log(scope.row.value.$index);
+const handleUpdateStatus = (scope: any) => {
+  var data = { id: scope.row.id, status: scope.row.status == 0 ? "2" : "0" };
+  updateStatus(data);
+  getTableData();
 };
 const handleDownload = (scope: any) => {
-  console.log("下载");
-  console.log(scope.row.value.$index);
+  console.log("下载", scope);
 };
 /**
  * 批量选择
  */
 //选中的数据
+//返回id数组
 const selectionData = ref([]);
 const handleSelect = (data: any) => {
-  selectionData.value = data;
-  console.log(selectionData.value);
+  selectionData.value = data.map((item: any) => item.id);
 };
 /**
  * 新建
  */
 const router = useRouter();
-const handleNewBuilt = (command: string | number | object) => {
+const handleAdd = (command: string | number | object) => {
   if (command == 1) {
     router.push({ name: "channelContractAdd", query: { activeName: "1" } });
     console.log("线下合同");
@@ -183,27 +196,33 @@ const handleImport = () => {};
  * 下拉选择外部导入
  */
 const getData = () => {
-  let a = 8;
-  stateOptions.value = [
-    { label: `全部 (${a})`, value: 1 },
-    { label: `启用中 (${a})`, value: 2 },
-    { label: `待启用 (${a})`, value: 3 },
-    { label: `预警 (${a})`, value: 4 },
-    { label: `下架 (${a})`, value: 5 },
-  ];
+  stateOptions.value = (proxy as any).$const["statusEnum.IndustryType"];
 };
 getData();
-//
-// //路由跳转
+//路由跳转
+// const router = useRouter();
 // const rou=()=>{
 //   const uid = router.currentRoute.value.meta.title;
-//   if(uid=="渠道合同"){
-//     activeName.value="2"
+//   if(uid=="企业合同"){
+//     activeName.value="1"
 //    console.log(uid)
 //   }
 // }
 
+/**
+ * 获取数据
+ */
+const getTableData = () => {
+  const data = { ...formItem };
+  getChannelContractList(data)
+    .then((response: any) => {
+      tableData.length = 0;
+      tableData.push(...response.data.list);
+    })
+    .catch(() => {});
+};
+
 onMounted(() => {
-  // rou()
+  getTableData();
 });
 </script>

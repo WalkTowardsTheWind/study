@@ -12,16 +12,16 @@
             <div class="flex">
               <div class="w-[33%]">
                 <el-form-item label="合同名称">
-                  <el-text class="mx-1">{{ formItem.contract_name }}</el-text>
+                  <span class="mx-1">{{ contractName }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="编号">
-                  <el-text class="mx-1">{{ formItem.contract_no }}</el-text>
+                  <span class="mx-1">{{ formItem.contract_no }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="合同类型">
                   <el-select
                     class="w-[100%]"
                     v-model="formItem.contract_kind"
-                    placeholder="Select"
+                    placeholder="请选择"
                   >
                     <el-option
                       v-for="item in contract_kindOptions"
@@ -75,19 +75,21 @@
                 </el-form-item>
               </div>
               <div class="w-[33%]">
-                <el-form-item class="mb-[0]" label="合同文件">
+                <!-- <el-form-item class="mb-[0]" label="合同文件">
                   <multi-upload v-model="formItem.file_url"></multi-upload>
                 </el-form-item>
                 <el-form-item class="mt-13px" label="附件">
                   <multi-upload v-model="formItem.annex_url"></multi-upload>
-                </el-form-item>
+                </el-form-item> -->
               </div>
             </div>
           </el-form>
         </div>
         <zxn-bottom-btn>
           <div class="but">
-            <el-button type="primary" @click="handleSubmit">确 定</el-button>
+            <el-button type="primary" @click="handleSupplyContractAdd"
+              >确 定</el-button
+            >
             <el-button @click="handleClose">取 消</el-button>
           </div>
         </zxn-bottom-btn>
@@ -106,6 +108,8 @@
 </template>
 <script setup lang="ts">
 import { useRoute } from "vue-router";
+import { getContractNumber } from "@/api/contractCenter";
+import { supplyContractAdd } from "@/api/contractCenter/supplyContract";
 const activeName = ref("1");
 const tabsList = [
   {
@@ -118,13 +122,36 @@ const tabsList = [
   },
 ];
 //
-const contract_kindOptions = ref([] as any);
-const contract_termOptions = ref([] as any);
+const contract_kindOptions = [
+  {
+    value: "1",
+    label: "业务拓展协议(个人)",
+  },
+  {
+    value: "2",
+    label: "业务拓展协议(企业)",
+  },
+  {
+    value: "3",
+    label: "共享经济服务协议",
+  },
+  {
+    value: "4",
+    label: "自由职业者服务协议",
+  },
+];
+const contract_termOptions = [
+  {
+    value: "1",
+    label: "一年",
+  },
+];
 
 //表单信息
 const formItem = reactive({
   contract_name: "",
   contract_no: "",
+  online_type: 0,
   contract_kind: "",
   party_a: "",
   party_b: "",
@@ -134,13 +161,27 @@ const formItem = reactive({
   end_time: "",
 
   remarks: "",
-  file_url: [
-    "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  ],
-  annex_url: [
-    "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  ],
+  // file_url: [
+  //   "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
+  // ],
+  // annex_url: [
+  //   "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
+  // ],
 });
+// 计算属性
+var contractName = computed(() => {
+  var contractKind = contract_kindOptions.find((item) => {
+    if (item.value == formItem.contract_kind) {
+      return item;
+    }
+  });
+  console.log(contractKind?.label);
+  return formItem.party_a + (contractKind?.label || "");
+}) as any;
+
+const handleSupplyContractAdd = () => {
+  supplyContractAdd(formItem).then().catch();
+};
 const handleSubmit = () => {};
 const handleClose = () => {};
 
@@ -155,6 +196,12 @@ console.log(route.query.activeName);
 //    console.log(uid)
 //   }
 // }
+const getData = () => {
+  getContractNumber()
+    .then(() => {})
+    .catch();
+};
+getData();
 
 onMounted(() => {
   activeName.value = route.query.activeName + "";

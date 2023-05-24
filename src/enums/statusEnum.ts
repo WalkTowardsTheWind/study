@@ -20,3 +20,14 @@ export enum settlementType {
   "冻结",
   "异常",
 }
+export enum taxLandType {
+  "待启用",
+  "启用中",
+  "下架",
+  "预警",
+}
+export enum invoiceType {
+  "普通发票",
+  "6%增值税发票",
+  "普通发票/6%增值税发票",
+}

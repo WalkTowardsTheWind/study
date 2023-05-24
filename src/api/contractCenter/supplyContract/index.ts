@@ -1,5 +1,9 @@
 import request from "@/utils/request";
-import { supplyContractAdd, supplyContractEdit } from "./types";
+import {
+  supplyContractAdd,
+  supplyContractList,
+  supplyContractEdit,
+} from "./types";
 
 /**
  * 新建企业合同
@@ -20,10 +24,11 @@ export function supplyContractAdd(data: supplyContractAdd) {
  *
  *
  */
-export function getSupplyContractList() {
+export function getSupplyContractList(data: supplyContractList) {
   return request({
     url: "/adminapi/contract/supply_contract",
     method: "get",
+    params: data,
   });
 }
 

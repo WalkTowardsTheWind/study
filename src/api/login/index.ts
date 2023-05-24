@@ -22,7 +22,7 @@ export function loginApi(data: LoginData): AxiosPromise<any> {
  * @param data {RegisterData}
  * @returns
  */
-export function login(data: RegisterData) {
+export function getRegisterData(data: RegisterData) {
   return request({
     url: "/adminapi/forgotPwd",
     method: "post",
@@ -35,7 +35,7 @@ export function login(data: RegisterData) {
  */
 export function getPhone(data: GetPhone) {
   return request({
-    url: "/adminapi/notify/sms/captcha",
+    url: "/adminapi/smsCaptcha",
     method: "post",
     params: data,
   });
@@ -45,7 +45,7 @@ export function getPhone(data: GetPhone) {
  */
 export function logoutApi() {
   return request({
-    url: "/adminapi/admin/logout",
+    url: "/adminapi/setting/admin/logout",
     method: "get",
   });
 }

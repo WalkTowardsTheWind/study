@@ -2,7 +2,7 @@
   <div class="p-[24px] p-b-[0]">
     <zxn-search :formItem="formItem">
       <el-form-item>
-        <el-input v-model="formItem.search" placeholder="请输入关键字">
+        <el-input v-model="formItem.keywords" placeholder="请输入关键字">
           <template #prefix>
             <el-icon><i-ep-Search /></el-icon>
           </template>
@@ -10,7 +10,7 @@
       </el-form-item>
 
       <el-form-item label="税地状态">
-        <el-select v-model="formItem.state" placeholder="Select">
+        <el-select v-model="formItem.status" placeholder="Select">
           <el-option
             v-for="item in stateOptions"
             :key="item.value"
@@ -21,7 +21,7 @@
       </el-form-item>
 
       <el-form-item label="厂商">
-        <el-select v-model="formItem.manufacturer" placeholder="Select">
+        <el-select v-model="formItem.tax_manufacturer" placeholder="Select">
           <el-option
             v-for="item in manufacturerOptions"
             :key="item.value"
@@ -32,7 +32,7 @@
       </el-form-item>
 
       <el-form-item label="发票类型">
-        <el-select v-model="formItem.Invoice" placeholder="Select">
+        <el-select v-model="formItem.invoice_type" placeholder="Select">
           <el-option
             v-for="item in InvoiceOptions"
             :key="item.value"
@@ -43,7 +43,7 @@
       </el-form-item>
 
       <el-form-item label="税率形式">
-        <el-select v-model="formItem.tax" placeholder="Select">
+        <el-select v-model="formItem.calculation_type" placeholder="Select">
           <el-option
             v-for="item in taxOptions"
             :key="item.value"
@@ -52,10 +52,9 @@
           />
         </el-select>
       </el-form-item>
-
       <el-form-item prop="date" label="申请日期">
         <el-date-picker
-          v-model="formItem.date"
+          v-model="Time"
           type="daterange"
           unlink-panels
           range-separator="~"
@@ -68,18 +67,10 @@
       :table-data="tableData"
       :column-list="columnList"
       hasSelect
-      @selection-change="handleC"
+      @selection-change="handleSelect"
     >
       <template #tableTop>
-        <el-dropdown trigger="click" @command="handleDD">
-          <el-button type="primary">+ 新建</el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="1">新建1</el-dropdown-item>
-              <el-dropdown-item command="2">新建2</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
+        <el-button type="primary" @click="handleAdd">+ 新建</el-button>
         <el-dropdown class="ml-4" trigger="click" @command="handleD">
           <el-button type="primary">批量操作</el-button>
           <template #dropdown>
@@ -102,12 +93,11 @@
       </template>
     </zxn-table>
   </div>
-  <!-- <viewDialog v-model:dialogVisible="dialogVisible" :title="title" /> -->
 </template>
 <script setup lang="ts">
-// import viewDialog from "../components/viewDialog.vue";
-const dialogVisible = ref(false);
-const title = ref("");
+import { useRouter } from "vue-router";
+import { getSelfOperatedTaxLandList } from "@/api/taxLandManagement/selfOperatedTaxLand";
+const router = useRouter();
 // const statusOption = [
 //   { label: "申请中", value: 1 },
 //   { label: "报名中", value: 2 },
@@ -139,51 +129,70 @@ const taxOptions = [
 ] as any;
 
 const formItem = reactive({
-  search: "",
-  state: "",
-  manufacturer: "",
-  Invoice: "",
-  tax: "",
-  date: "",
+  keywords: "",
+  status: "",
+  tax_land_type: "",
+  start_time: "",
+  end_time: "",
+  invoice_type: "",
+  calculation_type: "",
+  tax_manufacturer: "",
+  page: "",
+  limit: "",
 });
-const tableData = reactive([
-  { value: "自营税地", name: "shshhud", state: 1 },
-  { value: "自营税地", name: "shshhud", state: 1 },
-  { value: "自营税地", name: "shshhud", state: 1 },
-  { value: "自营税地", name: "shshhud", state: 1 },
-  { value: "自营税地", name: "shshhud", state: 1 },
-]);
+// 计算属性
+var Time = computed(() => {
+  return [formItem.start_time, formItem.end_time];
+}) as any;
+const tableData = reactive([] as any);
 const columnList = [
-  { label: "税地编号", prop: "value" },
-  { label: "税地名称", prop: "state" },
-  { label: "税地成本", prop: "a" },
-  { label: "签约数量", prop: "a" },
-  { label: "计算形式", prop: "a" },
-  { label: "对接人", prop: "a" },
-  { label: "税地发票数量", prop: "b" },
-  { label: "上架时间", sortable: "custom", width: 120 },
-  { label: "税地类型" },
-  { label: "支付方式" },
-  { label: "状态" },
+  { label: "税地编号", prop: "tax_land_no" },
+  {
+    label: "状态",
+    type: "enum",
+    path: "statusEnum.taxLandType",
+    prop: "status",
+    width: 100,
+    color: { 0: "blue", 1: "gray", 2: "black" },
+  },
+  { label: "税地名称", prop: "tax_land_name" },
+  { label: "成本", prop: "tax_cost_point" },
+  { label: "签约数量", prop: "sign_count" },
+  { label: "税率形式", prop: "calculation_type" },
+  { label: "对接人", prop: "tax_land_head" },
+  {
+    label: "税地发票类型",
+    type: "enum",
+    path: "statusEnum.invoiceType",
+    prop: "invoice_type",
+    width: 120,
+    color: { 0: "blue", 1: "gray", 2: "black" },
+  },
+  { label: "上架时间", prop: "ground_time", sortable: "custom", width: 120 },
+  { label: "税地类型", prop: "tax_land_type" },
+  { label: "支付方式", prop: "payment_type" },
+
   { label: "操作", slot: "operation", fixed: "right", width: 250 },
 ];
 /**
  * 上下架
  */
 const handleA = (scope: any) => {
-  console.log(tableData[scope.$index].state, "下架");
-  if (tableData[scope.$index].state == 1) {
-    tableData[scope.$index].state = 2;
-  } else if (tableData[scope.$index].state == 2) {
-    tableData[scope.$index].state = 1;
-  }
+  console.log(scope, "下架");
+  // if (tableData[scope.$index].state == 1) {
+  //   tableData[scope.$index].state = 2;
+  // } else if (tableData[scope.$index].state == 2) {
+  //   tableData[scope.$index].state = 1;
+  // }
 };
 /**
  * 编辑
  */
 const handleB = (scope: any) => {
-  title.value = "税地编辑";
-  dialogVisible.value = true;
+  router.push({
+    name: "selfOperatedTaxLandEdit",
+    query: { activeName: "1", id: scope.row.id },
+  });
   console.log(scope.row.value, "编辑");
 };
 /**
@@ -191,7 +200,6 @@ const handleB = (scope: any) => {
  */
 const handleE = (scope: any) => {
   console.log(scope.row.value, "删除");
-  tableData.splice(scope.$index, 1);
 };
 /**
  * 导出
@@ -203,41 +211,29 @@ const handleF = (scope: any) => {
  * 详情
  */
 const handleG = (scope: any) => {
-  title.value = "税地详情";
-  dialogVisible.value = true;
+  router.push({
+    name: "selfOperatedTaxLandDetails",
+    query: { activeName: "1", id: scope.row.id },
+  });
   console.log(scope.row.value, "详情");
 };
 /**
  * 批量选择
  */
-const selectionData = ref([]);
-const handleC = (sss: any) => {
-  selectionData.value = sss;
-  console.log(selectionData.value);
-};
+// const selectionData = ref([]);
+const handleSelect = () => {};
 /**
  * 新建
  */
-const handleDD = (command: string | number | object) => {
-  if (command == 1) {
-    title.value = "新增税地";
-    dialogVisible.value = true;
-    console.log("新建1");
-  } else if (command == 2) {
-    console.log("新建2");
-  }
+const handleAdd = () => {
+  router.push({ name: "selfOperatedTaxLandAdd", query: { activeName: "1" } });
 };
 /**
  * 批量操作
  */
 const handleD = (command: string | number | object) => {
-  var data = selectionData.value.map((item, index) => {
-    return index;
-  });
   if (command == 1) {
-    data.forEach((item) => (tableData[item].state = 1));
-
-    console.log("上架", selectionData.value, data);
+    console.log("上架");
   } else if (command == 2) {
     console.log("删除");
   } else if (command == 3) {
@@ -258,6 +254,30 @@ const handleS = () => {
   ];
 };
 handleS();
+const getTableData = () => {
+  getSelfOperatedTaxLandList(formItem)
+    .then((response) => {
+      var data = response.data.list.map((item: any) => {
+        return {
+          id: item.id,
+          tax_land_no: item.tax_land_no,
+          status: item.status,
+          tax_land_name: item.tax_land_name,
+          tax_cost_point: item.tax_cost_point,
+          sign_count: item.sign_count,
+          calculation_type: item.calculation_type,
+          tax_land_head: item.tax_land_head,
+          invoice_type: item.invoice_type,
+          ground_time: item.ground_time,
+          tax_land_type: item.tax_land_type,
+          payment_type: item.payment_type,
+        };
+      });
+      tableData.push(...data);
+    })
+    .catch();
+};
+getTableData();
 onMounted(() => {
   // handleS()
 });

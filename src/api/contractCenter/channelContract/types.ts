@@ -60,6 +60,21 @@ export interface channelContractAdd {
   party_b: string;
 }
 /**
+ * 关键字
+ */
+export interface channelContractList {
+  /**
+   * 关键字
+   */
+  keywords: string;
+  start_time: string;
+  end_time: string;
+  contract_kind: string;
+  page: string;
+  limit: string;
+  status: string;
+}
+/**
  * 修改渠道合同
  */
 export interface channelContractEdit {

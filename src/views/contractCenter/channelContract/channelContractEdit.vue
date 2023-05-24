@@ -12,10 +12,10 @@
             <div class="flex">
               <div class="w-[33%]">
                 <el-form-item label="合同名称">
-                  <el-text class="mx-1">{{ formItem.contract_name }}</el-text>
+                  <span class="mx-1">{{ formItem.contract_name }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="编号">
-                  <el-text class="mx-1">{{ formItem.contract_no }}</el-text>
+                  <span class="mx-1">{{ formItem.contract_no }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="合同类型">
                   <el-select
@@ -75,15 +75,15 @@
                 </el-form-item>
               </div>
               <div class="w-[33%]">
-                <el-form-item class="mb-[0]" label="合同文件">
+                <!-- <el-form-item class="mb-[0]" label="合同文件">
                   <multi-upload v-model="formItem.file_url"></multi-upload>
                 </el-form-item>
                 <el-form-item class="mt-13px" label="附件">
                   <multi-upload v-model="formItem.annex_url"></multi-upload>
-                </el-form-item>
+                </el-form-item> -->
               </div>
               <!-- 表格 -->
-              <div class="w-[33%] box">
+              <!-- <div class="w-[33%] box">
                 <el-row>
                   <el-col class="top" :span="5">产品列表</el-col>
                   <el-col :span="5"> <div class="bg tac">产品</div></el-col>
@@ -128,13 +128,15 @@
                     ></el-col
                   >
                 </el-row>
-              </div>
+              </div> -->
             </div>
           </el-form>
         </div>
         <zxn-bottom-btn>
           <div class="but">
-            <el-button type="primary" @click="handleSubmit">确 定</el-button>
+            <el-button type="primary" @click="handleChannelContractEdit"
+              >确 定</el-button
+            >
             <el-button @click="handleClose">取 消</el-button>
           </div>
         </zxn-bottom-btn>
@@ -155,6 +157,8 @@
 <script setup lang="ts">
 // import Form from "../components/Form.vue";
 import { useRoute } from "vue-router";
+import { channelContractEdit } from "@/api/contractCenter/channelContract";
+import { getContractDetails } from "@/api/contractCenter";
 const activeName = ref("1");
 const tabsList = [
   {
@@ -167,18 +171,32 @@ const tabsList = [
   },
 ];
 //
-const contract_kindOptions = ref([] as any);
-const contract_termOptions = ref([] as any);
-
-// 厂商
-const manufacturerOptions = [
-  { label: "薪龙网", value: 1 },
-  { label: "某某网", value: 2 },
-  { label: "某某网", value: 3 },
-  { label: "某某网", value: 4 },
-] as any;
+const contract_kindOptions = [
+  {
+    value: "1",
+    label: "业务拓展协议(个人)",
+  },
+  {
+    value: "2",
+    label: "业务拓展协议(企业)",
+  },
+  {
+    value: "3",
+    label: "共享经济服务协议",
+  },
+  {
+    value: "4",
+    label: "自由职业者服务协议",
+  },
+];
+const contract_termOptions = [
+  {
+    value: "1",
+    label: "一年",
+  },
+];
 //表单信息
-const formItem = reactive({
+const formItem = ref({
   contract_name: "",
   contract_no: "",
   contract_kind: "",
@@ -190,21 +208,25 @@ const formItem = reactive({
   end_time: "",
 
   remarks: "",
-  file_url: [
-    "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  ],
-  annex_url: [
-    "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  ],
-  manufacturer: [
-    { value1: null, value2: null, value3: "" },
-    { value1: null, value2: null, value3: "" },
-  ] as any,
+  // file_url: [
+  //   "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
+  // ],
+  // annex_url: [
+  //   "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
+  // ],
+  // manufacturer: [
+  //   { value1: null, value2: null, value3: "" },
+  //   { value1: null, value2: null, value3: "" },
+  // ] as any,
 });
 //
 
-const handleAdd = () => {
-  formItem.manufacturer.push({ value1: null, value2: null, value3: "" });
+// const handleAdd = () => {
+//   formItem.manufacturer.push({ value1: null, value2: null, value3: "" });
+// };
+const handleChannelContractEdit = () => {
+  const ID = Number(route.query.id);
+  channelContractEdit(ID, formItem.value).then().catch();
 };
 const handleSubmit = () => {};
 const handleClose = () => {};
@@ -218,7 +240,45 @@ console.log(route.query.activeName);
 //    console.log(uid)
 //   }
 // }
-
+const getData = () => {
+  const ID = Number(route.query.id);
+  getContractDetails(ID)
+    .then((response) => {
+      console.log(typeof response.data.info.contract_name);
+      activeName.value = response.data.info.online_type + "";
+      var {
+        contract_name,
+        contract_no,
+        contract_kind,
+        party_a,
+        party_b,
+        tax_location,
+        contract_term,
+        sign_time,
+        end_time,
+        remarks,
+        // file_url,
+        // annex_url,
+      } = response.data.info;
+      console.log(contract_name);
+      formItem.value = {
+        contract_name,
+        contract_no,
+        contract_kind: contract_kind + "",
+        party_a,
+        party_b,
+        tax_location,
+        contract_term,
+        sign_time,
+        end_time,
+        remarks,
+        // file_url,
+        // annex_url,
+      };
+    })
+    .catch();
+};
+getData();
 onMounted(() => {
   activeName.value = route.query.activeName + "";
   // rou()

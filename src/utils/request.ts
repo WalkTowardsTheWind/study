@@ -14,7 +14,6 @@ service.interceptors.request.use(
     const userStore = useUserStoreHook();
     if (userStore.token) {
       config.headers.Authorization = userStore.token;
-      console.log(userStore.token, "===>");
     }
     return config;
   },
@@ -29,6 +28,10 @@ service.interceptors.response.use(
     const { code, msg, status } = response.data;
     if (code === "00000" || status === 200) {
       return response.data;
+    }
+    if (status === 410000) {
+      ElMessage.error(msg);
+      return Promise.reject(new Error(msg));
     }
     // 响应数据为二进制流处理(Excel导出)
     if (response.data instanceof ArrayBuffer) {

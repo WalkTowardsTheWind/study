@@ -64,7 +64,7 @@
           "
         >
           <div class="text-black text-sm" style="text-align: left">
-            <el-checkbox v-model="checked1" label="记住密码" size="large" />
+            <!-- <el-checkbox v-model="checked1" label="记住密码" size="large" /> -->
           </div>
           <div class="text-black text-sm" style="text-align: right">
             <span style="cursor: pointer" @click="handle">忘记密码</span>
@@ -165,7 +165,7 @@
               color="#356FF3"
               size="large"
               class="resetButton-confirm w-[35%]"
-              @click="registerVisible = false"
+              @click="Register"
             >
               确认
             </el-button>
@@ -190,7 +190,7 @@ import { useUserStore } from "@/store/modules/user";
 // API依赖
 import { LocationQuery, LocationQueryValue, useRoute } from "vue-router";
 import { LoginData, RegisterData } from "@/api/login/types";
-import { getPhone } from "@/api/login/index";
+import { getPhone, getRegisterData } from "@/api/login/index";
 
 const userStore = useUserStore();
 const route = useRoute();
@@ -202,11 +202,11 @@ const loading = ref(false);
 /**
  * 记住密码
  */
-const imgSrc = ref("http://192.168.110.27/adminapi/getCaptcha");
+const imgSrc = ref(import.meta.env.VITE_APP_BASE_API + "/adminapi/getCaptcha");
 /**
  * 记住密码
  */
-const checked1 = ref(false);
+// const checked1 = ref(false);
 /**
  * 弹窗
  */
@@ -267,18 +267,18 @@ const registerFormRef = ref(ElForm);
 
 const registerData = reactive<RegisterData>({
   mobile: "",
-  code: "",
   pwd: "",
   conf_pwd: "",
+  code: "",
 });
 
 const registerRules = {
-  phone: [{ required: true, trigger: "blur", validator: phoneValidator }],
-  password: [{ required: true, trigger: "blur", validator: passwordValidator }],
-  password2: [
+  mobile: [{ required: true, trigger: "blur", validator: phoneValidator }],
+  pwd: [{ required: true, trigger: "blur", validator: passwordValidator }],
+  conf_pwd: [
     { required: true, trigger: "blur", validator: password2Validator },
   ],
-  verifyCode: [{ required: true, trigger: "blur" }],
+  code: [{ required: true, trigger: "blur" }],
 };
 /**
  * 手机号校验器
@@ -305,7 +305,7 @@ function passwordValidator(rule: any, value: any, callback: any) {
   }
 }
 function password2Validator(rule: any, value: any, callback: any) {
-  if (value != registerRules.password) {
+  if (value != registerRules.pwd) {
     callback(new Error("二次密码输入不一致"));
   } else {
     callback();
@@ -342,29 +342,31 @@ const debounce = (fn: () => void, time?: any) => {
  */
 const getCaptchaImg = () => {
   var num = Math.ceil(Math.random() * 10);
-  imgSrc.value = "http://192.168.110.27/adminapi/getCaptcha?" + num;
+  imgSrc.value =
+    import.meta.env.VITE_APP_BASE_API + "/adminapi/getCaptcha?" + num;
 };
 /**
  * 获取手机验证码
  */
 function getPhoneCaptcha() {
-  var phone = registerData.mobile;
-  console.log(phone);
-  getPhone({ phone });
   loading2.value = true;
-
   debounce(function () {
-    countNum.value = 60;
-    let timer: any;
-    if (timer) clearInterval(timer);
-    console.log(123123123);
-    timer = setInterval(() => {
-      countNum.value = (countNum.value as number) - 1;
-      if (countNum.value == 0) {
-        loading2.value = false;
-        clearInterval(timer);
-      }
-    }, 1000);
+    var phone = registerData.mobile;
+    getPhone({ phone })
+      .then(() => {
+        countNum.value = 60;
+        let timer: any;
+        if (timer) clearInterval(timer);
+        console.log(123123123);
+        timer = setInterval(() => {
+          countNum.value = (countNum.value as number) - 1;
+          if (countNum.value == 0) {
+            loading2.value = false;
+            clearInterval(timer);
+          }
+        }, 1000);
+      })
+      .catch();
   }, 0)();
 }
 
@@ -381,9 +383,7 @@ function handleLogin() {
         .then(() => {
           console.log("准备跳转了");
           const query: LocationQuery = route.query;
-
           const redirect = (query.redirect as LocationQueryValue) ?? "/";
-
           const otherQueryParams = Object.keys(query).reduce(
             (acc: any, cur: string) => {
               if (cur !== "redirect") {
@@ -400,7 +400,7 @@ function handleLogin() {
           console.log(error);
           console.log("失败");
           // 验证失败，重新生成验证码
-          // getCaptchaImg();
+          getCaptchaImg();
         })
         .finally(() => {
           loading.value = false;
@@ -426,6 +426,29 @@ function handle() {
   registerVisible.value = !registerVisible.value;
 }
 
+/**
+ * 忘记密码
+ */
+function Register() {
+  registerFormRef.value.validate((valid: boolean) => {
+    if (valid) {
+      console.log(1);
+      loading.value = true;
+      getRegisterData(registerData)
+        .then(() => {
+          console.log("成功了");
+          registerVisible.value = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          console.log("失败");
+        })
+        .finally(() => {
+          loading.value = false;
+        });
+    }
+  });
+}
 onMounted(() => {
   getCaptchaImg();
 });

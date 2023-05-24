@@ -1,15 +1,19 @@
 <template>
   <div class="p-[24px] p-b-[0]">
-    <zxn-search :formItem="formItem">
+    <zxn-search
+      :formItem="formItem"
+      :on-search="handleSearch"
+      :on-reset="handleReset"
+    >
       <el-form-item>
-        <el-input v-model="formItem.search" placeholder="请输入关键字">
+        <el-input v-model="formItem.keywords" placeholder="请输入关键字">
           <template #prefix>
             <el-icon><i-ep-Search /></el-icon>
           </template>
         </el-input>
       </el-form-item>
       <el-form-item label="合同状态">
-        <el-select v-model="formItem.state" placeholder="Select">
+        <el-select v-model="formItem.keywords" placeholder="Select">
           <el-option
             v-for="item in stateOptions"
             :key="item.value"
@@ -19,7 +23,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="税源地">
-        <el-select v-model="formItem.manufacturer" placeholder="Select">
+        <el-select v-model="formItem.keywords" placeholder="Select">
           <el-option
             v-for="item in manufacturerOptions"
             :key="item.value"
@@ -30,7 +34,7 @@
       </el-form-item>
       <el-form-item prop="date" label="创建日期">
         <el-date-picker
-          v-model="formItem.date"
+          v-model="formItem.keywords"
           type="daterange"
           unlink-panels
           range-separator="~"
@@ -67,7 +71,7 @@
           v-if="scope.row.status != 1"
           link
           type="primary"
-          @click="handleDelete(scope)"
+          @click="handleUpdateStatus(scope)"
           >{{ scope.row.status == 0 ? "停用" : "启用" }}</el-button
         >
         <el-button link type="primary" @click="handleEdit(scope)"
@@ -83,6 +87,8 @@
 </template>
 <script setup lang="ts">
 import { useRouter } from "vue-router";
+import { getSupplyContractList } from "@/api/contractCenter/supplyContract";
+import { updateStatus } from "@/api/contractCenter";
 // 状态
 const stateOptions = ref([] as any);
 // 厂商
@@ -92,14 +98,18 @@ const manufacturerOptions = [
   { label: "某某网", value: 3 },
   { label: "某某网", value: 4 },
 ] as any;
+// 查询重置
+const handleSearch = () => {};
+const handleReset = () => {};
 
 const formItem = reactive({
-  search: "",
-  state: "",
-  manufacturer: "",
-  Invoice: "",
-  tax: "",
-  date: "",
+  keywords: "",
+  start_time: "",
+  end_time: "",
+  contract_kind: "",
+  page: "",
+  limit: "",
+  status: "",
 });
 const tableData = reactive([{ contract_no: "2", status: "企业合同" }]);
 const columnList = [
@@ -129,7 +139,7 @@ const columnList = [
 const handleDetails = (scope: any) => {
   router.push({
     name: "supplyContractDetails",
-    query: { activeName: "1", id: "1" },
+    query: { activeName: "1", id: scope.row.id },
   });
   console.log("详情");
   console.log(scope.row.value.$index);
@@ -137,15 +147,15 @@ const handleDetails = (scope: any) => {
 const handleEdit = (scope: any) => {
   router.push({
     name: "supplyContractEdit",
-    query: { activeName: "1", id: "1" },
+    query: { activeName: "1", id: scope.row.id },
   });
   console.log("编辑");
   console.log(scope.row.value);
 };
-const handleDelete = (scope: any) => {
-  console.log("删除");
-  console.log(scope.row.value.$index);
-  tableData.splice(scope.$index, 1);
+const handleUpdateStatus = (scope: any) => {
+  var data = { id: scope.row.id, status: scope.row.status == 0 ? "2" : "0" };
+  updateStatus(data);
+  getTableData();
 };
 const handleDownload = (scope: any) => {
   console.log("下载");
@@ -201,6 +211,19 @@ getData();
 //    console.log(uid)
 //   }
 // }
+/**
+ * 获取数据
+ */
+const getTableData = () => {
+  const data = { ...formItem };
+  getSupplyContractList(data)
+    .then((response: any) => {
+      tableData.length = 0;
+      tableData.push(...response.data.list);
+    })
+    .catch(() => {});
+};
+getTableData();
 onMounted(() => {
   //   rou()
 });
