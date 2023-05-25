@@ -141,16 +141,12 @@ const handleDetails = (scope: any) => {
     name: "supplyContractDetails",
     query: { activeName: "1", id: scope.row.id },
   });
-  console.log("详情");
-  console.log(scope.row.value.$index);
 };
 const handleEdit = (scope: any) => {
   router.push({
     name: "supplyContractEdit",
     query: { activeName: "1", id: scope.row.id },
   });
-  console.log("编辑");
-  console.log(scope.row.value);
 };
 const handleUpdateStatus = (scope: any) => {
   var data = { id: scope.row.id, status: scope.row.status == 0 ? "2" : "0" };
@@ -158,8 +154,7 @@ const handleUpdateStatus = (scope: any) => {
   getTableData();
 };
 const handleDownload = (scope: any) => {
-  console.log("下载");
-  console.log(scope.row.value.$index);
+  console.log(scope);
 };
 /**
  * 批量选择
@@ -168,7 +163,6 @@ const handleDownload = (scope: any) => {
 const selectionData = ref([]);
 const handleSelect = (data: any) => {
   selectionData.value = data;
-  console.log(selectionData.value);
 };
 /**
  * 新建
@@ -177,9 +171,7 @@ const router = useRouter();
 const handleAdd = (command: string | number | object) => {
   if (command == 1) {
     router.push({ name: "supplyContractAdd", query: { activeName: "1" } });
-    console.log("线下合同");
   } else if (command == 2) {
-    console.log("新建2");
     router.push({ name: "supplyContractAdd", query: { activeName: "2" } });
   }
 };
@@ -202,15 +194,7 @@ const getData = () => {
   ];
 };
 getData();
-//路由跳转
-//
-// const rou=()=>{
-//   const uid = router.currentRoute.value.meta.title;
-//   if(uid=="税地合同"){
-//     activeName.value="3"
-//    console.log(uid)
-//   }
-// }
+
 /**
  * 获取数据
  */

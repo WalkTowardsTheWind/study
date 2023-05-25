@@ -1,17 +1,17 @@
 import request from "@/utils/request";
 import {
-  enterpriseContractAdd,
-  enterpriseContractList,
-  enterpriseContractEdit,
+  enterpriseContractAddType,
+  enterpriseContractListType,
+  enterpriseContractEditType,
 } from "./types";
 
 /**
  * 新建企业合同
  *
- * @param data {contractAdd}
+ * @param data {enterpriseContractAddType}
  * @returns
  */
-export function enterpriseContractAdd(data: enterpriseContractAdd) {
+export function enterpriseContractAdd(data: enterpriseContractAddType) {
   return request({
     url: "/adminapi/contract/contract",
     method: "post",
@@ -24,7 +24,7 @@ export function enterpriseContractAdd(data: enterpriseContractAdd) {
  *
  *
  */
-export function getEnterpriseContractList(data: enterpriseContractList) {
+export function getEnterpriseContractList(data: enterpriseContractListType) {
   return request({
     url: "/adminapi/contract/contract",
     method: "get",
@@ -39,7 +39,7 @@ export function getEnterpriseContractList(data: enterpriseContractList) {
  */
 export function enterpriseContractEdit(
   id: number,
-  data: enterpriseContractEdit
+  data: enterpriseContractEditType
 ) {
   return request({
     url: `/adminapi/contract/contract/${id}`,

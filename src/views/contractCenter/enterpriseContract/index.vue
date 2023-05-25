@@ -47,6 +47,7 @@
       :table-data="tableData"
       :column-list="columnList"
       :page-info="pageInfo"
+      @page-change="handlePageChange"
       hasSelect
       @selection-change="handleSelect"
     >
@@ -87,6 +88,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import { transformTimeRange } from "@/utils";
 import { useRouter } from "vue-router";
 import { getEnterpriseContractList } from "@/api/contractCenter/enterpriseContract";
 import { updateStatus } from "@/api/contractCenter";
@@ -104,8 +106,23 @@ const manufacturerOptions = [
   { label: "某某网", value: 4 },
 ] as any;
 // 查询重置
-const handleSearch = () => {};
-const handleReset = () => {};
+const pageInfo = reactive({
+  page: 1,
+  total: 0,
+  limit: 20,
+});
+const handleReset = () => {
+  handleSearch();
+};
+const handleSearch = () => {
+  pageInfo.page = 1;
+  getTableData();
+};
+const handlePageChange = (cur) => {
+  const { page } = cur;
+  pageInfo.page = page;
+  getTableData();
+};
 const formItem = reactive({
   keywords: "",
   start_time: "",
@@ -115,10 +132,7 @@ const formItem = reactive({
   limit: "",
   status: "",
 });
-var pageInfo = ref({
-  total: 1, //总数
-  page: 1, //页数
-} as any);
+
 var tableData = reactive([] as any);
 const columnList = [
   { label: "合同编号", prop: "contract_no" },
@@ -145,7 +159,6 @@ const columnList = [
 ];
 // 操作
 const handleDetails = (scope: any) => {
-  console.log(scope.row.id, "scope");
   router.push({
     name: "enterpriseContractDetails",
     query: { activeName: "1", id: scope.row.id },
@@ -181,10 +194,8 @@ const router = useRouter();
 const handleAdd = (command: string | number | object) => {
   if (command == 1) {
     router.push({ name: "enterpriseContractAdd", query: { activeName: "1" } });
-    console.log("线下合同");
   } else if (command == 2) {
     router.push({ name: "enterpriseContractAdd", query: { activeName: "2" } });
-    console.log("新建2");
   }
 };
 /**
@@ -199,27 +210,23 @@ const getData = () => {
   stateOptions.value = (proxy as any).$const["statusEnum.IndustryType"];
 };
 getData();
-//路由跳转
-// const router = useRouter();
-// const rou=()=>{
-//   const uid = router.currentRoute.value.meta.title;
-//   if(uid=="企业合同"){
-//     activeName.value="1"
-//    console.log(uid)
-//   }
-// }
 
 /**
  * 获取数据
  */
-const getTableData = () => {
-  const data = { ...formItem };
-  getEnterpriseContractList(data)
-    .then((response) => {
-      tableData.length = 0;
-      tableData.push(...response.data.list);
-    })
-    .catch(() => {});
+const getTableData = async () => {
+  const params = transformTimeRange({ ...formItem });
+  params.page = pageInfo.page;
+  params.limit = pageInfo.limit;
+  try {
+    const { data } = await getEnterpriseContractList(params);
+    tableData.length = 0;
+    pageInfo.page = data.current_page;
+    pageInfo.total = data.total;
+    tableData.push(...data.data);
+  } catch (error) {
+    console.log(error);
+  }
 };
 getTableData();
 onMounted(() => {});

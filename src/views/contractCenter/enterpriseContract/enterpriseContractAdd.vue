@@ -75,12 +75,12 @@
                 </el-form-item>
               </div>
               <div class="w-[33%]">
-                <!-- <el-form-item class="mb-[0]" label="合同文件">
+                <el-form-item class="mb-[0]" label="合同文件">
                   <multi-upload v-model="formItem.file_url"></multi-upload>
                 </el-form-item>
                 <el-form-item class="mt-13px" label="附件">
                   <multi-upload v-model="formItem.annex_url"></multi-upload>
-                </el-form-item> -->
+                </el-form-item>
               </div>
             </div>
           </el-form>
@@ -107,10 +107,13 @@
   </zxn-plan>
 </template>
 <script setup lang="ts">
-import { useRoute } from "vue-router";
+// import { useRoute } from "vue-router";
 import { getContractNumber } from "@/api/contractCenter";
 import { enterpriseContractAdd } from "@/api/contractCenter/enterpriseContract";
+import { enterpriseContractAddType } from "@/api/contractCenter/enterpriseContract/types";
+// const route = useRoute();
 const activeName = ref("1");
+
 const tabsList = [
   {
     name: "1",
@@ -147,7 +150,7 @@ const contract_termOptions = [
   },
 ];
 //表单信息
-const formItem = reactive({
+const formItem = reactive<enterpriseContractAddType>({
   contract_name: contractName,
   contract_no: "",
   online_type: 0,
@@ -160,12 +163,8 @@ const formItem = reactive({
   end_time: "",
 
   remarks: "",
-  // file_url: [
-  //   "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  // ],
-  // annex_url: [
-  //   "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  // ],
+  file_url: [],
+  annex_url: [],
 });
 // 计算属性
 var contractName = computed(() => {
@@ -174,7 +173,6 @@ var contractName = computed(() => {
       return item;
     }
   });
-  console.log(contractKind?.label);
   return formItem.party_a + (contractKind?.label || "");
 }) as any;
 
@@ -184,17 +182,6 @@ const handleEnterpriseContractAdd = () => {
 const handleSubmit = () => {};
 const handleClose = () => {};
 
-const route = useRoute();
-console.log(route.query.activeName);
-
-//路由跳转
-// const rou=()=>{
-//   const uid = router.currentRoute.value.meta.title;
-//   if(uid=="企业合同"){
-//     activeName.value="1"
-//    console.log(uid)
-//   }
-// }
 const getData = () => {
   getContractNumber()
     .then(() => {})

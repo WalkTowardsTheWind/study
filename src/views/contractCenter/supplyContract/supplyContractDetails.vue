@@ -43,12 +43,16 @@
                 </el-form-item>
               </div>
               <div class="w-[33%]">
-                <!-- <el-form-item class="mb-[0]" label="合同文件">
-                  <PicturePreview v-model="formItem.file_url"></PicturePreview>
+                <el-form-item class="mb-[0]" label="合同文件">
+                  <PicturePreview
+                    :image-list="formItem.file_url"
+                  ></PicturePreview>
                 </el-form-item>
                 <el-form-item class="mt-13px" label="附件">
-                  <PicturePreview v-model="formItem.annex_url"></PicturePreview>
-                </el-form-item> -->
+                  <PicturePreview
+                    :image-list="formItem.annex_url"
+                  ></PicturePreview>
+                </el-form-item>
               </div>
             </div>
           </el-form>
@@ -75,7 +79,7 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router";
 import { getContractDetails } from "@/api/contractCenter";
-import { ref } from "vue";
+const route = useRoute();
 const activeName = ref("1");
 const tabsList = [
   {
@@ -101,31 +105,16 @@ const formItem = ref({
   end_time: "",
 
   remarks: "",
-  // file_url: [
-  //   "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  // ],
-  // annex_url: [
-  //   "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  // ],
+  file_url: [],
+  annex_url: [],
 });
 const handleSubmit = () => {};
 const handleClose = () => {};
 
-const route = useRoute();
-console.log(route.query.activeName);
-//路由跳转
-// const rou=()=>{
-//   const uid = router.currentRoute.value.meta.title;
-//   if(uid=="企业合同"){
-//     activeName.value="1"
-//    console.log(uid)
-//   }
-// }
 const getData = () => {
   const ID = Number(route.query.id);
   getContractDetails(ID)
     .then((response) => {
-      console.log(response.data.info.online_type);
       activeName.value = response.data.info.online_type + "";
       var {
         contract_name,
@@ -138,8 +127,8 @@ const getData = () => {
         sign_time,
         end_time,
         remarks,
-        // file_url,
-        // annex_url,
+        file_url,
+        annex_url,
       } = response.data.info;
       console.log(contract_name);
       formItem.value = {
@@ -153,8 +142,8 @@ const getData = () => {
         sign_time,
         end_time,
         remarks,
-        // file_url,
-        // annex_url,
+        file_url,
+        annex_url,
       };
     })
     .catch();

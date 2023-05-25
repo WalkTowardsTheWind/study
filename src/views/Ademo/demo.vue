@@ -1,131 +1,120 @@
 <template>
-  <div>
-    <el-table
-      :data="tableData"
-      style="width: 100%; margin-bottom: 20px"
-      row-key="id"
-      border
-      x
-    >
-      <el-table-column prop="date" label="Date" sortable />
-      <el-table-column prop="name" label="Name" sortable />
-      <el-table-column prop="address" label="Address" sortable />
-    </el-table>
+  <el-button type="primary" @click="dialogVisible = true">open</el-button>
 
-    <el-table
-      :data="tableData1"
-      style="width: 100%"
-      row-key="id"
-      border
-      lazy
-      :load="load"
-      :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-    >
-      <el-table-column prop="date" label="Date" />
-      <el-table-column prop="name" label="Name" />
-      <el-table-column prop="address" label="Address" />
-    </el-table>
-  </div>
+  <el-dialog
+    custom-class="my-dialog"
+    v-model="dialogVisible"
+    width="50%"
+    :before-close="handleClose"
+  >
+    <template #header>
+      <div class="my-header">
+        <h4>发佣确认</h4>
+      </div>
+    </template>
+    <div>
+      <el-form
+        :model="formItem"
+        inline
+        label-width="90px"
+        label-position="left"
+      >
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="结算单号">
+              <el-text class="mx-1">{{ formItem.name }}</el-text>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="结算单状态">
+              <el-text class="mx-1">{{ formItem.name }}</el-text>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="任务企业">
+              <el-text class="mx-1">{{ formItem.name }}</el-text>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="任务时间">
+              <el-text class="mx-1">{{ formItem.name }}</el-text>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="结算金额">
+              <el-text class="mx-1">{{ formItem.name }}</el-text>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="渠道点位">
+              <el-text class="mx-1">{{ formItem.name }}</el-text>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="收佣渠道">
+              <el-text class="mx-1">{{ formItem.name }}</el-text>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="税前佣金">
+              <el-text class="mx-1">{{ formItem.name }}</el-text>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="税后佣金">
+              <el-text class="mx-1">{{ formItem.name }}</el-text>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="收款银行">
+              <el-text class="mx-1">{{ formItem.name }}</el-text>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="收款账号">
+              <el-text class="mx-1">{{ formItem.name }}</el-text>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="凭证">
+              <multi-upload v-model="formItem.annex_url"></multi-upload>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </div>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">
+          确认
+        </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
-<script lang="ts" setup>
-interface User {
-  id: number;
-  date: string;
-  name: string;
-  address: string;
-  hasChildren?: boolean;
-  children?: User[];
-}
+<script setup lang="ts">
+import { ref, reactive } from "vue";
+const dialogVisible = ref(true);
 
-const load = (
-  row: User,
-  treeNode: unknown,
-  resolve: (date: User[]) => void
-) => {
-  setTimeout(() => {
-    resolve([
-      {
-        id: 31,
-        date: "2016-05-01",
-        name: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-      {
-        id: 32,
-        date: "2016-05-01",
-        name: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-    ]);
-  }, 1000);
-};
-
-const tableData: User[] = [
-  {
-    id: 1,
-    date: "2016-05-02",
-    name: "wangxiaohu",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    id: 2,
-    date: "2016-05-04",
-    name: "wangxiaohu",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    id: 3,
-    date: "2016-05-01",
-    name: "wangxiaohu",
-    address: "No. 189, Grove St, Los Angeles",
-    children: [
-      {
-        id: 31,
-        date: "2016-05-01",
-        name: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-      {
-        id: 32,
-        date: "2016-05-01",
-        name: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-    ],
-  },
-  {
-    id: 4,
-    date: "2016-05-03",
-    name: "wangxiaohu",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-];
-
-const tableData1: User[] = [
-  {
-    id: 1,
-    date: "2016-05-02",
-    name: "wangxiaohu",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    id: 2,
-    date: "2016-05-04",
-    name: "wangxiaohu",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    id: 3,
-    date: "2016-05-01",
-    name: "wangxiaohu",
-    hasChildren: true,
-    address: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    id: 4,
-    date: "2016-05-03",
-    name: "wangxiaohu",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-];
+const formItem = reactive({
+  name: "",
+  tags: [{ id: 2, label: "不限学历" }],
+  multiPicUrls: [
+    "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
+    "https://oss.youlai.tech/default/2022/11/20/13dbfd7feaf848c2acec2b21675eb9d3.webp",
+  ],
+});
 </script>

@@ -75,12 +75,12 @@
                 </el-form-item>
               </div>
               <div class="w-[33%]">
-                <!-- <el-form-item class="mb-[0]" label="合同文件">
+                <el-form-item class="mb-[0]" label="合同文件">
                   <multi-upload v-model="formItem.file_url"></multi-upload>
                 </el-form-item>
                 <el-form-item class="mt-13px" label="附件">
                   <multi-upload v-model="formItem.annex_url"></multi-upload>
-                </el-form-item> -->
+                </el-form-item>
               </div>
             </div>
           </el-form>
@@ -109,7 +109,9 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router";
 import { supplyContractEdit } from "@/api/contractCenter/supplyContract";
+import { supplyContractEditType } from "@/api/contractCenter/supplyContract/types";
 import { getContractDetails } from "@/api/contractCenter";
+const route = useRoute();
 const activeName = ref("1");
 const tabsList = [
   {
@@ -148,9 +150,10 @@ const contract_termOptions = [
 ];
 
 //表单信息
-const formItem = ref({
+const formItem = ref<supplyContractEditType>({
   contract_name: "",
   contract_no: "",
+  online_type: 0,
   contract_kind: "",
   party_a: "",
   party_b: "",
@@ -158,32 +161,19 @@ const formItem = ref({
   contract_term: "",
   sign_time: "",
   end_time: "",
-
   remarks: "",
-  // file_url: [
-  //   "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  // ],
-  // annex_url: [
-  //   "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  // ],
+  file_url: [],
+  annex_url: [],
 });
 const handleSupplyContractEdit = () => {
   const ID = Number(route.query.id);
-  supplyContractEdit(ID, formItem).then().catch();
+  supplyContractEdit(ID as number, formItem.value)
+    .then()
+    .catch();
 };
 const handleSubmit = () => {};
 const handleClose = () => {};
 
-const route = useRoute();
-console.log(route.query.activeName);
-//路由跳转
-// const rou=()=>{
-//   const uid = router.currentRoute.value.meta.title;
-//   if(uid=="企业合同"){
-//     activeName.value="1"
-//    console.log(uid)
-//   }
-// }
 const getData = () => {
   const ID = Number(route.query.id);
   getContractDetails(ID)
@@ -201,13 +191,14 @@ const getData = () => {
         sign_time,
         end_time,
         remarks,
-        // file_url,
-        // annex_url,
+        file_url,
+        annex_url,
       } = response.data.info;
       console.log(contract_name);
       formItem.value = {
         contract_name,
         contract_no,
+        online_type: 0,
         contract_kind: contract_kind + "",
         party_a,
         party_b,
@@ -216,8 +207,8 @@ const getData = () => {
         sign_time,
         end_time,
         remarks,
-        // file_url,
-        // annex_url,
+        file_url,
+        annex_url,
       };
     })
     .catch();

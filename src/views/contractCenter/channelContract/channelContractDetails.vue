@@ -43,12 +43,53 @@
                 </el-form-item>
               </div>
               <div class="w-[33%]">
-                <!-- <el-form-item class="mb-[0]" label="合同文件">
-                  <PicturePreview v-model="formItem.file_url"></PicturePreview>
+                <el-form-item class="mb-[0]" label="合同文件">
+                  <PicturePreview
+                    :image-list="formItem.file_url"
+                  ></PicturePreview>
                 </el-form-item>
                 <el-form-item class="mt-13px" label="附件">
-                  <PicturePreview v-model="formItem.annex_url"></PicturePreview>
-                </el-form-item> -->
+                  <PicturePreview
+                    :image-list="formItem.annex_url"
+                  ></PicturePreview>
+                </el-form-item>
+              </div>
+              <!-- 表格 -->
+              <div class="w-[33%] box">
+                <el-row>
+                  <el-col class="top" :span="5">产品列表</el-col>
+                  <el-col :span="5"> <div class="bg tac">产品</div></el-col>
+                  <el-col class="bg tac" :span="8">票面种类及税点</el-col>
+                  <el-col class="bg tac" :span="6">合作价格</el-col>
+                </el-row>
+                <el-row v-for="(item, index) in formItem.product" :key="index">
+                  <el-col class="tac" :offset="5" :span="5">
+                    <el-select v-model="item.product_type" placeholder="请输入">
+                      <el-option
+                        v-for="item in productOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      />
+                    </el-select>
+                  </el-col>
+                  <el-col class="tac" :span="8">
+                    <el-select v-model="item.invoice_type" placeholder="请输入">
+                      <el-option
+                        v-for="item in productOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      />
+                    </el-select>
+                  </el-col>
+                  <el-col class="tac" :span="6">
+                    <el-input
+                      v-model="item.cooperate_point"
+                      placeholder="请输入"
+                    ></el-input>
+                  </el-col>
+                </el-row>
               </div>
             </div>
           </el-form>
@@ -74,6 +115,7 @@
 </template>
 <script setup lang="ts">
 import { useRoute } from "vue-router";
+import { channelContractDetailsType } from "@/api/contractCenter/channelContract/types";
 import { getContractDetails } from "@/api/contractCenter";
 const activeName = ref("1");
 const tabsList = [
@@ -88,7 +130,7 @@ const tabsList = [
 ];
 
 //表单信息
-const formItem = ref({
+const formItem = ref<channelContractDetailsType>({
   contract_name: "",
   contract_no: "",
   contract_kind: "",
@@ -100,32 +142,19 @@ const formItem = ref({
   end_time: "",
 
   remarks: "",
-  // file_url: [
-  //   "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  // ],
-  // annex_url: [
-  //   "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  // ],
+  file_url: [],
+  annex_url: [],
+  product: [{ product_type: null, invoice_type: null, cooperate_point: "" }],
 });
 const handleSubmit = () => {};
 const handleClose = () => {};
 
 const route = useRoute();
-console.log(route.query.activeName);
-//路由跳转
-// const rou=()=>{
-//   const uid = router.currentRoute.value.meta.title;
-//   if(uid=="企业合同"){
-//     activeName.value="1"
-//    console.log(uid)
-//   }
-// }
 
 const getData = () => {
   const ID = Number(route.query.id);
   getContractDetails(ID)
     .then((response) => {
-      console.log(response.data.info.online_type);
       activeName.value = response.data.info.online_type + "";
       var {
         contract_name,
@@ -138,10 +167,10 @@ const getData = () => {
         sign_time,
         end_time,
         remarks,
-        // file_url,
-        // annex_url,
+        file_url,
+        annex_url,
+        product,
       } = response.data.info;
-      console.log(contract_name);
       formItem.value = {
         contract_name,
         contract_no,
@@ -153,22 +182,42 @@ const getData = () => {
         sign_time,
         end_time,
         remarks,
-        // file_url,
-        // annex_url,
+        file_url,
+        annex_url,
+        product,
       };
     })
     .catch();
 };
 getData();
-onMounted(() => {
-  activeName.value = route.query.activeName + "";
-  // rou()
-});
+onMounted(() => {});
 </script>
 <style lang="scss" scoped>
 .but {
   :deep(.el-button) {
     min-width: 80px;
+  }
+}
+
+.box {
+  .top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 0 12px 0 0;
+    font-size: 14px;
+    line-height: 32px;
+    color: rgb(96 98 102);
+  }
+
+  .bg {
+    background-color: #eff4fe;
+  }
+
+  .tac {
+    display: flex;
+    align-items: center;
+    height: 50px;
   }
 }
 </style>

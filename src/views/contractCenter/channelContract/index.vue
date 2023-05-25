@@ -145,7 +145,6 @@ const columnList = [
 ];
 // 操作
 const handleDetails = (scope: any) => {
-  console.log(scope.row.id, "scope");
   router.push({
     name: "channelContractDetails",
     query: { activeName: "1", id: scope.row.id },
@@ -157,10 +156,15 @@ const handleEdit = (scope: any) => {
     query: { activeName: "1", id: scope.row.id },
   });
 };
-const handleUpdateStatus = (scope: any) => {
+const handleUpdateStatus = async (scope: any) => {
+  console.log(scope);
   var data = { id: scope.row.id, status: scope.row.status == 0 ? "2" : "0" };
-  updateStatus(data);
-  getTableData();
+  try {
+    updateStatus(data);
+    getTableData();
+  } catch (error) {
+    console.log(error);
+  }
 };
 const handleDownload = (scope: any) => {
   console.log("下载", scope);
@@ -181,10 +185,8 @@ const router = useRouter();
 const handleAdd = (command: string | number | object) => {
   if (command == 1) {
     router.push({ name: "channelContractAdd", query: { activeName: "1" } });
-    console.log("线下合同");
   } else if (command == 2) {
     router.push({ name: "channelContractAdd", query: { activeName: "2" } });
-    console.log("新建2");
   }
 };
 /**
@@ -199,15 +201,6 @@ const getData = () => {
   stateOptions.value = (proxy as any).$const["statusEnum.IndustryType"];
 };
 getData();
-//路由跳转
-// const router = useRouter();
-// const rou=()=>{
-//   const uid = router.currentRoute.value.meta.title;
-//   if(uid=="企业合同"){
-//     activeName.value="1"
-//    console.log(uid)
-//   }
-// }
 
 /**
  * 获取数据

@@ -1,17 +1,17 @@
 import request from "@/utils/request";
 import {
-  supplyContractAdd,
-  supplyContractList,
-  supplyContractEdit,
+  supplyContractAddType,
+  supplyContractListType,
+  supplyContractEditType,
 } from "./types";
 
 /**
  * 新建企业合同
  *
- * @param data {supplyContractAdd}
+ * @param data {supplyContractAddType}
  * @returns
  */
-export function supplyContractAdd(data: supplyContractAdd) {
+export function supplyContractAdd(data: supplyContractAddType) {
   return request({
     url: "/adminapi/contract/supply_contract",
     method: "post",
@@ -24,7 +24,7 @@ export function supplyContractAdd(data: supplyContractAdd) {
  *
  *
  */
-export function getSupplyContractList(data: supplyContractList) {
+export function getSupplyContractList(data: supplyContractListType) {
   return request({
     url: "/adminapi/contract/supply_contract",
     method: "get",
@@ -37,7 +37,7 @@ export function getSupplyContractList(data: supplyContractList) {
  * @param data {supplyContractEdit}
  * @returns
  */
-export function supplyContractEdit(id: number, data: supplyContractEdit) {
+export function supplyContractEdit(id: number, data: supplyContractEditType) {
   return request({
     url: `/adminapi/contract/channel_contract/${id}`,
     method: "put",

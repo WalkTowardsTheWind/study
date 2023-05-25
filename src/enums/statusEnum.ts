@@ -29,7 +29,7 @@ export enum taxLandType {
   "下架",
   "预警",
 }
-export enum invoiceType {
+export enum applyInvoiceType {
   "普通发票",
   "6%增值税发票",
   "普通发票/6%增值税发票",

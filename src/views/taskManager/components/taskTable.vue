@@ -172,7 +172,7 @@ const getTaskList = async () => {
     console.log(data, "222");
     tableData.length = 0;
     pageInfo.page = data.current_page;
-    pageInfo.total = data.total;
+    pageInfo.total = data.count;
     tableData.push(...data.data);
   } catch (e) {
     console.log(e);

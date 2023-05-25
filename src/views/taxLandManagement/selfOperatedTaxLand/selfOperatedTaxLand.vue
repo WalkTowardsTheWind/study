@@ -163,7 +163,7 @@ const columnList = [
   {
     label: "税地发票类型",
     type: "enum",
-    path: "statusEnum.invoiceType",
+    path: "statusEnum.applyInvoiceType",
     prop: "invoice_type",
     width: 120,
     color: { 0: "blue", 1: "gray", 2: "black" },

@@ -75,12 +75,12 @@
                 </el-form-item>
               </div>
               <div class="w-[33%]">
-                <!-- <el-form-item class="mb-[0]" label="合同文件">
+                <el-form-item class="mb-[0]" label="合同文件">
                   <multi-upload v-model="formItem.file_url"></multi-upload>
                 </el-form-item>
                 <el-form-item class="mt-13px" label="附件">
                   <multi-upload v-model="formItem.annex_url"></multi-upload>
-                </el-form-item> -->
+                </el-form-item>
               </div>
             </div>
           </el-form>
@@ -107,9 +107,10 @@
   </zxn-plan>
 </template>
 <script setup lang="ts">
-import { useRoute } from "vue-router";
+// import { useRoute } from "vue-router";
 import { getContractNumber } from "@/api/contractCenter";
 import { supplyContractAdd } from "@/api/contractCenter/supplyContract";
+import { supplyContractAddType } from "@/api/contractCenter/supplyContract/types";
 const activeName = ref("1");
 const tabsList = [
   {
@@ -146,9 +147,14 @@ const contract_termOptions = [
     label: "一年",
   },
 ];
-
+// const productOptions = [
+//   {
+//     value: "1",
+//     label: "一年",
+//   },
+// ];
 //表单信息
-const formItem = reactive({
+const formItem = reactive<supplyContractAddType>({
   contract_name: "",
   contract_no: "",
   online_type: 0,
@@ -159,14 +165,9 @@ const formItem = reactive({
   contract_term: "",
   sign_time: "",
   end_time: "",
-
   remarks: "",
-  // file_url: [
-  //   "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  // ],
-  // annex_url: [
-  //   "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  // ],
+  file_url: [],
+  annex_url: [],
 });
 // 计算属性
 var contractName = computed(() => {
@@ -175,27 +176,17 @@ var contractName = computed(() => {
       return item;
     }
   });
-  console.log(contractKind?.label);
   return formItem.party_a + (contractKind?.label || "");
 }) as any;
 
 const handleSupplyContractAdd = () => {
-  supplyContractAdd(formItem).then().catch();
+  supplyContractAdd(formItem as supplyContractAddType)
+    .then()
+    .catch();
 };
 const handleSubmit = () => {};
 const handleClose = () => {};
 
-const route = useRoute();
-console.log(route.query.activeName);
-
-//路由跳转
-// const rou=()=>{
-//   const uid = router.currentRoute.value.meta.title;
-//   if(uid=="企业合同"){
-//     activeName.value="1"
-//    console.log(uid)
-//   }
-// }
 const getData = () => {
   getContractNumber()
     .then(() => {})
@@ -203,10 +194,7 @@ const getData = () => {
 };
 getData();
 
-onMounted(() => {
-  activeName.value = route.query.activeName + "";
-  // rou()
-});
+onMounted(() => {});
 </script>
 <style lang="scss" scoped>
 .zxn-box {

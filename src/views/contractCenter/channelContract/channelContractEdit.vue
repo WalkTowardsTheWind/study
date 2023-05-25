@@ -75,29 +75,26 @@
                 </el-form-item>
               </div>
               <div class="w-[33%]">
-                <!-- <el-form-item class="mb-[0]" label="合同文件">
+                <el-form-item class="mb-[0]" label="合同文件">
                   <multi-upload v-model="formItem.file_url"></multi-upload>
                 </el-form-item>
                 <el-form-item class="mt-13px" label="附件">
                   <multi-upload v-model="formItem.annex_url"></multi-upload>
-                </el-form-item> -->
+                </el-form-item>
               </div>
               <!-- 表格 -->
-              <!-- <div class="w-[33%] box">
+              <div class="w-[33%] box">
                 <el-row>
                   <el-col class="top" :span="5">产品列表</el-col>
                   <el-col :span="5"> <div class="bg tac">产品</div></el-col>
                   <el-col class="bg tac" :span="8">票面种类及税点</el-col>
                   <el-col class="bg tac" :span="6">合作价格</el-col>
                 </el-row>
-                <el-row
-                  v-for="(item, index) in formItem.manufacturer"
-                  :key="index"
-                >
+                <el-row v-for="(item, index) in formItem.product" :key="index">
                   <el-col class="tac" :offset="5" :span="5">
-                    <el-select v-model="item.value1" placeholder="请输入">
+                    <el-select v-model="item.product_type" placeholder="请输入">
                       <el-option
-                        v-for="item in manufacturerOptions"
+                        v-for="item in productOptions"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
@@ -105,9 +102,9 @@
                     </el-select>
                   </el-col>
                   <el-col class="tac" :span="8">
-                    <el-select v-model="item.value2" placeholder="请输入">
+                    <el-select v-model="item.invoice_type" placeholder="请输入">
                       <el-option
-                        v-for="item in manufacturerOptions"
+                        v-for="item in productOptions"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
@@ -116,7 +113,7 @@
                   </el-col>
                   <el-col class="tac" :span="6">
                     <el-input
-                      v-model="item.value3"
+                      v-model="item.cooperate_point"
                       placeholder="请输入"
                     ></el-input>
                   </el-col>
@@ -128,7 +125,7 @@
                     ></el-col
                   >
                 </el-row>
-              </div> -->
+              </div>
             </div>
           </el-form>
         </div>
@@ -158,6 +155,7 @@
 // import Form from "../components/Form.vue";
 import { useRoute } from "vue-router";
 import { channelContractEdit } from "@/api/contractCenter/channelContract";
+import { channelContractEditType } from "@/api/contractCenter/channelContract/types";
 import { getContractDetails } from "@/api/contractCenter";
 const activeName = ref("1");
 const tabsList = [
@@ -195,10 +193,17 @@ const contract_termOptions = [
     label: "一年",
   },
 ];
+const productOptions = [
+  {
+    value: "1",
+    label: "一年",
+  },
+];
 //表单信息
-const formItem = ref({
-  contract_name: "",
+const formItem = ref<channelContractEditType>({
+  contract_name: contractName,
   contract_no: "",
+  online_type: 0,
   contract_kind: "",
   party_a: "",
   party_b: "",
@@ -206,45 +211,42 @@ const formItem = ref({
   contract_term: "",
   sign_time: "",
   end_time: "",
-
   remarks: "",
-  // file_url: [
-  //   "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  // ],
-  // annex_url: [
-  //   "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  // ],
-  // manufacturer: [
-  //   { value1: null, value2: null, value3: "" },
-  //   { value1: null, value2: null, value3: "" },
-  // ] as any,
+  file_url: [],
+  annex_url: [],
+  product: [{ product_type: null, invoice_type: null, cooperate_point: "" }],
 });
-//
+// 计算属性
+var contractName = computed(() => {
+  var contractKind = contract_kindOptions.find((item) => {
+    if (item.value == formItem.value.contract_kind) {
+      return item;
+    }
+  });
+  return formItem.value.party_a + (contractKind?.label || "");
+}) as any;
 
-// const handleAdd = () => {
-//   formItem.manufacturer.push({ value1: null, value2: null, value3: "" });
-// };
+const handleAdd = () => {
+  formItem.value.product.push({
+    product_type: null,
+    invoice_type: null,
+    cooperate_point: "",
+  });
+};
 const handleChannelContractEdit = () => {
   const ID = Number(route.query.id);
-  channelContractEdit(ID, formItem.value).then().catch();
+  channelContractEdit(ID, formItem.value as channelContractEditType)
+    .then()
+    .catch();
 };
 const handleSubmit = () => {};
 const handleClose = () => {};
 const route = useRoute();
-console.log(route.query.activeName);
-//路由跳转
-// const rou=()=>{
-//   const uid = router.currentRoute.value.meta.title;
-//   if(uid=="企业合同"){
-//     activeName.value="1"
-//    console.log(uid)
-//   }
-// }
+
 const getData = () => {
   const ID = Number(route.query.id);
   getContractDetails(ID)
     .then((response) => {
-      console.log(typeof response.data.info.contract_name);
       activeName.value = response.data.info.online_type + "";
       var {
         contract_name,
@@ -257,13 +259,14 @@ const getData = () => {
         sign_time,
         end_time,
         remarks,
-        // file_url,
-        // annex_url,
+        file_url,
+        annex_url,
+        product,
       } = response.data.info;
-      console.log(contract_name);
       formItem.value = {
         contract_name,
         contract_no,
+        online_type: 0,
         contract_kind: contract_kind + "",
         party_a,
         party_b,
@@ -272,8 +275,9 @@ const getData = () => {
         sign_time,
         end_time,
         remarks,
-        // file_url,
-        // annex_url,
+        file_url,
+        annex_url,
+        product,
       };
     })
     .catch();
