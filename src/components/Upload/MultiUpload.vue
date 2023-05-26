@@ -91,7 +91,6 @@ async function handleUpload(options: UploadRequestOptions): Promise<any> {
   );
 
   fileList.value.splice(fileIndex, 1, {
-    name: fileInfo.name,
     url: fileInfo.src,
   } as UploadUserFile);
 

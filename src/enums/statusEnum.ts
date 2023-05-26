@@ -44,7 +44,18 @@ export enum invoiceStatus {
   "冲红",
 }
 
-export enum invoiceType {
+export enum applyInvoiceType {
   "普票",
   "专票",
+}
+
+export enum invoiceType {
+  "纸质发票",
+  "电子发票",
+}
+
+export enum invoiceRequire {
+  "下发开票",
+  "充值开票",
+  "预开票",
 }

@@ -8,7 +8,17 @@ import { AxiosPromise } from "axios";
 export function getTreeList(params: { type: number }): AxiosPromise {
   return request({
     url: "/adminapi/category/get_tree_list",
-    method: "get",
+    method: "GET",
     params,
+  });
+}
+
+/**
+ * 获取税地列表
+ */
+export function getLandList(): AxiosPromise {
+  return request({
+    url: "/adminapi/tax/taxLandList",
+    method: "GET",
   });
 }

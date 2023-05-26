@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 
 import { loginApi, logoutApi } from "@/api/login/index";
 import { getUserInfo } from "@/api/user";
+import { getLandList } from "@/api/common";
 import { resetRouter } from "@/router";
 import { store } from "@/store";
 
@@ -18,6 +19,7 @@ export const useUserStore = defineStore("user", () => {
   const roles = ref<Array<string>>([]); // 用户角色编码集合 → 判断路由权限
   const perms = ref<Array<string>>([]); // 用户权限编码集合 → 判断按钮权限
   const taxSource = ref<string[]>(["全国"]); //  当前税地
+  const sourceList = ref([]);
 
   /**
    * 登录调用
@@ -94,6 +96,18 @@ export const useUserStore = defineStore("user", () => {
   function taxSourceChange(value: []): void {
     taxSource.value = value;
   }
+  function getSourceList(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      getLandList()
+        .then(({ data }) => {
+          sourceList.value = data;
+          resolve();
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
 
   return {
     token,
@@ -107,6 +121,8 @@ export const useUserStore = defineStore("user", () => {
     resetToken,
     taxSource,
     taxSourceChange,
+    sourceList,
+    getSourceList,
   };
 });
 

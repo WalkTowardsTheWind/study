@@ -1,5 +1,5 @@
 import router from "@/router";
-// import { useUserStoreHook } from "@/store/modules/user";
+import { useUserStoreHook } from "@/store/modules/user";
 import { usePermissionStoreHook } from "@/store/modules/permission";
 
 import NProgress from "nprogress";
@@ -20,8 +20,12 @@ router.beforeEach(async (to, from, next) => {
       next({ path: "/" });
       NProgress.done();
     } else {
-      // const userStore = useUserStoreHook();
+      const userStore = useUserStoreHook();
+      const hasLand = userStore.sourceList && userStore.sourceList.length > 0;
       // const hasRoles = userStore.roles && userStore.roles.length > 0;
+      if (!hasLand) {
+        // await userStore.getSourceList();
+      }
       next();
       // if (hasRoles) {
       //   // 未匹配到任何路由，跳转404

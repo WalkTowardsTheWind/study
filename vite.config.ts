@@ -29,21 +29,21 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       port: Number(env.VITE_APP_PORT),
       open: true, // 运行是否自动打开浏览器
       // 反向代理解决跨域
-      proxy: {
-        [env.VITE_APP_BASE_API]: {
-          // 线上接口API地址
-          target: "http://adminapi.zhongxinneng.lol",
-          // 本地接口API地址
-          // target: 'http://localhost:8989',
-          changeOrigin: true,
-          rewrite: (path) =>
-            // localhost:3000/dev-api/users/me → http://vapi.youlai.tech/users/me
-            path.replace(
-              new RegExp("^" + env.VITE_APP_BASE_API),
-              env.VITE_APP_BASE_API
-            ),
-        },
-      },
+      // proxy: {
+      //   [env.VITE_APP_BASE_API]: {
+      //     // 线上接口API地址
+      //     target: "http://adminapi.zhongxinneng.lol",
+      //     // 本地接口API地址
+      //     // target: 'http://localhost:8989',
+      //     changeOrigin: true,
+      //     rewrite: (path) =>
+      //       // localhost:3000/dev-api/users/me → http://vapi.youlai.tech/users/me
+      //       path.replace(
+      //         new RegExp("^" + env.VITE_APP_BASE_API),
+      //         env.VITE_APP_BASE_API
+      //       ),
+      //   }
+      // },
     },
     plugins: createVitePlugins(),
     optimizeDeps: {

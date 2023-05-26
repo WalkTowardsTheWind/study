@@ -3,9 +3,9 @@
     <div v-if="$slots.tableTop" class="integration-table-top">
       <slot name="tableTop" />
     </div>
-    <div v-if="selectedNumber" class="integration-table-selected">
-      已选择 {{ selectedNumber }} 项
-    </div>
+    <!--    <div v-if="selectedNumber" class="integration-table-selected">-->
+    <!--      已选择 {{ selectedNumber }} 项-->
+    <!--    </div>-->
     <el-table
       ref="zxnTable"
       :data="tableData"
@@ -45,6 +45,7 @@
       v-if="hasPagination"
       :total="_total"
       :page="_page"
+      :limit="_limit"
       @pagination="handlePageChange"
     />
   </div>
@@ -79,11 +80,13 @@ const getSelectionRows = () => {
 };
 let _total = ref(0);
 let _page = ref(1);
+let _limit = ref(20);
 watchEffect(() => {
-  const { total, page } = props.pageInfo;
+  const { total, page, limit } = props.pageInfo;
   // console.log(total, '2222')
   _total.value = total;
   _page.value = page;
+  _limit.value = limit;
 });
 const deepRender = (row, item) => {
   const fields = item.prop.split(".");
@@ -99,7 +102,10 @@ const resetHeight = () => {
   setTimeout(() => {
     const el = zxnTable.value?.$el;
     const { top } = el.getBoundingClientRect();
-    maxHeight.value = window.innerHeight - top - (props.hasPagination ? 68 : 0);
+    const VisibleHeight =
+      window.innerHeight - top - (props.hasPagination ? 68 : 0);
+    maxHeight.value = VisibleHeight > 500 ? VisibleHeight : 500;
+    // zxnTable.value.doLayout()
   });
 };
 onMounted(() => {

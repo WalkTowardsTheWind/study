@@ -1,22 +1,38 @@
 <template>
   <zxn-plan>
-    <zxn-tabs v-model:activeName="activeName" :tabsList="tabsList">
+    <zxn-tabs
+      v-model:activeName="activeName"
+      :tabsList="tabsList"
+      @tabChange="handleTabChange"
+    >
       <template #enterprise>
-        <invoiceTable type="enterprise" />
+        <invoiceTable
+          ref="enterprise"
+          type="enterprise"
+          @on-upload="handleUpload"
+          @on-logistics="handleLogistics"
+        />
       </template>
       <template #channel>
-        <invoiceTable type="channel" />
+        <invoiceTable
+          ref="channel"
+          type="channel"
+          @on-upload="handleUpload"
+          @on-logistics="handleLogistics"
+        />
       </template>
     </zxn-tabs>
     <task-dialog ref="taskDialogRef" />
-    <addinvoice />
+    <add-invoice ref="addInvoiceRef" @on-success="handleTabChange" />
+    <logistics-dialog ref="logisticsDialogRef" />
   </zxn-plan>
 </template>
 <script setup lang="ts">
 import taskDialog from "./components/taskDialog.vue";
-import addinvoice from "./components/addinvoice.vue";
+import addInvoice from "./components/addinvoice.vue";
 import invoiceTable from "./components/invoiceTable.vue";
-const activeName = "enterprise";
+import logisticsDialog from "./components/logisticsDialog.vue";
+const activeName = ref("enterprise");
 const tabsList = [
   {
     name: "enterprise",
@@ -27,6 +43,26 @@ const tabsList = [
     label: "渠道发票",
   },
 ];
+const enterprise = ref();
+const channel = ref();
+const handleTabChange = () => {
+  if (activeName.value === "enterprise") {
+    enterprise.value.getList();
+  } else {
+    channel.value.getList();
+  }
+};
+const addInvoiceRef = ref();
+const handleUpload = (cur) => {
+  addInvoiceRef.value.init(cur.id);
+};
+const logisticsDialogRef = ref();
+const handleLogistics = (cur) => {
+  logisticsDialogRef.value.init(cur.id);
+};
+onMounted(() => {
+  handleTabChange();
+});
 // const taskDialogRef = ref(null);
 // const handleSearch = () => {
 //   taskDialogRef.value.init([]);

@@ -201,7 +201,7 @@ const loading = ref(false);
 /**
  * 记住密码
  */
-const imgSrc = ref("/adminapi/getCaptcha");
+const imgSrc = ref(`${import.meta.env.VITE_APP_BASE_API}/adminapi/getCaptcha`);
 /**
  * 记住密码
  */
@@ -341,7 +341,9 @@ const debounce = (fn: () => void, time?: any) => {
  */
 const getCaptchaImg = () => {
   var num = Math.ceil(Math.random() * 10);
-  imgSrc.value = "/adminapi/getCaptcha?" + num;
+  imgSrc.value = `${
+    import.meta.env.VITE_APP_BASE_API
+  }/adminapi/getCaptcha?${num}`;
 };
 /**
  * 获取手机验证码

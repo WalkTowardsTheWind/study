@@ -12,11 +12,9 @@
         <task-table ref="manual" :type="0" :industry-list="industryList" />
       </template>
     </zxn-tabs>
-    <viewDialog />
   </zxn-plan>
 </template>
 <script setup lang="ts">
-import viewDialog from "./components/viewDialog.vue";
 import taskTable from "./components/taskTable.vue";
 import { getTreeList } from "@/api/common/index";
 const activeName = ref("auto");

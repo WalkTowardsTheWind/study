@@ -10,3 +10,18 @@ export interface invoiceQuery extends PageQuery {
   end_time?: string;
   status?: number;
 }
+
+/**
+ * 上传企业发票
+ */
+export interface uploadQuery {
+  express_id: string;
+  express_no: string;
+  invoice_sample_url: string;
+  express_url: string;
+}
+
+export interface invoiceStatus {
+  ids: string[];
+  status: number;
+}

@@ -2,7 +2,7 @@
   <div ref="zxnSearch" class="zxn-search">
     <el-form
       ref="form"
-      :inline="true"
+      inline
       label-position="right"
       :label-width="labelWidth"
       :model="formItem"
@@ -19,7 +19,6 @@
 </template>
 <script setup lang="ts">
 import { TabsContextKey } from "@/components/constants";
-import { ElForm } from "element-plus";
 const tabsContext = inject(TabsContextKey, undefined);
 defineProps({
   formItem: { type: Object, default: () => ({}) },
@@ -68,6 +67,8 @@ defineExpose({
       width: v-bind(item_width);
       margin-right: 0;
       margin-bottom: 16px;
+      //display: inline-flex;
+      //vertical-align: middle;
 
       .el-form-item__label {
         font-family: SourceHanSansSC-Medium, SourceHanSansSC, sans-serif;

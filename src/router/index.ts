@@ -44,30 +44,6 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
-  {
-    path: "/test",
-    component: Layout,
-    children: [
-      {
-        path: "test2",
-        component: () => import("@/views/test/index.vue"),
-        name: "test2",
-        meta: { title: "测试", icon: "homepage", affix: true },
-      },
-    ],
-  },
-  {
-    path: "/demo",
-    component: Layout,
-    children: [
-      {
-        path: "demo1",
-        component: () => import("@/views/Ademo/demo.vue"),
-        name: "test2",
-        meta: { title: "demo", icon: "homepage", affix: true },
-      },
-    ],
-  },
   // 合同中心
   {
     path: "/contractCenter",
@@ -271,18 +247,6 @@ export const constantRoutes: RouteRecordRaw[] = [
         name: "taskManagerView",
         meta: { title: "任务详情", hidden: true },
       },
-      {
-        path: "log",
-        component: () => import("@/views/system/log/index.vue"),
-        name: "log",
-        meta: { title: "日志中心", icon: "homepage", affix: true },
-      },
-      {
-        path: "account",
-        component: () => import("@/views/system/account/index.vue"),
-        name: "account",
-        meta: { title: "账号设置", icon: "homepage", affix: true },
-      },
     ],
   },
   {
@@ -320,6 +284,24 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/system/role/roleView.vue"),
         name: "addRole",
         meta: { title: "新增角色", hidden: true },
+      },
+      {
+        path: "menu",
+        component: () => import("@/views/system/menu/index.vue"),
+        name: "menuIndex",
+        meta: { title: "菜单管理", icon: "homepage" },
+      },
+      {
+        path: "log",
+        component: () => import("@/views/system/log/index.vue"),
+        name: "log",
+        meta: { title: "日志中心", icon: "homepage", affix: true },
+      },
+      {
+        path: "account",
+        component: () => import("@/views/system/account/index.vue"),
+        name: "account",
+        meta: { title: "账号设置", hidden: true },
       },
     ],
   },
