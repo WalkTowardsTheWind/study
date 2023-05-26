@@ -18,7 +18,11 @@
                   <el-text class="mx-1">{{ formItem.contract_no }}</el-text>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="合同类型">
-                  <el-text class="mx-1">{{ formItem.contract_kind }}</el-text>
+                  <el-text class="mx-1">{{
+                    proxy.$enumSet["contractCenterEnum.contractType"][
+                      formItem.contract_kind
+                    ]
+                  }}</el-text>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="甲方">
                   <el-text class="mx-1">{{ formItem.party_a }}</el-text>
@@ -30,7 +34,11 @@
                   <el-text class="mx-1">{{ formItem.tax_location }}</el-text>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="合同期限">
-                  <el-text class="mx-1">{{ formItem.contract_term }}</el-text>
+                  <el-text class="mx-1">{{
+                    proxy.$enumSet["contractCenterEnum.contractTerm"][
+                      formItem.contract_term
+                    ]
+                  }}</el-text>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="签约时间">
                   <el-text class="mx-1">{{ formItem.sign_time }}</el-text>
@@ -72,14 +80,15 @@
 </template>
 <script setup lang="ts">
 import { useRoute } from "vue-router";
-// import { enterpriseContractDetailsType } from "@/api/contractCenter/enterpriseContract/types";
+import { enterpriseContractDetailsType } from "@/api/contractCenter/enterpriseContract/types";
 import { getContractDetails } from "@/api/contractCenter";
+const { proxy } = getCurrentInstance() as any;
 const route = useRoute();
 const activeName = ref("1");
 const tabsList = [
   {
     name: "1",
-    label: "线上合同",
+    label: "线下合同",
   },
   // {
   //   name: "2",
@@ -88,7 +97,7 @@ const tabsList = [
 ];
 
 //表单信息
-const formItem = ref({
+const formItem = ref<enterpriseContractDetailsType>({
   contract_name: "",
   contract_no: "",
   contract_kind: "",

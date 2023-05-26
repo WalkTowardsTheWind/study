@@ -21,7 +21,9 @@
                     placeholder="请选择"
                   >
                     <el-option
-                      v-for="item in contract_kindOptions"
+                      v-for="item in proxy.$const[
+                        'contractCenterEnum.contractType'
+                      ]"
                       :key="item.value"
                       :label="item.label"
                       :value="item.value"
@@ -44,7 +46,9 @@
                     placeholder="请选择"
                   >
                     <el-option
-                      v-for="item in contract_termOptions"
+                      v-for="item in proxy.$const[
+                        'contractCenterEnum.contractTerm'
+                      ]"
                       :key="item.value"
                       :label="item.label"
                       :value="item.value"
@@ -110,49 +114,20 @@ import { useRouter } from "vue-router";
 import { supplyContractAdd } from "@/api/contractCenter/supplyContract";
 import { supplyContractAddType } from "@/api/contractCenter/supplyContract/types";
 import { ElMessage } from "element-plus";
+const { proxy } = getCurrentInstance() as any;
 const router = useRouter();
 const activeName = ref("1");
 const tabsList = [
   {
     name: "1",
-    label: "线上合同",
+    label: "线下合同",
   },
   // {
   //   name: "2",
   //   label: "线下合同",
   // },
 ];
-//
-const contract_kindOptions = [
-  {
-    value: "1",
-    label: "业务拓展协议(个人)",
-  },
-  {
-    value: "2",
-    label: "业务拓展协议(企业)",
-  },
-  {
-    value: "3",
-    label: "共享经济服务协议",
-  },
-  {
-    value: "4",
-    label: "自由职业者服务协议",
-  },
-];
-const contract_termOptions = [
-  {
-    value: "1",
-    label: "一年",
-  },
-];
-// const productOptions = [
-//   {
-//     value: "1",
-//     label: "一年",
-//   },
-// ];
+
 //表单信息
 const formItem = reactive<supplyContractAddType>({
   online_type: 0,
@@ -169,12 +144,9 @@ const formItem = reactive<supplyContractAddType>({
 });
 // 计算属性
 var contractName = computed(() => {
-  var contractKind = contract_kindOptions.find((item) => {
-    if (item.value == formItem.contract_kind) {
-      return item;
-    }
-  });
-  return formItem.party_a + (contractKind?.label || "");
+  var contractkind =
+    proxy.$enumSet["contractCenterEnum.contractType"][formItem.contract_kind];
+  return (formItem.party_a || "") + (contractkind || "");
 }) as any;
 
 const handleSupplyContractAdd = () => {

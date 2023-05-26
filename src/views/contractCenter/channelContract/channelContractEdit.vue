@@ -12,7 +12,7 @@
             <div class="flex">
               <div class="w-[33%]">
                 <el-form-item label="合同名称">
-                  <span class="mx-1">{{ formItem.contract_name }}</span>
+                  <span class="mx-1">{{ contractName }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="编号">
                   <span class="mx-1">{{ formItem.contract_no }}</span>
@@ -24,7 +24,9 @@
                     placeholder="Select"
                   >
                     <el-option
-                      v-for="item in contract_kindOptions"
+                      v-for="item in proxy.$const[
+                        'contractCenterEnum.contractType'
+                      ]"
                       :key="item.value"
                       :label="item.label"
                       :value="item.value"
@@ -47,7 +49,9 @@
                     placeholder="请选择"
                   >
                     <el-option
-                      v-for="item in contract_termOptions"
+                      v-for="item in proxy.$const[
+                        'contractCenterEnum.contractTerm'
+                      ]"
                       :key="item.value"
                       :label="item.label"
                       :value="item.value"
@@ -84,8 +88,9 @@
                   <multi-upload v-model="formItem.annex_url"></multi-upload>
                 </el-form-item>
               </div>
+              {{}}
               <!-- 表格 -->
-              <div class="w-[33%] box">
+              <!-- <div class="w-[33%] box">
                 <el-row>
                   <el-col class="top" :span="5">产品列表</el-col>
                   <el-col :span="5"> <div class="bg tac">产品</div></el-col>
@@ -127,7 +132,7 @@
                     ></el-col
                   >
                 </el-row>
-              </div>
+              </div> -->
             </div>
           </el-form>
         </div>
@@ -149,7 +154,6 @@
           </div>
         </zxn-bottom-btn>
       </template>
-      >
     </zxn-tabs>
   </zxn-plan>
 </template>
@@ -161,48 +165,15 @@ import { channelContractEditType } from "@/api/contractCenter/channelContract/ty
 import { getContractDetails } from "@/api/contractCenter";
 const route = useRoute();
 const router = useRouter();
+const { proxy } = getCurrentInstance() as any;
 const activeName = ref("1");
 const tabsList = [
   {
     name: "1",
-    label: "线上合同",
-  },
-  // {
-  //   name: "2",
-  //   label: "线下合同",
-  // },
-];
-//
-const contract_kindOptions = [
-  {
-    value: "1",
-    label: "业务拓展协议(个人)",
-  },
-  {
-    value: "2",
-    label: "业务拓展协议(企业)",
-  },
-  {
-    value: "3",
-    label: "共享经济服务协议",
-  },
-  {
-    value: "4",
-    label: "自由职业者服务协议",
+    label: "线下合同",
   },
 ];
-const contract_termOptions = [
-  {
-    value: "1",
-    label: "一年",
-  },
-];
-const productOptions = [
-  {
-    value: "1",
-    label: "一年",
-  },
-];
+
 //表单信息
 const formItem = ref<channelContractEditType>({
   contract_no: "",
@@ -217,36 +188,37 @@ const formItem = ref<channelContractEditType>({
   remarks: "",
   file_url: [],
   annex_url: [],
-  product: [{ product_type: null, invoice_type: null, cooperate_point: "" }],
+  // product: [{ product_type: null, invoice_type: null, cooperate_point: "" }],
 });
 // 计算属性
 var contractName = computed(() => {
-  var contractKind = contract_kindOptions.find((item) => {
-    if (item.value == formItem.value.contract_kind) {
-      return item;
-    }
-  });
-  return formItem.value.party_a + (contractKind?.label || "");
+  var contractkind =
+    proxy.$enumSet["contractCenterEnum.contractType"][
+      formItem.value.contract_kind
+    ];
+  return (formItem.value.party_a || "") + (contractkind || "");
 }) as any;
 
-const handleAdd = () => {
-  formItem.value.product.push({
-    product_type: null,
-    invoice_type: null,
-    cooperate_point: "",
-  });
-};
+// const handleAdd = () => {
+//   formItem.value.product.push({
+//     product_type: null,
+//     invoice_type: null,
+//     cooperate_point: "",
+//   });
+// };
 const handleChannelContractEdit = () => {
   const ID = Number(route.query.id);
-  const params = { ...formItem, contract_name: contractName.value };
+  const params = { ...formItem.value, contract_name: contractName.value };
   params.file_url = JSON.stringify(params.file_url);
   params.annex_url = JSON.stringify(params.annex_url);
-  params.product = JSON.stringify(params.product);
+  // params.product = JSON.stringify(params.product);
+  console.log(params, "============");
+
   channelContractEdit(ID, params)
     .then(() => {
       ElMessage({
         type: "success",
-        message: `新建成功`,
+        message: `编辑成功`,
       });
       router.push({ name: "contractCenter", query: { activeName: "channel" } });
     })
@@ -275,13 +247,13 @@ const getData = () => {
         annex_url,
       } = response.data.info;
 
-      const product = response.data.product.map((item) => {
-        return {
-          product_type: item.product_type,
-          invoice_type: item.invoice_type,
-          cooperate_point: item.cooperate_point,
-        };
-      });
+      // const product = response.data.product.map((item) => {
+      //   return {
+      //     product_type: item.product_type,
+      //     invoice_type: item.invoice_type,
+      //     cooperate_point: item.cooperate_point,
+      //   };
+      // });
 
       formItem.value = {
         contract_name,
@@ -290,13 +262,13 @@ const getData = () => {
         party_a,
         party_b,
         tax_location,
-        contract_term,
+        contract_term: contract_term + "",
         sign_time,
         end_time,
         remarks,
         file_url,
         annex_url,
-        product,
+        // product,
       };
     })
     .catch();

@@ -15,7 +15,7 @@
       <el-form-item label="合同状态">
         <el-select v-model="formItem.status" placeholder="Select">
           <el-option
-            v-for="item in stateOptions"
+            v-for="item in proxy.$const['contractCenterEnum.contractStatus']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -25,7 +25,7 @@
       <el-form-item label="税源地">
         <el-select v-model="formItem.contract_kind" placeholder="Select">
           <el-option
-            v-for="item in manufacturerOptions"
+            v-for="item in proxy.$const['contractCenterEnum.contractStatus']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -89,15 +89,6 @@ import { ElMessage } from "element-plus";
 import type { ComponentInternalInstance } from "vue";
 import { reactive } from "vue";
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
-// 状态
-const stateOptions = ref([] as any);
-// 厂商
-const manufacturerOptions = [
-  { label: "薪龙网", value: 1 },
-  { label: "某某网", value: 2 },
-  { label: "某某网", value: 3 },
-  { label: "某某网", value: 4 },
-] as any;
 // 查询重置
 const pageInfo = reactive({
   page: 1,
@@ -105,9 +96,20 @@ const pageInfo = reactive({
   limit: 20,
 });
 const handleReset = () => {
+  formItem.value = {
+    company_id: "",
+    keywords: "",
+    start_time: "",
+    end_time: "",
+    contract_kind: "",
+    page: "",
+    limit: "",
+    status: "",
+  };
   handleSearch();
 };
 const handleSearch = () => {
+  console.log("查询");
   pageInfo.page = 1;
   getTableData();
 };
@@ -116,7 +118,7 @@ const handlePageChange = (cur) => {
   pageInfo.page = page;
   getTableData();
 };
-const formItem = reactive({
+const formItem = ref({
   company_id: "",
   keywords: "",
   start_time: "",
@@ -126,13 +128,13 @@ const formItem = reactive({
   limit: "",
   status: "",
 });
-const tableData = reactive([{ contract_no: "2", status: "企业合同" }]);
+const tableData = reactive([]);
 const columnList = [
   { label: "合同编号", prop: "contract_no" },
   {
     label: "状态",
     type: "enum",
-    path: "statusEnum.contractType",
+    path: "contractCenterEnum.contractStatus",
     prop: "status",
     // fixed: "left",
     color: {
@@ -239,19 +241,12 @@ const handleAdd = (command: string | number | object) => {
  */
 const handleExport = () => {};
 const handleImport = () => {};
-/**
- * 下拉选择外部导入
- */
-const getData = () => {
-  stateOptions.value = (proxy as any).$const["statusEnum.IndustryType"];
-};
-getData();
 
 /**
  * 获取数据
  */
 const getTableData = async () => {
-  const params = transformTimeRange({ ...formItem });
+  const params = transformTimeRange({ ...formItem.value });
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
   try {

@@ -57,16 +57,10 @@ const handleTabChange = () => {
     }
   }
   if (activeName.value === "enterprise") {
-    console.log(1);
-
     enterprise.value.getTableData();
   } else if (activeName.value === "channel") {
-    console.log(2);
-
     channel.value.getTableData();
   } else if (activeName.value === "supply") {
-    console.log(3);
-
     supply.value.getTableData();
   }
 };
