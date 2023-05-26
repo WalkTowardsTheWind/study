@@ -12,7 +12,7 @@
             <div class="flex">
               <div class="w-[33%]">
                 <el-form-item label="合同名称">
-                  <span class="mx-1">{{ formItem.contract_name }}</span>
+                  <span class="mx-1">{{ contractName }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="编号">
                   <span class="mx-1">{{ formItem.contract_no }}</span>
@@ -57,6 +57,7 @@
                 <el-form-item class="mt-25px" label="签约时间">
                   <el-date-picker
                     v-model="formItem.sign_time"
+                    value-format="YYYY-MM-DD"
                     type="date"
                     unlink-panels
                     placeholder="请选择"
@@ -65,6 +66,7 @@
                 <el-form-item class="mt-25px" label="到期时间">
                   <el-date-picker
                     v-model="formItem.end_time"
+                    value-format="YYYY-MM-DD"
                     type="date"
                     unlink-panels
                     placeholder="请选择"
@@ -107,20 +109,22 @@
   </zxn-plan>
 </template>
 <script setup lang="ts">
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { enterpriseContractEdit } from "@/api/contractCenter/enterpriseContract";
 import { enterpriseContractEditType } from "@/api/contractCenter/enterpriseContract/types";
 import { getContractDetails } from "@/api/contractCenter";
+const route = useRoute();
+const router = useRouter();
 const activeName = ref("1");
 const tabsList = [
   {
     name: "1",
     label: "线上合同",
   },
-  {
-    name: "2",
-    label: "线下合同",
-  },
+  // {
+  //   name: "2",
+  //   label: "线下合同",
+  // },
 ];
 //
 const contract_kindOptions = [
@@ -150,8 +154,6 @@ const contract_termOptions = [
 
 //表单信息
 var formItem = ref<enterpriseContractEditType>({
-  contract_name: "",
-  contract_no: "",
   online_type: 0,
   contract_kind: "",
   party_a: "",
@@ -164,21 +166,43 @@ var formItem = ref<enterpriseContractEditType>({
   file_url: [],
   annex_url: [],
 });
+// 计算属性
+var contractName = computed(() => {
+  var contractKind = contract_kindOptions.find((item) => {
+    if (item.value == formItem.value.contract_kind) {
+      return item;
+    }
+  });
+  return formItem.value.party_a + (contractKind?.label || "");
+}) as any;
+
 const handleEnterpriseContractEdit = () => {
   const ID = Number(route.query.id);
-  enterpriseContractEdit(ID, formItem.value).then().catch();
+  const params = { ...formItem.value, contract_name: contractName.value };
+  params.file_url = JSON.stringify(params.file_url);
+  params.annex_url = JSON.stringify(params.annex_url);
+  enterpriseContractEdit(ID, params)
+    .then(() => {
+      ElMessage({
+        type: "success",
+        message: `编辑成功`,
+      });
+      router.push({
+        name: "contractCenter",
+        query: { activeName: "enterprise" },
+      });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
-const handleSubmit = () => {
-  getData();
-};
+const handleSubmit = () => {};
 const handleClose = () => {};
 
-const route = useRoute();
 const getData = () => {
   const ID = Number(route.query.id);
   getContractDetails(ID)
     .then((response) => {
-      activeName.value = response.data.info.online_type + "";
       var {
         contract_name,
         contract_no,

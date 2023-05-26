@@ -57,12 +57,6 @@
             </div>
           </el-form>
         </div>
-        <zxn-bottom-btn>
-          <div class="but">
-            <el-button type="primary" @click="handleSubmit">确 定</el-button>
-            <el-button @click="handleClose">取 消</el-button>
-          </div>
-        </zxn-bottom-btn>
       </template>
       <template #2>
         <div class="p-[24px] p-b-[0]">无内容</div>
@@ -80,16 +74,17 @@
 import { useRoute } from "vue-router";
 import { enterpriseContractDetailsType } from "@/api/contractCenter/enterpriseContract/types";
 import { getContractDetails } from "@/api/contractCenter";
+const route = useRoute();
 const activeName = ref("1");
 const tabsList = [
   {
     name: "1",
     label: "线上合同",
   },
-  {
-    name: "2",
-    label: "线下合同",
-  },
+  // {
+  //   name: "2",
+  //   label: "线下合同",
+  // },
 ];
 
 //表单信息
@@ -110,12 +105,10 @@ const formItem = ref<enterpriseContractDetailsType>({
 const handleSubmit = () => {};
 const handleClose = () => {};
 
-const route = useRoute();
 const getData = () => {
   const ID = Number(route.query.id);
   getContractDetails(ID)
     .then((response) => {
-      activeName.value = response.data.info.online_type + "";
       var {
         contract_name,
         contract_no,
@@ -149,10 +142,7 @@ const getData = () => {
 };
 getData();
 
-onMounted(() => {
-  activeName.value = route.query.activeName + "";
-  // rou()
-});
+onMounted(() => {});
 </script>
 <style lang="scss" scoped>
 .but {

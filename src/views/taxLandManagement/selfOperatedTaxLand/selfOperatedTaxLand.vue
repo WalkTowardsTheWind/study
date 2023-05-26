@@ -278,7 +278,8 @@ const getTableData = () => {
     .catch();
 };
 getTableData();
-onMounted(() => {
-  // handleS()
+onMounted(() => {});
+defineExpose({
+  getTableData,
 });
 </script>

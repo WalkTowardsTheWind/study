@@ -1,7 +1,7 @@
 <template>
   <zxn-plan>
     <zxn-tabs
-      v-model:activeName="activeName"
+      :activeName="activeName"
       :tabsList="tabsList"
       @tabChange="handleTabChange"
     >
@@ -39,6 +39,7 @@ const getIndustryList = async () => {
   industryList.push(...data);
 };
 const handleTabChange = () => {
+  console.log(auto.value);
   if (activeName.value === "auto") {
     auto.value.getTaskList();
   } else {

@@ -23,7 +23,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="税源地">
-        <el-select v-model="formItem.keywords" placeholder="Select">
+        <el-select v-model="formItem.contract_kind" placeholder="Select">
           <el-option
             v-for="item in manufacturerOptions"
             :key="item.value"
@@ -33,20 +33,14 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="date" label="创建日期">
-        <el-date-picker
-          v-model="formItem.keywords"
-          type="daterange"
-          unlink-panels
-          range-separator="~"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        />
+        <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>
     </zxn-search>
     <zxn-table
       :table-data="tableData"
       :column-list="columnList"
       :page-info="pageInfo"
+      @page-change="handlePageChange"
       hasSelect
       @selection-change="handleSelect"
     >
@@ -56,7 +50,7 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="1">线上合同</el-dropdown-item>
-              <el-dropdown-item command="2">线下合同</el-dropdown-item>
+              <!-- <el-dropdown-item command="2">线下合同</el-dropdown-item> -->
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -87,9 +81,11 @@
   </div>
 </template>
 <script setup lang="ts">
+import { transformTimeRange } from "@/utils";
 import { useRouter } from "vue-router";
 import { getChannelContractList } from "@/api/contractCenter/channelContract";
 import { updateStatus } from "@/api/contractCenter";
+import { ElMessage } from "element-plus";
 import type { ComponentInternalInstance } from "vue";
 import { reactive } from "vue";
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
@@ -104,9 +100,25 @@ const manufacturerOptions = [
   { label: "某某网", value: 4 },
 ] as any;
 // 查询重置
-const handleSearch = () => {};
-const handleReset = () => {};
+const pageInfo = reactive({
+  page: 1,
+  total: 0,
+  limit: 20,
+});
+const handleReset = () => {
+  handleSearch();
+};
+const handleSearch = () => {
+  pageInfo.page = 1;
+  getTableData();
+};
+const handlePageChange = (cur) => {
+  const { page } = cur;
+  pageInfo.page = page;
+  getTableData();
+};
 const formItem = reactive({
+  company_id: "",
   keywords: "",
   start_time: "",
   end_time: "",
@@ -115,10 +127,6 @@ const formItem = reactive({
   limit: "",
   status: "",
 });
-var pageInfo = ref({
-  total: 1, //总数
-  page: 1, //页数
-} as any);
 var tableData = reactive([] as any);
 const columnList = [
   { label: "合同编号", prop: "contract_no" },
@@ -127,7 +135,17 @@ const columnList = [
     type: "enum",
     path: "statusEnum.contractType",
     prop: "status",
-    color: { 0: "blue", 1: "gray", 2: "black" },
+    // fixed: "left",
+    color: {
+      0: { color: "#19B56B", backgroundColor: "#daf3e7" },
+      1: { color: "#F35135", backgroundColor: "#fde3df" },
+      2: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+      3: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+      4: { color: "#FFFFFF", backgroundColor: "#9ab7f9" },
+      5: { color: "#35C5F3", backgroundColor: "#dff6fd" },
+      6: { color: "#333333", backgroundColor: "#dedede" },
+      7: { color: "#333333", backgroundColor: "#999999" },
+    },
   },
   { label: "合同类型", prop: "contract_kind" },
   { label: "签署形式", prop: "online_type" },
@@ -157,14 +175,42 @@ const handleEdit = (scope: any) => {
   });
 };
 const handleUpdateStatus = async (scope: any) => {
-  console.log(scope);
-  var data = { id: scope.row.id, status: scope.row.status == 0 ? "2" : "0" };
-  try {
-    updateStatus(data);
+  ElMessageBox({
+    title: "",
+    message: h(
+      "p",
+      null,
+      `确定${scope.row.status == 0 ? "停用" : "启用"}该合同`
+    ),
+    showCancelButton: true,
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    beforeClose: async (
+      action: string,
+      instance: { confirmButtonLoading: boolean },
+      done: () => void
+    ) => {
+      if (action === "confirm") {
+        instance.confirmButtonLoading = true;
+        var data = {
+          id: scope.row.id,
+          status: scope.row.status == 0 ? "2" : "0",
+        };
+        await updateStatus(data);
+
+        instance.confirmButtonLoading = false;
+        done();
+      } else {
+        done();
+      }
+    },
+  }).then(() => {
+    ElMessage({
+      type: "success",
+      message: `成功${scope.row.status == 0 ? "停用" : "启用"}该任务合同`,
+    });
     getTableData();
-  } catch (error) {
-    console.log(error);
-  }
+  });
 };
 const handleDownload = (scope: any) => {
   console.log("下载", scope);
@@ -205,17 +251,23 @@ getData();
 /**
  * 获取数据
  */
-const getTableData = () => {
-  const data = { ...formItem };
-  getChannelContractList(data)
-    .then((response: any) => {
-      tableData.length = 0;
-      tableData.push(...response.data.list);
-    })
-    .catch(() => {});
+const getTableData = async () => {
+  const params = transformTimeRange({ ...formItem });
+  params.page = pageInfo.page;
+  params.limit = pageInfo.limit;
+  try {
+    const { data } = await getChannelContractList(params);
+    tableData.length = 0;
+    pageInfo.page = data.current_page;
+    pageInfo.total = data.total;
+    tableData.push(...data.data);
+  } catch (error) {
+    console.log(error);
+  }
 };
-
-onMounted(() => {
-  getTableData();
+getTableData();
+onMounted(() => {});
+defineExpose({
+  getTableData,
 });
 </script>

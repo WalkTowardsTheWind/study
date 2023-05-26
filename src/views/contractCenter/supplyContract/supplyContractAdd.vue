@@ -14,9 +14,6 @@
                 <el-form-item label="合同名称">
                   <span class="mx-1">{{ contractName }}</span>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="编号">
-                  <span class="mx-1">{{ formItem.contract_no }}</span>
-                </el-form-item>
                 <el-form-item class="mt-25px" label="合同类型">
                   <el-select
                     class="w-[100%]"
@@ -57,6 +54,7 @@
                 <el-form-item class="mt-25px" label="签约时间">
                   <el-date-picker
                     v-model="formItem.sign_time"
+                    value-format="YYYY-MM-DD"
                     type="date"
                     unlink-panels
                     placeholder="请选择"
@@ -65,6 +63,7 @@
                 <el-form-item class="mt-25px" label="到期时间">
                   <el-date-picker
                     v-model="formItem.end_time"
+                    value-format="YYYY-MM-DD"
                     type="date"
                     unlink-panels
                     placeholder="请选择"
@@ -107,20 +106,21 @@
   </zxn-plan>
 </template>
 <script setup lang="ts">
-// import { useRoute } from "vue-router";
-import { getContractNumber } from "@/api/contractCenter";
+import { useRouter } from "vue-router";
 import { supplyContractAdd } from "@/api/contractCenter/supplyContract";
 import { supplyContractAddType } from "@/api/contractCenter/supplyContract/types";
+import { ElMessage } from "element-plus";
+const router = useRouter();
 const activeName = ref("1");
 const tabsList = [
   {
     name: "1",
     label: "线上合同",
   },
-  {
-    name: "2",
-    label: "线下合同",
-  },
+  // {
+  //   name: "2",
+  //   label: "线下合同",
+  // },
 ];
 //
 const contract_kindOptions = [
@@ -155,8 +155,6 @@ const contract_termOptions = [
 // ];
 //表单信息
 const formItem = reactive<supplyContractAddType>({
-  contract_name: "",
-  contract_no: "",
   online_type: 0,
   contract_kind: "",
   party_a: "",
@@ -180,19 +178,24 @@ var contractName = computed(() => {
 }) as any;
 
 const handleSupplyContractAdd = () => {
-  supplyContractAdd(formItem as supplyContractAddType)
-    .then()
-    .catch();
+  console.log(contractName);
+  const params = { ...formItem, contract_name: contractName.value };
+  params.file_url = JSON.stringify(params.file_url);
+  params.annex_url = JSON.stringify(params.annex_url);
+  supplyContractAdd(params)
+    .then(() => {
+      ElMessage({
+        type: "success",
+        message: `新建成功`,
+      });
+      router.push({ name: "contractCenter", query: { activeName: "supply" } });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 const handleSubmit = () => {};
 const handleClose = () => {};
-
-const getData = () => {
-  getContractNumber()
-    .then(() => {})
-    .catch();
-};
-getData();
 
 onMounted(() => {});
 </script>

@@ -14,9 +14,6 @@
                 <el-form-item label="合同名称">
                   <span class="mx-1">{{ contractName }}</span>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="编号">
-                  <span class="mx-1">{{ formItem.contract_no }}</span>
-                </el-form-item>
                 <el-form-item class="mt-25px" label="合同类型">
                   <el-select
                     class="w-[100%]"
@@ -58,6 +55,7 @@
                   <el-date-picker
                     v-model="formItem.sign_time"
                     type="date"
+                    value-format="YYYY-MM-DD"
                     unlink-panels
                     placeholder="请选择"
                   />
@@ -65,6 +63,7 @@
                 <el-form-item class="mt-25px" label="到期时间">
                   <el-date-picker
                     v-model="formItem.end_time"
+                    value-format="YYYY-MM-DD"
                     type="date"
                     unlink-panels
                     placeholder="请选择"
@@ -107,11 +106,11 @@
   </zxn-plan>
 </template>
 <script setup lang="ts">
-// import { useRoute } from "vue-router";
-import { getContractNumber } from "@/api/contractCenter";
+import { useRouter } from "vue-router";
 import { enterpriseContractAdd } from "@/api/contractCenter/enterpriseContract";
 import { enterpriseContractAddType } from "@/api/contractCenter/enterpriseContract/types";
-// const route = useRoute();
+import { ElMessage } from "element-plus";
+const router = useRouter();
 const activeName = ref("1");
 
 const tabsList = [
@@ -119,10 +118,10 @@ const tabsList = [
     name: "1",
     label: "线上合同",
   },
-  {
-    name: "2",
-    label: "线下合同",
-  },
+  // {
+  //   name: "2",
+  //   label: "线下合同",
+  // },
 ];
 //
 const contract_kindOptions = [
@@ -151,8 +150,6 @@ const contract_termOptions = [
 ];
 //表单信息
 const formItem = reactive<enterpriseContractAddType>({
-  contract_name: contractName,
-  contract_no: "",
   online_type: 0,
   contract_kind: "",
   party_a: "",
@@ -161,7 +158,6 @@ const formItem = reactive<enterpriseContractAddType>({
   contract_term: "",
   sign_time: "",
   end_time: "",
-
   remarks: "",
   file_url: [],
   annex_url: [],
@@ -177,18 +173,27 @@ var contractName = computed(() => {
 }) as any;
 
 const handleEnterpriseContractAdd = () => {
-  enterpriseContractAdd(formItem).then().catch();
+  console.log(contractName);
+  const params = { ...formItem, contract_name: contractName.value };
+  params.file_url = JSON.stringify(params.file_url);
+  params.annex_url = JSON.stringify(params.annex_url);
+  enterpriseContractAdd(params)
+    .then(() => {
+      ElMessage({
+        type: "success",
+        message: `新建成功`,
+      });
+      router.push({
+        name: "contractCenter",
+        query: { activeName: "enterprise" },
+      });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 const handleSubmit = () => {};
 const handleClose = () => {};
-
-const getData = () => {
-  getContractNumber()
-    .then(() => {})
-    .catch();
-};
-getData();
-
 onMounted(() => {});
 </script>
 <style lang="scss" scoped>

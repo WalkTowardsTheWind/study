@@ -2,8 +2,8 @@
   <div class="p-[24px] p-b-[0]">
     <zxn-search
       :formItem="formItem"
-      :on-search="handleSearch"
-      :on-reset="handleReset"
+      @on-search="handleSearch"
+      @on-reset="handleReset"
     >
       <el-form-item>
         <el-input v-model="formItem.keywords" placeholder="请输入关键字">
@@ -13,7 +13,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="合同状态">
-        <el-select v-model="formItem.keywords" placeholder="Select">
+        <el-select v-model="formItem.status" placeholder="Select">
           <el-option
             v-for="item in stateOptions"
             :key="item.value"
@@ -23,7 +23,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="税源地">
-        <el-select v-model="formItem.keywords" placeholder="Select">
+        <el-select v-model="formItem.contract_kind" placeholder="Select">
           <el-option
             v-for="item in manufacturerOptions"
             :key="item.value"
@@ -33,14 +33,7 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="date" label="创建日期">
-        <el-date-picker
-          v-model="formItem.keywords"
-          type="daterange"
-          unlink-panels
-          range-separator="~"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        />
+        <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>
     </zxn-search>
     <zxn-table
@@ -57,7 +50,7 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="1">线上合同</el-dropdown-item>
-              <el-dropdown-item command="2">线下合同</el-dropdown-item>
+              <!-- <el-dropdown-item command="2">线下合同</el-dropdown-item> -->
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -92,6 +85,7 @@ import { transformTimeRange } from "@/utils";
 import { useRouter } from "vue-router";
 import { getEnterpriseContractList } from "@/api/contractCenter/enterpriseContract";
 import { updateStatus } from "@/api/contractCenter";
+import { ElMessage } from "element-plus";
 import type { ComponentInternalInstance } from "vue";
 import { reactive } from "vue";
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
@@ -124,6 +118,7 @@ const handlePageChange = (cur) => {
   getTableData();
 };
 const formItem = reactive({
+  company_id: "",
   keywords: "",
   start_time: "",
   end_time: "",
@@ -141,7 +136,17 @@ const columnList = [
     type: "enum",
     path: "statusEnum.contractType",
     prop: "status",
-    color: { 0: "blue", 1: "gray", 2: "black" },
+    // fixed: "left",
+    color: {
+      0: { color: "#19B56B", backgroundColor: "#daf3e7" },
+      1: { color: "#F35135", backgroundColor: "#fde3df" },
+      2: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+      3: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+      4: { color: "#FFFFFF", backgroundColor: "#9ab7f9" },
+      5: { color: "#35C5F3", backgroundColor: "#dff6fd" },
+      6: { color: "#333333", backgroundColor: "#dedede" },
+      7: { color: "#333333", backgroundColor: "#999999" },
+    },
   },
   { label: "合同类型", prop: "contract_kind" },
   { label: "签署形式", prop: "online_type" },
@@ -161,22 +166,55 @@ const columnList = [
 const handleDetails = (scope: any) => {
   router.push({
     name: "enterpriseContractDetails",
-    query: { activeName: "1", id: scope.row.id },
+    query: { activeName: "enterprise", id: scope.row.id },
   });
 };
 const handleEdit = (scope: any) => {
   router.push({
     name: "enterpriseContractEdit",
-    query: { activeName: "1", id: scope.row.id },
+    query: { activeName: "enterprise", id: scope.row.id },
   });
 };
-const handleUpdateStatus = (scope: any) => {
-  var data = { id: scope.row.id, status: scope.row.status == 0 ? "2" : "0" };
-  updateStatus(data);
-  getTableData();
+const handleUpdateStatus = async (scope: any) => {
+  ElMessageBox({
+    title: "",
+    message: h(
+      "p",
+      null,
+      `确定${scope.row.status == 0 ? "停用" : "启用"}该合同`
+    ),
+    showCancelButton: true,
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    beforeClose: async (
+      action: string,
+      instance: { confirmButtonLoading: boolean },
+      done: () => void
+    ) => {
+      if (action === "confirm") {
+        instance.confirmButtonLoading = true;
+        var data = {
+          id: scope.row.id,
+          status: scope.row.status == 0 ? "2" : "0",
+        };
+        await updateStatus(data);
+
+        instance.confirmButtonLoading = false;
+        done();
+      } else {
+        done();
+      }
+    },
+  }).then(() => {
+    ElMessage({
+      type: "success",
+      message: `成功${scope.row.status == 0 ? "停用" : "启用"}该任务合同`,
+    });
+    getTableData();
+  });
 };
 const handleDownload = (scope: any) => {
-  console.log("下载", scope);
+  console.log(scope);
 };
 /**
  * 批量选择
@@ -193,9 +231,12 @@ const handleSelect = (data: any) => {
 const router = useRouter();
 const handleAdd = (command: string | number | object) => {
   if (command == 1) {
-    router.push({ name: "enterpriseContractAdd", query: { activeName: "1" } });
+    router.push({
+      name: "enterpriseContractAdd",
+      query: { activeName: "enterprise" },
+    });
   } else if (command == 2) {
-    router.push({ name: "enterpriseContractAdd", query: { activeName: "2" } });
+    // router.push({ name: "enterpriseContractAdd", query: { activeName: "2" } });
   }
 };
 /**
@@ -229,5 +270,7 @@ const getTableData = async () => {
   }
 };
 getTableData();
-onMounted(() => {});
+defineExpose({
+  getTableData,
+});
 </script>

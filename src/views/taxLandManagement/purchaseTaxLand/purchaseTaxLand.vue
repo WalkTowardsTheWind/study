@@ -244,21 +244,9 @@ const handleD = (command: string | number | object) => {
     console.log("导出");
   }
 };
-/**
- *
- */
-const handleS = () => {
-  let a = 8;
-  stateOptions.value = [
-    { label: `全部 (${a})`, value: 1 },
-    { label: `启用中 (${a})`, value: 2 },
-    { label: `待启用 (${a})`, value: 3 },
-    { label: `预警 (${a})`, value: 4 },
-    { label: `下架 (${a})`, value: 5 },
-  ];
-};
-handleS();
-onMounted(() => {
-  // handleS()
+const getTableData = () => {};
+onMounted(() => {});
+defineExpose({
+  getTableData,
 });
 </script>

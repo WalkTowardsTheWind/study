@@ -531,10 +531,7 @@ const getData = () => {
     .catch();
 };
 getData();
-onMounted(() => {
-  // activeName.value=route.query.activeName+''
-  // rou()
-});
+onMounted(() => {});
 </script>
 <style lang="scss" scoped>
 .steps {

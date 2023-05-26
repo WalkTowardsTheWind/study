@@ -55,6 +55,7 @@
                 <el-form-item class="mt-25px" label="签约时间">
                   <el-date-picker
                     v-model="formItem.sign_time"
+                    value-format="YYYY-MM-DD"
                     type="date"
                     unlink-panels
                     placeholder="请选择"
@@ -63,6 +64,7 @@
                 <el-form-item class="mt-25px" label="到期时间">
                   <el-date-picker
                     v-model="formItem.end_time"
+                    value-format="YYYY-MM-DD"
                     type="date"
                     unlink-panels
                     placeholder="请选择"
@@ -150,21 +152,20 @@
   </zxn-plan>
 </template>
 <script setup lang="ts">
-// import { useRoute } from "vue-router";
-import { getContractNumber } from "@/api/contractCenter";
+import { useRouter } from "vue-router";
 import { channelContractAdd } from "@/api/contractCenter/channelContract";
 import { channelContractAddType } from "@/api/contractCenter/channelContract/types";
-// const route = useRoute();
+const router = useRouter();
 const activeName = ref("1");
 const tabsList = [
   {
     name: "1",
     label: "线上合同",
   },
-  {
-    name: "2",
-    label: "线下合同",
-  },
+  // {
+  //   name: "2",
+  //   label: "线下合同",
+  // },
 ];
 const contract_kindOptions = [
   {
@@ -199,7 +200,6 @@ const productOptions = [
 
 //表单信息
 const formItem = reactive<channelContractAddType>({
-  contract_name: contractName,
   online_type: 0,
   contract_kind: "",
   party_a: "",
@@ -231,19 +231,25 @@ const handleAdd = () => {
   });
 };
 const handleChannelContractAdd = () => {
-  channelContractAdd(formItem as channelContractAddType)
-    .then(() => {})
-    .catch();
+  console.log(contractName);
+  const params = { ...formItem, contract_name: contractName.value };
+  params.file_url = JSON.stringify(params.file_url);
+  params.annex_url = JSON.stringify(params.annex_url);
+  params.product = JSON.stringify(params.product);
+  channelContractAdd(params)
+    .then(() => {
+      ElMessage({
+        type: "success",
+        message: `新建成功`,
+      });
+      router.push({ name: "contractCenter", query: { activeName: "channel" } });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 const handleSubmit = () => {};
 const handleClose = () => {};
-
-const getData = () => {
-  getContractNumber()
-    .then(() => {})
-    .catch();
-};
-getData();
 onMounted(() => {});
 </script>
 <style lang="scss" scoped>

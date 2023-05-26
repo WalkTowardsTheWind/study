@@ -57,6 +57,7 @@
                 <el-form-item class="mt-25px" label="签约时间">
                   <el-date-picker
                     v-model="formItem.sign_time"
+                    value-format="YYYY-MM-DD"
                     type="date"
                     unlink-panels
                     placeholder="请选择"
@@ -65,6 +66,7 @@
                 <el-form-item class="mt-25px" label="到期时间">
                   <el-date-picker
                     v-model="formItem.end_time"
+                    value-format="YYYY-MM-DD"
                     type="date"
                     unlink-panels
                     placeholder="请选择"
@@ -153,20 +155,22 @@
 </template>
 <script setup lang="ts">
 // import Form from "../components/Form.vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { channelContractEdit } from "@/api/contractCenter/channelContract";
 import { channelContractEditType } from "@/api/contractCenter/channelContract/types";
 import { getContractDetails } from "@/api/contractCenter";
+const route = useRoute();
+const router = useRouter();
 const activeName = ref("1");
 const tabsList = [
   {
     name: "1",
     label: "线上合同",
   },
-  {
-    name: "2",
-    label: "线下合同",
-  },
+  // {
+  //   name: "2",
+  //   label: "线下合同",
+  // },
 ];
 //
 const contract_kindOptions = [
@@ -201,7 +205,6 @@ const productOptions = [
 ];
 //表单信息
 const formItem = ref<channelContractEditType>({
-  contract_name: contractName,
   contract_no: "",
   online_type: 0,
   contract_kind: "",
@@ -235,19 +238,28 @@ const handleAdd = () => {
 };
 const handleChannelContractEdit = () => {
   const ID = Number(route.query.id);
-  channelContractEdit(ID, formItem.value as channelContractEditType)
-    .then()
-    .catch();
+  const params = { ...formItem, contract_name: contractName.value };
+  params.file_url = JSON.stringify(params.file_url);
+  params.annex_url = JSON.stringify(params.annex_url);
+  params.product = JSON.stringify(params.product);
+  channelContractEdit(ID, params)
+    .then(() => {
+      ElMessage({
+        type: "success",
+        message: `新建成功`,
+      });
+      router.push({ name: "contractCenter", query: { activeName: "channel" } });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 const handleSubmit = () => {};
 const handleClose = () => {};
-const route = useRoute();
-
 const getData = () => {
   const ID = Number(route.query.id);
   getContractDetails(ID)
     .then((response) => {
-      activeName.value = response.data.info.online_type + "";
       var {
         contract_name,
         contract_no,
@@ -261,12 +273,19 @@ const getData = () => {
         remarks,
         file_url,
         annex_url,
-        product,
       } = response.data.info;
+
+      const product = response.data.product.map((item) => {
+        return {
+          product_type: item.product_type,
+          invoice_type: item.invoice_type,
+          cooperate_point: item.cooperate_point,
+        };
+      });
+
       formItem.value = {
         contract_name,
         contract_no,
-        online_type: 0,
         contract_kind: contract_kind + "",
         party_a,
         party_b,
@@ -283,10 +302,7 @@ const getData = () => {
     .catch();
 };
 getData();
-onMounted(() => {
-  activeName.value = route.query.activeName + "";
-  // rou()
-});
+onMounted(() => {});
 </script>
 <style lang="scss" scoped>
 .zxn-box {

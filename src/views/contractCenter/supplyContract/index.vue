@@ -13,7 +13,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="合同状态">
-        <el-select v-model="formItem.keywords" placeholder="Select">
+        <el-select v-model="formItem.status" placeholder="Select">
           <el-option
             v-for="item in stateOptions"
             :key="item.value"
@@ -23,7 +23,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="税源地">
-        <el-select v-model="formItem.keywords" placeholder="Select">
+        <el-select v-model="formItem.contract_kind" placeholder="Select">
           <el-option
             v-for="item in manufacturerOptions"
             :key="item.value"
@@ -32,20 +32,15 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item prop="date" label="创建日期">
-        <el-date-picker
-          v-model="formItem.keywords"
-          type="daterange"
-          unlink-panels
-          range-separator="~"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        />
+      <el-form-item prop="timeData" label="创建日期">
+        <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>
     </zxn-search>
     <zxn-table
       :table-data="tableData"
       :column-list="columnList"
+      :page-info="pageInfo"
+      @page-change="handlePageChange"
       hasSelect
       @selection-change="handleSelect"
     >
@@ -55,7 +50,7 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="1">线上合同</el-dropdown-item>
-              <el-dropdown-item command="2">线下合同</el-dropdown-item>
+              <!-- <el-dropdown-item command="2">线下合同</el-dropdown-item> -->
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -86,9 +81,14 @@
   </div>
 </template>
 <script setup lang="ts">
+import { transformTimeRange } from "@/utils";
 import { useRouter } from "vue-router";
 import { getSupplyContractList } from "@/api/contractCenter/supplyContract";
 import { updateStatus } from "@/api/contractCenter";
+import { ElMessage } from "element-plus";
+import type { ComponentInternalInstance } from "vue";
+import { reactive } from "vue";
+const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 // 状态
 const stateOptions = ref([] as any);
 // 厂商
@@ -99,10 +99,25 @@ const manufacturerOptions = [
   { label: "某某网", value: 4 },
 ] as any;
 // 查询重置
-const handleSearch = () => {};
-const handleReset = () => {};
-
+const pageInfo = reactive({
+  page: 1,
+  total: 0,
+  limit: 20,
+});
+const handleReset = () => {
+  handleSearch();
+};
+const handleSearch = () => {
+  pageInfo.page = 1;
+  getTableData();
+};
+const handlePageChange = (cur) => {
+  const { page } = cur;
+  pageInfo.page = page;
+  getTableData();
+};
 const formItem = reactive({
+  company_id: "",
   keywords: "",
   start_time: "",
   end_time: "",
@@ -119,7 +134,17 @@ const columnList = [
     type: "enum",
     path: "statusEnum.contractType",
     prop: "status",
-    color: { 0: "blue", 1: "gray", 2: "black" },
+    // fixed: "left",
+    color: {
+      0: { color: "#19B56B", backgroundColor: "#daf3e7" },
+      1: { color: "#F35135", backgroundColor: "#fde3df" },
+      2: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+      3: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+      4: { color: "#FFFFFF", backgroundColor: "#9ab7f9" },
+      5: { color: "#35C5F3", backgroundColor: "#dff6fd" },
+      6: { color: "#333333", backgroundColor: "#dedede" },
+      7: { color: "#333333", backgroundColor: "#999999" },
+    },
   },
   { label: "合同类型", prop: "contract_kind" },
   { label: "签署形式", prop: "online_type" },
@@ -148,10 +173,43 @@ const handleEdit = (scope: any) => {
     query: { activeName: "1", id: scope.row.id },
   });
 };
-const handleUpdateStatus = (scope: any) => {
-  var data = { id: scope.row.id, status: scope.row.status == 0 ? "2" : "0" };
-  updateStatus(data);
-  getTableData();
+const handleUpdateStatus = async (scope: any) => {
+  ElMessageBox({
+    title: "",
+    message: h(
+      "p",
+      null,
+      `确定${scope.row.status == 0 ? "停用" : "启用"}该合同`
+    ),
+    showCancelButton: true,
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    beforeClose: async (
+      action: string,
+      instance: { confirmButtonLoading: boolean },
+      done: () => void
+    ) => {
+      if (action === "confirm") {
+        instance.confirmButtonLoading = true;
+        var data = {
+          id: scope.row.id,
+          status: scope.row.status == 0 ? "2" : "0",
+        };
+        await updateStatus(data);
+
+        instance.confirmButtonLoading = false;
+        done();
+      } else {
+        done();
+      }
+    },
+  }).then(() => {
+    ElMessage({
+      type: "success",
+      message: `成功${scope.row.status == 0 ? "停用" : "启用"}该合同成功`,
+    });
+    getTableData();
+  });
 };
 const handleDownload = (scope: any) => {
   console.log(scope);
@@ -160,9 +218,10 @@ const handleDownload = (scope: any) => {
  * 批量选择
  */
 //选中的数据
+//返回id数组
 const selectionData = ref([]);
 const handleSelect = (data: any) => {
-  selectionData.value = data;
+  selectionData.value = data.map((item: any) => item.id);
 };
 /**
  * 新建
@@ -184,31 +243,30 @@ const handleImport = () => {};
  * 下拉选择外部导入
  */
 const getData = () => {
-  let a = 8;
-  stateOptions.value = [
-    { label: `全部 (${a})`, value: 1 },
-    { label: `启用中 (${a})`, value: 2 },
-    { label: `待启用 (${a})`, value: 3 },
-    { label: `预警 (${a})`, value: 4 },
-    { label: `下架 (${a})`, value: 5 },
-  ];
+  stateOptions.value = (proxy as any).$const["statusEnum.IndustryType"];
 };
 getData();
 
 /**
  * 获取数据
  */
-const getTableData = () => {
-  const data = { ...formItem };
-  getSupplyContractList(data)
-    .then((response: any) => {
-      tableData.length = 0;
-      tableData.push(...response.data.list);
-    })
-    .catch(() => {});
+const getTableData = async () => {
+  const params = transformTimeRange({ ...formItem });
+  params.page = pageInfo.page;
+  params.limit = pageInfo.limit;
+  try {
+    const { data } = await getSupplyContractList(params);
+    tableData.length = 0;
+    pageInfo.page = data.current_page;
+    pageInfo.total = data.total;
+    tableData.push(...data.data);
+  } catch (error) {
+    console.log(error);
+  }
 };
 getTableData();
-onMounted(() => {
-  //   rou()
+onMounted(() => {});
+defineExpose({
+  getTableData,
 });
 </script>

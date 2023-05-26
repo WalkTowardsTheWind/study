@@ -39,7 +39,7 @@ export function getSupplyContractList(data: supplyContractListType) {
  */
 export function supplyContractEdit(id: number, data: supplyContractEditType) {
   return request({
-    url: `/adminapi/contract/channel_contract/${id}`,
+    url: `/adminapi/contract/supply_contract/${id}`,
     method: "put",
     params: data,
   });

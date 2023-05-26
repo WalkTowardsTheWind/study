@@ -175,8 +175,7 @@
     </div>
 
     <div class="loginBanquan">
-      版权所有@copyRight北京惠通智云信息技术有限公司 保留一切版权
-      京ICP备19020515号-1
+      版权所有@copyRight中新能智能云平台有限公司 保留一切版权
     </div>
   </div>
 </template>

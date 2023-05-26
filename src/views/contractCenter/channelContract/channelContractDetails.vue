@@ -12,7 +12,7 @@
             <div class="flex">
               <div class="w-[33%]">
                 <el-form-item label="合同名称">
-                  <span class="mx-1">{{ formItem.contract_name }}</span>
+                  <span class="mx-1">{{ contractName }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="编号">
                   <span class="mx-1">{{ formItem.contract_no }}</span>
@@ -94,12 +94,6 @@
             </div>
           </el-form>
         </div>
-        <zxn-bottom-btn>
-          <div class="but">
-            <el-button type="primary" @click="handleSubmit">确 定</el-button>
-            <el-button @click="handleClose">取 消</el-button>
-          </div>
-        </zxn-bottom-btn>
       </template>
       <template #2>
         <div class="p-[24px] p-b-[0]">无内容</div>
@@ -117,21 +111,51 @@
 import { useRoute } from "vue-router";
 import { channelContractDetailsType } from "@/api/contractCenter/channelContract/types";
 import { getContractDetails } from "@/api/contractCenter";
+const route = useRoute();
 const activeName = ref("1");
 const tabsList = [
   {
     name: "1",
     label: "线上合同",
   },
+  // {
+  //   name: "2",
+  //   label: "线下合同",
+  // },
+];
+const contract_kindOptions = [
   {
-    name: "2",
-    label: "线下合同",
+    value: "1",
+    label: "业务拓展协议(个人)",
+  },
+  {
+    value: "2",
+    label: "业务拓展协议(企业)",
+  },
+  {
+    value: "3",
+    label: "共享经济服务协议",
+  },
+  {
+    value: "4",
+    label: "自由职业者服务协议",
+  },
+];
+// const contract_termOptions = [
+//   {
+//     value: "1",
+//     label: "一年",
+//   },
+// ];
+const productOptions = [
+  {
+    value: "1",
+    label: "一年",
   },
 ];
 
 //表单信息
 const formItem = ref<channelContractDetailsType>({
-  contract_name: "",
   contract_no: "",
   contract_kind: "",
   party_a: "",
@@ -146,16 +170,22 @@ const formItem = ref<channelContractDetailsType>({
   annex_url: [],
   product: [{ product_type: null, invoice_type: null, cooperate_point: "" }],
 });
+// 计算属性
+var contractName = computed(() => {
+  var contractKind = contract_kindOptions.find((item) => {
+    if (item.value == formItem.value.contract_kind) {
+      return item;
+    }
+  });
+  return formItem.value.party_a + (contractKind?.label || "");
+}) as any;
 const handleSubmit = () => {};
 const handleClose = () => {};
-
-const route = useRoute();
 
 const getData = () => {
   const ID = Number(route.query.id);
   getContractDetails(ID)
     .then((response) => {
-      activeName.value = response.data.info.online_type + "";
       var {
         contract_name,
         contract_no,
@@ -169,8 +199,15 @@ const getData = () => {
         remarks,
         file_url,
         annex_url,
-        product,
       } = response.data.info;
+      const product = response.data.product.map((item) => {
+        return {
+          product_type: item.product_type,
+          invoice_type: item.invoice_type,
+          cooperate_point: item.cooperate_point,
+        };
+      });
+
       formItem.value = {
         contract_name,
         contract_no,
