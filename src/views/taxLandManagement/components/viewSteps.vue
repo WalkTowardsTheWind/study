@@ -44,8 +44,7 @@ const props = defineProps({
 const ss = ref<number>();
 watch(
   () => props.activeStep,
-  (newVal, oldVal) => {
-    console.log("监听基本类型数据testStr");
+  (newVal) => {
     if (newVal > props.stepList.length - 1) {
       emit("update:activeStep", props.stepList.length - 1);
     }
@@ -53,9 +52,6 @@ watch(
       emit("update:activeStep", 0);
     }
     ss.value = newVal;
-
-    console.log("new", newVal, ss.value);
-    console.log("old", oldVal);
   }
 );
 </script>

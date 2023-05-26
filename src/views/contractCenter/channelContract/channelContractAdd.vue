@@ -12,16 +12,14 @@
             <div class="flex">
               <div class="w-[33%]">
                 <el-form-item label="合同名称">
-                  <el-text class="mx-1">{{ formItem.contract_name }}</el-text>
+                  <span class="mx-1">{{ contractName }}</span>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="编号">
-                  <el-text class="mx-1">{{ formItem.contract_no }}</el-text>
-                </el-form-item>
+
                 <el-form-item class="mt-25px" label="合同类型">
                   <el-select
                     class="w-[100%]"
                     v-model="formItem.contract_kind"
-                    placeholder="Select"
+                    placeholder="请选择"
                   >
                     <el-option
                       v-for="item in contract_kindOptions"
@@ -57,6 +55,7 @@
                 <el-form-item class="mt-25px" label="签约时间">
                   <el-date-picker
                     v-model="formItem.sign_time"
+                    value-format="YYYY-MM-DD"
                     type="date"
                     unlink-panels
                     placeholder="请选择"
@@ -65,6 +64,7 @@
                 <el-form-item class="mt-25px" label="到期时间">
                   <el-date-picker
                     v-model="formItem.end_time"
+                    value-format="YYYY-MM-DD"
                     type="date"
                     unlink-panels
                     placeholder="请选择"
@@ -90,14 +90,11 @@
                   <el-col class="bg tac" :span="8">票面种类及税点</el-col>
                   <el-col class="bg tac" :span="6">合作价格</el-col>
                 </el-row>
-                <el-row
-                  v-for="(item, index) in formItem.manufacturer"
-                  :key="index"
-                >
+                <el-row v-for="(item, index) in formItem.product" :key="index">
                   <el-col class="tac" :offset="5" :span="5">
-                    <el-select v-model="item.value1" placeholder="请输入">
+                    <el-select v-model="item.product_type" placeholder="请输入">
                       <el-option
-                        v-for="item in manufacturerOptions"
+                        v-for="item in productOptions"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
@@ -105,9 +102,9 @@
                     </el-select>
                   </el-col>
                   <el-col class="tac" :span="8">
-                    <el-select v-model="item.value2" placeholder="请输入">
+                    <el-select v-model="item.invoice_type" placeholder="请输入">
                       <el-option
-                        v-for="item in manufacturerOptions"
+                        v-for="item in productOptions"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
@@ -116,7 +113,7 @@
                   </el-col>
                   <el-col class="tac" :span="6">
                     <el-input
-                      v-model="item.value3"
+                      v-model="item.cooperate_point"
                       placeholder="请输入"
                     ></el-input>
                   </el-col>
@@ -134,7 +131,9 @@
         </div>
         <zxn-bottom-btn>
           <div class="but">
-            <el-button type="primary" @click="handleSubmit">确 定</el-button>
+            <el-button type="primary" @click="handleChannelContractAdd"
+              >确 定</el-button
+            >
             <el-button @click="handleClose">取 消</el-button>
           </div>
         </zxn-bottom-btn>
@@ -153,34 +152,55 @@
   </zxn-plan>
 </template>
 <script setup lang="ts">
-// import Form from "../components/Form.vue";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
+import { channelContractAdd } from "@/api/contractCenter/channelContract";
+import { channelContractAddType } from "@/api/contractCenter/channelContract/types";
+const router = useRouter();
 const activeName = ref("1");
 const tabsList = [
   {
     name: "1",
     label: "线上合同",
   },
+  // {
+  //   name: "2",
+  //   label: "线下合同",
+  // },
+];
+const contract_kindOptions = [
   {
-    name: "2",
-    label: "线下合同",
+    value: "1",
+    label: "业务拓展协议(个人)",
+  },
+  {
+    value: "2",
+    label: "业务拓展协议(企业)",
+  },
+  {
+    value: "3",
+    label: "共享经济服务协议",
+  },
+  {
+    value: "4",
+    label: "自由职业者服务协议",
   },
 ];
-//
-const contract_kindOptions = ref([] as any);
-const contract_termOptions = ref([] as any);
+const contract_termOptions = [
+  {
+    value: "1",
+    label: "一年",
+  },
+];
+const productOptions = [
+  {
+    value: "1",
+    label: "一年",
+  },
+];
 
-// 厂商
-const manufacturerOptions = [
-  { label: "薪龙网", value: 1 },
-  { label: "某某网", value: 2 },
-  { label: "某某网", value: 3 },
-  { label: "某某网", value: 4 },
-] as any;
 //表单信息
-const formItem = reactive({
-  contract_name: "",
-  contract_no: "",
+const formItem = reactive<channelContractAddType>({
+  online_type: 0,
   contract_kind: "",
   party_a: "",
   party_b: "",
@@ -188,38 +208,49 @@ const formItem = reactive({
   contract_term: "",
   sign_time: "",
   end_time: "",
-
   remarks: "",
-  file_url: [
-    "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  ],
-  annex_url: [
-    "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  ],
-  manufacturer: [{ value1: null, value2: null, value3: "" }] as any,
+  file_url: [],
+  annex_url: [],
+  product: [{ product_type: null, invoice_type: null, cooperate_point: "" }],
 });
-//
+// 计算属性
+var contractName = computed(() => {
+  var contractKind = contract_kindOptions.find((item) => {
+    if (item.value == formItem.contract_kind) {
+      return item;
+    }
+  });
+  return formItem.party_a + (contractKind?.label || "");
+}) as any;
 
 const handleAdd = () => {
-  formItem.manufacturer.push({ value1: null, value2: null, value3: "" });
+  formItem.product.push({
+    product_type: null,
+    invoice_type: null,
+    cooperate_point: "",
+  });
+};
+const handleChannelContractAdd = () => {
+  console.log(contractName);
+  const params = { ...formItem, contract_name: contractName.value };
+  params.file_url = JSON.stringify(params.file_url);
+  params.annex_url = JSON.stringify(params.annex_url);
+  params.product = JSON.stringify(params.product);
+  channelContractAdd(params)
+    .then(() => {
+      ElMessage({
+        type: "success",
+        message: `新建成功`,
+      });
+      router.push({ name: "contractCenter", query: { activeName: "channel" } });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 const handleSubmit = () => {};
 const handleClose = () => {};
-const route = useRoute();
-console.log(route.query.activeName);
-//路由跳转
-// const rou=()=>{
-//   const uid = router.currentRoute.value.meta.title;
-//   if(uid=="企业合同"){
-//     activeName.value="1"
-//    console.log(uid)
-//   }
-// }
-
-onMounted(() => {
-  activeName.value = route.query.activeName + "";
-  // rou()
-});
+onMounted(() => {});
 </script>
 <style lang="scss" scoped>
 .zxn-box {

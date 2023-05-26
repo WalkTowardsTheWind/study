@@ -1,46 +1,76 @@
 <template>
   <zxn-plan>
     <zxn-tabs
-      :activeName="activeName"
+      v-model:activeName="activeName"
       :tabsList="tabsList"
+      @tabChange="handleTabChange"
       :hasBack="true"
       :hasUpdate="false"
-    ></zxn-tabs>
+    >
+      <template #enterprise>
+        <enterprise-contract ref="enterprise"></enterprise-contract>
+      </template>
+      <template #channel>
+        <channel-contract ref="channel"></channel-contract>
+      </template>
+      <template #supply>
+        <supply-contract ref="supply"></supply-contract>
+      </template>
+    </zxn-tabs>
   </zxn-plan>
 </template>
 <script setup lang="ts">
-// import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import enterpriseContract from "./enterpriseContract/index.vue";
 import channelContract from "./channelContract/index.vue";
 import supplyContract from "./supplyContract/index.vue";
-const activeName = ref("1");
+const route = useRoute();
+const activeName = ref("enterprise");
 const tabsList = [
   {
-    name: "1",
+    name: "enterprise",
     label: "企业合同",
-    subassembly: enterpriseContract,
   },
   {
-    name: "2",
+    name: "channel",
     label: "渠道合同",
-    subassembly: channelContract,
   },
   {
-    name: "3",
+    name: "supply",
     label: "供应合同",
-    subassembly: supplyContract,
   },
 ];
-//路由跳转
-// const router = useRouter();
-// const rou=()=>{
-//   const uid = router.currentRoute.value.meta.title;
-//   if(uid=="税地合同"){
-//     activeName.value="3"
-//    console.log(uid)
-//   }
-// }
+
+console.log(route.query);
+
+const enterprise = ref();
+const channel = ref();
+const supply = ref();
+const handleTabChange = () => {
+  if (route.query.activeName) {
+    if (route.query.activeName === "enterprise") {
+      activeName.value = "enterprise";
+    } else if (route.query.activeName === "channel") {
+      activeName.value = "channel";
+    } else if (route.query.activeName === "supply") {
+      activeName.value = "supply";
+    }
+  }
+  if (activeName.value === "enterprise") {
+    console.log(1);
+
+    enterprise.value.getTableData();
+  } else if (activeName.value === "channel") {
+    console.log(2);
+
+    channel.value.getTableData();
+  } else if (activeName.value === "supply") {
+    console.log(3);
+
+    supply.value.getTableData();
+  }
+};
 onMounted(() => {
-  //   rou()
+  handleTabChange();
 });
 </script>

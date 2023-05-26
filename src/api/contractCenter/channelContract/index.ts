@@ -1,13 +1,17 @@
 import request from "@/utils/request";
-import { channelContractAdd, channelContractEdit } from "./types";
+import {
+  channelContractAddType,
+  channelContractList,
+  channelContractEditType,
+} from "./types";
 
 /**
  * 新建渠道合同
  *
- * @param data {contractAdd}
+ * @param data {channelContractAddType}
  * @returns
  */
-export function channelContractAdd(data: channelContractAdd) {
+export function channelContractAdd(data: channelContractAddType) {
   return request({
     url: "/adminapi/contract/channel_contract",
     method: "post",
@@ -20,19 +24,20 @@ export function channelContractAdd(data: channelContractAdd) {
  *
  *
  */
-export function getChannelContractList() {
+export function getChannelContractList(data: channelContractList) {
   return request({
     url: "/adminapi/contract/channel_contract",
     method: "get",
+    params: data,
   });
 }
 
 /**
  * 修改渠道合同
- * @param data {contractEdit}
+ * @param data {channelContractEditType}
  * @returns
  */
-export function channelContractEdit(id: number, data: channelContractEdit) {
+export function channelContractEdit(id: number, data: channelContractEditType) {
   return request({
     url: `/adminapi/contract/channel_contract/${id}`,
     method: "put",

@@ -12,10 +12,10 @@
             <div class="flex">
               <div class="w-[33%]">
                 <el-form-item label="合同名称">
-                  <el-text class="mx-1">{{ formItem.contract_name }}</el-text>
+                  <span class="mx-1">{{ contractName }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="编号">
-                  <el-text class="mx-1">{{ formItem.contract_no }}</el-text>
+                  <span class="mx-1">{{ formItem.contract_no }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="合同类型">
                   <el-select
@@ -57,6 +57,7 @@
                 <el-form-item class="mt-25px" label="签约时间">
                   <el-date-picker
                     v-model="formItem.sign_time"
+                    value-format="YYYY-MM-DD"
                     type="date"
                     unlink-panels
                     placeholder="请选择"
@@ -65,6 +66,7 @@
                 <el-form-item class="mt-25px" label="到期时间">
                   <el-date-picker
                     v-model="formItem.end_time"
+                    value-format="YYYY-MM-DD"
                     type="date"
                     unlink-panels
                     placeholder="请选择"
@@ -87,7 +89,9 @@
         </div>
         <zxn-bottom-btn>
           <div class="but">
-            <el-button type="primary" @click="handleSubmit">确 定</el-button>
+            <el-button type="primary" @click="handleEnterpriseContractEdit"
+              >确 定</el-button
+            >
             <el-button @click="handleClose">取 消</el-button>
           </div>
         </zxn-bottom-btn>
@@ -105,26 +109,52 @@
   </zxn-plan>
 </template>
 <script setup lang="ts">
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { enterpriseContractEdit } from "@/api/contractCenter/enterpriseContract";
+import { enterpriseContractEditType } from "@/api/contractCenter/enterpriseContract/types";
+import { getContractDetails } from "@/api/contractCenter";
+const route = useRoute();
+const router = useRouter();
 const activeName = ref("1");
 const tabsList = [
   {
     name: "1",
     label: "线上合同",
   },
-  {
-    name: "2",
-    label: "线下合同",
-  },
+  // {
+  //   name: "2",
+  //   label: "线下合同",
+  // },
 ];
 //
-const contract_kindOptions = ref([] as any);
-const contract_termOptions = ref([] as any);
+const contract_kindOptions = [
+  {
+    value: "1",
+    label: "业务拓展协议(个人)",
+  },
+  {
+    value: "2",
+    label: "业务拓展协议(企业)",
+  },
+  {
+    value: "3",
+    label: "共享经济服务协议",
+  },
+  {
+    value: "4",
+    label: "自由职业者服务协议",
+  },
+];
+const contract_termOptions = [
+  {
+    value: "1",
+    label: "一年",
+  },
+];
 
 //表单信息
-const formItem = reactive({
-  contract_name: "",
-  contract_no: "",
+var formItem = ref<enterpriseContractEditType>({
+  online_type: 0,
   contract_kind: "",
   party_a: "",
   party_b: "",
@@ -132,33 +162,81 @@ const formItem = reactive({
   contract_term: "",
   sign_time: "",
   end_time: "",
-
   remarks: "",
-  file_url: [
-    "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  ],
-  annex_url: [
-    "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-  ],
+  file_url: [],
+  annex_url: [],
 });
+// 计算属性
+var contractName = computed(() => {
+  var contractKind = contract_kindOptions.find((item) => {
+    if (item.value == formItem.value.contract_kind) {
+      return item;
+    }
+  });
+  return formItem.value.party_a + (contractKind?.label || "");
+}) as any;
+
+const handleEnterpriseContractEdit = () => {
+  const ID = Number(route.query.id);
+  const params = { ...formItem.value, contract_name: contractName.value };
+  params.file_url = JSON.stringify(params.file_url);
+  params.annex_url = JSON.stringify(params.annex_url);
+  enterpriseContractEdit(ID, params)
+    .then(() => {
+      ElMessage({
+        type: "success",
+        message: `编辑成功`,
+      });
+      router.push({
+        name: "contractCenter",
+        query: { activeName: "enterprise" },
+      });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
 const handleSubmit = () => {};
 const handleClose = () => {};
 
-const route = useRoute();
-console.log(route.query.activeName);
-//路由跳转
-// const rou=()=>{
-//   const uid = router.currentRoute.value.meta.title;
-//   if(uid=="企业合同"){
-//     activeName.value="1"
-//    console.log(uid)
-//   }
-// }
-
-onMounted(() => {
-  activeName.value = route.query.activeName + "";
-  // rou()
-});
+const getData = () => {
+  const ID = Number(route.query.id);
+  getContractDetails(ID)
+    .then((response) => {
+      var {
+        contract_name,
+        contract_no,
+        contract_kind,
+        party_a,
+        party_b,
+        tax_location,
+        contract_term,
+        sign_time,
+        end_time,
+        remarks,
+        file_url,
+        annex_url,
+      } = response.data.info;
+      formItem.value = {
+        contract_name,
+        contract_no,
+        online_type: 0,
+        contract_kind: contract_kind + "",
+        party_a,
+        party_b,
+        tax_location,
+        contract_term,
+        sign_time,
+        end_time,
+        remarks,
+        file_url,
+        annex_url,
+      };
+    })
+    .catch();
+};
+getData();
+onMounted(() => {});
 </script>
 <style lang="scss" scoped>
 .zxn-box {

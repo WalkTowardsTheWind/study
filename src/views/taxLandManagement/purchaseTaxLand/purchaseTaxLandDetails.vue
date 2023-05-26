@@ -152,7 +152,7 @@
   </zxn-plan>
 </template>
 <script setup lang="ts">
-import { useRoute } from "vue-router";
+// import { useRoute } from "vue-router";
 const activeName = ref("1");
 const tabsList = [
   {
@@ -170,7 +170,7 @@ const tabsList = [
 ];
 
 //
-const stateOptions = ref([] as any);
+// const stateOptions = ref([] as any);
 
 //表单信息
 const formItem = reactive({
@@ -185,35 +185,10 @@ const formItem = reactive({
 });
 const handleSubmit = () => {};
 const handleClose = () => {};
-/**
- * 下拉选择外部导入
- */
-const getData = () => {
-  let a = 8;
-  stateOptions.value = [
-    { label: `全部 (${a})`, value: 1 },
-    { label: `启用中 (${a})`, value: 2 },
-    { label: `待启用 (${a})`, value: 3 },
-    { label: `预警 (${a})`, value: 4 },
-    { label: `下架 (${a})`, value: 5 },
-  ];
-};
-const route = useRoute();
-console.log(route.query.activeName);
-getData();
-//路由跳转
-// const rou=()=>{
-//   const uid = router.currentRoute.value.meta.title;
-//   if(uid=="企业合同"){
-//     activeName.value="1"
-//    console.log(uid)
-//   }
-// }
 
-onMounted(() => {
-  // activeName.value=route.query.activeName+''
-  // rou()
-});
+// const route = useRoute();
+
+onMounted(() => {});
 </script>
 <style lang="scss" scoped>
 .steps {

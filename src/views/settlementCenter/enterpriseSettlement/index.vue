@@ -2,14 +2,14 @@
   <div class="p-[24px] p-b-[0]">
     <zxn-search :formItem="formItem">
       <el-form-item>
-        <el-input v-model="formItem.search" placeholder="请输入关键字">
+        <el-input v-model="formItem.keywords" placeholder="请输入关键字">
           <template #prefix>
             <el-icon><i-ep-Search /></el-icon>
           </template>
         </el-input>
       </el-form-item>
       <el-form-item label="任务状态">
-        <el-select v-model="formItem.state" placeholder="Select">
+        <el-select v-model="formItem.status" placeholder="Select">
           <el-option
             v-for="item in stateOptions"
             :key="item.value"
@@ -20,7 +20,7 @@
       </el-form-item>
       <el-form-item prop="date" label="申请日期">
         <el-date-picker
-          v-model="formItem.date"
+          v-model="formItem.start_time"
           type="daterange"
           unlink-panels
           range-separator="~"
@@ -70,21 +70,21 @@
   </div>
 </template>
 <script setup lang="ts">
-const dialogVisible = ref(false);
-const title = ref("");
-
+import { useRouter } from "vue-router";
+import { getEnterpriseSettlementList } from "@/api/settlementCenter/enterpriseSettlement";
+const router = useRouter();
 // 状态
 const stateOptions = ref([] as any);
 
 const formItem = reactive({
-  search: "",
-  state: "",
-  manufacturer: "",
-  Invoice: "",
-  tax: "",
-  date: "",
+  keywords: "",
+  start_time: "",
+  end_time: "",
+  status: "",
+  page: "",
+  limit: "",
 });
-const tableData = reactive([{ settlement_order_no: "企业结算", status: 0 }]);
+const tableData = reactive([] as any);
 const columnList = [
   { label: "结算单号", prop: "settlement_order_no" },
   {
@@ -114,18 +114,13 @@ const columnList = [
 ];
 // 操作
 const handleThaw = (scope: any) => {
-  title.value = "合同详情";
-  dialogVisible.value = true;
-
-  console.log("详情");
-  console.log(scope.row.value.$index);
+  console.log(scope);
 };
 const handleDetails = (scope: any) => {
-  title.value = "合同编辑";
-  dialogVisible.value = true;
-
-  console.log("编辑", dialogVisible.value);
-  console.log(scope.row.value);
+  router.push({
+    name: "enterpriseSettlementDetails",
+    query: { activeName: "1", id: scope.row.id },
+  });
 };
 const handleEdit = (scope: any) => {
   console.log("删除");
@@ -173,7 +168,15 @@ const getData = () => {
   ];
 };
 getData();
-
+const getTableData = () => {
+  getEnterpriseSettlementList(formItem)
+    .then((response) => {
+      tableData.length = 0;
+      tableData.push(...response.data.list);
+    })
+    .catch();
+};
+getTableData();
 onMounted(() => {
   // rou()
 });

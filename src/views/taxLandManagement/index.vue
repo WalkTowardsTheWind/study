@@ -1,24 +1,45 @@
 <template>
   <zxn-plan>
-    <zxn-tabs :activeName="activeName" :tabsList="tabsList"> </zxn-tabs>
+    <zxn-tabs
+      v-model:activeName="activeName"
+      :tabsList="tabsList"
+      @tabChange="handleTabChange"
+    >
+      <template #selfOperated>
+        <self-operated-tax-land ref="selfOperated"></self-operated-tax-land>
+      </template>
+      <template #purchase>
+        <purchase-tax-land ref="purchase"></purchase-tax-land>
+      </template>
+    </zxn-tabs>
   </zxn-plan>
 </template>
 <script setup lang="ts">
 import selfOperatedTaxLand from "./selfOperatedTaxLand/selfOperatedTaxLand.vue";
 import purchaseTaxLand from "./purchaseTaxLand/purchaseTaxLand.vue";
-const activeName = "1";
+const activeName = "selfOperated";
 const tabsList = reactive([
   {
-    name: "1",
+    name: "selfOperated",
     label: "自营税地",
-    subassembly: selfOperatedTaxLand,
   },
   {
-    name: "2",
+    name: "purchase",
     label: "采购税地",
-    subassembly: purchaseTaxLand,
   },
 ]);
+const selfOperated = ref();
+const purchase = ref();
+const handleTabChange = () => {
+  if (activeName.value === "selfOperated") {
+    console.log(1);
 
+    selfOperated.value.getTableData();
+  } else if (activeName.value === "purchase") {
+    console.log(2);
+
+    purchase.value.getTableData();
+  }
+};
 onMounted(() => {});
 </script>

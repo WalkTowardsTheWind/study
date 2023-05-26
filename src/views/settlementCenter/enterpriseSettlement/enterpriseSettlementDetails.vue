@@ -28,42 +28,46 @@
               <el-row>
                 <el-col :span="8">
                   <el-form-item label="企业名称">
-                    <el-text class="mx-1">{{ formItem.name }}</el-text>
+                    <el-text class="mx-1">{{ formItem.company_name }}</el-text>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="企业账户ID">
-                    <el-text class="mx-1">{{ formItem.name }}</el-text>
+                    <el-text class="mx-1">{{ formItem.company_id }}</el-text>
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="8">
                   <el-form-item label="统一社会信用代码" label-width="140px">
-                    <el-text class="mx-1">{{ formItem.name }}</el-text>
+                    <el-text class="mx-1">{{ formItem.credit_code }}</el-text>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="8">
                   <el-form-item label="法人">
-                    <el-text class="mx-1">{{ formItem.name }}</el-text>
+                    <el-text class="mx-1">{{ formItem.legal_person }}</el-text>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="联系人">
-                    <el-text class="mx-1">{{ formItem.name }}</el-text>
+                    <el-text class="mx-1">{{ formItem.contacts }}</el-text>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="联系方式" label-width="140px">
-                    <el-text class="mx-1">{{ formItem.name }}</el-text>
+                    <el-text class="mx-1">{{
+                      formItem.contacts_mobile
+                    }}</el-text>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="8">
                   <el-form-item label="企业地址">
-                    <el-text class="mx-1">{{ formItem.name }}</el-text>
+                    <el-text class="mx-1">{{
+                      formItem.company_address
+                    }}</el-text>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -84,8 +88,10 @@
   </zxn-plan>
 </template>
 <script setup lang="ts">
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import lyTable from "../components/lyTable.vue";
+import { getEnterpriseSettlementDetails } from "@/api/settlementCenter/enterpriseSettlement";
+const route = useRoute();
 const activeName = ref("1");
 const tabsList = [
   {
@@ -103,31 +109,67 @@ const handleTo = () => {
 };
 
 //表单信息
-const formItem = reactive({
+const formItem = ref({
   settlement_order_no: "",
-  name: "name",
-  date: "date",
-  tags: [{ id: 2, label: "不限学历" }],
-  multiPicUrls: [
-    "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-    "https://oss.youlai.tech/default/2022/11/20/13dbfd7feaf848c2acec2b21675eb9d3.webp",
-    "https://oss.youlai.tech/default/2022/11/20/18e206dae97b40329661537d1e433639.jpg",
-  ],
+  company_name: "",
+  company_id: "",
+  credit_code: "",
+  legal_person: "",
+  contacts: "",
+  contacts_mobile: "",
+  company_address: "",
 });
 //
-const tableData = reactive([
-  { value: "010" },
-  { value: "010" },
-  { value: "010" },
-]);
+const tableData = reactive([{ settlement_order_no: "010" }]);
 const columnList = [
-  { label: "任务编号", prop: "value", width: 120 },
-  { label: "任务名称", prop: "name", width: 120 },
-  { label: "需求人数", width: 120 },
-  { label: "预算", width: 120 },
-  { label: "申请时间", width: 120 },
-  { label: "任务详情", slot: "operation", fixed: "right" },
+  { label: "任务编号", prop: "task_no", width: 120 },
+  { label: "任务名称", prop: "task_name", width: 120 },
+  { label: "需求人数", prop: "person_count", width: 120 },
+  { label: "预算", prop: "value", width: 120 },
+  { label: "申请时间", prop: "value", width: 120 },
+  { label: "任务详情", prop: "value", slot: "operation", fixed: "right" },
 ];
+const getData = () => {
+  const ID = Number(route.query.id);
+  console.log(ID);
+  getEnterpriseSettlementDetails(ID)
+    .then((response) => {
+      const {
+        settlement_order_no,
+        company_name,
+        company_id,
+        credit_code,
+        legal_person,
+        contacts,
+        contacts_mobile,
+        company_address,
+      } = response.data.info;
+      formItem.value = {
+        settlement_order_no,
+        company_name,
+        company_id,
+        credit_code,
+        legal_person,
+        contacts,
+        contacts_mobile,
+        company_address,
+      };
+    })
+    .catch();
+};
+getData();
+/**
+ * 获取数据
+ */
+const getTableData = () => {
+  // const data={...formItem}
+  // getEnterpriseContractList(data).then((response)=>{
+  //   tableData.length = 0
+  //   tableData.push(...response.data.list)
+  // }).catch(()=>{
+  // })
+};
+getTableData();
 
 onMounted(() => {});
 </script>

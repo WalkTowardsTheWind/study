@@ -581,7 +581,8 @@
 </template>
 <script setup lang="ts">
 import viewSteps from "../components/viewSteps.vue";
-import { useRoute } from "vue-router";
+// import { useRoute } from "vue-router";
+// const route = useRoute();
 const activeName = ref("1");
 const tabsList = [
   {
@@ -631,22 +632,10 @@ const getData = () => {
     { label: `下架 (${a})`, value: 5 },
   ];
 };
-const route = useRoute();
-console.log(route.query.activeName);
-getData();
-//路由跳转
-// const rou=()=>{
-//   const uid = router.currentRoute.value.meta.title;
-//   if(uid=="企业合同"){
-//     activeName.value="1"
-//    console.log(uid)
-//   }
-// }
 
-onMounted(() => {
-  // activeName.value=route.query.activeName+''
-  // rou()
-});
+getData();
+
+onMounted(() => {});
 </script>
 <style lang="scss" scoped>
 .steps {

@@ -20,7 +20,7 @@ export function updateStatus(data: updateStatus) {
  *
  *
  */
-export function getSupplyContractList() {
+export function getContractNumber() {
   return request({
     url: "/adminapi/contract/contract/create",
     method: "get",
@@ -32,7 +32,7 @@ export function getSupplyContractList() {
  * @param data {supplyContractEdit}
  * @returns
  */
-export function supplyContractEdit(id: number) {
+export function getContractDetails(id: number) {
   return request({
     url: `/adminapi/contract/contract/${id}`,
     method: "get",

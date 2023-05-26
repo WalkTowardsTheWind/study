@@ -70,8 +70,10 @@ export const useUserStore = defineStore("user", () => {
   // 注销
   function logout() {
     return new Promise<void>((resolve, reject) => {
+      console.log("out");
       logoutApi()
         .then(() => {
+          console.log(111);
           resetRouter();
           resetToken();
           resolve();
