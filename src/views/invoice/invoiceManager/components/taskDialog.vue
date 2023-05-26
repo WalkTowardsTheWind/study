@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="visible" custom-class="zxn-dialog" title="关联任务">
+  <el-dialog v-model="visible" class="zxn-dialog" title="关联任务">
     <zxn-table
       :table-data="tableData"
       :column-list="columnList"

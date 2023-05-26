@@ -32,7 +32,8 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       proxy: {
         [env.VITE_APP_BASE_API]: {
           // 线上接口API地址
-          target: "http://192.168.110.27",
+          target: "http://192.168.110.27", // 陈希
+          // target: "http://adminapi.zhongxinneng.lol", // 测试
           // 本地接口API地址
           // target: 'http://localhost:8989',
           changeOrigin: true,

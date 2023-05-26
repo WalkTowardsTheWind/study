@@ -158,8 +158,9 @@ const handleSearch = () => {
   getTaskList();
 };
 const handlePageChange = (cur) => {
-  const { page } = cur;
+  const { page, limit } = cur;
   pageInfo.page = page;
+  pageInfo.limit = limit;
   getTaskList();
 };
 const getTaskList = async () => {

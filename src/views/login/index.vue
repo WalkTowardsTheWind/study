@@ -342,7 +342,7 @@ const debounce = (fn: () => void, time?: any) => {
  */
 const getCaptchaImg = () => {
   var num = Math.ceil(Math.random() * 10);
-  imgSrc.value = "http://192.168.110.27/adminapi/getCaptcha?" + num;
+  imgSrc.value = "/adminapi/getCaptcha?" + num;
 };
 /**
  * 获取手机验证码

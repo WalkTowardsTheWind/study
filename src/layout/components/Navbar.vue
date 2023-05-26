@@ -81,6 +81,9 @@ function logout() {
             <router-link to="/">
               <el-dropdown-item>{{ $t("navbar.dashboard") }}</el-dropdown-item>
             </router-link>
+            <router-link to="/system/account">
+              <el-dropdown-item>修改密码</el-dropdown-item>
+            </router-link>
             <el-dropdown-item @click="logout">
               {{ $t("navbar.logout") }}
             </el-dropdown-item>

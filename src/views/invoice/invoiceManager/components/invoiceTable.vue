@@ -3,6 +3,7 @@
     <zxn-search
       :formItem="formItem"
       @on-search="handleSearch"
+      @on-reset="handleReset"
       :label-width="100"
     >
       <el-form-item label="">
@@ -22,20 +23,10 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="税源地区">
-        <el-select v-model="formItem.tax_land_id" placeholder="请选择">
-          <el-option
-            v-for="item in proxy.$const['statusEnum.IndustryType']"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
       <el-form-item label="开票类型">
         <el-select v-model="formItem.invoice_type" placeholder="请选择">
           <el-option
-            v-for="item in proxy.$const['statusEnum.IndustryType']"
+            v-for="item in proxy.$const['statusEnum.applyInvoiceType']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -56,23 +47,40 @@
         <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>
     </zxn-search>
-    <zxn-table :table-data="tableData" :column-list="columnList" hasSelect>
+    <zxn-table
+      ref="table"
+      :table-data="tableData"
+      :column-list="columnList"
+      hasSelect
+      :page-info="pageInfo"
+      :selectable="selectable"
+      @page-change="handlePageChange"
+    >
       <template #tableTop>
-        <el-dropdown trigger="click">
-          <el-button type="primary">批量操作</el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item>驳回</el-dropdown-item>
-              <el-dropdown-item>通过</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
+        <el-button type="primary" plain @click="handleCommand"
+          >批量驳回</el-button
+        >
       </template>
-      <template #operation>
-        <el-button link type="primary">驳回</el-button>
-        <el-button link type="primary">上传发票</el-button>
-        <el-button link type="primary">查看物流</el-button>
-        <el-button link type="primary">详情</el-button>
+      <template #taskLength="{ row }">
+        <span>{{ row.task_list.length }}</span>
+      </template>
+      <template #operation="{ row }">
+        <template v-if="!row.status">
+          <el-button link type="primary" @click="handleCommand(row.id)"
+            >驳回</el-button
+          >
+          <el-button link type="primary" @click="handleUpload(row)"
+            >上传发票</el-button
+          >
+        </template>
+        <el-button
+          v-if="row.status === 2 || row.status === 1"
+          link
+          type="primary"
+          @click="handleLogistics(row)"
+          >查看物流</el-button
+        >
+        <el-button link type="primary" @click="handleView(row)">详情</el-button>
         <el-button link type="primary">导出</el-button>
       </template>
     </zxn-table>
@@ -82,10 +90,27 @@
 import type { ComponentInternalInstance } from "vue";
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 import { getTreeList } from "@/api/common";
+import {
+  getInvoiceInCompany,
+  getInvoiceInChannel,
+  setStatus,
+  channelSetStatus,
+} from "@/api/invoice";
+import { transformTimeRange } from "@/utils";
+import { isNumber } from "@/utils/is";
+import { useRouter } from "vue-router";
+import { ElMessage } from "element-plus";
+const router = useRouter();
 const props = defineProps({
   type: { type: String, default: "enterprise" },
 });
+const emits = defineEmits(["on-upload", "on-logistics"]);
 const industryList = reactive([]);
+const pageInfo = reactive({
+  page: 1,
+  total: 0,
+  limit: 20,
+});
 const getIndustryList = async () => {
   const { data } = await getTreeList({ type: 2 });
   industryList.length = 0;
@@ -100,30 +125,153 @@ const formItem = reactive({
   status: "",
 });
 const columnList: any[] = reactive([
-  { label: "发票任务编号", prop: "value", minWidth: 110 },
-  { label: "关联任务数量", prop: "name", minWidth: 110 },
-  { label: "申请开票企业", minWidth: 110 },
-  { label: "开票样式", minWidth: 80 },
-  { label: "申请开票金额", minWidth: 110 },
+  { label: "发票任务编号", prop: "invoice_no", minWidth: 150 },
+  {
+    label: "关联任务数量",
+    prop: "task_list",
+    slot: "taskLength",
+    minWidth: 120,
+  },
+  { label: "申请开票企业", prop: "company_name", minWidth: 150 },
+  {
+    label: "开票样式",
+    prop: "apply_invoice_type",
+    type: "enum",
+    path: "statusEnum.applyInvoiceType",
+    minWidth: 120,
+  },
+  { label: "申请开票金额", prop: "apply_amount", minWidth: 120 },
   { label: "税地发票面额", minWidth: 110 },
-  { label: "发票张数", minWidth: 80 },
-  { label: "开票要求", minWidth: 80 },
-  { label: "申请时间", sortable: "custom", minWidth: 120 },
+  { label: "发票张数", prop: "invoice_num", minWidth: 80 },
+  {
+    label: "开票要求",
+    prop: "invoice_require",
+    type: "enum",
+    path: "statusEnum.invoiceRequire",
+    minWidth: 120,
+  },
+  { label: "申请时间", prop: "add_time", sortable: "custom", minWidth: 120 },
   { label: "结算确认函", minWidth: 120 },
   {
     label: "状态",
     type: "enum",
-    path: "statusEnum.IndustryType",
+    path: "statusEnum.invoiceStatus",
     prop: "status",
-    color: { 0: "blue", 1: "red" },
-    minWidth: 80,
+    fixed: "left",
+    color: {
+      0: { color: "#19B56B", backgroundColor: "#daf3e7" },
+      1: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+      2: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+      3: { color: "#F35135", backgroundColor: "#fde3df" },
+      4: { color: "#FFFFFF", backgroundColor: "#f9a89a" },
+    },
+    minWidth: 120,
   },
-  { label: "操作", slot: "operation", fixed: "right", width: 250 },
+  {
+    label: "操作",
+    slot: "operation",
+    fixed: "right",
+    align: "right",
+    width: 230,
+  },
 ]);
 const tableData: any[] = reactive([]);
+
+const handleReset = () => {
+  handleSearch();
+};
+const handleSearch = () => {
+  pageInfo.page = 1;
+  getList();
+};
+const handlePageChange = (cur) => {
+  const { page } = cur;
+  pageInfo.page = page;
+  getList();
+};
+const getList = async () => {
+  const params = transformTimeRange({ ...formItem });
+  params.task_type = props.type;
+  params.page = pageInfo.page;
+  params.limit = pageInfo.limit;
+  try {
+    const { data } =
+      props.type === "enterprise"
+        ? await getInvoiceInCompany(params)
+        : await getInvoiceInChannel(params);
+    tableData.length = 0;
+    pageInfo.page = data.current_page;
+    pageInfo.total = data.total;
+    tableData.push(...data.data);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const selectable = (row) => {
+  return Boolean(!row.status);
+};
+const handleView = (cur) => {
+  router.push({ name: "invoiceView", query: { id: cur.id, type: props.type } });
+};
+const table = ref();
+const handleCommand = async (id) => {
+  const selected = table.value.getSelectionRows();
+  const ids = isNumber(id) ? [id] : selected.map((it) => it.id);
+  console.log(ids, "2222");
+  if (!ids.length) {
+    return ElMessage({
+      type: "error",
+      message: `请选择数据`,
+    });
+  }
+  ElMessageBox({
+    title: "",
+    message: h("p", null, `确定驳回该发票`),
+    showCancelButton: true,
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    beforeClose: async (
+      action: string,
+      instance: { confirmButtonLoading: boolean },
+      done: () => void
+    ) => {
+      if (action === "confirm") {
+        instance.confirmButtonLoading = true;
+        const params = {
+          ids,
+          status: 3,
+        };
+        props.type === "enterprise"
+          ? await setStatus(params)
+          : await channelSetStatus(params);
+        instance.confirmButtonLoading = false;
+        done();
+      } else {
+        done();
+      }
+    },
+  }).then(() => {
+    ElMessage({
+      type: "success",
+      message: `$驳回成功`,
+    });
+    getList();
+  });
+};
+
+const handleUpload = (cur) => {
+  emits("on-upload", cur);
+};
+const handleLogistics = (cur) => {
+  emits("on-logistics", cur);
+};
 onMounted(() => {
   if (props.type === "enterprise") {
     getIndustryList();
   }
+});
+defineExpose({
+  getList,
 });
 </script>
