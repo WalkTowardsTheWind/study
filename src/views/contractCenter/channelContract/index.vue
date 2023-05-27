@@ -2,8 +2,8 @@
   <div class="p-[24px] p-b-[0]">
     <zxn-search
       :formItem="formItem"
-      :on-search="handleSearch"
-      :on-reset="handleReset"
+      @on-search="handleSearch"
+      @on-reset="handleReset"
     >
       <el-form-item>
         <el-input v-model="formItem.keywords" placeholder="请输入关键字">
@@ -14,16 +14,6 @@
       </el-form-item>
       <el-form-item label="合同状态">
         <el-select v-model="formItem.status" placeholder="Select">
-          <el-option
-            v-for="item in proxy.$const['contractCenterEnum.contractStatus']"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="税源地">
-        <el-select v-model="formItem.contract_kind" placeholder="Select">
           <el-option
             v-for="item in proxy.$const['contractCenterEnum.contractStatus']"
             :key="item.value"

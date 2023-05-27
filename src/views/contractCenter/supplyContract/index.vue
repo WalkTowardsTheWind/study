@@ -2,8 +2,8 @@
   <div class="p-[24px] p-b-[0]">
     <zxn-search
       :formItem="formItem"
-      :on-search="handleSearch"
-      :on-reset="handleReset"
+      @on-search="handleSearch"
+      @on-reset="handleReset"
     >
       <el-form-item>
         <el-input v-model="formItem.keywords" placeholder="请输入关键字">
@@ -22,17 +22,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="税源地">
-        <el-select v-model="formItem.contract_kind" placeholder="Select">
-          <el-option
-            v-for="item in proxy.$const['contractCenterEnum.contractStatus']"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item prop="timeData" label="创建日期">
+      <el-form-item prop="date" label="创建日期">
         <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>
     </zxn-search>

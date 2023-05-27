@@ -5,15 +5,16 @@ export interface selfOperatedTaxLandList {
   /**
    * 关键字
    */
-  keywords: string;
-  tax_land_type: string;
-  start_time: string;
-  end_time: string;
-  invoice_type: string;
-  calculation_type: string;
-  tax_manufacturer: string;
-  page: string;
-  limit: string;
+  keywords?: string;
+  tax_land_type?: string;
+  start_time?: string;
+  end_time?: string;
+  invoice_type?: string;
+  invoice_denomination?: string;
+  calculation_type?: string;
+  tax_manufacturer?: string;
+  page?: string;
+  limit?: string;
 }
 /**
  * 新建税地

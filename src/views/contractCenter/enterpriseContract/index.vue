@@ -22,16 +22,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="税源地">
-        <el-select v-model="formItem.contract_kind" placeholder="Select">
-          <el-option
-            v-for="item in proxy.$const['contractCenterEnum.contractStatus']"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
+
       <el-form-item prop="date" label="创建日期">
         <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>

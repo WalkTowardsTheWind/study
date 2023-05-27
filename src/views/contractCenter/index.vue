@@ -25,7 +25,7 @@ import enterpriseContract from "./enterpriseContract/index.vue";
 import channelContract from "./channelContract/index.vue";
 import supplyContract from "./supplyContract/index.vue";
 const route = useRoute();
-const activeName = ref("enterprise");
+const activeName = ref("channel");
 const tabsList = [
   {
     name: "enterprise",

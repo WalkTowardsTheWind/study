@@ -61,7 +61,9 @@
                     placeholder="Select"
                   >
                     <el-option
-                      v-for="item in calculation_typeOptions"
+                      v-for="item in proxy.$const[
+                        'taxLandManagementEnum.calculationType'
+                      ]"
                       :key="item.value"
                       :label="item.label"
                       :value="item.value"
@@ -310,6 +312,7 @@
 <script setup lang="ts">
 import viewSteps from "../components/viewSteps.vue";
 import { selfOperatedTaxLandAdd } from "@/api/taxLandManagement/selfOperatedTaxLand";
+const { proxy } = getCurrentInstance() as any;
 const activeName = ref("1");
 const tabsList = [
   {
@@ -332,7 +335,7 @@ const stepList = [
 
 const tax_land_sourceOptions = ref([] as any);
 const tax_manufacturerOptions = ref([] as any);
-const calculation_typeOptions = ref([] as any);
+// const calculation_typeOptions = ref([] as any);
 const tax_land_city_idOptions = ref([] as any);
 const industry_category_idOptions = ref([] as any);
 const invoice_denominationOptions = ref([] as any);

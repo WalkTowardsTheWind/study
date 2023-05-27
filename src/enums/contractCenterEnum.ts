@@ -14,7 +14,3 @@ export enum contractTerm {
   "二年" = 2,
   "三年" = 3,
 }
-// contractCenterEnum
-// proxy.$const['contractCenterEnum.contractTerm']
-// proxy.$enumSet['contractCenterEnum.contractType']
-// const { proxy } = getCurrentInstance() as any;

@@ -11,7 +11,7 @@ import {
  * @param data {selfOperatedTaxLandList}
  * @returns
  */
-export function getSelfOperatedTaxLandList(data: selfOperatedTaxLandList) {
+export function getSelfOperatedTaxLandList(data?: selfOperatedTaxLandList) {
   return request({
     url: "/adminapi/tax/taxLand",
     method: "get",

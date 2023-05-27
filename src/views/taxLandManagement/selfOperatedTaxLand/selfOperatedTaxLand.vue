@@ -1,6 +1,10 @@
 <template>
   <div class="p-[24px] p-b-[0]">
-    <zxn-search :formItem="formItem">
+    <zxn-search
+      :formItem="formItem"
+      @on-search="handleSearch"
+      @on-reset="handleReset"
+    >
       <el-form-item>
         <el-input v-model="formItem.keywords" placeholder="请输入关键字">
           <template #prefix>
@@ -12,18 +16,7 @@
       <el-form-item label="税地状态">
         <el-select v-model="formItem.status" placeholder="Select">
           <el-option
-            v-for="item in stateOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
-
-      <el-form-item label="厂商">
-        <el-select v-model="formItem.tax_manufacturer" placeholder="Select">
-          <el-option
-            v-for="item in manufacturerOptions"
+            v-for="item in proxy.$const['taxLandManagementEnum.TaxLandStatus']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -34,7 +27,7 @@
       <el-form-item label="发票类型">
         <el-select v-model="formItem.invoice_type" placeholder="Select">
           <el-option
-            v-for="item in InvoiceOptions"
+            v-for="item in proxy.$const['taxLandManagementEnum.InvoiceType']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -42,10 +35,25 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="税率形式">
+      <el-form-item label="发票面额">
+        <el-select v-model="formItem.invoice_denomination" placeholder="Select">
+          <el-option
+            v-for="item in proxy.$const[
+              'taxLandManagementEnum.invoice_denomination'
+            ]"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="计算方式">
         <el-select v-model="formItem.calculation_type" placeholder="Select">
           <el-option
-            v-for="item in taxOptions"
+            v-for="item in proxy.$const[
+              'taxLandManagementEnum.calculationType'
+            ]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -53,19 +61,14 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="date" label="申请日期">
-        <el-date-picker
-          v-model="Time"
-          type="daterange"
-          unlink-panels
-          range-separator="~"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        />
+        <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>
     </zxn-search>
     <zxn-table
       :table-data="tableData"
       :column-list="columnList"
+      :page-info="pageInfo"
+      @page-change="handlePageChange"
       hasSelect
       @selection-change="handleSelect"
     >
@@ -95,55 +98,57 @@
   </div>
 </template>
 <script setup lang="ts">
+import { transformTimeRange } from "@/utils";
 import { useRouter } from "vue-router";
 import { getSelfOperatedTaxLandList } from "@/api/taxLandManagement/selfOperatedTaxLand";
 const router = useRouter();
-// const statusOption = [
-//   { label: "申请中", value: 1 },
-//   { label: "报名中", value: 2 },
-//   { label: "进行中", value: 3 },
-//   { label: "已验收", value: 4 },
-//   { label: "异常", value: 5 },
-// ];
-// 状态
-const stateOptions = ref([] as any);
-// 厂商
-const manufacturerOptions = [
-  { label: "薪龙网", value: 1 },
-  { label: "某某网", value: 2 },
-  { label: "某某网", value: 3 },
-  { label: "某某网", value: 4 },
-] as any;
-// 发票类型
-const InvoiceOptions = [
-  { label: "全部", value: 1 },
-  { label: "6%增值税发票(万元版)", value: 2 },
-  { label: "普通发票(万元版)", value: 3 },
-  { label: "6%增值税发票/普通发票(十万元版)", value: 4 },
-] as any;
-// 税率形式
-const taxOptions = [
-  { label: "全部", value: 1 },
-  { label: "内扣", value: 2 },
-  { label: "外扣", value: 3 },
-] as any;
+const { proxy } = getCurrentInstance() as any;
+
+// 查询重置
+const pageInfo = reactive({
+  page: 1,
+  total: 0,
+  limit: 20,
+});
+const handleReset = () => {
+  formItem.value = {
+    keywords: "",
+    status: "",
+    tax_land_type: "0",
+    timeData: [],
+    invoice_type: "",
+    invoice_denomination: "",
+    calculation_type: "",
+    page: "",
+    limit: "",
+  };
+  handleSearch();
+};
+const handleSearch = () => {
+  console.log("查询");
+  pageInfo.page = 1;
+  getTableData();
+};
+const handlePageChange = (cur) => {
+  const { page } = cur;
+  pageInfo.page = page;
+  getTableData();
+};
 
 const formItem = reactive({
   keywords: "",
   status: "",
-  tax_land_type: "",
-  start_time: "",
-  end_time: "",
+  tax_land_type: "0",
+  timeData: [],
   invoice_type: "",
+  invoice_denomination: "",
   calculation_type: "",
-  tax_manufacturer: "",
   page: "",
   limit: "",
 });
+
 // 计算属性
-var Time = computed(() => {
-  return [formItem.start_time, formItem.end_time];
-}) as any;
+
 const tableData = reactive([] as any);
 const columnList = [
   { label: "税地编号", prop: "tax_land_no" },
@@ -179,11 +184,6 @@ const columnList = [
  */
 const handleA = (scope: any) => {
   console.log(scope, "下架");
-  // if (tableData[scope.$index].state == 1) {
-  //   tableData[scope.$index].state = 2;
-  // } else if (tableData[scope.$index].state == 2) {
-  //   tableData[scope.$index].state = 1;
-  // }
 };
 /**
  * 编辑
@@ -240,42 +240,38 @@ const handleD = (command: string | number | object) => {
     console.log("导出");
   }
 };
-/**
- *
- */
-const handleS = () => {
-  let a = 8;
-  stateOptions.value = [
-    { label: `全部 (${a})`, value: 1 },
-    { label: `启用中 (${a})`, value: 2 },
-    { label: `待启用 (${a})`, value: 3 },
-    { label: `预警 (${a})`, value: 4 },
-    { label: `下架 (${a})`, value: 5 },
-  ];
-};
-handleS();
-const getTableData = () => {
-  getSelfOperatedTaxLandList(formItem)
-    .then((response) => {
-      var data = response.data.list.map((item: any) => {
-        return {
-          id: item.id,
-          tax_land_no: item.tax_land_no,
-          status: item.status,
-          tax_land_name: item.tax_land_name,
-          tax_cost_point: item.tax_cost_point,
-          sign_count: item.sign_count,
-          calculation_type: item.calculation_type,
-          tax_land_head: item.tax_land_head,
-          invoice_type: item.invoice_type,
-          ground_time: item.ground_time,
-          tax_land_type: item.tax_land_type,
-          payment_type: item.payment_type,
-        };
-      });
-      tableData.push(...data);
-    })
-    .catch();
+
+const getTableData = async () => {
+  const params = transformTimeRange({ ...formItem });
+  params.page = pageInfo.page;
+  params.limit = pageInfo.limit;
+  console.log(params);
+
+  try {
+    const { data } = await getSelfOperatedTaxLandList(params);
+    tableData.length = 0;
+    pageInfo.page = data.current_page;
+    pageInfo.total = data.count;
+    var newData = data.data.map((item: any) => {
+      return {
+        id: item.id,
+        tax_land_no: item.tax_land_no,
+        status: item.status,
+        tax_land_name: item.tax_land_name,
+        tax_cost_point: item.tax_cost_point,
+        sign_count: item.sign_count,
+        calculation_type: item.calculation_type,
+        tax_land_head: item.tax_land_head,
+        invoice_type: item.invoice_type,
+        ground_time: item.ground_time,
+        tax_land_type: item.tax_land_type,
+        payment_type: item.payment_type,
+      };
+    });
+    tableData.push(...newData);
+  } catch (error) {
+    console.log(error);
+  }
 };
 getTableData();
 onMounted(() => {});
