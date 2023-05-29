@@ -1,5 +1,10 @@
 <template>
   <zxn-plan>
+    <zxn-tabs
+      activeName="log"
+      :tabsList="[{ label: '操作日志', name: 'log' }]"
+      hasUpdate
+    />
     <div class="p-[24px] p-b-[0]">
       <zxn-search
         :formItem="formItem"

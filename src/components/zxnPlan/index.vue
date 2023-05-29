@@ -19,12 +19,12 @@ defineProps({
     padding-bottom: 27px;
 
     .zxn-plan-content {
-      min-height: calc(100vh - 99px);
+      min-height: calc(100vh - 131px);
     }
   }
 
   &-content {
-    min-height: calc(100vh - 72px);
+    min-height: calc(100vh - 104px);
     background: #fff;
     border-radius: 8px;
   }

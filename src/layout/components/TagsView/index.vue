@@ -209,9 +209,6 @@ function closeAllTags(view: TagView) {
 
 function openTagMenu(tag: TagView, e: MouseEvent) {
   const menuMinWidth = 105;
-
-  console.log("test", proxy?.$el);
-
   const offsetLeft = proxy?.$el.getBoundingClientRect().left; // container margin left
   const offsetWidth = proxy?.$el.offsetWidth; // container width
   const maxLeft = offsetWidth - menuMinWidth; // left boundary
@@ -259,7 +256,7 @@ onMounted(() => {
           class="tags-item-close"
           @click.prevent.stop="closeSelectedTag(tag)"
         >
-          <i-ep-close class="text-[10px]" />
+          <i-ep-CircleCloseFilled class="text-[11px] c-#666666" />
         </span>
       </router-link>
     </scroll-pane>
@@ -301,18 +298,28 @@ onMounted(() => {
 <style lang="scss" scoped>
 .tags-container {
   width: 100%;
-  height: 34px;
+  //height: 34px;
   background-color: var(--el-bg-color);
-  border: 1px solid var(--el-border-color-light);
-  box-shadow: 0 1px 1px var(--el-box-shadow-light);
 
   .tags-item {
+    position: relative;
     display: inline-block;
     padding: 3px 8px;
-    margin: 4px 0 0 5px;
-    font-size: 12px;
+    font-size: 14px;
+    color: #333;
     cursor: pointer;
-    border: 1px solid var(--el-border-color-light);
+
+    &::after {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      display: inline-block;
+      width: 1px;
+      height: 16px;
+      content: "";
+      background: #e5e5e5;
+      transform: translateY(-50%);
+    }
 
     &:first-of-type {
       margin-left: 15px;
@@ -327,28 +334,15 @@ onMounted(() => {
     }
 
     &.active {
-      color: #fff;
-      background-color: var(--el-color-primary);
-      border-color: var(--el-color-primary);
+      background-color: #f6f6f6;
 
-      &::before {
-        display: inline-block;
-        width: 8px;
-        height: 8px;
-        margin-right: 5px;
-        content: "";
-        background: #fff;
-        border-radius: 50%;
+      &::after {
+        background-color: #f6f6f6;
       }
     }
 
     &-close {
       border-radius: 100%;
-
-      &:hover {
-        color: #fff;
-        background: rgb(0 0 0 / 16%);
-      }
     }
   }
 }

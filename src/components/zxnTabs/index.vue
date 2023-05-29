@@ -12,14 +12,10 @@
         <component :is="item.subassembly"></component>
       </el-tab-pane>
     </el-tabs>
-    <div
-      class="zxn-tabs-back"
-      v-if="hasBack || hasUpdate"
-      @click="handleClickRight"
-    >
+    <div class="zxn-tabs-back" v-if="hasUpdate" @click="handleClickRight">
       <el-icon size="14" color="#474747">
-        <i-ep-ArrowLeft v-if="hasBack" />
-        <i-ep-RefreshRight v-if="hasUpdate && !hasBack" />
+        <!--        <i-ep-ArrowLeft v-if="hasBack" />-->
+        <i-ep-RefreshRight v-if="hasUpdate" />
       </el-icon>
       <span>{{ hasBack ? "返回上一级" : "更新" }}</span>
     </div>
@@ -42,14 +38,14 @@ const props = defineProps({
   activeName: { type: String, default: "" },
   tabsList: { type: Array as PropType<tabsListType>, default: () => [] },
   hasBack: { type: Boolean, default: false },
-  hasUpdate: { type: Boolean, default: true },
+  hasUpdate: { type: Boolean, default: false },
 });
 const emit = defineEmits(["update:activeName", "tab-change"]);
 const activeValue = computed(() => props.activeName);
 const handleClick = (tab: string) => {
   emit("update:activeName", tab);
   emit("tab-change", tab);
-  nextTick(resizeSearch);
+  setTimeout(resizeSearch);
 };
 const handleClickRight = () => {
   if (props.hasBack) {

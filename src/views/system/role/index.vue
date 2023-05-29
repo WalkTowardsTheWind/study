@@ -1,5 +1,10 @@
 <template>
   <zxn-plan>
+    <zxn-tabs
+      activeName="role"
+      :tabsList="[{ label: '角色管理', name: 'role' }]"
+      hasUpdate
+    />
     <div class="p-[24px] p-b-[0]">
       <zxn-search>
         <el-form-item>

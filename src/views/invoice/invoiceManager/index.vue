@@ -4,6 +4,7 @@
       v-model:activeName="activeName"
       :tabsList="tabsList"
       @tabChange="handleTabChange"
+      hasUpdate
     >
       <template #enterprise>
         <invoiceTable

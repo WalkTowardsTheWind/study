@@ -6,7 +6,7 @@
         任务信息
         <template #right>
           <span
-            v-if="formItem.status"
+            v-if="isNumber(formItem.status)"
             class="zxn-table-label ml-14px"
             :style="colorType[formItem.status]"
           >
@@ -139,6 +139,7 @@
 import type { Ref } from "vue";
 import { getTaskView } from "@/api/task";
 import { useRoute } from "vue-router";
+import { isNumber } from "@/utils/is";
 import { ElLoading } from "element-plus";
 
 const route = useRoute();

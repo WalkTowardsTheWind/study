@@ -1,19 +1,22 @@
 <template>
   <div class="zxn-button-group">
-    <el-button
+    <div
       v-if="hasAll"
-      :type="!modelValue ? 'primary' : '' as 'primary'"
+      class="zxn-button-group-item"
+      :class="{ active: modelValue === '' }"
       @click="handleClick('')"
-      >全部</el-button
     >
-    <el-button
+      全部
+    </div>
+    <div
       v-for="item in options"
       :key="item.label"
-      :type="item.value === modelValue ? 'primary' : '' as 'primary'"
+      class="zxn-button-group-item"
+      :class="{ active: modelValue === item.value }"
       @click="handleClick(item.value)"
     >
       {{ item.label }}{{ isNullOrUnDef(item.number) ? "" : `(${item.number})` }}
-    </el-button>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -21,7 +24,7 @@ import { isNullOrUnDef } from "@/utils/is";
 defineProps({
   options: { type: Array, default: () => [] },
   modelValue: { type: [String, Number], default: "" },
-  hasAll: { type: Boolean, default: true },
+  hasAll: { type: Boolean, default: false },
 });
 const emit = defineEmits(["update:modelValue", "on-change"]);
 const handleClick = (value: string | number): void => {
@@ -29,3 +32,27 @@ const handleClick = (value: string | number): void => {
   emit("on-change", value);
 };
 </script>
+<style lang="scss" scoped>
+.zxn-button-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-gap: 10px;
+  width: 100%;
+
+  &-item {
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #e7e7e7;
+    border-radius: 4px;
+
+    &:hover {
+      border-color: #497cf5;
+    }
+
+    &.active {
+      color: #497cf5;
+      border-color: #497cf5;
+    }
+  }
+}
+</style>
