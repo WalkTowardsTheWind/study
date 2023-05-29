@@ -115,7 +115,6 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from "vue-router";
 import { enterpriseContractEdit } from "@/api/contractCenter/enterpriseContract";
-import { enterpriseContractEditType } from "@/api/contractCenter/enterpriseContract/types";
 import { getContractDetails } from "@/api/contractCenter";
 const route = useRoute();
 const router = useRouter();
@@ -133,9 +132,10 @@ const tabsList = [
 ];
 
 //表单信息
-var formItem = ref<enterpriseContractEditType>({
+var formItem = ref({
+  contract_name: "",
   contract_no: "",
-  online_type: 0,
+  online_type: 1,
   contract_kind: "",
   party_a: "",
   party_b: "",
@@ -158,7 +158,10 @@ var contractName = computed(() => {
 
 const handleEnterpriseContractEdit = () => {
   const ID = Number(route.query.id);
-  const params = { ...formItem.value, contract_name: contractName.value };
+  const params = {
+    ...formItem.value,
+    contract_name: contractName.value,
+  } as any;
   params.file_url = JSON.stringify(params.file_url);
   params.annex_url = JSON.stringify(params.annex_url);
   enterpriseContractEdit(ID, params)
@@ -177,7 +180,12 @@ const handleEnterpriseContractEdit = () => {
     });
 };
 const handleSubmit = () => {};
-const handleClose = () => {};
+const handleClose = () => {
+  router.push({
+    name: "contractCenter",
+    query: { activeName: "enterprise" },
+  });
+};
 
 const getData = () => {
   const ID = Number(route.query.id);
@@ -200,7 +208,7 @@ const getData = () => {
       formItem.value = {
         contract_name,
         contract_no,
-        online_type: 0,
+        online_type: 1,
         contract_kind: contract_kind + "",
         party_a,
         party_b,

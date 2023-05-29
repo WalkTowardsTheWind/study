@@ -158,7 +158,6 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { channelContractAdd } from "@/api/contractCenter/channelContract";
-import { channelContractAddType } from "@/api/contractCenter/channelContract/types";
 import { ElMessage } from "element-plus";
 const { proxy } = getCurrentInstance() as any;
 const router = useRouter();
@@ -175,8 +174,8 @@ const tabsList = [
 ];
 
 //表单信息
-const formItem = reactive<channelContractAddType>({
-  online_type: 0,
+const formItem = reactive({
+  online_type: 1,
   contract_kind: "",
   party_a: "",
   party_b: "",
@@ -205,7 +204,7 @@ var contractName = computed(() => {
 // };
 const handleChannelContractAdd = () => {
   console.log(contractName);
-  const params = { ...formItem, contract_name: contractName.value };
+  const params = { ...formItem, contract_name: contractName.value } as any;
   params.file_url = JSON.stringify(params.file_url);
   params.annex_url = JSON.stringify(params.annex_url);
   // params.product = JSON.stringify(params.product);
@@ -222,7 +221,9 @@ const handleChannelContractAdd = () => {
     });
 };
 const handleSubmit = () => {};
-const handleClose = () => {};
+const handleClose = () => {
+  router.push({ name: "contractCenter", query: { activeName: "channel" } });
+};
 onMounted(() => {});
 </script>
 <style lang="scss" scoped>

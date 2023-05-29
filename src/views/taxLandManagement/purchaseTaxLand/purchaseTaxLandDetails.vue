@@ -17,51 +17,56 @@
             <div class="flex">
               <div class="w-[33%]">
                 <el-form-item label="税地负责人">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{ formItem.tax_land_head }}</span>
                 </el-form-item>
                 <el-form-item label="联系方式">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{ formItem.head_mobile }}</span>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="税地来源">
-                  <el-text>{{ formItem.name }}</el-text>
+                <el-form-item class="mt-25px" label="税地名称">
+                  <span>{{ formItem.tax_land_name }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="厂商">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{ formItem.tax_manufacturer }}</span>
+                </el-form-item>
+                <el-form-item class="mt-25px" label="银行账户">
+                  <span>{{ formItem.bank_account }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="成本点位">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{ formItem.tax_cost_point }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="计算方式">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{
+                    proxy.$enumSet["taxLandManagementEnum.calculationType"][
+                      formItem.calculation_type
+                    ]
+                  }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="用工年限">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{ formItem.min_employment_year }}</span>
+                  <div class="w-[10%] text-center">-</div>
+                  <span>{{ formItem.max_employment_year }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="税地地区">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{ formItem.tax_land_city_id }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="网址">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{ formItem.web_url }}</span>
                 </el-form-item>
               </div>
               <div class="w-[33%]">
                 <el-form-item class="mb-[0]" label="营业执照">
                   <picture-preview
-                    :imageList="formItem.multiPicUrls"
+                    :imageList="formItem.tax_land_license"
                   ></picture-preview>
                 </el-form-item>
                 <el-form-item class="mt-13px" label="公司资质">
                   <picture-preview
-                    :imageList="formItem.multiPicUrls"
+                    :imageList="formItem.company_qualifications"
                   ></picture-preview>
                 </el-form-item>
               </div>
             </div>
           </el-form>
-        </div>
-        <div class="but">
-          <el-button type="primary" @click="handleSubmit">保存</el-button>
-          <el-button @click="handleClose">取消</el-button>
         </div>
       </template>
       <template #2>
@@ -70,46 +75,50 @@
             <div class="flex">
               <div class="w-[33%]">
                 <el-form-item label="核账网址">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{ formItem.audit_web_url }}</span>
                 </el-form-item>
                 <el-form-item label="核账网址账号">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{ formItem.audit_account }}</span>
                 </el-form-item>
                 <el-form-item label="核账网址密码">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{ formItem.audit_password }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="行业类型">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{ formItem.industry_category_id }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="发票面额">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{
+                    proxy.$enumSet[
+                      "taxLandManagementEnum.invoice_denomination"
+                    ][formItem.invoice_denomination]
+                  }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="发票金额上限">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{ formItem.max_money }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="税点">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{ formItem.tax_point }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="是否有支付接口">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{
+                    proxy.$enumSet["taxLandManagementEnum.is_payment_api"][
+                      formItem.is_payment_api
+                    ]
+                  }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="支付供应商">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{ formItem.payment_supplier }}</span>
                 </el-form-item>
               </div>
               <div class="w-[33%]">
                 <el-form-item class="mb-[0]" label="发票票样">
                   <picture-preview
-                    :imageList="formItem.multiPicUrls"
+                    :imageList="formItem.invoice_sample"
                   ></picture-preview>
                 </el-form-item>
               </div>
             </div>
           </el-form>
-        </div>
-        <div class="but">
-          <el-button type="primary" @click="handleSubmit">保存</el-button>
-          <el-button @click="handleClose">取消</el-button>
         </div>
       </template>
       <template #3>
@@ -118,41 +127,55 @@
             <div class="flex">
               <div class="w-[33%]">
                 <el-form-item class="mt-25px" label="认证形态">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{ formItem.certification_form }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="签约形态">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{
+                    proxy.$enumSet["taxLandManagementEnum.sign_form"][
+                      formItem.sign_form
+                    ]
+                  }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="行业限制">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{ formItem.industry_limit }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="合同年限">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{
+                    proxy.$enumSet["contractCenterEnum.contractTerm"][
+                      formItem.tax_contract_term
+                    ]
+                  }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="进件资料">
-                  <el-text>{{ formItem.name }}</el-text>
+                  <span>{{ formItem.incoming_materials }}</span>
                 </el-form-item>
               </div>
               <div class="w-[33%]">
                 <el-form-item class="mb-[0]" label="协议">
                   <picture-preview
-                    :imageList="formItem.multiPicUrls"
+                    :imageList="formItem.agreement_url"
                   ></picture-preview>
                 </el-form-item>
               </div>
             </div>
           </el-form>
         </div>
-        <div class="but">
-          <el-button type="primary" @click="handleSubmit">保存</el-button>
-          <el-button @click="handleClose">取消</el-button>
-        </div>
       </template>
     </zxn-tabs>
+    <zxn-bottom-btn
+      ><div class="but">
+        <el-button type="primary" @click="handleSubmit">保存</el-button>
+        <el-button @click="handleClose">取消</el-button>
+      </div></zxn-bottom-btn
+    >
   </zxn-plan>
 </template>
 <script setup lang="ts">
-// import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { selfOperatedTaxLandDetails } from "@/api/taxLandManagement/selfOperatedTaxLand";
+const { proxy } = getCurrentInstance() as any;
+const route = useRoute();
+const router = useRouter();
 const activeName = ref("1");
 const tabsList = [
   {
@@ -169,25 +192,136 @@ const tabsList = [
   },
 ];
 
-//
-// const stateOptions = ref([] as any);
-
 //表单信息
-const formItem = reactive({
-  name: "name",
-  date: "date",
-  tags: [{ id: 2, label: "不限学历" }],
-  multiPicUrls: [
-    "https://oss.youlai.tech/default/2022/11/20/8af5567816094545b53e76b38ae9c974.webp",
-    "https://oss.youlai.tech/default/2022/11/20/13dbfd7feaf848c2acec2b21675eb9d3.webp",
-    "https://oss.youlai.tech/default/2022/11/20/18e206dae97b40329661537d1e433639.jpg",
-  ],
+const formItem = ref({
+  tax_land_head: "",
+  head_mobile: "",
+  tax_land_name: "",
+  tax_land_type: 1,
+  tax_manufacturer: "",
+  bank_account: "",
+  tax_cost_point: "",
+  calculation_type: "",
+  min_employment_year: "",
+  max_employment_year: "",
+  tax_land_city_id: "",
+  web_url: "",
+  tax_land_license: [],
+  company_qualifications: [],
+  audit_web_url: "",
+  audit_account: "",
+  audit_password: "",
+  industry_category_id: "",
+  invoice_type: "",
+  invoice_denomination: "",
+  max_money: "",
+  tax_point: "",
+  payment_type: "",
+  is_payment_api: "",
+  payment_supplier: "",
+  invoice_sample: [],
+  certification_form: "",
+  sign_form: "",
+  industry_limit: "",
+  tax_contract_term: "",
+  incoming_materials: "",
+  agreement_url: [],
 });
-const handleSubmit = () => {};
-const handleClose = () => {};
+const handleSubmit = () => {
+  router.push({
+    name: "taxLandManagementIndex",
+    query: { activeName: "purchase" },
+  });
+};
+const handleClose = () => {
+  router.push({
+    name: "taxLandManagementIndex",
+    query: { activeName: "purchase" },
+  });
+};
 
-// const route = useRoute();
+const getData = () => {
+  const ID = Number(route.query.id);
+  console.log(ID);
+  selfOperatedTaxLandDetails(ID)
+    .then((response: any) => {
+      var {
+        tax_land_head,
+        head_mobile,
+        tax_land_name,
+        tax_land_type,
+        tax_manufacturer,
+        bank_account,
+        tax_cost_point,
+        calculation_type,
+        min_employment_year,
+        max_employment_year,
+        tax_land_city_id,
+        web_url,
+        tax_land_license,
+        company_qualifications,
+        audit_web_url,
+        audit_account,
+        audit_password,
+        industry_category_id,
+        invoice_type,
+        invoice_denomination,
+        max_money,
+        tax_point,
+        payment_type,
+        is_payment_api,
+        payment_supplier,
+        invoice_sample,
+        certification_form,
+        sign_form,
+        industry_limit,
+        tax_contract_term,
+        incoming_materials,
+        agreement_url,
+      } = response.data.info;
+      console.log(
+        response.data.info.tax_contract_term,
+        "=========asdawfsdasdfwefrewdfeqwf"
+      );
 
+      formItem.value = {
+        tax_land_head,
+        head_mobile,
+        tax_land_name,
+        tax_land_type,
+        tax_manufacturer,
+        bank_account,
+        tax_cost_point,
+        calculation_type: calculation_type + "",
+        min_employment_year,
+        max_employment_year,
+        tax_land_city_id,
+        web_url,
+        tax_land_license,
+        company_qualifications,
+        audit_web_url,
+        audit_account,
+        audit_password,
+        industry_category_id,
+        invoice_type: invoice_type + "",
+        invoice_denomination: invoice_denomination + "",
+        max_money,
+        tax_point,
+        payment_type: payment_type + "",
+        is_payment_api: is_payment_api + "",
+        payment_supplier,
+        invoice_sample,
+        certification_form,
+        sign_form: sign_form + "",
+        industry_limit,
+        tax_contract_term: tax_contract_term + "",
+        incoming_materials,
+        agreement_url,
+      };
+    })
+    .catch();
+};
+getData();
 onMounted(() => {});
 </script>
 <style lang="scss" scoped>

@@ -14,3 +14,7 @@ export enum contractTerm {
   "二年" = 2,
   "三年" = 3,
 }
+export enum onlineType {
+  "线上",
+  "线下",
+}
