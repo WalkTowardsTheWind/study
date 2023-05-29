@@ -44,7 +44,7 @@ interface DefaultSettings {
 const defaultSettings: DefaultSettings = {
   title: "vue3-element-admin",
   showSettings: false,
-  tagsView: false,
+  tagsView: true,
   fixedHeader: true,
   sidebarLogo: true,
   layout: "left",

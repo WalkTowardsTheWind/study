@@ -13,3 +13,10 @@ export interface LogQuery extends PageQuery {
   ip?: string;
   admin_id?: string;
 }
+
+/**
+ * 权限菜单
+ */
+export interface menusQuery extends PageQuery {
+  keyword: "";
+}

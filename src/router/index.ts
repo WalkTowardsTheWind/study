@@ -199,7 +199,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "taxLandManagement",
         component: () => import("@/views/taxLandManagement/index.vue"),
         name: "taxLandManagementIndex",
-        meta: { title: "税地管理", icon: "homepage", affix: true },
+        meta: { title: "税地管理", icon: "homepage" },
       },
       {
         path: "selfOperatedTaxLandAdd",
@@ -208,7 +208,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/taxLandManagement/selfOperatedTaxLand/selfOperatedTaxLandAdd.vue"
           ),
         name: "selfOperatedTaxLandAdd",
-        meta: { title: "新建税地", icon: "homepage", affix: true },
+        meta: { title: "新建税地", icon: "homepage" },
       },
       {
         path: "selfOperatedTaxLandEdit",
@@ -217,7 +217,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/taxLandManagement/selfOperatedTaxLand/selfOperatedTaxLandEdit.vue"
           ),
         name: "selfOperatedTaxLandEdit",
-        meta: { title: "编辑税地", icon: "homepage", affix: true },
+        meta: { title: "编辑税地", icon: "homepage" },
       },
       {
         path: "selfOperatedTaxLandDetails",
@@ -226,7 +226,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/taxLandManagement/selfOperatedTaxLand/selfOperatedTaxLandDetails.vue"
           ),
         name: "selfOperatedTaxLandDetails",
-        meta: { title: "税地详情", icon: "homepage", affix: true },
+        meta: { title: "税地详情", icon: "homepage" },
       },
     ],
   },
@@ -239,7 +239,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "index",
         component: () => import("@/views/taskManager/index.vue"),
         name: "taskManagerIndex",
-        meta: { title: "任务中心", icon: "homepage", affix: true },
+        meta: { title: "任务中心", icon: "homepage" },
       },
       {
         path: "view",
@@ -295,7 +295,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "log",
         component: () => import("@/views/system/log/index.vue"),
         name: "log",
-        meta: { title: "日志中心", icon: "homepage", affix: true },
+        meta: { title: "日志中心", icon: "homepage" },
       },
       {
         path: "account",

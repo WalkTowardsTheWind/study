@@ -1,21 +1,19 @@
 <template>
   <zxn-plan>
-    <zxn-tabs v-model:activeName="activeName" :tabsList="tabsList" />
+    <zxn-tabs v-model:activeName="activeName" :tabsList="tabsList" hasUpdate />
     <div class="p-[24px] p-b-[0]">
       <zxn-table
         ref="taskTable"
         :table-data="tableData"
         :column-list="columnList"
-        hasSelect
-        :page-info="pageInfo"
-        @page-change="handlePageChange"
+        :hasPagination="false"
       >
         <template #tableTop>
           <div class="menu-search">
-            <el-button type="primary">+ 新建</el-button>
+            <el-button type="primary" @click="handleAdd">+ 新建</el-button>
             <div class="menu-search-input">
               <el-input
-                v-model="formItem.task_name"
+                v-model="formItem.keyword"
                 class="w-344px mr-16px"
                 placeholder="请输入关键字"
               >
@@ -23,7 +21,7 @@
                   <el-icon><i-ep-Search /></el-icon>
                 </template>
               </el-input>
-              <el-button type="primary">查询</el-button>
+              <el-button type="primary" @click="handleSearch">查询</el-button>
             </div>
           </div>
         </template>
@@ -33,9 +31,12 @@
         </template>
       </zxn-table>
     </div>
+    <operation-dialog ref="operationDialogRef" />
   </zxn-plan>
 </template>
 <script lang="ts" setup>
+import operationDialog from "./components/operationDialog.vue";
+import { menusIndex } from "@/api/system";
 const activeName = "menu";
 const tabsList = [
   {
@@ -44,10 +45,10 @@ const tabsList = [
   },
 ];
 const columnList = [
-  { label: "菜单名称", prop: "task_no", minWidth: 140 },
-  { label: "类型", prop: "task_name", minWidth: 120 },
-  { label: "节点路由", prop: "company_name", minWidth: 140 },
-  { label: "文件路径", prop: "task_attribute.person_count", type: "deep" },
+  { label: "菜单名称", prop: "menu_name", minWidth: 140 },
+  { label: "类型", prop: "auth_type", minWidth: 120 },
+  { label: "节点路由", prop: "menu_path", minWidth: 140 },
+  { label: "文件路径", prop: "path" },
   { label: "更新时间", prop: "category_name", minWidth: 80 },
   {
     label: "操作",
@@ -57,17 +58,31 @@ const columnList = [
     align: "right",
   },
 ];
-const formItem = reactive({});
-const pageInfo = reactive({
-  page: 1,
-  total: 0,
-  limit: 20,
+const handleSearch = () => {
+  getList();
+};
+const formItem = reactive({
+  keyword: "",
 });
 const tableData = reactive([]);
-const handlePageChange = (cur) => {
-  const { page } = cur;
-  pageInfo.page = page;
+const getList = async () => {
+  const params = { ...formItem };
+  try {
+    const { data } = await menusIndex(params);
+    console.log(data, "==========");
+    tableData.push(...data);
+    console.log(tableData);
+  } catch (e) {
+    console.log(e);
+  }
 };
+const operationDialogRef = ref();
+const handleAdd = () => {
+  operationDialogRef.value.init();
+};
+onMounted(() => {
+  getList();
+});
 </script>
 <style lang="scss" scoped>
 .menu-search {

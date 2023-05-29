@@ -170,10 +170,9 @@ const getTaskList = async () => {
   params.limit = pageInfo.limit;
   try {
     const { data } = await getTaskIndex(params);
-    console.log(data, "222");
     tableData.length = 0;
     pageInfo.page = data.current_page;
-    pageInfo.total = data.count;
+    pageInfo.total = data.total;
     tableData.push(...data.data);
   } catch (e) {
     console.log(e);

@@ -1,9 +1,10 @@
 <template>
   <zxn-plan>
     <zxn-tabs
-      :activeName="activeName"
+      v-model:activeName="activeName"
       :tabsList="tabsList"
       @tabChange="handleTabChange"
+      hasUpdate
     >
       <template #auto>
         <task-table ref="auto" :type="1" :industry-list="industryList" />
@@ -16,7 +17,7 @@
 </template>
 <script setup lang="ts">
 import taskTable from "./components/taskTable.vue";
-import { getTreeList } from "@/api/common/index";
+import { getTreeList } from "@/api/common";
 const activeName = ref("auto");
 const tabsList = [
   {
@@ -37,10 +38,10 @@ const getIndustryList = async () => {
   industryList.push(...data);
 };
 const handleTabChange = () => {
-  console.log(auto.value);
   if (activeName.value === "auto") {
     auto.value.getTaskList();
   } else {
+    console.log(22222222);
     manual.value.getTaskList();
   }
 };
