@@ -208,7 +208,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/taxLandManagement/selfOperatedTaxLand/selfOperatedTaxLandAdd.vue"
           ),
         name: "selfOperatedTaxLandAdd",
-        meta: { title: "新建自营税地", icon: "homepage", affix: true },
+        meta: { title: "新建自营税地", icon: "homepage" },
       },
       {
         path: "selfOperatedTaxLandEdit",
@@ -217,7 +217,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/taxLandManagement/selfOperatedTaxLand/selfOperatedTaxLandEdit.vue"
           ),
         name: "selfOperatedTaxLandEdit",
-        meta: { title: "编辑自营税地", icon: "homepage", affix: true },
+        meta: { title: "编辑自营税地", icon: "homepage" },
       },
       {
         path: "selfOperatedTaxLandDetails",
@@ -226,7 +226,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/taxLandManagement/selfOperatedTaxLand/selfOperatedTaxLandDetails.vue"
           ),
         name: "selfOperatedTaxLandDetails",
-        meta: { title: "自营税地详情", icon: "homepage", affix: true },
+        meta: { title: "自营税地详情", icon: "homepage" },
       },
       {
         path: "purchaseTaxLandAdd",
@@ -235,7 +235,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/taxLandManagement/purchaseTaxLand/purchaseTaxLandAdd.vue"
           ),
         name: "purchaseTaxLandAdd",
-        meta: { title: "新建采购税地", icon: "homepage", affix: true },
+        meta: { title: "新建采购税地", icon: "homepage" },
       },
       {
         path: "selfOperatedTaxLandEdit",
@@ -244,7 +244,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/taxLandManagement/purchaseTaxLand/purchaseTaxLandEdit.vue"
           ),
         name: "purchaseTaxLandEdit",
-        meta: { title: "编辑采购税地", icon: "homepage", affix: true },
+        meta: { title: "编辑采购税地", icon: "homepage" },
       },
       {
         path: "selfOperatedTaxLandDetails",
@@ -253,7 +253,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/taxLandManagement/purchaseTaxLand/purchaseTaxLandDetails.vue"
           ),
         name: "purchaseTaxLandDetails",
-        meta: { title: "采购税地详情", icon: "homepage", affix: true },
+        meta: { title: "采购税地详情", icon: "homepage" },
       },
     ],
   },
