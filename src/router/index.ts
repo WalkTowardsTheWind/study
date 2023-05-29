@@ -332,6 +332,138 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
+  // 账户管理模块
+  {
+    path: "/account-management",
+    component: Layout,
+    name: "account-management",
+    children: [
+      {
+        path: "business-account",
+        component: () => import("@/views/account-management/index.vue"),
+        name: "business-account",
+        meta: { title: "账户管理", icon: "homepage" },
+      },
+      {
+        path: "business-account-detail",
+        component: () =>
+          import("@/views/account-management/business/detail-or-edit.vue"),
+        name: "business-account-detail",
+        meta: {
+          hidden: true,
+        },
+      },
+      {
+        path: "business-account-add",
+        component: () => import("@/views/account-management/business/add.vue"),
+        name: "business-account-add",
+        meta: {
+          hidden: true,
+        },
+      },
+      {
+        path: "channel-account-detail",
+        component: () =>
+          import("@/views/account-management/channel/detail-or-edit.vue"),
+        name: "channel-account-detail",
+        meta: {
+          hidden: true,
+        },
+      },
+      {
+        path: "channel-account-add",
+        component: () => import("@/views/account-management/channel/add.vue"),
+        name: "channel-account-add",
+        meta: {
+          hidden: true,
+        },
+      },
+      {
+        path: "personal-account",
+        component: () =>
+          import("@/views/account-management/personal/index.vue"),
+        name: "personal-account",
+        meta: {
+          hidden: true,
+        },
+      },
+      {
+        path: "personal-account-detail",
+        component: () =>
+          import("@/views/account-management/personal/detail-or-edit.vue"),
+        name: "personal-account-detail",
+        meta: {
+          hidden: true,
+        },
+      },
+    ],
+  },
+  {
+    path: "/asset-management",
+    component: Layout,
+    meta: { title: "资产管理", icon: "homepage" },
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/asset-management/index.vue"),
+        name: "asset-management",
+        meta: { title: "资产管理", icon: "homepage", affix: true },
+      },
+      {
+        path: "detail",
+        component: () => import("@/views/asset-management/detail.vue"),
+        name: "asset-management-detail",
+        meta: { hidden: true },
+      },
+    ],
+  },
+
+  {
+    path: "/recharge-center",
+    component: Layout,
+    meta: { title: "充值中心", icon: "homepage" },
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/recharge-center/index.vue"),
+        name: "recharge-center",
+        meta: { title: "充值中心", icon: "homepage", affix: true },
+      },
+      {
+        path: "detail",
+        component: () => import("@/views/recharge-center/detail.vue"),
+        name: "recharge-center-detail",
+        meta: { hidden: true },
+      },
+    ],
+  },
+  {
+    path: "/channel-commission",
+    component: Layout,
+    meta: { title: "渠道佣金", icon: "homepage" },
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/channel-commission/index.vue"),
+        name: "channel-commission",
+        meta: { title: "渠道佣金", icon: "homepage", affix: true },
+      },
+    ],
+  },
+  // 类目
+  {
+    path: "/category-management",
+    component: Layout,
+    meta: { title: "类目管理", icon: "homepage" },
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/category-management/index.vue"),
+        name: "category-management",
+        meta: { title: "类目管理", icon: "homepage", affix: true },
+      },
+    ],
+  },
 ];
 
 /**
