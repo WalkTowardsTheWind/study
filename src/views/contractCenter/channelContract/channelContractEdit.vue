@@ -161,7 +161,6 @@
 // import Form from "../components/Form.vue";
 import { useRoute, useRouter } from "vue-router";
 import { channelContractEdit } from "@/api/contractCenter/channelContract";
-import { channelContractEditType } from "@/api/contractCenter/channelContract/types";
 import { getContractDetails } from "@/api/contractCenter";
 const route = useRoute();
 const router = useRouter();
@@ -175,9 +174,10 @@ const tabsList = [
 ];
 
 //表单信息
-const formItem = ref<channelContractEditType>({
+const formItem = ref({
+  contract_name: "",
   contract_no: "",
-  online_type: 0,
+  online_type: 1,
   contract_kind: "",
   party_a: "",
   party_b: "",
@@ -208,11 +208,13 @@ var contractName = computed(() => {
 // };
 const handleChannelContractEdit = () => {
   const ID = Number(route.query.id);
-  const params = { ...formItem.value, contract_name: contractName.value };
+  const params = {
+    ...formItem.value,
+    contract_name: contractName.value,
+  } as any;
   params.file_url = JSON.stringify(params.file_url);
   params.annex_url = JSON.stringify(params.annex_url);
   // params.product = JSON.stringify(params.product);
-  console.log(params, "============");
 
   channelContractEdit(ID, params)
     .then(() => {
@@ -227,7 +229,9 @@ const handleChannelContractEdit = () => {
     });
 };
 const handleSubmit = () => {};
-const handleClose = () => {};
+const handleClose = () => {
+  router.push({ name: "contractCenter", query: { activeName: "channel" } });
+};
 const getData = () => {
   const ID = Number(route.query.id);
   getContractDetails(ID)
@@ -258,6 +262,7 @@ const getData = () => {
       formItem.value = {
         contract_name,
         contract_no,
+        online_type: 1,
         contract_kind: contract_kind + "",
         party_a,
         party_b,

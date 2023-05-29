@@ -40,7 +40,7 @@
           <el-button type="primary">+ 新建</el-button>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="1">线上合同</el-dropdown-item>
+              <el-dropdown-item command="1">线下合同</el-dropdown-item>
               <!-- <el-dropdown-item command="2">线下合同</el-dropdown-item> -->
             </el-dropdown-menu>
           </template>
@@ -77,9 +77,7 @@ import { useRouter } from "vue-router";
 import { getEnterpriseContractList } from "@/api/contractCenter/enterpriseContract";
 import { updateStatus } from "@/api/contractCenter";
 import { ElMessage } from "element-plus";
-import type { ComponentInternalInstance } from "vue";
-import { reactive } from "vue";
-const { proxy } = getCurrentInstance() as ComponentInternalInstance;
+const { proxy } = getCurrentInstance() as any;
 
 // 查询重置
 const pageInfo = reactive({
@@ -91,8 +89,7 @@ const handleReset = () => {
   formItem.value = {
     company_id: "",
     keywords: "",
-    start_time: "",
-    end_time: "",
+    timeData: [],
     contract_kind: "",
     page: "",
     limit: "",
@@ -105,7 +102,7 @@ const handleSearch = () => {
   pageInfo.page = 1;
   getTableData();
 };
-const handlePageChange = (cur) => {
+const handlePageChange = (cur: any) => {
   const { page } = cur;
   pageInfo.page = page;
   getTableData();
@@ -113,8 +110,7 @@ const handlePageChange = (cur) => {
 const formItem = ref({
   company_id: "",
   keywords: "",
-  start_time: "",
-  end_time: "",
+  timeData: [],
   contract_kind: "",
   page: "",
   limit: "",
@@ -131,14 +127,9 @@ const columnList = [
     prop: "status",
     // fixed: "left",
     color: {
-      0: { color: "#19B56B", backgroundColor: "#daf3e7" },
-      1: { color: "#F35135", backgroundColor: "#fde3df" },
-      2: { color: "#356FF3", backgroundColor: "#dfe8fd" },
-      3: { color: "#356FF3", backgroundColor: "#dfe8fd" },
-      4: { color: "#FFFFFF", backgroundColor: "#9ab7f9" },
-      5: { color: "#35C5F3", backgroundColor: "#dff6fd" },
-      6: { color: "#333333", backgroundColor: "#dedede" },
-      7: { color: "#333333", backgroundColor: "#999999" },
+      0: { color: "#366FF4", backgroundColor: "#DFE8FD" },
+      1: { color: "#FFFFFF", backgroundColor: "#999999" },
+      2: { color: "#333333", backgroundColor: "#DEDEDE" },
     },
   },
   { label: "合同类型", prop: "contract_kind" },
@@ -250,7 +241,21 @@ const getTableData = async () => {
     tableData.length = 0;
     pageInfo.page = data.current_page;
     pageInfo.total = data.total;
-    tableData.push(...data.data);
+    var newData = data.data.map((item: any) => {
+      return {
+        id: item.id,
+        contract_no: item.contract_no,
+        status: item.status,
+        contract_kind:
+          proxy.$enumSet["contractCenterEnum.contractType"][item.contract_kind],
+        online_type:
+          proxy.$enumSet["contractCenterEnum.onlineType"][item.online_type],
+        party_a: item.party_a,
+        party_b: item.party_b,
+        tax_location: item.tax_location,
+      };
+    });
+    tableData.push(...newData);
   } catch (error) {
     console.log(error);
   }

@@ -41,8 +41,6 @@ const tabsList = [
   },
 ];
 
-console.log(route.query);
-
 const enterprise = ref();
 const channel = ref();
 const supply = ref();
@@ -55,6 +53,8 @@ const handleTabChange = () => {
     } else if (route.query.activeName === "supply") {
       activeName.value = "supply";
     }
+  } else {
+    activeName.value = "enterprise";
   }
   if (activeName.value === "enterprise") {
     enterprise.value.getTableData();

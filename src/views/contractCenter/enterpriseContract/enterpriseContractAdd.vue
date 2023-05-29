@@ -112,7 +112,6 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { enterpriseContractAdd } from "@/api/contractCenter/enterpriseContract";
-import { enterpriseContractAddType } from "@/api/contractCenter/enterpriseContract/types";
 import { ElMessage } from "element-plus";
 const { proxy } = getCurrentInstance() as any;
 const router = useRouter();
@@ -126,8 +125,8 @@ const tabsList = [
 ];
 
 //表单信息
-const formItem = reactive<enterpriseContractAddType>({
-  online_type: 0,
+const formItem = reactive({
+  online_type: 1,
   contract_kind: "",
   party_a: "",
   party_b: "",
@@ -149,7 +148,7 @@ var contractName = computed(() => {
 
 const handleEnterpriseContractAdd = () => {
   console.log(contractName);
-  const params = { ...formItem, contract_name: contractName.value };
+  const params = { ...formItem, contract_name: contractName.value } as any;
   params.file_url = JSON.stringify(params.file_url);
   params.annex_url = JSON.stringify(params.annex_url);
   enterpriseContractAdd(params)
@@ -168,7 +167,12 @@ const handleEnterpriseContractAdd = () => {
     });
 };
 const handleSubmit = () => {};
-const handleClose = () => {};
+const handleClose = () => {
+  router.push({
+    name: "contractCenter",
+    query: { activeName: "enterprise" },
+  });
+};
 onMounted(() => {});
 </script>
 <style lang="scss" scoped>

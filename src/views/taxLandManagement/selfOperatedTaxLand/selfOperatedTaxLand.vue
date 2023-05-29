@@ -73,7 +73,16 @@
       @selection-change="handleSelect"
     >
       <template #tableTop>
-        <el-button type="primary" @click="handleAdd">+ 新建</el-button>
+        <!-- <el-button type="primary" @click="handleAdd">+ 新建</el-button> -->
+        <el-dropdown class="ml-4" trigger="click" @command="handleAdd">
+          <el-button type="primary">+ 新建</el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="1">新建自营税地</el-dropdown-item>
+              <el-dropdown-item command="2">新建采购税地</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
         <el-dropdown class="ml-4" trigger="click" @command="handleD">
           <el-button type="primary">批量操作</el-button>
           <template #dropdown>
@@ -86,11 +95,13 @@
         </el-dropdown>
       </template>
       <template #operation="scope">
-        <el-button link type="primary" @click="handleA(scope)">{{
-          scope.row.state == 1 ? "下架" : "上架"
+        <el-button link type="primary" @click="handleUpdateStatus(scope)">{{
+          [0, 2].includes(scope.row.status) ? "上架" : "下架"
         }}</el-button>
         <el-button link type="primary" @click="handleB(scope)">编辑</el-button>
-        <el-button link type="primary" @click="handleE(scope)">删除</el-button>
+        <el-button link type="primary" @click="handleDelete(scope)"
+          >删除</el-button
+        >
         <el-button link type="primary" @click="handleF(scope)">导出</el-button>
         <el-button link type="primary" @click="handleG(scope)">详情</el-button>
       </template>
@@ -100,7 +111,12 @@
 <script setup lang="ts">
 import { transformTimeRange } from "@/utils";
 import { useRouter } from "vue-router";
-import { getSelfOperatedTaxLandList } from "@/api/taxLandManagement/selfOperatedTaxLand";
+import {
+  getSelfOperatedTaxLandList,
+  selfOperatedTaxLandDelete,
+  selfOperatedTaxLandUpdateStatus,
+} from "@/api/taxLandManagement/selfOperatedTaxLand";
+import { ElMessage } from "element-plus";
 const router = useRouter();
 const { proxy } = getCurrentInstance() as any;
 
@@ -129,13 +145,13 @@ const handleSearch = () => {
   pageInfo.page = 1;
   getTableData();
 };
-const handlePageChange = (cur) => {
+const handlePageChange = (cur: any) => {
   const { page } = cur;
   pageInfo.page = page;
   getTableData();
 };
 
-const formItem = reactive({
+const formItem = ref({
   keywords: "",
   status: "",
   tax_land_type: "0",
@@ -158,7 +174,13 @@ const columnList = [
     path: "statusEnum.taxLandType",
     prop: "status",
     width: 100,
-    color: { 0: "blue", 1: "gray", 2: "black" },
+    // fixed: "left",
+    color: {
+      0: { color: "#36C5F4", backgroundColor: "#DFF6FD" },
+      1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
+      2: { color: "#333333", backgroundColor: "#DEDEDE" },
+      3: { color: "#F45136", backgroundColor: "#FDE3DF" },
+    },
   },
   { label: "税地名称", prop: "tax_land_name" },
   { label: "成本", prop: "tax_cost_point" },
@@ -182,8 +204,45 @@ const columnList = [
 /**
  * 上下架
  */
-const handleA = (scope: any) => {
-  console.log(scope, "下架");
+const handleUpdateStatus = (scope: any) => {
+  ElMessageBox({
+    title: "",
+    message: h(
+      "p",
+      null,
+      `确定${[0, 2].includes(scope.row.status) ? "上架" : "下架"}该税地`
+    ),
+    showCancelButton: true,
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    beforeClose: async (
+      action: string,
+      instance: { confirmButtonLoading: boolean },
+      done: () => void
+    ) => {
+      if (action === "confirm") {
+        instance.confirmButtonLoading = true;
+        var data = {
+          id: scope.row.id,
+          status: [0, 2].includes(scope.row.status) ? "1" : "2",
+        };
+        await selfOperatedTaxLandUpdateStatus(data);
+
+        instance.confirmButtonLoading = false;
+        done();
+      } else {
+        done();
+      }
+    },
+  }).then(() => {
+    ElMessage({
+      type: "success",
+      message: `成功${
+        [0, 2].includes(scope.row.status) ? "上架" : "下架"
+      }该税地`,
+    });
+    getTableData();
+  });
 };
 /**
  * 编辑
@@ -198,7 +257,16 @@ const handleB = (scope: any) => {
 /**
  * 删除
  */
-const handleE = (scope: any) => {
+const handleDelete = (scope: any) => {
+  selfOperatedTaxLandDelete(scope.row.id)
+    .then(() => {
+      ElMessage({
+        type: "success",
+        message: `删除税地成功`,
+      });
+      getTableData();
+    })
+    .catch();
   console.log(scope.row.value, "删除");
 };
 /**
@@ -220,13 +288,23 @@ const handleG = (scope: any) => {
 /**
  * 批量选择
  */
-// const selectionData = ref([]);
-const handleSelect = () => {};
+//选中的数据
+//返回id数组
+const selectionData = ref([]);
+const handleSelect = (data: any) => {
+  selectionData.value = data.map((item: any) => item.id);
+};
 /**
  * 新建
  */
-const handleAdd = () => {
-  router.push({ name: "selfOperatedTaxLandAdd", query: { activeName: "1" } });
+const handleAdd = (command: string | number | object) => {
+  if (command == 1) {
+    console.log("自营");
+    router.push({ name: "selfOperatedTaxLandAdd", query: { activeName: "1" } });
+  } else if (command == 2) {
+    console.log("采购");
+    router.push({ name: "purchaseTaxLandAdd", query: { activeName: "1" } });
+  }
 };
 /**
  * 批量操作
@@ -242,7 +320,7 @@ const handleD = (command: string | number | object) => {
 };
 
 const getTableData = async () => {
-  const params = transformTimeRange({ ...formItem });
+  const params = transformTimeRange({ ...formItem.value });
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
   console.log(params);
@@ -252,6 +330,7 @@ const getTableData = async () => {
     tableData.length = 0;
     pageInfo.page = data.current_page;
     pageInfo.total = data.count;
+
     var newData = data.data.map((item: any) => {
       return {
         id: item.id,
@@ -260,12 +339,21 @@ const getTableData = async () => {
         tax_land_name: item.tax_land_name,
         tax_cost_point: item.tax_cost_point,
         sign_count: item.sign_count,
-        calculation_type: item.calculation_type,
+        calculation_type:
+          proxy.$enumSet["taxLandManagementEnum.calculationType"][
+            item.calculation_type
+          ],
         tax_land_head: item.tax_land_head,
         invoice_type: item.invoice_type,
         ground_time: item.ground_time,
-        tax_land_type: item.tax_land_type,
-        payment_type: item.payment_type,
+        tax_land_type:
+          proxy.$enumSet["taxLandManagementEnum.tax_land_type"][
+            item.tax_land_type
+          ],
+        payment_type:
+          proxy.$enumSet["taxLandManagementEnum.paymentType"][
+            item.payment_type
+          ],
       };
     });
     tableData.push(...newData);
