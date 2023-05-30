@@ -24,7 +24,7 @@
         <el-form-item prop="date" label="联系人">
           <el-input v-model="formItem.value" />
         </el-form-item>
-        <el-form-item prop="date" label="申请日期">
+        <el-form-item prop="date" label="操作日期">
           <zxn-date-range v-model="formItem.date" />
         </el-form-item>
         <template #rightBtn>

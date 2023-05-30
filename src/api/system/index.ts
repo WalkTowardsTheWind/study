@@ -46,3 +46,37 @@ export function setMenus(data: any): AxiosPromise {
     data,
   });
 }
+
+/**
+ * 修改菜单
+ * @param data
+ * @param id
+ */
+export function editMenus(data: any, id: number): AxiosPromise {
+  return request({
+    url: `/adminapi/setting/menus/${id}`,
+    method: "PUT",
+    data,
+  });
+}
+
+/**
+ *  删除菜单
+ * @param id
+ */
+export function removeMenu(id: number): AxiosPromise {
+  return request({
+    url: `/adminapi/setting/menus/${id}`,
+    method: "DELETE",
+  });
+}
+
+/**
+ *  菜单详情
+ */
+export function menusView(id: number): AxiosPromise {
+  return request({
+    url: `/adminapi/setting/menus/${id}`,
+    method: "GET",
+  });
+}

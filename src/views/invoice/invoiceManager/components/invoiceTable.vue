@@ -254,7 +254,7 @@ const handleCommand = async (id) => {
   }).then(() => {
     ElMessage({
       type: "success",
-      message: `$驳回成功`,
+      message: `驳回成功`,
     });
     getList();
   });

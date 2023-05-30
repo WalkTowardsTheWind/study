@@ -69,98 +69,124 @@ const areaList = reactive([
     ],
   },
 ]);
-const roleList = reactive([
-  {
-    label: "账户管理",
-    children: [
-      {
-        label: "企业账户",
-        children: [
-          { label: "新增", code: 1 },
-          { label: "编辑", code: 2 },
-          { label: "详情", code: 3 },
-        ],
-      },
-      {
-        label: "企业合同",
-        children: [
-          { label: "新增", code: 1 },
-          { label: "编辑", code: 2 },
-          { label: "详情", code: 3 },
-        ],
-      },
-      {
-        label: "个人账户",
-        children: [
-          { label: "新增", code: 1 },
-          { label: "编辑", code: 2 },
-          { label: "详情", code: 3 },
-        ],
-      },
-      {
-        label: "个人账户",
-        children: [
-          { label: "新增", code: 1 },
-          { label: "编辑", code: 2 },
-          { label: "详情", code: 3 },
-        ],
-      },
-      {
-        label: "个人账户",
-        children: [
-          { label: "新增", code: 1 },
-          { label: "编辑", code: 2 },
-          { label: "详情", code: 3 },
-        ],
-      },
-      {
-        label: "个人账户",
-        children: [
-          { label: "新增", code: 1 },
-          { label: "编辑", code: 2 },
-          { label: "详情", code: 3 },
-        ],
-      },
-    ],
-  },
-  {
-    label: "任务管理",
-    children: [
-      {
-        label: "人工任务",
-        children: [
-          { label: "新增", code: 1 },
-          { label: "编辑", code: 2 },
-          { label: "详情", code: 3 },
-        ],
-      },
-      {
-        label: "自动任务",
-        children: [
-          { label: "新增", code: 1 },
-          { label: "编辑", code: 2 },
-          { label: "详情", code: 3 },
-        ],
-      },
-      {
-        label: "个人账户",
-        children: [
-          { label: "新增", code: 1 },
-          { label: "编辑", code: 2 },
-          { label: "详情", code: 3 },
-        ],
-      },
-      {
-        label: "自动任务",
-        children: [
-          { label: "新增", code: 1 },
-          { label: "编辑", code: 2 },
-          { label: "详情", code: 3 },
-        ],
-      },
-    ],
-  },
-]);
+const roleList = reactive([]);
+const getMenu = () => {
+  const menu = [
+    {
+      menu_name: "账户管理",
+      id: 1,
+      children: [
+        {
+          menu_name: "企业账户",
+          children: [
+            { menu_name: "新增", code: 1 },
+            { menu_name: "编辑", code: 2 },
+            { menu_name: "详情", code: 3 },
+          ],
+        },
+        {
+          menu_name: "企业合同",
+          children: [
+            { menu_name: "新增", code: 1 },
+            { menu_name: "编辑", code: 2 },
+            { menu_name: "详情", code: 3 },
+          ],
+        },
+        {
+          menu_name: "个人账户",
+          children: [
+            { menu_name: "新增", code: 1 },
+            { menu_name: "编辑", code: 2 },
+            { menu_name: "详情", code: 3 },
+          ],
+        },
+        {
+          menu_name: "个人账户",
+          children: [
+            { menu_name: "新增", code: 1 },
+            { menu_name: "编辑", code: 2 },
+            { menu_name: "详情", code: 3 },
+          ],
+        },
+        {
+          menu_name: "个人账户",
+          children: [
+            { menu_name: "新增", code: 1 },
+            { menu_name: "编辑", code: 2 },
+            { menu_name: "详情", code: 3 },
+          ],
+        },
+        {
+          menu_name: "个人账户",
+          children: [
+            { menu_name: "新增", code: 1 },
+            { menu_name: "编辑", code: 2 },
+            { menu_name: "详情", code: 3 },
+          ],
+        },
+      ],
+    },
+    {
+      menu_name: "任务管理",
+      children: [
+        {
+          menu_name: "人工任务",
+          children: [
+            { menu_name: "新增", code: 1 },
+            { menu_name: "编辑", code: 2 },
+            { menu_name: "详情", code: 3 },
+          ],
+        },
+        {
+          menu_name: "自动任务",
+          children: [
+            { menu_name: "新增", code: 1 },
+            { menu_name: "编辑", code: 2 },
+            { menu_name: "详情", code: 3 },
+          ],
+        },
+        {
+          menu_name: "个人账户",
+          children: [
+            { menu_name: "新增", code: 1 },
+            { menu_name: "编辑", code: 2 },
+            { menu_name: "详情", code: 3 },
+          ],
+        },
+        {
+          menu_name: "自动任务",
+          children: [
+            { menu_name: "新增", code: 1 },
+            { menu_name: "编辑", code: 2 },
+            { menu_name: "详情", code: 3 },
+          ],
+        },
+      ],
+    },
+  ];
+  roleList.length = 0;
+  roleList.push(...washMenu(menu));
+  console.log(roleList);
+};
+const washMenu = (menu) => {
+  const list = [];
+  menu.forEach((it) => {
+    let children = [];
+    if (it.children && it.children.length) {
+      children = washMenu(it.children);
+    }
+    list.push({
+      id: it.id,
+      label: it.menu_name,
+      selected: false,
+      children,
+    });
+  });
+  return list;
+};
+onMounted(() => {
+  getMenu();
+});
 </script>
 <style lang="scss">
 .role-view {
