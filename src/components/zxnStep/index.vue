@@ -15,7 +15,7 @@
       >
         <div class="arrow">
           <el-icon size="20">
-            <DArrowRight />
+            <i-ep-DArrowRight />
           </el-icon>
         </div>
       </div>
@@ -24,8 +24,6 @@
 </template>
 
 <script lang="ts" setup>
-import { DArrowRight } from "@element-plus/icons-vue";
-
 interface IStepList {
   desc: string;
 }
