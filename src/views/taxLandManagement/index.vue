@@ -15,9 +15,11 @@
   </zxn-plan>
 </template>
 <script setup lang="ts">
+import { useRoute } from "vue-router";
 import selfOperatedTaxLand from "./selfOperatedTaxLand/selfOperatedTaxLand.vue";
 import purchaseTaxLand from "./purchaseTaxLand/purchaseTaxLand.vue";
-const activeName = "selfOperated";
+const route = useRoute();
+const activeName = ref("selfOperated");
 const tabsList = reactive([
   {
     name: "selfOperated",
@@ -31,15 +33,21 @@ const tabsList = reactive([
 const selfOperated = ref();
 const purchase = ref();
 const handleTabChange = () => {
-  if (activeName.value === "selfOperated") {
-    console.log(1);
+  if (route.query.activeName) {
+    if (route.query.activeName === "selfOperated") {
+      activeName.value = "selfOperated";
+    } else if (route.query.activeName === "purchase") {
+      activeName.value = "purchase";
+    }
+  }
 
+  if (activeName.value === "selfOperated") {
     selfOperated.value.getTableData();
   } else if (activeName.value === "purchase") {
-    console.log(2);
-
     purchase.value.getTableData();
   }
 };
-onMounted(() => {});
+onMounted(() => {
+  handleTabChange();
+});
 </script>

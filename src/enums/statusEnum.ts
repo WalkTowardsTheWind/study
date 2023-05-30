@@ -12,6 +12,22 @@ export enum IndustryType {
   "建筑业",
   "服务业",
 }
+
+export enum personalType {
+  "未认证" = 0,
+  "正常",
+  "预警",
+  "封停",
+}
+
+export enum channelAccountStatusType {
+  "申请中",
+  "未认证",
+  "正常",
+  "预警",
+  "封停",
+}
+
 export enum contractType {
   "正常",
   "过期",
@@ -22,17 +38,7 @@ export enum settlementType {
   "冻结",
   "异常",
 }
-export enum taxLandType {
-  "待启用",
-  "启用中",
-  "下架",
-  "预警",
-}
-export enum applyInvoiceType {
-  "普通发票",
-  "6%增值税发票",
-  "普通发票/6%增值税发票",
-}
+
 export enum personnelType {
   "已报名",
   "驳回",
@@ -48,18 +54,7 @@ export enum invoiceStatus {
   "冲红",
 }
 
-export enum applyInvoiceType {
+export enum invoiceType {
   "普票",
   "专票",
-}
-
-export enum invoiceType {
-  "纸质发票",
-  "电子发票",
-}
-
-export enum invoiceRequire {
-  "下发开票",
-  "充值开票",
-  "预开票",
 }

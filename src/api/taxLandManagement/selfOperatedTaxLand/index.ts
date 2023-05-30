@@ -3,6 +3,7 @@ import {
   selfOperatedTaxLandList,
   selfOperatedTaxLandAdd,
   selfOperatedTaxLandEditType,
+  selfOperatedTaxLandUpdateStatusType,
 } from "./types";
 
 /**
@@ -11,7 +12,7 @@ import {
  * @param data {selfOperatedTaxLandList}
  * @returns
  */
-export function getSelfOperatedTaxLandList(data: selfOperatedTaxLandList) {
+export function getSelfOperatedTaxLandList(data?: selfOperatedTaxLandList) {
   return request({
     url: "/adminapi/tax/taxLand",
     method: "get",
@@ -57,5 +58,32 @@ export function selfOperatedTaxLandDetails(id: number) {
   return request({
     url: `/adminapi/tax/taxLand/${id}`,
     method: "get",
+  });
+}
+/**
+ * 获取税地详情
+ *
+ * @param data {}
+ * @returns
+ */
+export function selfOperatedTaxLandDelete(id: number) {
+  return request({
+    url: `/adminapi/tax/taxLand/${id}`,
+    method: "delete",
+  });
+}
+/**
+ * 修改税地状态
+ *
+ * @param data {}
+ * @returns
+ */
+export function selfOperatedTaxLandUpdateStatus(
+  data: selfOperatedTaxLandUpdateStatusType
+) {
+  return request({
+    url: "/adminapi/tax/taxLand/updateStatus",
+    method: "post",
+    params: data,
   });
 }

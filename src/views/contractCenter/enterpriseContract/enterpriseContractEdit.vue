@@ -24,7 +24,9 @@
                     placeholder="Select"
                   >
                     <el-option
-                      v-for="item in contract_kindOptions"
+                      v-for="item in proxy.$const[
+                        'contractCenterEnum.contractType'
+                      ]"
                       :key="item.value"
                       :label="item.label"
                       :value="item.value"
@@ -47,7 +49,9 @@
                     placeholder="请选择"
                   >
                     <el-option
-                      v-for="item in contract_termOptions"
+                      v-for="item in proxy.$const[
+                        'contractCenterEnum.contractTerm'
+                      ]"
                       :key="item.value"
                       :label="item.label"
                       :value="item.value"
@@ -111,50 +115,27 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from "vue-router";
 import { enterpriseContractEdit } from "@/api/contractCenter/enterpriseContract";
-import { enterpriseContractEditType } from "@/api/contractCenter/enterpriseContract/types";
 import { getContractDetails } from "@/api/contractCenter";
 const route = useRoute();
 const router = useRouter();
+const { proxy } = getCurrentInstance() as any;
 const activeName = ref("1");
 const tabsList = [
   {
     name: "1",
-    label: "线上合同",
+    label: "线下合同",
   },
   // {
   //   name: "2",
   //   label: "线下合同",
   // },
 ];
-//
-const contract_kindOptions = [
-  {
-    value: "1",
-    label: "业务拓展协议(个人)",
-  },
-  {
-    value: "2",
-    label: "业务拓展协议(企业)",
-  },
-  {
-    value: "3",
-    label: "共享经济服务协议",
-  },
-  {
-    value: "4",
-    label: "自由职业者服务协议",
-  },
-];
-const contract_termOptions = [
-  {
-    value: "1",
-    label: "一年",
-  },
-];
 
 //表单信息
-var formItem = ref<enterpriseContractEditType>({
-  online_type: 0,
+var formItem = ref({
+  contract_name: "",
+  contract_no: "",
+  online_type: 1,
   contract_kind: "",
   party_a: "",
   party_b: "",
@@ -168,17 +149,19 @@ var formItem = ref<enterpriseContractEditType>({
 });
 // 计算属性
 var contractName = computed(() => {
-  var contractKind = contract_kindOptions.find((item) => {
-    if (item.value == formItem.value.contract_kind) {
-      return item;
-    }
-  });
-  return formItem.value.party_a + (contractKind?.label || "");
+  var contractkind =
+    proxy.$enumSet["contractCenterEnum.contractType"][
+      formItem.value.contract_kind
+    ];
+  return (formItem.value.party_a || "") + (contractkind || "");
 }) as any;
 
 const handleEnterpriseContractEdit = () => {
   const ID = Number(route.query.id);
-  const params = { ...formItem.value, contract_name: contractName.value };
+  const params = {
+    ...formItem.value,
+    contract_name: contractName.value,
+  } as any;
   params.file_url = JSON.stringify(params.file_url);
   params.annex_url = JSON.stringify(params.annex_url);
   enterpriseContractEdit(ID, params)
@@ -197,7 +180,12 @@ const handleEnterpriseContractEdit = () => {
     });
 };
 const handleSubmit = () => {};
-const handleClose = () => {};
+const handleClose = () => {
+  router.push({
+    name: "contractCenter",
+    query: { activeName: "enterprise" },
+  });
+};
 
 const getData = () => {
   const ID = Number(route.query.id);
@@ -220,12 +208,12 @@ const getData = () => {
       formItem.value = {
         contract_name,
         contract_no,
-        online_type: 0,
+        online_type: 1,
         contract_kind: contract_kind + "",
         party_a,
         party_b,
         tax_location,
-        contract_term,
+        contract_term: contract_term + "",
         sign_time,
         end_time,
         remarks,

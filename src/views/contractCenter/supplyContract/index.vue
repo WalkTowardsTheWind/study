@@ -2,8 +2,8 @@
   <div class="p-[24px] p-b-[0]">
     <zxn-search
       :formItem="formItem"
-      :on-search="handleSearch"
-      :on-reset="handleReset"
+      @on-search="handleSearch"
+      @on-reset="handleReset"
     >
       <el-form-item>
         <el-input v-model="formItem.keywords" placeholder="请输入关键字">
@@ -15,24 +15,14 @@
       <el-form-item label="合同状态">
         <el-select v-model="formItem.status" placeholder="Select">
           <el-option
-            v-for="item in stateOptions"
+            v-for="item in proxy.$const['contractCenterEnum.contractStatus']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="税源地">
-        <el-select v-model="formItem.contract_kind" placeholder="Select">
-          <el-option
-            v-for="item in manufacturerOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item prop="timeData" label="创建日期">
+      <el-form-item prop="date" label="创建日期">
         <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>
     </zxn-search>
@@ -49,7 +39,7 @@
           <el-button type="primary">+ 新建</el-button>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="1">线上合同</el-dropdown-item>
+              <el-dropdown-item command="1">线下合同</el-dropdown-item>
               <!-- <el-dropdown-item command="2">线下合同</el-dropdown-item> -->
             </el-dropdown-menu>
           </template>
@@ -86,18 +76,8 @@ import { useRouter } from "vue-router";
 import { getSupplyContractList } from "@/api/contractCenter/supplyContract";
 import { updateStatus } from "@/api/contractCenter";
 import { ElMessage } from "element-plus";
-import type { ComponentInternalInstance } from "vue";
 import { reactive } from "vue";
-const { proxy } = getCurrentInstance() as ComponentInternalInstance;
-// 状态
-const stateOptions = ref([] as any);
-// 厂商
-const manufacturerOptions = [
-  { label: "薪龙网", value: 1 },
-  { label: "某某网", value: 2 },
-  { label: "某某网", value: 3 },
-  { label: "某某网", value: 4 },
-] as any;
+const { proxy } = getCurrentInstance() as any;
 // 查询重置
 const pageInfo = reactive({
   page: 1,
@@ -105,45 +85,49 @@ const pageInfo = reactive({
   limit: 20,
 });
 const handleReset = () => {
+  formItem.value = {
+    company_id: "",
+    keywords: "",
+    timeData: [],
+    contract_kind: "",
+    page: "",
+    limit: "",
+    status: "",
+  };
   handleSearch();
 };
 const handleSearch = () => {
+  console.log("查询");
   pageInfo.page = 1;
   getTableData();
 };
-const handlePageChange = (cur) => {
+const handlePageChange = (cur: any) => {
   const { page } = cur;
   pageInfo.page = page;
   getTableData();
 };
-const formItem = reactive({
+const formItem = ref({
   company_id: "",
   keywords: "",
-  start_time: "",
-  end_time: "",
+  timeData: [],
   contract_kind: "",
   page: "",
   limit: "",
   status: "",
 });
-const tableData = reactive([{ contract_no: "2", status: "企业合同" }]);
+const tableData = reactive([] as any);
 const columnList = [
   { label: "合同编号", prop: "contract_no" },
   {
     label: "状态",
     type: "enum",
-    path: "statusEnum.contractType",
+    path: "contractCenterEnum.contractStatus",
     prop: "status",
     // fixed: "left",
     color: {
-      0: { color: "#19B56B", backgroundColor: "#daf3e7" },
-      1: { color: "#F35135", backgroundColor: "#fde3df" },
-      2: { color: "#356FF3", backgroundColor: "#dfe8fd" },
-      3: { color: "#356FF3", backgroundColor: "#dfe8fd" },
-      4: { color: "#FFFFFF", backgroundColor: "#9ab7f9" },
-      5: { color: "#35C5F3", backgroundColor: "#dff6fd" },
-      6: { color: "#333333", backgroundColor: "#dedede" },
-      7: { color: "#333333", backgroundColor: "#999999" },
+      0: { color: "#366FF4", backgroundColor: "#DFE8FD" },
+      1: { color: "#FFFFFF", backgroundColor: "#999999" },
+      2: { color: "#333333", backgroundColor: "#DEDEDE" },
     },
   },
   { label: "合同类型", prop: "contract_kind" },
@@ -239,19 +223,12 @@ const handleAdd = (command: string | number | object) => {
  */
 const handleExport = () => {};
 const handleImport = () => {};
-/**
- * 下拉选择外部导入
- */
-const getData = () => {
-  stateOptions.value = (proxy as any).$const["statusEnum.IndustryType"];
-};
-getData();
 
 /**
  * 获取数据
  */
 const getTableData = async () => {
-  const params = transformTimeRange({ ...formItem });
+  const params = transformTimeRange({ ...formItem.value });
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
   try {
@@ -259,7 +236,21 @@ const getTableData = async () => {
     tableData.length = 0;
     pageInfo.page = data.current_page;
     pageInfo.total = data.total;
-    tableData.push(...data.data);
+    var newData = data.data.map((item: any) => {
+      return {
+        id: item.id,
+        contract_no: item.contract_no,
+        status: item.status,
+        contract_kind:
+          proxy.$enumSet["contractCenterEnum.contractType"][item.contract_kind],
+        online_type:
+          proxy.$enumSet["contractCenterEnum.onlineType"][item.online_type],
+        party_a: item.party_a,
+        party_b: item.party_b,
+        tax_location: item.tax_location,
+      };
+    });
+    tableData.push(...newData);
   } catch (error) {
     console.log(error);
   }

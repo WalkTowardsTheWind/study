@@ -87,12 +87,12 @@ const activeName = ref("1");
 const tabsList = [
   {
     name: "1",
-    label: "线上合同",
-  },
-  {
-    name: "2",
     label: "线下合同",
   },
+  // {
+  //   name: "2",
+  //   label: "线下合同",
+  // },
 ];
 const formData = reactive({
   name: "zhangsan",

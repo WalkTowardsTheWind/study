@@ -25,7 +25,7 @@ import enterpriseContract from "./enterpriseContract/index.vue";
 import channelContract from "./channelContract/index.vue";
 import supplyContract from "./supplyContract/index.vue";
 const route = useRoute();
-const activeName = ref("enterprise");
+const activeName = ref("channel");
 const tabsList = [
   {
     name: "enterprise",
@@ -41,8 +41,6 @@ const tabsList = [
   },
 ];
 
-console.log(route.query);
-
 const enterprise = ref();
 const channel = ref();
 const supply = ref();
@@ -55,18 +53,14 @@ const handleTabChange = () => {
     } else if (route.query.activeName === "supply") {
       activeName.value = "supply";
     }
+  } else {
+    activeName.value = "enterprise";
   }
   if (activeName.value === "enterprise") {
-    console.log(1);
-
     enterprise.value.getTableData();
   } else if (activeName.value === "channel") {
-    console.log(2);
-
     channel.value.getTableData();
   } else if (activeName.value === "supply") {
-    console.log(3);
-
     supply.value.getTableData();
   }
 };

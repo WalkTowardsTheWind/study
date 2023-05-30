@@ -18,7 +18,11 @@
                   <span class="mx-1">{{ formItem.contract_no }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="合同类型">
-                  <span class="mx-1">{{ formItem.contract_kind }}</span>
+                  <span class="mx-1">{{
+                    proxy.$enumSet["contractCenterEnum.contractType"][
+                      formItem.contract_kind
+                    ]
+                  }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="甲方">
                   <span class="mx-1">{{ formItem.party_a }}</span>
@@ -30,7 +34,11 @@
                   <span class="mx-1">{{ formItem.tax_location }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="合同期限">
-                  <span class="mx-1">{{ formItem.contract_term }}</span>
+                  <span class="mx-1">{{
+                    proxy.$enumSet["contractCenterEnum.contractTerm"][
+                      formItem.contract_term
+                    ]
+                  }}</span>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="签约时间">
                   <span class="mx-1">{{ formItem.sign_time }}</span>
@@ -74,12 +82,13 @@
 import { useRoute } from "vue-router";
 import { enterpriseContractDetailsType } from "@/api/contractCenter/enterpriseContract/types";
 import { getContractDetails } from "@/api/contractCenter";
+const { proxy } = getCurrentInstance() as any;
 const route = useRoute();
 const activeName = ref("1");
 const tabsList = [
   {
     name: "1",
-    label: "线上合同",
+    label: "线下合同",
   },
   // {
   //   name: "2",
@@ -130,7 +139,7 @@ const getData = () => {
         party_a,
         party_b,
         tax_location,
-        contract_term,
+        contract_term: contract_term + "",
         sign_time,
         end_time,
         remarks,
