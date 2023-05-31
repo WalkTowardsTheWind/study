@@ -1,32 +1,32 @@
 <template>
   <div class="p-x-[48px]">
-    <div class="top">
-      <el-card class="top-item" v-for="item in 3" :key="item">
-        <div class="top-item-title">净收入</div>
-        <div class="top-item-money">126.500</div>
-        <div class="top-item-bi">
-          <div class="left">
-            <span>周同比</span>
-            <span class="per">12%</span>
-            <img :src="iconTop" />
-          </div>
-          <div class="right">
-            <span>日环比</span>
-            <span class="per">12%</span>
-            <img :src="iconBottom" />
-          </div>
-        </div>
-      </el-card>
+    <div class="line-chart">
+      <LineChart1 />
     </div>
-    <div class="time">
+    <div>
       <div class="title">
         <div class="line"></div>
-        <div>营收趋势图</div>
+        <div>企业列表</div>
       </div>
-      <zxn-date-picker :isRange="true" @change="change" />
+      <zxn-table
+        :table-data="tableData1"
+        :column-list="columnList1"
+        :page-info="pageInfo"
+      >
+        <template #operation="scope">
+          <el-button link @click="toDetail(scope.row)">详情</el-button>
+        </template>
+      </zxn-table>
     </div>
-    <div class="line-chart">
-      <LineChart />
+    <div>
+      <div class="title">
+        <div class="line"></div>
+        <div>产品数据合计</div>
+      </div>
+      <zxn-table
+        :table-data="tableData2"
+        :column-list="columnList2"
+      ></zxn-table>
     </div>
   </div>
 
@@ -44,63 +44,78 @@
 </template>
 
 <script lang="ts" setup>
-import LineChart from "./LineChart.vue";
-import iconTop from "@/assets/icons-jpg/top.png";
-import iconBottom from "@/assets/icons-jpg/bottom.png";
+import router from "@/router";
+import LineChart1 from "./line-chart1.vue";
+import { getBusinessList } from "@/api/money";
+
+const pageInfo = reactive({
+  page: 1,
+  limit: 20,
+  total: 0,
+});
 
 const visible = ref(false);
-const change = (date: any) => {
-  if (date) {
-    console.log(date);
-  }
-};
+
+const tableData1 = reactive([] as any);
+const tableData2 = reactive([]);
+
+const columnList1 = [
+  { label: "企业ID", prop: "id", width: 100 },
+  {
+    label: "状态",
+    type: "enum",
+    path: "accountEnum.businessType",
+    prop: "status",
+    color: {
+      0: { color: "#1DE585", background: "#dbfbeb" },
+      1: { color: "#35C5F3", background: "#dff6fd" },
+      2: { color: "#356FF3", background: "#dfe8fd" },
+      3: { color: "#F35036", background: "#fde3df" },
+      4: { color: "#333333", background: "#dedede" },
+      width: 80,
+    },
+  },
+  { label: "企业名称", prop: "company_name" },
+  { label: "累计充值", prop: "total_recharge" },
+  { label: "累计结算", prop: "total_settlement" },
+  { label: "企业余额", prop: "balance" },
+  { label: "操作", slot: "operation", fixed: "right", width: 280 },
+];
+const columnList2 = [
+  { label: "产品类型", prop: "company_id", width: 100 },
+  { label: "打款金额", prop: "company_name" },
+  { label: "结算金额", prop: "contacts" },
+  { label: "利润", prop: "mobile" },
+];
+
+function getList() {
+  let params = {
+    ...pageInfo,
+  };
+  getBusinessList(params).then((res) => {
+    tableData1.push(...res.data.list.data);
+    pageInfo.total = res.data.list.total;
+  });
+}
+
+function toDetail(item: any) {
+  router.push({
+    name: "recharge-detail",
+    query: { id: item.id, name: item.company_name },
+  });
+}
+
+getList();
 </script>
 
 <style lang="scss" scoped>
-.top {
+.title {
   display: flex;
-  gap: 0 16px;
-  margin: 20px 0 30px;
-
-  &-item {
-    width: 272px;
-    height: 160px;
-    background: #f5f5f5;
-    border: none;
-    border-radius: 4px;
-
-    &-title {
-      font-size: 14px;
-      font-weight: 500;
-      color: #333;
-    }
-
-    &-money {
-      margin: 10px 0 20px;
-      font-size: 32px;
-      font-weight: bold;
-      color: #356ff3;
-    }
-
-    &-bi {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 13px;
-      color: #656565;
-
-      .left,
-      .right {
-        display: flex;
-        align-items: center;
-      }
-
-      .per {
-        margin: 0 5px 0 10px;
-        color: #333;
-      }
-    }
-  }
+  flex-direction: row;
+  align-items: center;
+  font-family: sans-serif;
+  font-size: 14px;
+  color: #356ff3;
 }
 
 .time {
@@ -108,23 +123,14 @@ const change = (date: any) => {
   align-items: center;
   justify-content: space-between;
   width: 85%;
+}
 
-  .title {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    font-family: sans-serif;
-    font-size: 14px;
-    color: #356ff3;
-  }
-
-  .line {
-    display: flex;
-    width: 4px;
-    height: 14px;
-    margin-right: 10px;
-    background: #356ff3;
-    border-radius: 4px;
-  }
+.line {
+  display: flex;
+  width: 4px;
+  height: 14px;
+  margin-right: 10px;
+  background: #356ff3;
+  border-radius: 4px;
 }
 </style>

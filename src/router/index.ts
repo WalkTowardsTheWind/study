@@ -401,19 +401,26 @@ export const constantRoutes: RouteRecordRaw[] = [
   {
     path: "/asset-management",
     component: Layout,
-    meta: { title: "资产管理", icon: "homepage" },
+    meta: { title: "财务中心", icon: "homepage" },
     children: [
       {
         path: "index",
         component: () => import("@/views/asset-management/index.vue"),
         name: "asset-management",
-        meta: { title: "资产管理", icon: "homepage", affix: true },
+        meta: { title: "财务中心", icon: "homepage", affix: true },
       },
       {
-        path: "detail",
+        path: "asset-management-detail",
         component: () => import("@/views/asset-management/detail.vue"),
         name: "asset-management-detail",
         meta: { hidden: true },
+      },
+      {
+        path: "recharge-detail",
+        component: () =>
+          import("@/views/asset-management/components/recharge-detail.vue"),
+        name: "recharge-detail",
+        meta: { hidden: true, title: "企业列表详情" },
       },
     ],
   },
@@ -437,19 +444,7 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
-  {
-    path: "/channel-commission",
-    component: Layout,
-    meta: { title: "渠道佣金", icon: "homepage" },
-    children: [
-      {
-        path: "index",
-        component: () => import("@/views/channel-commission/index.vue"),
-        name: "channel-commission",
-        meta: { title: "渠道佣金", icon: "homepage", affix: true },
-      },
-    ],
-  },
+
   // 类目
   {
     path: "/category-management",

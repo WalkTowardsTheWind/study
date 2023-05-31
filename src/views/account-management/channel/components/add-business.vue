@@ -5,47 +5,62 @@
       <template v-if="activeStep === 0">
         <el-col :span="6">
           <el-form-item label="企业名称">
-            <el-input />
+            <el-input v-model="addForm.company_name" />
           </el-form-item>
           <el-form-item label="密码">
-            <el-input />
+            <el-input v-model="addForm.pwd" />
           </el-form-item>
           <el-form-item label="确认密码">
-            <el-input />
+            <el-input v-model="addForm.conf_pwd" />
           </el-form-item>
           <el-form-item label="企业联系人">
-            <el-input />
+            <el-input v-model="addForm.contacts" />
           </el-form-item>
           <el-form-item label="联系方式">
-            <el-input />
+            <el-input v-model="addForm.mobile" />
           </el-form-item>
         </el-col>
       </template>
       <template v-if="activeStep === 1">
         <el-col :span="6">
           <el-form-item label="营业执照有效期">
-            <el-input />
+            <div class="license">
+              <el-date-picker
+                class="picker"
+                v-model="addForm.license_start_date"
+                value-format="YYYY-MM-DD"
+              />
+              <span class="m-x-[10px]">-</span>
+              <el-date-picker
+                class="picker"
+                v-model="addForm.license_end_date"
+                value-format="YYYY-MM-DD"
+              />
+            </div>
           </el-form-item>
           <el-form-item label="开户行">
-            <el-input />
+            <el-input v-model="addForm.bank" />
           </el-form-item>
           <el-form-item label="银行账户">
-            <el-input />
+            <el-input v-model="addForm.bank_account" />
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="营业执照">
-            <MultiUpload />
+            <MultiUpload v-model="addForm.license" />
           </el-form-item>
         </el-col>
       </template>
       <template v-if="activeStep === 2">
         <el-col :span="8">
           <el-form-item label="佣金结算时间">
-            <el-input />
+            <el-select v-model="addForm.commission_settlement_type">
+              <el-option value="1" label="按周结"></el-option>
+              <el-option value="2" label="按月结"></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="绑定渠道">
-            <el-input />
+            <el-select v-model="addForm" />
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -231,3 +246,14 @@ const delClick = (index, id) => {
   });
 };
 </script>
+
+<style scoped lang="scss">
+.license {
+  display: flex;
+  width: 100%;
+
+  .picker {
+    width: 200px;
+  }
+}
+</style>

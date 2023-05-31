@@ -91,14 +91,14 @@
           @click="toDetail('upload', scope.row.company_id)"
           >上传</el-button
         >
-        <el-button link type="primary" @click="toDetail('edit', scope.row.id)"
+        <el-button link type="primary" @click="toDetail('edit', scope.row)"
           >编辑</el-button
         >
         <el-button link type="primary" @click="del(scope.row.id)"
           >删除</el-button
         >
         <el-button link type="primary">导出</el-button>
-        <el-button link type="primary" @click="toDetail('detail', scope.row.id)"
+        <el-button link type="primary" @click="toDetail('detail', scope.row)"
           >详情</el-button
         >
       </template>
@@ -161,8 +161,13 @@ const columnList = [
   { label: "操作", slot: "operation", fixed: "right", width: 280 },
 ];
 
-const toDetail = (status: string, id: string) => {
-  router.push({ name: "business-account-detail", query: { status, id } });
+const toDetail = (status: string, item: any) => {
+  // console.log(item);
+
+  router.push({
+    name: "business-account-detail",
+    query: { status, id: item.company_id },
+  });
 };
 
 /**

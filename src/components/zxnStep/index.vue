@@ -14,9 +14,7 @@
         v-if="index !== stepList.length - 1"
       >
         <div class="arrow">
-          <el-icon size="20">
-            <DArrowRight />
-          </el-icon>
+          <i-ep-DArrowRight />
         </div>
       </div>
     </div>
@@ -24,8 +22,6 @@
 </template>
 
 <script lang="ts" setup>
-import { DArrowRight } from "@element-plus/icons-vue";
-
 interface IStepList {
   desc: string;
 }

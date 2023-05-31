@@ -24,3 +24,8 @@ export enum statusType {
   "关闭" = 0,
   "启用",
 }
+
+export enum taskType {
+  "未到账" = 0,
+  "已到账",
+}
