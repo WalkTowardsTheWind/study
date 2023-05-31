@@ -14,6 +14,8 @@
       @sort-change="handleSort"
       :max-height="maxHeight"
       class="zxn-table"
+      :row-key="rowKey"
+      :defaultExpandAll="defaultExpandAll"
     >
       <el-table-column
         v-if="hasSelect"
@@ -64,6 +66,8 @@ const props = defineProps({
   hasPagination: { type: Boolean, default: true },
   pageInfo: { type: Object, default: () => ({}) },
   selectable: { type: Function },
+  rowKey: { type: String },
+  defaultExpandAll: { type: Boolean, default: false },
 });
 const emit = defineEmits(["sort-change", "selection-change", "page-change"]);
 const handleSort = ({ column, prop, order }: SortParams<any>) => {

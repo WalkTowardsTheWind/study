@@ -14,7 +14,9 @@
         v-if="index !== stepList.length - 1"
       >
         <div class="arrow">
-          <i-ep-DArrowRight />
+          <el-icon size="20">
+            <i-ep-DArrowRight />
+          </el-icon>
         </div>
       </div>
     </div>

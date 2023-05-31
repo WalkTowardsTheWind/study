@@ -4,8 +4,7 @@ import { useStorage } from "@vueuse/core";
 
 export const useSettingsStore = defineStore("setting", () => {
   // state
-  const tagsView = useStorage<boolean>("tagsView", defaultSettings.tagsView);
-
+  const tagsView = ref<boolean>(defaultSettings.tagsView);
   const showSettings = ref<boolean>(defaultSettings.showSettings);
   const fixedHeader = ref<boolean>(defaultSettings.fixedHeader);
   const sidebarLogo = ref<boolean>(defaultSettings.sidebarLogo);

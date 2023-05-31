@@ -72,6 +72,14 @@
             >驳回</el-button
           >
         </template>
+        <el-button
+          v-if="[2, 3].includes(row.status)"
+          link
+          type="primary"
+          @click="handleCommand('close', row.id)"
+        >
+          关闭
+        </el-button>
         <el-button link type="primary" @click="handleView(row)">详情</el-button>
         <el-button link type="primary" @click="handleDelete(row)"
           >删除</el-button
@@ -101,7 +109,7 @@ const formItem = reactive({
   task_name: "",
   status: "",
   timeData: [],
-  category_id: "",
+  category_id: [],
   task_type: "",
 });
 const tableData = reactive([]);
@@ -135,11 +143,10 @@ const columnList = [
       0: { color: "#19B56B", backgroundColor: "#daf3e7" },
       1: { color: "#F35135", backgroundColor: "#fde3df" },
       2: { color: "#356FF3", backgroundColor: "#dfe8fd" },
-      3: { color: "#356FF3", backgroundColor: "#dfe8fd" },
-      4: { color: "#FFFFFF", backgroundColor: "#9ab7f9" },
-      5: { color: "#35C5F3", backgroundColor: "#dff6fd" },
-      6: { color: "#333333", backgroundColor: "#dedede" },
-      7: { color: "#333333", backgroundColor: "#999999" },
+      3: { color: "#FFFFFF", backgroundColor: "#9ab7f9" },
+      4: { color: "#35C5F3", backgroundColor: "#dff6fd" },
+      5: { color: "#333333", backgroundColor: "#dedede" },
+      6: { color: "#333333", backgroundColor: "#999999" },
     },
   },
   {
@@ -165,6 +172,7 @@ const handlePageChange = (cur) => {
 };
 const getTaskList = async () => {
   const params = transformTimeRange({ ...formItem });
+  params.category_id = params.category_id.pop();
   params.task_type = props.type;
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
@@ -182,7 +190,12 @@ const selectable = (row) => {
   return Boolean(!row.status);
 };
 const taskTable = ref();
-const handleCommand = async (instar: "reject" | "fulfill", id) => {
+const statusMessage = {
+  reject: "驳回",
+  fulfill: "通过",
+  close: "关闭",
+};
+const handleCommand = async (instar: "reject" | "fulfill" | "close", id) => {
   const selected = taskTable.value.getSelectionRows();
   const ids = id ? [id] : selected.map((it) => it.id);
   if (!ids.length) {
@@ -193,7 +206,7 @@ const handleCommand = async (instar: "reject" | "fulfill", id) => {
   }
   ElMessageBox({
     title: "",
-    message: h("p", null, `确定${instar === "reject" ? "驳回" : "通过"}该任务`),
+    message: h("p", null, `确定${statusMessage[instar]}该任务`),
     showCancelButton: true,
     confirmButtonText: "确定",
     cancelButtonText: "取消",
@@ -206,7 +219,14 @@ const handleCommand = async (instar: "reject" | "fulfill", id) => {
         instance.confirmButtonLoading = true;
         const params = {
           ids,
-          status: instar === "reject" ? 1 : 3,
+          status:
+            instar === "close"
+              ? 6
+              : instar === "reject"
+              ? 1
+              : props.type === 1
+              ? 4
+              : 2,
         };
         await setTaskStatus(params);
         instance.confirmButtonLoading = false;
@@ -218,7 +238,7 @@ const handleCommand = async (instar: "reject" | "fulfill", id) => {
   }).then(() => {
     ElMessage({
       type: "success",
-      message: `${instar === "reject" ? "驳回" : "通过"}成功`,
+      message: `${statusMessage[instar]}成功`,
     });
     getTaskList();
   });

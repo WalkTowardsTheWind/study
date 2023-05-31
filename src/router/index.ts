@@ -407,7 +407,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "index",
         component: () => import("@/views/asset-management/index.vue"),
         name: "asset-management",
-        meta: { title: "财务中心", icon: "homepage", affix: true },
+        meta: { title: "资产管理", icon: "homepage" },
       },
       {
         path: "asset-management-detail",
@@ -434,7 +434,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "index",
         component: () => import("@/views/recharge-center/index.vue"),
         name: "recharge-center",
-        meta: { title: "充值中心", icon: "homepage", affix: true },
+        meta: { title: "充值中心", icon: "homepage" },
       },
       {
         path: "detail",
@@ -444,7 +444,6 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
-
   // 类目
   {
     path: "/category-management",
@@ -455,7 +454,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "index",
         component: () => import("@/views/category-management/index.vue"),
         name: "category-management",
-        meta: { title: "类目管理", icon: "homepage", affix: true },
+        meta: { title: "类目管理", icon: "homepage" },
       },
     ],
   },

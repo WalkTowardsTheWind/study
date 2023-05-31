@@ -4,6 +4,6 @@ export enum authType {
 }
 
 export enum yesOrNo {
-  "是" = 1,
   "否" = 0,
+  "是" = 1,
 }

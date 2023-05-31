@@ -39,10 +39,11 @@ export function isExternal(path: string) {
 }
 
 export function transformTimeRange(params: any, oldField = "timeData") {
-  if (params[oldField] && params[oldField].length) {
-    params.start_time = params[oldField][0] || "";
-    params.end_time = params[oldField][1] || "";
+  const _params = JSON.parse(JSON.stringify(params));
+  if (_params[oldField] && _params[oldField].length) {
+    _params.start_time = _params[oldField][0] || "";
+    _params.end_time = _params[oldField][1] || "";
   }
-  delete params[oldField];
-  return params;
+  delete _params[oldField];
+  return _params;
 }

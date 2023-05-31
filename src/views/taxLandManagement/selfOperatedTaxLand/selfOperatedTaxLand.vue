@@ -171,7 +171,7 @@ const columnList = [
   {
     label: "状态",
     type: "enum",
-    path: "statusEnum.taxLandType",
+    path: "taxLandManagementEnum.TaxLandStatus",
     prop: "status",
     width: 100,
     // fixed: "left",
@@ -320,7 +320,7 @@ const handleD = (command: string | number | object) => {
 };
 
 const getTableData = async () => {
-  const params = transformTimeRange({ ...formItem.value });
+  const params = transformTimeRange({ ...formItem.value }) as any;
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
   console.log(params);

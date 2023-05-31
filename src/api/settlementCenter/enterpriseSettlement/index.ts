@@ -78,3 +78,9 @@ export function deleteEnterpriseSettlementDoc(id: number) {
     method: "delete",
   });
 }
+/**
+ * 删除企业结算单
+ *
+ * @param data {updateStatus}
+ * @returns
+ */
