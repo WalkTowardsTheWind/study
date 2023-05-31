@@ -11,4 +11,5 @@ export interface keywords {
 export interface updateStatus {
   id: string;
   status: string;
+  transfer_certificate: string;
 }
