@@ -74,18 +74,14 @@
                   />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="税地地区">
-                  <el-select
+                  {{ areaValue }}
+                  <el-cascader
                     class="w-[100%]"
-                    v-model="formItem.tax_land_city_id"
-                    placeholder="Select"
-                  >
-                    <el-option
-                      v-for="item in tax_land_city_idOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    />
-                  </el-select>
+                    v-model="areaValue"
+                    :options="options"
+                    :props="props"
+                    clearable
+                  />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="网址">
                   <el-input v-model="formItem.web_url" />
@@ -301,6 +297,7 @@
 import { useRouter } from "vue-router";
 import viewSteps from "../components/viewSteps.vue";
 import { selfOperatedTaxLandAdd } from "@/api/taxLandManagement/selfOperatedTaxLand";
+import { getAreaList } from "@/api/taxLandManagement";
 const { proxy } = getCurrentInstance() as any;
 const router = useRouter();
 const activeName = ref("1");
@@ -321,14 +318,51 @@ const stepList = [
   { desc: "发票厂家信息" },
   { desc: "行业与合同信息" },
 ];
+//税地
+
+var options = ref([]);
+const areaValue = ref([]);
+const getList = async () => {
+  try {
+    const { data } = await getAreaList();
+    const newData = JSON.parse(
+      JSON.stringify(data)
+        .replace(/"id"/g, '"value"')
+        .replace(/"name"/g, '"label"')
+        .replace(/"cityList"/g, '"children"')
+        .replace(/"taxLandList"/g, '"children"')
+        .replace(/"child"/g, '"children"')
+    );
+    options.value = newData;
+    console.log(newData);
+    //获取
+    const func = (data: any, name: any, s: any) => {
+      const newData = data.map((item: any) => {
+        if (item.value == s) {
+          return name + item.label;
+        } else {
+          var names = name + item.label;
+          if (item.children) {
+            return func(item.children, names, s);
+          }
+        }
+      });
+      return [...new Set(newData.flat(Infinity))];
+    };
+    const sss = func(newData, "", 7);
+    console.log(sss[1], 666);
+  } catch (error) {
+    console.log(error);
+  }
+};
+getList();
+const props = {
+  // multiple: true,
+  expandTrigger: "hover" as const,
+};
+
 //
 
-const tax_land_city_idOptions = ref([
-  { label: "薪龙网", value: 1 },
-  { label: "某某网", value: 2 },
-  { label: "某某网", value: 3 },
-  { label: "某某网", value: 4 },
-] as any);
 const industry_category_idOptions = ref([
   { label: "薪龙网", value: 1 },
   { label: "某某网", value: 2 },
@@ -401,6 +435,8 @@ const handleSubmit = () => {
 };
 const handleClose = () => {
   active.value--;
+  // console.log(areaValue.value[1]);
+
   if (active.value == -1) {
     router.push({
       name: "taxLandManagementIndex",

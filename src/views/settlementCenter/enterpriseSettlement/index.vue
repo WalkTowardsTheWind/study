@@ -1,6 +1,15 @@
 <template>
   <div class="p-[24px] p-b-[0]">
-    <zxn-search :formItem="formItem">
+    <div>
+      累计结算:1216415164151145
+      <!-- {{ formItem.total_money }} -->
+    </div>
+    <zxn-search
+      class="m-t-[20px]"
+      :formItem="formItem"
+      @on-search="handleSearch"
+      @on-reset="handleReset"
+    >
       <el-form-item>
         <el-input v-model="formItem.keywords" placeholder="请输入关键字">
           <template #prefix>
@@ -9,9 +18,9 @@
         </el-input>
       </el-form-item>
       <el-form-item label="任务状态">
-        <el-select v-model="formItem.status" placeholder="Select">
+        <el-select v-model="formItem.status" placeholder="全部" clearable>
           <el-option
-            v-for="item in stateOptions"
+            v-for="item in proxy.$const['settlementCenterEnum.statusType']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -19,19 +28,14 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="date" label="申请日期">
-        <el-date-picker
-          v-model="formItem.start_time"
-          type="daterange"
-          unlink-panels
-          range-separator="~"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        />
+        <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>
     </zxn-search>
     <zxn-table
       :table-data="tableData"
       :column-list="columnList"
+      :page-info="pageInfo"
+      @page-change="handlePageChange"
       hasSelect
       @selection-change="handleSelect"
     >
@@ -50,17 +54,20 @@
           </template>
         </el-dropdown>
       </template>
+      <template #inspect="scope">
+        <el-button link type="primary" @click="handleInspect(scope)"
+          >查看</el-button
+        >
+      </template>
       <template #operation="scope">
-        <el-button
-          link
-          type="primary"
-          v-show="scope.row.status != 0"
-          @click="handleThaw(scope)"
-          >{{ scope.row.status == 1 ? "解冻" : "冻结" }}</el-button
-        >
-        <el-button link type="primary" @click="handleEdit(scope)"
+        <template v-if="[2, 3].includes(scope.row.status)">
+          <el-button link type="primary" @click="handleThaw(scope)">{{
+            scope.row.status == 2 ? "解冻" : "冻结"
+          }}</el-button>
+          <!-- <el-button v-show="[2,3].includes(scope.row.status)" link type="primary" @click="handleEdit(scope)"
           >编辑</el-button
-        >
+        > -->
+        </template>
         <el-button link type="primary" @click="handleDelete(scope)"
           >删除</el-button
         >
@@ -68,18 +75,54 @@
       </template>
     </zxn-table>
   </div>
+  <InspectDialog v-model:dialogVisible="dialogVisible" :imageList="imageList" />
 </template>
 <script setup lang="ts">
+import { transformTimeRange } from "@/utils";
+import InspectDialog from "../components/InspectDialog.vue";
 import { useRouter } from "vue-router";
-import { getEnterpriseSettlementList } from "@/api/settlementCenter/enterpriseSettlement";
+import {
+  getEnterpriseSettlementList,
+  updateEnterpriseSettlementStatus,
+  deleteEnterpriseSettlementDoc,
+} from "@/api/settlementCenter/enterpriseSettlement";
+import { ElMessage } from "element-plus";
+const dialogVisible = ref(false);
+const imageList = ref([]) as any;
+const { proxy } = getCurrentInstance() as any;
 const router = useRouter();
-// 状态
-const stateOptions = ref([] as any);
 
-const formItem = reactive({
+// 查询重置
+const pageInfo = reactive({
+  page: 1,
+  total: 0,
+  limit: 20,
+});
+const handleReset = () => {
+  formItem.value = {
+    keywords: "",
+    timeData: [],
+    status: "",
+    page: "",
+    limit: "",
+  };
+  handleSearch();
+};
+const handleSearch = () => {
+  console.log("查询");
+  pageInfo.page = 1;
+  getTableData();
+};
+const handlePageChange = (cur: any) => {
+  const { page } = cur;
+  pageInfo.page = page;
+  getTableData();
+};
+// 累计
+// var total_money=ref()
+const formItem = ref({
   keywords: "",
-  start_time: "",
-  end_time: "",
+  timeData: [],
   status: "",
   page: "",
   limit: "",
@@ -90,19 +133,26 @@ const columnList = [
   {
     label: "状态",
     type: "enum",
-    path: "statusEnum.settlementType",
+    width: 100,
+    path: "settlementCenterEnum.settlementCenterEnum",
     prop: "status",
-    color: { 0: "blue", 1: "gray", 2: "red" },
+    // fixed: "left",
+    color: {
+      0: { color: "#1AB66B", backgroundColor: "#DAF3E7" },
+      1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
+      2: { color: "#333333", backgroundColor: "#DEDEDE" },
+      3: { color: "#F45136", backgroundColor: "#FDE3DF" },
+    },
   },
   { label: "任务数量", prop: "task_count" },
   { label: "结算企业", prop: "company_name" },
   { label: "税源地", prop: "tax_land_name" },
   { label: "结算人数", prop: "total_people" },
   { label: "实际人数", prop: "total_people" },
-  { label: "点位", prop: "total_people" },
+  { label: "点位", prop: "tax_point" },
   { label: "打款金额", prop: "total_money" },
   { label: "实际下发", prop: "real_money" },
-  { label: "个人回单", prop: "total_people" },
+  { label: "个人回单", slot: "inspect", headerAlign: "left" },
   {
     label: "操作",
     slot: "operation",
@@ -113,8 +163,49 @@ const columnList = [
   },
 ];
 // 操作
+const handleInspect = (scope: any) => {
+  dialogVisible.value = true;
+  console.log(typeof scope.row.transfer_certificate);
+
+  imageList.value = scope.row.transfer_certificate;
+};
 const handleThaw = (scope: any) => {
-  console.log(scope);
+  ElMessageBox({
+    title: "",
+    message: h(
+      "p",
+      null,
+      `确定${scope.row.status == 2 ? "解冻" : "冻结"}该任务`
+    ),
+    showCancelButton: true,
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    beforeClose: async (
+      action: string,
+      instance: { confirmButtonLoading: boolean },
+      done: () => void
+    ) => {
+      if (action === "confirm") {
+        instance.confirmButtonLoading = true;
+        var data = {
+          id: scope.row.id,
+          status: scope.row.status == 2 ? "0" : "2",
+        };
+        await updateEnterpriseSettlementStatus(data);
+
+        instance.confirmButtonLoading = false;
+        done();
+      } else {
+        done();
+      }
+    },
+  }).then(() => {
+    ElMessage({
+      type: "success",
+      message: `成功${scope.row.status == 2 ? "解冻" : "冻结"}该任务`,
+    });
+    getTableData();
+  });
 };
 const handleDetails = (scope: any) => {
   router.push({
@@ -122,14 +213,40 @@ const handleDetails = (scope: any) => {
     query: { activeName: "1", id: scope.row.id },
   });
 };
-const handleEdit = (scope: any) => {
-  console.log("删除");
-  console.log(scope.row.value.$index);
-  tableData.splice(scope.$index, 1);
-};
+// const handleEdit = (scope: any) => {
+//   console.log("编辑");
+//   console.log(scope.row);
+// };
 const handleDelete = (scope: any) => {
-  console.log("下载");
-  console.log(scope.row.value.$index);
+  ElMessageBox({
+    title: "",
+    message: h("p", null, `确定删除该任务`),
+    showCancelButton: true,
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    beforeClose: async (
+      action: string,
+      instance: { confirmButtonLoading: boolean },
+      done: () => void
+    ) => {
+      if (action === "confirm") {
+        instance.confirmButtonLoading = true;
+
+        await deleteEnterpriseSettlementDoc(scope.row.id);
+
+        instance.confirmButtonLoading = false;
+        done();
+      } else {
+        done();
+      }
+    },
+  }).then(() => {
+    ElMessage({
+      type: "success",
+      message: "成功删除该任务",
+    });
+    getTableData();
+  });
 };
 /**
  * 批量选择
@@ -154,27 +271,40 @@ const handleBatchOperation = (command: string | number | object) => {
     console.log("下载");
   }
 };
-/**
- * 下拉选择外部导入
- */
-const getData = () => {
-  let a = 8;
-  stateOptions.value = [
-    { label: `全部 (${a})`, value: 1 },
-    { label: `启用中 (${a})`, value: 2 },
-    { label: `待启用 (${a})`, value: 3 },
-    { label: `预警 (${a})`, value: 4 },
-    { label: `下架 (${a})`, value: 5 },
-  ];
-};
-getData();
-const getTableData = () => {
-  getEnterpriseSettlementList(formItem)
-    .then((response) => {
-      tableData.length = 0;
-      tableData.push(...response.data.list);
-    })
-    .catch();
+
+const getTableData = async () => {
+  const params = transformTimeRange({ ...formItem.value }) as any;
+  params.page = pageInfo.page;
+  params.limit = pageInfo.limit;
+  console.log(params);
+
+  try {
+    const { data } = await getEnterpriseSettlementList(params);
+
+    pageInfo.page = data.current_page;
+    pageInfo.total = data.count;
+    console.log(data);
+
+    var newData = data.data.map((item: any) => {
+      return {
+        id: item.id,
+        settlement_order_no: item.settlement_order_no,
+        status: item.status,
+        task_count: item.task_count,
+        company_name: item.company_name,
+        tax_land_name: item.tax_land_name,
+        total_people: item.total_people,
+        tax_point: item.tax_point,
+        total_money: item.total_money,
+        real_money: item.real_money,
+        transfer_certificate: item.transfer_certificate,
+      };
+    });
+    tableData.length = 0;
+    tableData.push(...newData);
+  } catch (error) {
+    console.log(error);
+  }
 };
 getTableData();
 onMounted(() => {
