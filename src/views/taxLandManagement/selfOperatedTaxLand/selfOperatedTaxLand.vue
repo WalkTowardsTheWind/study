@@ -171,7 +171,7 @@ const columnList = [
   {
     label: "状态",
     type: "enum",
-    path: "statusEnum.taxLandType",
+    path: "taxLandManagementEnum.TaxLandStatus",
     prop: "status",
     width: 100,
     // fixed: "left",

@@ -44,7 +44,9 @@
               <el-row>
                 <el-col :span="8">
                   <el-form-item label="渠道点位">
-                    <el-text class="mx-1">{{ formItem.tax_point }}</el-text>
+                    <el-text class="mx-1">{{
+                      formItem.cooperate_point
+                    }}</el-text>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -54,14 +56,14 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="渠道结算税后" label-width="100px">
-                    <el-text class="mx-1">{{ formItem.amount }}</el-text>
+                    <el-text class="mx-1">{{ formItem.after_tax }}</el-text>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="8">
                   <el-form-item label="客户点位">
-                    <el-text class="mx-1">{{ formItem.point }}</el-text>
+                    <el-text class="mx-1">{{ formItem.custom_point }}</el-text>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -103,11 +105,11 @@
                     <el-text class="mx-1">{{ formItem.company_name }}</el-text>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <!-- <el-col :span="8">
                   <el-form-item label="账户名称">
                     <el-text class="mx-1">{{ formItem.channel_name }}</el-text>
                   </el-form-item>
-                </el-col>
+                </el-col> -->
 
                 <el-col :span="8">
                   <el-form-item label="下发金额">
@@ -183,10 +185,10 @@ const formItem = ref({
   settlement_order_no: "",
   channel_admin_name: "",
   channel_name: "",
-  tax_point: "",
+  cooperate_point: "",
   before_tax: "",
-  amount: "",
-  point: "",
+  after_tax: "",
+  custom_point: "",
   tax_cost_point: "",
   tax_land_name: "",
   company_name: "",
@@ -225,10 +227,10 @@ const getTableData = async () => {
         settlement_order_no,
         channel_admin_name,
         channel_name,
-        tax_point,
+        cooperate_point,
         before_tax,
-        amount,
-        point,
+        after_tax,
+        custom_point,
         tax_cost_point,
         tax_land_name,
         company_name,
@@ -240,10 +242,10 @@ const getTableData = async () => {
         settlement_order_no,
         channel_admin_name,
         channel_name,
-        tax_point,
+        cooperate_point,
         before_tax,
-        amount,
-        point,
+        after_tax,
+        custom_point,
         tax_cost_point,
         tax_land_name,
         company_name,

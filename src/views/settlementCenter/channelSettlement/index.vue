@@ -1,9 +1,6 @@
 <template>
   <div class="p-[24px] p-b-[0]">
-    <div>
-      累计下发:1216415164151145
-      <!-- {{ formItem.total_money }} -->
-    </div>
+    <div>累计下发:{{ total_pay_money }}</div>
     <zxn-search
       class="m-t-[20px]"
       :formItem="formItem"
@@ -77,7 +74,11 @@
       </template>
     </zxn-table>
   </div>
-  <viewDialog v-model:dialogVisible="dialogVisible" :formItem="formData" />
+  <viewDialog
+    v-model:dialogVisible="dialogVisible"
+    :formItem="formData"
+    @up-Table="getTableData"
+  />
 </template>
 <script setup lang="ts">
 import { transformTimeRange } from "@/utils";
@@ -121,7 +122,7 @@ const handlePageChange = (cur: any) => {
   getTableData();
 };
 // 累计
-// var total_money=ref()
+var total_pay_money = ref();
 const formItem = ref({
   keywords: "",
   timeData: [],
@@ -165,69 +166,41 @@ const handleThaw = async (scope: any) => {
   try {
     const { data } = await getChannelSettlementDetails(Number(scope.row.id));
     console.log(data);
-    // const {
-    //       settlement_order_no,
-    //       status,
-    //       company_name,
-    //       //
-    //       //
-    //       tax_point,
-    //       //
-    //       before_tax,
-    //       amount,
 
-    //       channel_admin_name,
-    //       channel_name,
-    //       point,
-    //       tax_cost_point,
-    //       tax_land_name,
-    //       real_money,
-    //       company_id,
-    //       tax_land_id,
-    //     } =data.info;
+    const {
+      settlement_order_no,
+      status,
+      company_name,
+      settlement_time,
+      real_money,
+      cooperate_point,
+      channel_name,
+      before_tax,
+      after_tax,
+      bank,
+      bank_account,
+    } = data.info;
+    formData.value = {
+      id: scope.row.id,
+      settlement_order_no,
+      status,
+      company_name,
+      settlement_time,
+      real_money,
+      cooperate_point,
+      channel_name,
+      before_tax,
+      after_tax,
+      bank,
+      bank_account,
+    };
+
+    console.log(formData.value);
+
+    dialogVisible.value = true;
   } catch (error) {
     console.log(error);
   }
-
-  // dialogVisible.value = true;
-  // formData.value=scope.row
-
-  // ElMessageBox({
-  //   title: "",
-  //   message: h(
-  //     "p",
-  //     null,
-  //     `确定下发该任务`
-  //   ),
-  //   showCancelButton: true,
-  //   confirmButtonText: "确定",
-  //   cancelButtonText: "取消",
-  //   beforeClose: async (
-  //     action: string,
-  //     instance: { confirmButtonLoading: boolean },
-  //     done: () => void
-  //   ) => {
-  //     if (action === "confirm") {
-  //       instance.confirmButtonLoading = true;
-  //       var data = {
-  //         id: scope.row.id,
-  //         status: scope.row.status == 2 ? "0" : "2",
-  //       };
-  //       await updateChannelSettlementStatus(data);
-
-  //       instance.confirmButtonLoading = false;
-  //       done();
-  //     } else {
-  //       done();
-  //     }
-  //   },
-  // }).then(() => {
-  //   ElMessage({
-  //     type: "success",
-  //     message: `成功${scope.row.status == 2 ? "解冻" : "冻结"}该任务`,
-  //   });
-  //   getTableData();
-  // });
 };
 const handleDetails = (scope: any) => {
   router.push({
@@ -301,6 +274,7 @@ const getTableData = async () => {
     pageInfo.page = data.current_page;
     pageInfo.total = data.count;
     console.log(data);
+    total_pay_money.value = data.data.total_pay_money;
 
     var newData = data.data.map((item: any) => {
       return {

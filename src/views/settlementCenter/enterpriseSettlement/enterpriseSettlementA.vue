@@ -411,7 +411,6 @@ const getTableData = async () => {
       bank_account,
       check_url,
     };
-    console.log(data, "====sdsdsdsdsdssdsd");
     const newData = data.taskUser.map((item: any) => {
       return {
         account: item.account,

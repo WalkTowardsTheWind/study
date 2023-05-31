@@ -1,9 +1,6 @@
 <template>
   <div class="p-[24px] p-b-[0]">
-    <div>
-      累计结算:1216415164151145
-      <!-- {{ formItem.total_money }} -->
-    </div>
+    <div>累计结算: {{ total_settlement_money }}</div>
     <zxn-search
       class="m-t-[20px]"
       :formItem="formItem"
@@ -119,7 +116,7 @@ const handlePageChange = (cur: any) => {
   getTableData();
 };
 // 累计
-// var total_money=ref()
+var total_settlement_money = ref();
 const formItem = ref({
   keywords: "",
   timeData: [],
@@ -283,7 +280,8 @@ const getTableData = async () => {
 
     pageInfo.page = data.current_page;
     pageInfo.total = data.count;
-    console.log(data);
+    console.log(data.data.total_settlement_money, "total_settlement_money");
+    total_settlement_money.value = data.data.total_settlement_money;
 
     var newData = data.data.map((item: any) => {
       return {
