@@ -77,11 +77,20 @@
       </template>
       <template #2>
         <div class="p-[24px] p-b-[0]">
-          <lyTable :table-data="tableData" :column-list="columnList" hasSelect>
-            <template #operation>
-              <el-button link type="primary" @click="handleTo">查看</el-button>
+          <zxn-table
+            :table-data="tableData"
+            :column-list="columnList"
+            :page-info="pageInfo"
+            @page-change="handlePageChange"
+            hasSelect
+            @selection-change="handleSelect"
+          >
+            <template #operation="scope">
+              <el-button link type="primary" @click="handleInspect(scope)"
+                >查看</el-button
+              >
             </template>
-          </lyTable>
+          </zxn-table>
         </div>
       </template>
     </zxn-tabs>
@@ -89,9 +98,12 @@
 </template>
 <script setup lang="ts">
 import { useRouter, useRoute } from "vue-router";
-import lyTable from "../components/lyTable.vue";
-import { getEnterpriseSettlementDetails } from "@/api/settlementCenter/enterpriseSettlement";
+import {
+  getTaskList,
+  getEnterpriseSettlementDetails,
+} from "@/api/settlementCenter/enterpriseSettlement";
 const route = useRoute();
+const router = useRouter();
 const activeName = ref("1");
 const tabsList = [
   {
@@ -103,9 +115,23 @@ const tabsList = [
     label: "结算任务列表",
   },
 ];
-const router = useRouter();
-const handleTo = () => {
-  router.push({ name: "enterpriseSettlementA", query: { activeName: "1" } });
+
+const handleInspect = (scope: any) => {
+  router.push({
+    name: "enterpriseSettlementA",
+    query: { activeName: "1", task_id: scope.row.task_id },
+  });
+};
+// 查询重置
+const pageInfo = reactive({
+  page: 1,
+  total: 0,
+  limit: 20,
+});
+const handlePageChange = (cur: any) => {
+  const { page } = cur;
+  pageInfo.page = page;
+  getTableData();
 };
 
 //表单信息
@@ -113,6 +139,7 @@ const formItem = ref({
   settlement_order_no: "",
   company_name: "",
   company_id: "",
+  tax_land_id: "",
   credit_code: "",
   legal_person: "",
   contacts: "",
@@ -120,24 +147,38 @@ const formItem = ref({
   company_address: "",
 });
 //
-const tableData = reactive([{ settlement_order_no: "010" }]);
+const tableData = reactive([] as any);
 const columnList = [
   { label: "任务编号", prop: "task_no", width: 120 },
   { label: "任务名称", prop: "task_name", width: 120 },
   { label: "需求人数", prop: "person_count", width: 120 },
-  { label: "预算", prop: "value", width: 120 },
-  { label: "申请时间", prop: "value", width: 120 },
-  { label: "任务详情", prop: "value", slot: "operation", fixed: "right" },
+  { label: "预算", prop: "salary", width: 120 },
+  { label: "申请时间", prop: "add_time", width: 120 },
+  { label: "任务详情", slot: "operation", fixed: "right" },
 ];
-const getData = () => {
+/**
+ * 批量选择
+ */
+//选中的数据
+//返回id数组
+const selectionData = ref([]);
+const handleSelect = (data: any) => {
+  selectionData.value = data.map((item: any) => item.id);
+};
+
+/**
+ * 获取数据
+ */
+const getTableData = async () => {
   const ID = Number(route.query.id);
   console.log(ID);
-  getEnterpriseSettlementDetails(ID)
+  await getEnterpriseSettlementDetails(ID)
     .then((response) => {
       const {
         settlement_order_no,
         company_name,
         company_id,
+        tax_land_id,
         credit_code,
         legal_person,
         contacts,
@@ -148,6 +189,7 @@ const getData = () => {
         settlement_order_no,
         company_name,
         company_id,
+        tax_land_id,
         credit_code,
         legal_person,
         contacts,
@@ -156,21 +198,40 @@ const getData = () => {
       };
     })
     .catch();
-};
-getData();
-/**
- * 获取数据
- */
-const getTableData = () => {
-  // const data={...formItem}
-  // getEnterpriseContractList(data).then((response)=>{
-  //   tableData.length = 0
-  //   tableData.push(...response.data.list)
-  // }).catch(()=>{
-  // })
-};
-getTableData();
+  const params = {
+    company_id: formItem.value.company_id,
+    tax_land_id: formItem.value.tax_land_id,
+  } as any;
+  params.page = pageInfo.page;
+  params.limit = pageInfo.limit;
+  console.log(params);
 
+  try {
+    const { data } = await getTaskList(params);
+    tableData.length = 0;
+    pageInfo.page = data.current_page;
+    pageInfo.total = data.count;
+    console.log(data.list.data);
+
+    var newData = data.list.data.map((item: any) => {
+      return {
+        id: item.id,
+        task_no: item.task_no,
+        task_name: item.task_name,
+        task_id: item.id,
+        person_count: item.task_attribute.person_count,
+        salary: item.task_attribute.salary,
+        add_time: item.add_time,
+        task_user: item.task_user,
+      };
+    });
+    tableData.push(...newData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+getTableData();
 onMounted(() => {});
 </script>
 <style lang="scss" scoped>
