@@ -5,9 +5,9 @@ import request from "@/utils/request";
  * @param data {selfOperatedTaxLandList}
  * @returns
  */
-export function getAreaList() {
+export function getAreaList(parent_id: number) {
   return request({
-    url: "/adminapi/tax/areaList",
+    url: `/adminapi/setting/city/list/${parent_id}`,
     method: "get",
   });
 }
