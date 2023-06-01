@@ -4,11 +4,12 @@
     @mousewheel="handleWheel"
     ref="scrollbar"
   >
+    <!--		{{ curAreaList }}-->
     <div class="area-select">
       <div
         class="area-select-province"
         v-for="item in curAreaList"
-        :key="item.label"
+        :key="item.id"
       >
         <div class="area-select-province-checkbox">
           <span>{{ item.label }}</span>
@@ -21,12 +22,12 @@
         <div class="area-select-province-box">
           <div
             class="area-select-province-city"
-            :class="{ 'is-active': modelValue.includes(city.code) }"
-            v-for="city in item.children"
-            :key="city.code"
+            :class="{ 'is-active': modelValue.includes(city.id) }"
+            v-for="city in item.child"
+            :key="city.id"
             @click="handleCityChange(city)"
           >
-            {{ city.label }}
+            {{ city.name }}
           </div>
         </div>
       </div>
@@ -40,28 +41,29 @@ import { useThrottleFn } from "@vueuse/core";
 const props = defineProps({
   modelValue: { type: Array<number>, default: () => [] },
   areaList: { type: Array, default: () => [] },
-  labelField: { type: String, default: "label" },
-  valueField: { type: String, default: "code" },
+  labelField: { type: String, default: "name" },
+  valueField: { type: String, default: "id" },
 });
 const emit = defineEmits(["update:modelValue"]);
 const { labelField, valueField } = toRefs(props);
 const curAreaList = computed(() => {
   return props.areaList.map((it: any) => {
-    const checkNum = it.children.filter((city: any) =>
+    const checkNum = it.child.filter((city: any) =>
       props.modelValue.includes(city[valueField.value])
     );
     return {
+      id: it.id,
       label: it[labelField.value],
-      checked: checkNum.length === it.children.length,
+      checked: checkNum.length === it.child.length,
       indeterminate: Boolean(
-        checkNum.length && checkNum.length !== it.children.length
+        checkNum.length && checkNum.length !== it.child.length
       ),
-      children: it.children,
+      child: it.child,
     };
   });
 });
 const handleCityAllChange = (pro: any): void => {
-  const cityCodes = pro.children.map((it: any) => it.code);
+  const cityCodes = pro.child.map((it: any) => it.id);
   let cur: any[] = [];
   if (!pro.checked) {
     cur = deleteCity(props.modelValue, cityCodes);

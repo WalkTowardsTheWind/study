@@ -1,6 +1,6 @@
 import request from "@/utils/request";
 import { AxiosPromise } from "axios";
-import { RoleQuery, LogQuery, menusQuery } from "./types";
+import { RoleQuery, LogQuery, menusQuery, SetRoleQuery } from "./types";
 
 /**
  * 获取角色数据
@@ -12,6 +12,52 @@ export function getRolePage(params: RoleQuery): AxiosPromise {
     url: "/adminapi/setting/role",
     method: "GET",
     params,
+  });
+}
+
+/**
+ * 新增角色数据
+ * @param data
+ */
+export function setRole(data: SetRoleQuery): AxiosPromise {
+  return request({
+    url: "/adminapi/setting/role",
+    method: "POST",
+    data,
+  });
+}
+
+/**
+ * 角色详情
+ * @param id
+ */
+export function roleView(id: number): AxiosPromise {
+  return request({
+    url: `/adminapi/setting/role/${id}/edit`,
+    method: "GET",
+  });
+}
+
+/**
+ * 删除角色
+ * @param id
+ */
+export function removeRole(id: number): AxiosPromise {
+  return request({
+    url: `/adminapi/setting/role/${id}`,
+    method: "DELETE",
+  });
+}
+
+/**
+ * 修改角色状态
+ * @param data
+ */
+export function setRoleStatus(data: any): AxiosPromise {
+  return request({
+    url: `/adminapi/setting/role/set_status`,
+    method: "PUT",
+    data,
   });
 }
 
@@ -77,6 +123,16 @@ export function removeMenu(id: number): AxiosPromise {
 export function menusView(id: number): AxiosPromise {
   return request({
     url: `/adminapi/setting/menus/${id}`,
+    method: "GET",
+  });
+}
+
+/**
+ * 获取税地城市列表
+ */
+export function getAreaList(): AxiosPromise {
+  return request({
+    url: "/adminapi/tax/areaList",
     method: "GET",
   });
 }

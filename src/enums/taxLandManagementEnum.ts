@@ -1,4 +1,4 @@
-export enum TaxLandStatus {
+export enum taxLandStatus {
   "待启用",
   "启用中",
   "下架",
