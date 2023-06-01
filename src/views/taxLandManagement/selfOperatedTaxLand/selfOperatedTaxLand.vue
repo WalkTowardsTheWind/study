@@ -187,14 +187,7 @@ const columnList = [
   { label: "签约数量", prop: "sign_count" },
   { label: "税率形式", prop: "calculation_type" },
   { label: "对接人", prop: "tax_land_head" },
-  {
-    label: "税地发票类型",
-    type: "enum",
-    path: "statusEnum.applyInvoiceType",
-    prop: "invoice_type",
-    width: 120,
-    color: { 0: "blue", 1: "gray", 2: "black" },
-  },
+  { label: "税地发票类型", prop: "invoice_type", width: 120 },
   { label: "上架时间", prop: "ground_time", sortable: "custom", width: 120 },
   { label: "税地类型", prop: "tax_land_type" },
   { label: "支付方式", prop: "payment_type" },
@@ -344,7 +337,10 @@ const getTableData = async () => {
             item.calculation_type
           ],
         tax_land_head: item.tax_land_head,
-        invoice_type: item.invoice_type,
+        invoice_type:
+          proxy.$enumSet["taxLandManagementEnum.calculationType"][
+            item.invoice_type
+          ],
         ground_time: item.ground_time,
         tax_land_type:
           proxy.$enumSet["taxLandManagementEnum.tax_land_type"][

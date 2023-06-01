@@ -173,6 +173,8 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from "vue-router";
 import { selfOperatedTaxLandDetails } from "@/api/taxLandManagement/selfOperatedTaxLand";
+import { getAreaList } from "@/api/taxLandManagement";
+import { getCategoryTreeList } from "@/api/category";
 const { proxy } = getCurrentInstance() as any;
 const route = useRoute();
 const router = useRouter();
@@ -191,7 +193,6 @@ const tabsList = [
     label: "行业与合同信息",
   },
 ];
-//
 
 //表单信息
 const formItem = ref({
@@ -241,86 +242,120 @@ const handleClose = () => {
   });
 };
 
-const getData = () => {
+const getData = async () => {
   const ID = Number(route.query.id);
-  console.log(ID);
-  selfOperatedTaxLandDetails(ID)
-    .then((response: any) => {
-      var {
-        tax_land_head,
-        head_mobile,
-        tax_land_name,
-        tax_land_type,
-        tax_manufacturer,
-        bank_account,
-        tax_cost_point,
-        calculation_type,
-        min_employment_year,
-        max_employment_year,
-        tax_land_city_id,
-        web_url,
-        tax_land_license,
-        company_qualifications,
-        audit_web_url,
-        audit_account,
-        audit_password,
-        industry_category_id,
-        invoice_type,
-        invoice_denomination,
-        max_money,
-        tax_point,
-        payment_type,
-        is_payment_api,
-        payment_supplier,
-        invoice_sample,
-        certification_form,
-        sign_form,
-        industry_limit,
-        tax_contract_term,
-        incoming_materials,
-        agreement_url,
-      } = response.data.info;
-      console.log(
-        response.data.info.tax_contract_term,
-        "=========asdawfsdasdfwefrewdfeqwf"
-      );
+  try {
+    const { data } = await selfOperatedTaxLandDetails(ID);
+    var {
+      tax_land_head,
+      head_mobile,
+      tax_land_name,
+      tax_land_type,
+      tax_manufacturer,
+      bank_account,
+      tax_cost_point,
+      calculation_type,
+      min_employment_year,
+      max_employment_year,
+      tax_land_city_id,
+      web_url,
+      tax_land_license,
+      company_qualifications,
+      audit_web_url,
+      audit_account,
+      audit_password,
+      industry_category_id,
+      invoice_type,
+      invoice_denomination,
+      max_money,
+      tax_point,
+      payment_type,
+      is_payment_api,
+      payment_supplier,
+      invoice_sample,
+      certification_form,
+      sign_form,
+      industry_limit,
+      tax_contract_term,
+      incoming_materials,
+      agreement_url,
+    } = data.info;
+    //获取税地地区
+    const AreaData = await getAreaList(0);
+    const newAreaData = JSON.parse(
+      JSON.stringify(AreaData.data)
+        .replace(/"id"/g, '"value"')
+        .replace(/"name"/g, '"label"')
+        .replace(/"cityList"/g, '"children"')
+        .replace(/"taxLandList"/g, '"children"')
+        .replace(/"child"/g, '"children"')
+    );
+    //获取行业
+    const TradeData = await getCategoryTreeList({ type: "0" });
 
-      formItem.value = {
-        tax_land_head,
-        head_mobile,
-        tax_land_name,
-        tax_land_type,
-        tax_manufacturer,
-        bank_account,
-        tax_cost_point,
-        calculation_type: calculation_type + "",
-        min_employment_year,
-        max_employment_year,
-        tax_land_city_id,
-        web_url,
-        tax_land_license,
-        company_qualifications,
-        audit_web_url,
-        audit_account,
-        audit_password,
-        industry_category_id,
-        invoice_type: invoice_type + "",
-        invoice_denomination: invoice_denomination + "",
-        max_money,
-        tax_point,
-        payment_type: payment_type + "",
-        is_payment_api: is_payment_api + "",
-        payment_supplier,
-        invoice_sample,
-        certification_form,
-        sign_form: sign_form + "",
-        industry_limit,
-        tax_contract_term: tax_contract_term + "",
-        incoming_materials,
-        agreement_url,
-      };
-    })
-    .catch();
+    const newTradeData = JSON.parse(
+      JSON.stringify(TradeData.data)
+        .replace(/"id"/g, '"value"')
+        .replace(/"name"/g, '"label"')
+        .replace(/"children"/g, '"children"')
+    );
+
+    const func = (data: any, name: any, s: any) => {
+      const newData = data.map((item: any) => {
+        if (item.value == s) {
+          return name + item.label;
+        } else {
+          var names = name + item.label;
+          if (item.children) {
+            return func(item.children, names, s);
+          }
+        }
+      });
+      return [...new Set(newData.flat(Infinity))].filter(Boolean);
+    };
+    const newtax_land_city_id = func(newAreaData, "", tax_land_city_id) as any;
+    const newindustry_category_id = func(
+      newTradeData,
+      "",
+      industry_category_id
+    ) as any;
+    formItem.value = {
+      tax_land_head,
+      head_mobile,
+      tax_land_name,
+      tax_land_type,
+      tax_manufacturer,
+      bank_account,
+      tax_cost_point,
+      calculation_type: calculation_type + "",
+      min_employment_year,
+      max_employment_year,
+      tax_land_city_id: newtax_land_city_id[0],
+      web_url,
+      tax_land_license,
+      company_qualifications,
+      audit_web_url,
+      audit_account,
+      audit_password,
+      industry_category_id: newindustry_category_id[0],
+      invoice_type: invoice_type + "",
+      invoice_denomination: invoice_denomination + "",
+      max_money,
+      tax_point,
+      payment_type: payment_type + "",
+      is_payment_api: is_payment_api + "",
+      payment_supplier,
+      invoice_sample,
+      certification_form,
+      sign_form: sign_form + "",
+      industry_limit,
+      tax_contract_term: tax_contract_term + "",
+      incoming_materials,
+      agreement_url,
+    };
+  } catch (error) {
+    console.log(error);
+  }
 };
 getData();
 onMounted(() => {});
