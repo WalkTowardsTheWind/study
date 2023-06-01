@@ -297,6 +297,7 @@ import {
 } from "@/api/taxLandManagement/selfOperatedTaxLand";
 import { getAreaList } from "@/api/taxLandManagement";
 import { getCategoryTreeList } from "@/api/category";
+import { isArray } from "../../../utils/is";
 const { proxy } = getCurrentInstance() as any;
 const route = useRoute();
 const router = useRouter();
@@ -405,8 +406,12 @@ const handleSelfOperatedTaxLandEdit = () => {
   params.company_qualifications = JSON.stringify(params.company_qualifications);
   params.invoice_sample = JSON.stringify(params.invoice_sample);
   params.agreement_url = JSON.stringify(params.agreement_url);
-  params.tax_land_city_id = params.tax_land_city_id.slice(-1)[0];
-  params.industry_category_id = params.industry_category_id.slice(-1)[0];
+  if (isArray(params.tax_land_city_id)) {
+    params.tax_land_city_id = params.tax_land_city_id.slice(-1)[0];
+  }
+  if (isArray(params.industry_category_id)) {
+    params.industry_category_id = params.industry_category_id.slice(-1)[0];
+  }
   selfOperatedTaxLandEdit(ID, params)
     .then(() => {
       ElMessage({
