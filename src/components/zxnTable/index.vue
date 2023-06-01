@@ -23,7 +23,7 @@
         :selectable="selectable"
       />
       <el-table-column v-if="hasIndex" type="index" label="序号" width="65" />
-      <template v-for="(item, index) in columnList" :key="index">
+      <template v-for="(item, index) in tableColumnList" :key="index">
         <el-table-column v-if="item.slot" v-bind="item">
           <template #default="scope">
             <slot :name="item.slot" v-bind="scope" />
@@ -32,7 +32,10 @@
         <el-table-column v-else-if="item.type" v-bind="item">
           <template #default="{ row }">
             <div
-              v-if="item.type === 'enum'"
+              v-if="
+                item.type === 'enum' &&
+                (isNumber(row[item.prop]) || row[item.prop])
+              "
               v-text="proxy.$enumSet[item.path][row[item.prop]]"
               class="zxn-table-label"
               :style="item.color ? item.color[row[item.prop]] : {}"
@@ -56,6 +59,8 @@
 import { PropType } from "vue";
 import { TabsContextKey } from "@/components/constants";
 import type { SortParams } from "./tableType";
+import { isNumber } from "@/utils/is";
+
 const tabsContext = inject(TabsContextKey, undefined);
 const { proxy } = getCurrentInstance() as any;
 const props = defineProps({
@@ -85,6 +90,16 @@ const getSelectionRows = () => {
 let _total = ref(0);
 let _page = ref(1);
 let _limit = ref(20);
+const tableColumnList = ref([]);
+watch(
+  () => props.columnList,
+  (val) => {
+    tableColumnList.value = val.filter((it) => {
+      return !Object.hasOwnProperty.call(it, "visible") || it.visible;
+    });
+  },
+  { immediate: true, deep: true }
+);
 watchEffect(() => {
   const { total, page, limit } = props.pageInfo;
   // console.log(total, '2222')

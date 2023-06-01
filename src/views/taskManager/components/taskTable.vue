@@ -114,7 +114,12 @@ const formItem = reactive({
 });
 const tableData = reactive([]);
 const columnList = [
-  { label: "任务编号", prop: "task_no", minWidth: 140 },
+  {
+    label: "任务编号",
+    prop: "task_no",
+    visible: props.type !== 1,
+    minWidth: 140,
+  },
   { label: "任务名称", prop: "task_name", minWidth: 120 },
   { label: "关联企业", prop: "company_name", minWidth: 140 },
   { label: "需求人数", prop: "task_attribute.person_count", type: "deep" },
@@ -129,6 +134,7 @@ const columnList = [
   {
     label: "任务描述",
     prop: "task_desc",
+    visible: props.type !== 1,
     showOverflowTooltip: true,
     minWidth: 100,
   },
@@ -138,7 +144,6 @@ const columnList = [
     path: "statusEnum.TaskEnum",
     prop: "status",
     minWidth: 100,
-    fixed: "left",
     color: {
       0: { color: "#19B56B", backgroundColor: "#daf3e7" },
       1: { color: "#F35135", backgroundColor: "#fde3df" },

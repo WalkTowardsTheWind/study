@@ -58,3 +58,13 @@ export enum invoiceType {
   "普票",
   "专票",
 }
+
+export enum applyInvoiceType {
+  "普票",
+  "专票",
+}
+export enum invoiceRequire {
+  "下发开票",
+  "充值开票",
+  "预开票",
+}

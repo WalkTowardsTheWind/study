@@ -5,7 +5,7 @@
       type="date"
       placeholder="开始日期"
       format="YYYY/MM/DD"
-      value-format="YYYY-MM-DD"
+      :value-format="valueFormat"
       :disabled-date="(date) => disabledDate('start', date)"
       @change="handleDateChange"
     />
@@ -15,7 +15,7 @@
       type="date"
       placeholder="结束日期"
       format="YYYY/MM/DD"
-      value-format="YYYY-MM-DD"
+      :value-format="valueFormat"
       :disabled-date="(date) => disabledDate('end', date)"
       @change="handleDateChange"
     />
@@ -34,6 +34,7 @@
 <script setup lang="ts">
 const props = defineProps({
   modelValue: { type: Array, default: () => [] },
+  valueFormat: { type: String, default: "YYYY-MM-DD" },
 });
 const emit = defineEmits(["update:modelValue"]);
 const dateRange = computed(() => {

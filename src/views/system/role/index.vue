@@ -6,19 +6,19 @@
       hasUpdate
     />
     <div class="p-[24px] p-b-[0]">
-      <zxn-search
-        :formItem="formItem"
-        @on-search="handleSearch"
-        @on-reset="handleSearch"
-      >
-        <el-form-item prop="role_name">
-          <el-input v-model="formItem.role_name" placeholder="请输入关键字">
-            <template #prefix>
-              <el-icon><i-ep-Search /></el-icon>
-            </template>
-          </el-input>
-        </el-form-item>
-      </zxn-search>
+      <!--      <zxn-search-->
+      <!--        :formItem="formItem"-->
+      <!--        @on-search="handleSearch"-->
+      <!--        @on-reset="handleSearch"-->
+      <!--      >-->
+      <!--        <el-form-item prop="role_name">-->
+      <!--          <el-input v-model="formItem.role_name" placeholder="请输入关键字">-->
+      <!--            <template #prefix>-->
+      <!--              <el-icon><i-ep-Search /></el-icon>-->
+      <!--            </template>-->
+      <!--          </el-input>-->
+      <!--        </el-form-item>-->
+      <!--      </zxn-search>-->
       <zxn-table
         ref="table"
         :table-data="tableData"
@@ -27,21 +27,37 @@
         :hasPagination="false"
       >
         <template #tableTop>
-          <el-button type="primary" class="mr-[8px]" @click="handleAdd"
-            >+ 新建</el-button
-          >
-          <el-dropdown
-            trigger="click"
-            @command="(instar) => handleCommand(instar)"
-          >
-            <el-button type="primary" plain>批量操作</el-button>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item command="reject">停用</el-dropdown-item>
-                <el-dropdown-item command="fulfill">启用</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
+          <div class="flex justify-between">
+            <div>
+              <el-button type="primary" class="mr-[8px]" @click="handleAdd"
+                >+ 新建</el-button
+              >
+              <el-dropdown
+                trigger="click"
+                @command="(instar) => handleCommand(instar)"
+              >
+                <el-button type="primary" plain>批量操作</el-button>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command="reject">停用</el-dropdown-item>
+                    <el-dropdown-item command="fulfill">启用</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </div>
+            <div class="">
+              <el-input
+                v-model="formItem.role_name"
+                class="w-344px mr-16px"
+                placeholder="请输入关键字"
+              >
+                <template #prefix>
+                  <el-icon><i-ep-Search /></el-icon>
+                </template>
+              </el-input>
+              <el-button type="primary" @click="handleSearch">查询</el-button>
+            </div>
+          </div>
         </template>
         <template #operation="{ row }">
           <el-button
