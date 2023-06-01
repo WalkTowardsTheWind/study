@@ -146,8 +146,9 @@ const handleSearch = () => {
   getTableData();
 };
 const handlePageChange = (cur: any) => {
-  const { page } = cur;
+  const { page, limit } = cur;
   pageInfo.page = page;
+  pageInfo.limit = limit;
   getTableData();
 };
 
@@ -286,6 +287,7 @@ const handleG = (scope: any) => {
 const selectionData = ref([]);
 const handleSelect = (data: any) => {
   selectionData.value = data.map((item: any) => item.id);
+  console.log(selectionData.value);
 };
 /**
  * 新建
@@ -316,13 +318,12 @@ const getTableData = async () => {
   const params = transformTimeRange({ ...formItem.value }) as any;
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
-  console.log(params);
 
   try {
     const { data } = await getSelfOperatedTaxLandList(params);
     tableData.length = 0;
     pageInfo.page = data.current_page;
-    pageInfo.total = data.count;
+    pageInfo.total = data.total;
 
     var newData = data.data.map((item: any) => {
       return {
@@ -338,7 +339,7 @@ const getTableData = async () => {
           ],
         tax_land_head: item.tax_land_head,
         invoice_type:
-          proxy.$enumSet["taxLandManagementEnum.calculationType"][
+          proxy.$enumSet["taxLandManagementEnum.InvoiceType"][
             item.invoice_type
           ],
         ground_time: item.ground_time,

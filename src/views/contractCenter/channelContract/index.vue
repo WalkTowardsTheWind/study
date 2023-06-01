@@ -13,7 +13,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="合同状态">
-        <el-select v-model="formItem.status" placeholder="Select">
+        <el-select v-model="formItem.status" placeholder="请选择">
           <el-option
             v-for="item in proxy.$const['contractCenterEnum.contractStatus']"
             :key="item.value"
@@ -103,8 +103,9 @@ const handleSearch = () => {
   getTableData();
 };
 const handlePageChange = (cur: any) => {
-  const { page } = cur;
+  const { page, limit } = cur;
   pageInfo.page = page;
+  pageInfo.limit = limit;
   getTableData();
 };
 const formItem = ref({
@@ -141,7 +142,7 @@ const columnList = [
     slot: "operation",
     fixed: "right",
     width: 250,
-    align: "right",
+    align: "center ",
     headerAlign: "left",
   },
 ];
