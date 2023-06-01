@@ -126,8 +126,8 @@
                     </el-select>
                   </el-col>
                   <el-col class="tac" :span="6">
-                    <el-input placeholder="请输入"
-                      v-model="item.cooperate_point"
+                    <el-input
+                      v-model="item.cooperate_pointnt"
                       placeholder="请输入"
                     ></el-input>
                   </el-col>
@@ -195,7 +195,7 @@ const formItem = ref({
   remarks: "",
   file_url: [],
   annex_url: [],
-  // product: [{ product_type: null, invoice_type: null, cooperate_point: "" }],
+  // product: [{ product_type: null, invoice_type: null, cooperate_pointnt: "" }],
 });
 // 计算属性
 var contractName = computed(() => {
@@ -210,7 +210,7 @@ var contractName = computed(() => {
 //   formItem.value.product.push({
 //     product_type: null,
 //     invoice_type: null,
-//     cooperate_point: "",
+//     cooperate_pointnt: "",
 //   });
 // };
 const handleChannelContractEdit = () => {
@@ -262,7 +262,7 @@ const getData = () => {
       //   return {
       //     product_type: item.product_type,
       //     invoice_type: item.invoice_type,
-      //     cooperate_point: item.cooperate_point,
+      //     cooperate_pointnt: item.cooperate_pointnt,
       //   };
       // });
 
@@ -296,6 +296,7 @@ onMounted(() => {});
     .el-input__wrapper {
       width: 100%;
     }
+
     //  flex-grow: 1
   }
 }

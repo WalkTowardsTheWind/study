@@ -66,7 +66,9 @@
               <div class="w-[33%] box" style="min-width: 400px">
                 <el-row>
                   <el-col class="top" :span="5">产品列表</el-col>
-                  <el-col :span="5"> <div class="bg tac">产品</div></el-col>
+                  <el-col :span="5">
+                    <div class="bg tac">产品</div>
+                  </el-col>
                   <el-col class="bg tac" :span="8">票面种类及税点</el-col>
                   <el-col class="bg tac" :span="6">合作价格</el-col>
                 </el-row>
@@ -78,7 +80,7 @@
                     <span>{{ item.invoice_type }}</span>
                   </el-col>
                   <el-col class="tac" :span="6">
-                    <span>{{ item.cooperate_point }}</span>
+                    <span>{{ item.cooperate_pointnt }}</span>
                   </el-col>
                 </el-row>
               </div>
@@ -131,7 +133,7 @@ const formItem = ref<channelContractDetailsType>({
   remarks: "",
   file_url: [],
   annex_url: [],
-  product: [{ product_type: null, invoice_type: null, cooperate_point: "" }],
+  product: [{ product_type: null, invoice_type: null, cooperate_pointnt: "" }],
 });
 
 const handleSubmit = () => {};
@@ -159,7 +161,7 @@ const getData = () => {
         return {
           product_type: item.product_type,
           invoice_type: item.invoice_type,
-          cooperate_point: item.cooperate_point,
+          cooperate_pointnt: item.cooperate_pointnt,
         };
       });
 

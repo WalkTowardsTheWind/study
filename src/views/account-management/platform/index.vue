@@ -251,7 +251,14 @@ const columnList = [
     type: "enum",
     path: "accountEnum.statusType",
     color: {
-      0: {},
+      0: {
+        color: "#333333",
+        background: "#dedede",
+      },
+      1: {
+        color: "#366FF3",
+        background: "#dfe8fd",
+      },
     },
   },
   { label: "联系人", prop: "real_name" },

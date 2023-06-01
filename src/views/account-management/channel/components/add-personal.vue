@@ -84,7 +84,7 @@
                   :value="item.value"
                 ></el-option>
               </el-select>
-              <el-input class="form-item" v-model="item.cooperate_poi" />
+              <el-input class="form-item" v-model="item.cooperate_point" />
               <div
                 class="add"
                 v-if="product.length > 0"
@@ -200,6 +200,7 @@ const invoiceType = [
 const sumbit = () => {
   let params = {
     ...addForm.value,
+    is_channel: 1,
     product: product.value,
   };
   createPersonalAccount(params).then((res) => {
@@ -222,7 +223,7 @@ const addClick = () => {
       product_id: res.data.id,
       product_type: "",
       invoice_type: "",
-      cooperate_poi: "",
+      cooperate_point: "",
     });
   });
 };

@@ -52,7 +52,6 @@ function get3And1List() {
 
     options.value.xAxis.data = res.data?.income.map((item) => item.date_time);
     options.value.series[0].data = res.data?.income.map((item) => item.amount);
-    options.value.series[1].data = res.data?.expend.map((item) => item.amount);
     chart.value?.clear();
     chart.value?.setOption(options.value);
   });
@@ -78,9 +77,6 @@ const options = ref({
     data: [
       {
         name: "收入",
-      },
-      {
-        name: "支出",
       },
     ],
   },
@@ -116,22 +112,6 @@ const options = ref({
       smooth: true,
       itemStyle: {
         color: "#366ff4", // 折线颜色
-        symbol: "circle", // 圆点标记
-        symbolSize: 10, // 圆点大小
-        lineStyle: {
-          width: 1, // 折线宽度
-        },
-      },
-    },
-    {
-      name: "支出",
-      type: "line",
-      stack: "stack",
-      data: [], // 数据
-      showSymbol: false,
-      smooth: true,
-      itemStyle: {
-        color: "#36c5f4", // 折线颜色
         symbol: "circle", // 圆点标记
         symbolSize: 10, // 圆点大小
         lineStyle: {

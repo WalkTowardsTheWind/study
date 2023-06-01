@@ -50,7 +50,7 @@ import { LoginData } from '../../../api/auth/types';
           </el-col>
           <el-col :span="12">
             <el-form-item label="渠道点位">
-              <el-text class="mx-1">{{ formItem.cooperate_point }}</el-text>
+              <el-text class="mx-1">{{ formItem.cooperate_pointnt }}</el-text>
             </el-form-item>
           </el-col>
         </el-row>
