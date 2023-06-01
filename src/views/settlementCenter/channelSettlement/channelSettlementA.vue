@@ -45,7 +45,7 @@
                 <el-col :span="8">
                   <el-form-item label="渠道点位">
                     <el-text class="mx-1">{{
-                      formItem.cooperate_point
+                      formItem.cooperate_pointnt
                     }}</el-text>
                   </el-form-item>
                 </el-col>
@@ -185,7 +185,7 @@ const formItem = ref({
   settlement_order_no: "",
   channel_admin_name: "",
   channel_name: "",
-  cooperate_point: "",
+  cooperate_pointnt: "",
   before_tax: "",
   after_tax: "",
   custom_point: "",
@@ -227,7 +227,7 @@ const getTableData = async () => {
         settlement_order_no,
         channel_admin_name,
         channel_name,
-        cooperate_point,
+        cooperate_pointnt,
         before_tax,
         after_tax,
         custom_point,
@@ -242,7 +242,7 @@ const getTableData = async () => {
         settlement_order_no,
         channel_admin_name,
         channel_name,
-        cooperate_point,
+        cooperate_pointnt,
         before_tax,
         after_tax,
         custom_point,

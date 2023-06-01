@@ -27,7 +27,7 @@
       <el-button @click="changeType(4)">本月</el-button>
     </div>
   </div>
-  <div id="main"></div>
+  <div id="main2"></div>
 </template>
 
 <script lang="ts" setup>
@@ -49,16 +49,18 @@ function get3And1List() {
     time_type: time_type.value,
   };
   getChannelList(params).then((res) => {
-    // console.log(res);
     commission_total.value = res.data.commission_total;
     profit.value = res.data.profit;
     profit_rate.value = res.data.profit_rate;
 
-    console.log(res);
+    // console.log(res.data.commission_list);
 
-    // options.value.xAxis.data = res.data?.income.map(item => item.date_time)
-    // options.value.series[0].data = res.data?.income.map(item => item.amount)
-    // options.value.series[1].data = res.data?.expend.map(item => item.amount)
+    options.value.xAxis.data = res.data?.commission_list.map(
+      (item) => item.date_time
+    );
+    options.value.series[0].data = res.data?.commission_list.map(
+      (item) => item.commission
+    );
     chart.value?.clear();
     chart.value?.setOption(options.value);
   });
@@ -83,9 +85,6 @@ const options = ref({
     left: "left", // 距离左侧距离
     data: [
       {
-        name: "收入",
-      },
-      {
         name: "支出",
       },
     ],
@@ -104,7 +103,7 @@ const options = ref({
   xAxis: {
     type: "category",
     boundaryGap: false,
-    data: [],
+    data: [], // x轴
     axisTick: {
       show: false, // 不显示刻度
     },
@@ -114,30 +113,14 @@ const options = ref({
   },
   series: [
     {
-      name: "收入",
+      name: "支出",
       type: "line",
       stack: "total",
-      data: [],
+      data: [], // 数据
       showSymbol: false,
       smooth: true,
       itemStyle: {
         color: "#366ff4", // 折线颜色
-        symbol: "circle", // 圆点标记
-        symbolSize: 10, // 圆点大小
-        lineStyle: {
-          width: 1, // 折线宽度
-        },
-      },
-    },
-    {
-      name: "支出",
-      type: "line",
-      stack: "stack",
-      data: [],
-      showSymbol: false,
-      smooth: true,
-      itemStyle: {
-        color: "#36c5f4", // 折线颜色
         symbol: "circle", // 圆点标记
         symbolSize: 10, // 圆点大小
         lineStyle: {
@@ -150,7 +133,9 @@ const options = ref({
 
 onMounted(() => {
   // 图表初始化
-  chart.value = echarts.init(document.getElementById("main") as HTMLDivElement);
+  chart.value = echarts.init(
+    document.getElementById("main2") as HTMLDivElement
+  );
 
   // 大小自适应
   window.addEventListener("resize", () => {
@@ -162,7 +147,7 @@ get3And1List();
 </script>
 
 <style scoped lang="scss">
-#main {
+#main2 {
   width: 90vw;
   height: 500px;
 }
