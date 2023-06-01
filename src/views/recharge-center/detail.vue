@@ -26,6 +26,10 @@
 </template>
 
 <script lang="ts" setup>
+// import { useRoute } from 'vue-router';
+
+// const route = useRoute()
+
 const tabsList = [{ name: 1, label: "充值详情" }];
 
 const tableData = reactive([
@@ -44,6 +48,10 @@ const columnList = [
 ];
 
 const activeName = ref(1);
+
+// function getList() {
+
+// }
 </script>
 
 <style scoped>

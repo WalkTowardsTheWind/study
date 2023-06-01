@@ -95,10 +95,10 @@
               <el-input v-model="formData.bank_account" v-if="isEdit" />
               <span v-else>{{ formData.bank_account }}</span>
             </el-form-item>
-            <el-form-item label="渠道来源">
-              <el-input v-if="isEdit" />
-              <span v-else>江西某某某公司</span>
-            </el-form-item>
+            <!-- <el-form-item label="渠道来源">
+							<el-input v-if="isEdit" />
+							<span v-else>江西某某某公司</span>
+						</el-form-item> -->
             <el-form-item label="邮寄地址">
               <el-input v-model="formData.address" v-if="isEdit" />
               <span v-else>{{ formData.address }}</span>
@@ -106,11 +106,11 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="纳税人识别号" label-width="100px">
-              <el-input v-if="isEdit" />
+              <el-input v-model="formData.taxpayer_number" v-if="isEdit" />
               <span v-else> {{ formData.taxpayer_number }}</span>
             </el-form-item>
             <el-form-item label="发票接收人" label-width="100px">
-              <el-input v-if="isEdit" />
+              <el-input v-model="formData.consignee" v-if="isEdit" />
               <span v-else>{{ formData.consignee }}</span>
             </el-form-item>
           </el-col>
@@ -173,6 +173,8 @@ async function updateBusinessAccount() {
 async function getAccountDetail() {
   if (props.id) {
     const res = await getBusinessAccountDetail(props.id);
+    console.log(res);
+
     try {
       formData.value = res.data;
       date.value = [res.data.license_start_date, res.data.license_end_date];

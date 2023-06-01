@@ -97,6 +97,9 @@
         >
           解封
         </el-button>
+        <el-button v-if="scope.row.status === 0" link type="primary"
+          >认证</el-button
+        >
         <el-button v-if="scope.row.status === 1" link type="primary"
           >上传</el-button
         >
@@ -181,6 +184,8 @@ const columnList = [
   { label: "联系人", prop: "name" },
   { label: "联系方式", prop: "mobile" },
   { label: "渠道等级", prop: "level" },
+  { label: "渠道管理员", prop: "channel_admin_name" },
+  { label: "创建时间", prop: "add_time", width: 220 },
   // { label: "绑定信息", prop: "name" },
   { label: "操作", slot: "operation", fixed: "right", width: 250 },
 ];

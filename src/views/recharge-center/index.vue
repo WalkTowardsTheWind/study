@@ -1,83 +1,109 @@
 <template>
   <zxn-plan>
-    <zxn-tabs :tabs-list="tabsList" v-model:activeName="activeName"></zxn-tabs>
-    <span class="recharge">累计充值<span class="money">12.4880.00</span></span>
-    <div class="p-[24px]">
-      <zxn-search :formItem="formItem">
-        <el-form-item label="">
-          <el-input v-model="formItem.search" placeholder="请输入关键字">
-            <template #prefix>
-              <el-icon><i-ep-Search /></el-icon>
-            </template>
-          </el-input>
-        </el-form-item>
-        <el-form-item label="税源地">
-          <el-select v-model="formItem.state" placeholder="Select">
-            <el-option
-              v-for="item in []"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="任务状态">
-          <el-select v-model="formItem.state" placeholder="Select">
-            <el-option
-              v-for="item in []"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item prop="date" label="创建日期">
-          <el-date-picker
-            v-model="formItem.date"
-            type="daterange"
-            unlink-panels
-            range-separator="~"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          />
-        </el-form-item>
-        <el-form-item label="行业">
-          <el-select v-model="formItem.state" placeholder="Select">
-            <el-option
-              v-for="(item, index) in []"
-              :key="index"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-      </zxn-search>
-      <zxn-table :table-data="tableData" :column-list="columnList" hasSelect>
-        <template #tableTop>
-          <el-dropdown class="" trigger="click">
-            <el-button type="primary">批量操作</el-button>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item command="1">删除</el-dropdown-item>
-                <el-dropdown-item command="2">下载</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
-        </template>
-        <template #operation="scope">
-          <el-button link type="primary" @click="toDetail(scope.id)"
-            >下载</el-button
+    <zxn-tabs :tabs-list="tabsList" v-model:activeName="activeName">
+      <template #1>
+        <div class="recharge">
+          累计充值<span class="money">{{ total_amount }}</span>
+        </div>
+        <div class="p-[24px]">
+          <zxn-search :formItem="formItem" @on-search="getList">
+            <el-form-item label="">
+              <el-input v-model="formItem.name" placeholder="请输入">
+                <template #prefix>
+                  <i-ep-Search />
+                </template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="税源地">
+              <el-select v-model="formItem.tax_land_id" placeholder="请选择">
+                <el-option
+                  v-for="item in taxLand"
+                  :key="item.id"
+                  :label="item.tax_land_name"
+                  :value="item.id"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="任务状态">
+              <el-select v-model="formItem.status" placeholder="请选择">
+                <el-option
+                  v-for="item in taskStatus"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item prop="date" label="创建日期">
+              <el-date-picker
+                v-model="date"
+                type="daterange"
+                value-format="YYYY-MM-DD"
+                unlink-panels
+                range-separator="~"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              />
+            </el-form-item>
+            <el-form-item label="行业">
+              <el-select v-model="formItem.category_id" placeholder="请选择">
+                <el-option
+                  v-for="(item, index) in categoryList"
+                  :key="index"
+                  :label="item.name"
+                  :value="item.id"
+                />
+              </el-select>
+            </el-form-item>
+          </zxn-search>
+          <zxn-table
+            :table-data="tableData"
+            :column-list="columnList"
+            hasSelect
+            :page-info="pageInfo"
           >
-          <el-button link type="primary" @click="toDetail(scope.id)"
-            >详情</el-button
-          >
-        </template>
-      </zxn-table>
-    </div>
+            <template #certificate="scope">
+              <el-button link @click="toSee(scope.row.certificate)"
+                >查看</el-button
+              >
+            </template>
+            <template #tableTop>
+              <el-dropdown class="" trigger="click">
+                <el-button type="primary" plain>批量操作</el-button>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command="1">删除</el-dropdown-item>
+                    <el-dropdown-item command="2">下载</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </template>
+            <template #operation="scope">
+              <el-button
+                link
+                type="primary"
+                @click="toUpload(scope.row.recharge_id)"
+                >下载</el-button
+              >
+              <el-button
+                disabled
+                link
+                type="primary"
+                @click="toDetail(scope.row.recharge_id)"
+                >详情</el-button
+              >
+            </template>
+          </zxn-table>
+        </div>
+      </template>
+    </zxn-tabs>
   </zxn-plan>
 </template>
 
 <script lang="ts" setup>
+import { getCategoryList } from "@/api/category";
+import { getLandList } from "@/api/common";
+import { getRechargeTaskList } from "@/api/recharge";
 import router from "@/router";
 
 const tabsList = [
@@ -87,50 +113,125 @@ const tabsList = [
   },
 ];
 
+const taskStatus = [
+  {
+    label: "全部",
+    value: "",
+  },
+  {
+    label: "未到账 ",
+    value: "0",
+  },
+  {
+    label: "已到账 ",
+    value: "1",
+  },
+];
+const total_amount = ref();
+
+const taxLand = ref([
+  {
+    id: "",
+    tax_land_name: "全部",
+  },
+] as any);
+
+const categoryList = ref([
+  {
+    id: "",
+    name: "全部",
+  },
+] as any);
+
 const activeName = ref("1");
 
+const date = ref([] as any);
+
 const formItem = reactive({
-  search: "",
-  state: "",
-  manufacturer: "",
-  Invoice: "",
-  tax: "",
-  date: "",
+  name: "",
+  status: "",
+  category_id: "",
+  tax_land_id: "",
+  start_time: date[0] || "",
+  end_time: date[1] || "",
 });
-const tableData = reactive([
-  { value: "1", name: "shshhud", state: 1 },
-  { value: "2", name: "shshhud", state: 1 },
-  { value: "3", name: "shshhud", state: 1 },
-  { value: "4", name: "shshhud", state: 1 },
-  { value: "5", name: "shshhud", state: 1 },
-]);
+
+const pageInfo = reactive({
+  page: 1,
+  limit: 20,
+  total: 0,
+});
+
+const tableData = reactive([] as any);
 const columnList = [
-  { label: "充值单号", prop: "value" },
+  { label: "充值单号", prop: "recharge_order_no" },
   {
     label: "状态",
-    prop: "state",
+    prop: "status",
     type: "enum",
-    path: "statusEnum.AccountType",
-    color: { 0: "blue", 1: "green", 2: "浅蓝", 3: "红色", 4: "封停" },
+    path: "accountEnum.taskType",
+    color: {
+      0: {
+        color: "#36C5F3",
+        background: "#dff6fd",
+      },
+      1: {
+        color: "#366FF3",
+        background: "#dfe8fd",
+      },
+    },
   },
-  { label: "企业名称" },
-  { label: "关联任务" },
-  { label: "行业" },
-  { label: "税源地" },
-  { label: "税地账户" },
+  { label: "企业名称", prop: "company_name" },
+  { label: "关联任务", prop: "certificate", slot: "certificate" },
+  { label: "行业", prop: "category" },
+  { label: "税源地", prop: "tax_land_name" },
+  { label: "税地账户", prop: "bank_account" },
   { label: "操作", slot: "operation", fixed: "right", width: 250 },
 ];
 
-const toDetail = (status: string) => {
-  router.push({ name: "recharge-center-detail", query: { id: status } });
+const toDetail = (id: string) => {
+  router.push({ name: "recharge-center-detail", query: { id } });
 };
+const toUpload = (id: string) => {
+  console.log(id);
+  // router.push({ name: "recharge-center-detail", query: { id } });
+};
+
+const toSee = (url: string) => {
+  console.log(url);
+};
+
+function getList() {
+  let params = {
+    ...pageInfo,
+    ...formItem,
+  };
+  getRechargeTaskList(params).then((res) => {
+    console.log(res);
+
+    total_amount.value = res.data.total_amount;
+    tableData.push(...res.data.data);
+    pageInfo.total = res.data.total;
+  });
+}
+
+function getCategory() {
+  getCategoryList({ type: "0" }).then((res) => {
+    categoryList.value.push(...res.data);
+  });
+}
+
+function getTaxLand() {
+  getLandList().then((res) => {
+    taxLand.value.push(...res.data);
+  });
+}
+getList();
+getTaxLand();
+getCategory();
 </script>
 
 <style lang="scss">
-.searchForm {
-  margin-top: 10px;
-}
-
 .line {
   margin: 0 2px;
   font-size: 1px;
@@ -139,16 +240,22 @@ const toDetail = (status: string) => {
 }
 
 .recharge {
-  position: absolute;
-  top: 86px;
-  right: 180px;
+  display: flex;
+  align-items: center;
+  height: 50px;
+  padding-left: 25px;
+  margin-top: 25px;
+  margin-right: 28px;
+  margin-left: 25px;
   font-size: 14px;
+  background: #fef1ef;
+  border-radius: 2px;
 }
 
 .money {
   margin-left: 19px;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
   color: #333;
 }
 </style>

@@ -5,7 +5,7 @@
         <PlatformAssetView />
       </template>
       <template #2>
-        <BusinesstView />
+        <ChannelCommission />
       </template>
     </zxn-tabs>
   </zxn-plan>
@@ -13,7 +13,7 @@
 
 <script lang="ts" setup>
 import PlatformAssetView from "./components/platform-assets.vue";
-import BusinesstView from "./components/business.vue";
+import ChannelCommission from "./components/channel-commission.vue";
 
 const tabsList = [
   {
@@ -22,7 +22,7 @@ const tabsList = [
   },
   {
     name: "2",
-    label: "企业列表",
+    label: "渠道佣金",
   },
 ];
 

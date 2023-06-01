@@ -21,16 +21,6 @@ const tabsList = [
   },
 ];
 
-// const router = useRouter();
-// //路由跳转
-// const rou=()=>{
-//   const uid = router.currentRoute.value.meta.title;
-//   if(uid=="渠道合同"){
-//     activeName.value="2"
-//    console.log(uid)
-//   }
-// }
-
 onMounted(() => {
   // rou()
 });
