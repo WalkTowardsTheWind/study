@@ -21,7 +21,7 @@
                   <el-select
                     class="w-[100%]"
                     v-model="formItem.contract_kind"
-                    placeholder="Select"
+                    placeholder="请选择"
                   >
                     <el-option
                       v-for="item in proxy.$const[
@@ -34,13 +34,16 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="甲方">
-                  <el-input v-model="formItem.party_a" />
+                  <el-input placeholder="请输入" v-model="formItem.party_a" />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="乙方">
-                  <el-input v-model="formItem.party_b" />
+                  <el-input placeholder="请输入" v-model="formItem.party_b" />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="签约点位">
-                  <el-input v-model="formItem.tax_location" />
+                  <el-input
+                    placeholder="请输入"
+                    v-model="formItem.tax_location"
+                  />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="合同期限">
                   <el-select
@@ -77,7 +80,11 @@
                   />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="备注要求">
-                  <el-input v-model="formItem.remarks" type="textarea" />
+                  <el-input
+                    placeholder="请输入"
+                    v-model="formItem.remarks"
+                    type="textarea"
+                  />
                 </el-form-item>
               </div>
               <div class="w-[33%]">
@@ -99,7 +106,7 @@
                 </el-row>
                 <el-row v-for="(item, index) in formItem.product" :key="index">
                   <el-col class="tac" :offset="5" :span="5">
-                    <el-select v-model="item.product_type" placeholder="请输入">
+                    <el-select v-model="item.product_type" placeholder="请选择">
                       <el-option
                         v-for="item in productOptions"
                         :key="item.value"
@@ -109,7 +116,7 @@
                     </el-select>
                   </el-col>
                   <el-col class="tac" :span="8">
-                    <el-select v-model="item.invoice_type" placeholder="请输入">
+                    <el-select v-model="item.invoice_type" placeholder="请选择">
                       <el-option
                         v-for="item in productOptions"
                         :key="item.value"
@@ -119,7 +126,7 @@
                     </el-select>
                   </el-col>
                   <el-col class="tac" :span="6">
-                    <el-input
+                    <el-input placeholder="请输入"
                       v-model="item.cooperate_point"
                       placeholder="请输入"
                     ></el-input>

@@ -111,8 +111,9 @@ const handleSearch = () => {
   getTableData();
 };
 const handlePageChange = (cur: any) => {
-  const { page } = cur;
+  const { page, limit } = cur;
   pageInfo.page = page;
+  pageInfo.limit = limit;
   getTableData();
 };
 // 累计
@@ -279,7 +280,7 @@ const getTableData = async () => {
     const { data } = await getEnterpriseSettlementList(params);
 
     pageInfo.page = data.current_page;
-    pageInfo.total = data.count;
+    pageInfo.total = data.total;
     console.log(data.data.total_settlement_money, "total_settlement_money");
     total_settlement_money.value = data.data.total_settlement_money;
 

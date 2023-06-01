@@ -261,8 +261,9 @@ const pageInfo = reactive({
   limit: 20,
 });
 const handlePageChange = (cur: any) => {
-  const { page } = cur;
+  const { page, limit } = cur;
   pageInfo.page = page;
+  pageInfo.limit = limit;
   getTableData();
 };
 //表单信息

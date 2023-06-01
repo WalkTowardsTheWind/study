@@ -175,9 +175,9 @@ const pageInfo = reactive({
   limit: 20,
 });
 const handlePageChange = (cur: any) => {
-  const { page } = cur;
+  const { page, limit } = cur;
   pageInfo.page = page;
-  // getTableData();
+  pageInfo.limit = limit;
 };
 
 //表单信息
@@ -267,7 +267,7 @@ const getTableData = async () => {
     const { data } = await getTaskList(params);
     tableData.length = 0;
     pageInfo.page = data.current_page;
-    pageInfo.total = data.count;
+    pageInfo.total = data.total;
     console.log(data.list.data);
 
     var newData = data.list.data.map((item: any) => {

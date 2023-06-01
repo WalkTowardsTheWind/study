@@ -90,11 +90,13 @@
                 <el-form-item class="mb-[0]" label="营业执照">
                   <multi-upload
                     v-model="formItem.tax_land_license"
+                    :limit="3"
                   ></multi-upload>
                 </el-form-item>
                 <el-form-item class="mt-13px" label="公司资质">
                   <multi-upload
                     v-model="formItem.company_qualifications"
+                    :limit="3"
                   ></multi-upload>
                 </el-form-item>
               </div>
@@ -204,6 +206,7 @@
                 <el-form-item class="mb-[0]" label="发票票样">
                   <multi-upload
                     v-model="formItem.invoice_sample"
+                    :limit="3"
                   ></multi-upload>
                 </el-form-item>
               </div>
@@ -266,7 +269,10 @@
               </div>
               <div class="w-[33%]">
                 <el-form-item class="mb-[0]" label="协议">
-                  <multi-upload v-model="formItem.agreement_url"></multi-upload>
+                  <multi-upload
+                    v-model="formItem.agreement_url"
+                    :limit="3"
+                  ></multi-upload>
                 </el-form-item>
               </div>
             </div>

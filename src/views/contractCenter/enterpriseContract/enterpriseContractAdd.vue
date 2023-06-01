@@ -8,13 +8,23 @@
     >
       <template #1>
         <div class="p-[24px] p-b-[0]">
-          <el-form class="zxn-box" :model="formItem" label-width="100px">
+          <el-form
+            class="zxn-box"
+            ref="FormRef"
+            :model="formItem"
+            :rules="Rules"
+            label-width="100px"
+          >
             <div class="flex">
               <div class="w-[33%]">
                 <el-form-item label="合同名称">
                   <span class="mx-1">{{ contractName }}</span>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="合同类型">
+                <el-form-item
+                  class="mt-25px"
+                  label="合同类型"
+                  prop="contract_kind"
+                >
                   <el-select
                     class="w-[100%]"
                     v-model="formItem.contract_kind"
@@ -30,16 +40,27 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="甲方">
-                  <el-input v-model="formItem.party_a" />
+                <el-form-item class="mt-25px" label="甲方" prop="party_a">
+                  <el-input placeholder="请输入" v-model="formItem.party_a" />
                 </el-form-item>
-                <el-form-item class="mt-25px" label="乙方">
-                  <el-input v-model="formItem.party_b" />
+                <el-form-item class="mt-25px" label="乙方" prop="party_b">
+                  <el-input placeholder="请输入" v-model="formItem.party_b" />
                 </el-form-item>
-                <el-form-item class="mt-25px" label="签约点位">
-                  <el-input v-model="formItem.tax_location" />
+                <el-form-item
+                  class="mt-25px"
+                  label="签约点位"
+                  prop="tax_location"
+                >
+                  <el-input
+                    placeholder="请输入"
+                    v-model="formItem.tax_location"
+                  />
                 </el-form-item>
-                <el-form-item class="mt-25px" label="合同期限">
+                <el-form-item
+                  class="mt-25px"
+                  label="合同期限"
+                  prop="contract_term"
+                >
                   <el-select
                     class="w-[100%]"
                     v-model="formItem.contract_term"
@@ -55,7 +76,7 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="签约时间">
+                <el-form-item class="mt-25px" label="签约时间" prop="sign_time">
                   <el-date-picker
                     v-model="formItem.sign_time"
                     type="date"
@@ -64,7 +85,7 @@
                     placeholder="请选择"
                   />
                 </el-form-item>
-                <el-form-item class="mt-25px" label="到期时间">
+                <el-form-item class="mt-25px" label="到期时间" prop="end_time">
                   <el-date-picker
                     v-model="formItem.end_time"
                     value-format="YYYY-MM-DD"
@@ -73,15 +94,19 @@
                     placeholder="请选择"
                   />
                 </el-form-item>
-                <el-form-item class="mt-25px" label="备注要求">
-                  <el-input v-model="formItem.remarks" type="textarea" />
+                <el-form-item class="mt-25px" label="备注要求" prop="remarks">
+                  <el-input
+                    placeholder="请输入"
+                    v-model="formItem.remarks"
+                    type="textarea"
+                  />
                 </el-form-item>
               </div>
               <div class="w-[33%]">
-                <el-form-item class="mb-[0]" label="合同文件">
+                <el-form-item class="mb-[0]" label="合同文件" prop="file_url">
                   <multi-upload v-model="formItem.file_url"></multi-upload>
                 </el-form-item>
-                <el-form-item class="mt-13px" label="附件">
+                <el-form-item class="mt-13px" label="附件" prop="annex_url">
                   <multi-upload v-model="formItem.annex_url"></multi-upload>
                 </el-form-item>
               </div>
@@ -125,6 +150,20 @@ const tabsList = [
 ];
 
 //表单信息
+const FormRef = ref(ElForm);
+const Rules = {
+  online_type: [{ required: true, message: "请输入", trigger: "blur" }],
+  contract_kind: [{ required: true, message: "请输入", trigger: "blur" }],
+  party_a: [{ required: true, message: "请输入", trigger: "blur" }],
+  party_b: [{ required: true, message: "请输入", trigger: "blur" }],
+  tax_location: [{ required: true, message: "请输入", trigger: "blur" }],
+  contract_term: [{ required: true, message: "请输入", trigger: "blur" }],
+  sign_time: [{ required: true, message: "请输入", trigger: "blur" }],
+  end_time: [{ required: true, message: "请输入", trigger: "blur" }],
+  remarks: [{ required: true, message: "请输入", trigger: "blur" }],
+  file_url: [{ required: true, message: "请输入", trigger: "blur" }],
+  annex_url: [{ required: true, message: "请输入", trigger: "blur" }],
+};
 const formItem = reactive({
   online_type: 1,
   contract_kind: "",
@@ -147,24 +186,27 @@ var contractName = computed(() => {
 }) as any;
 
 const handleEnterpriseContractAdd = () => {
-  console.log(contractName);
-  const params = { ...formItem, contract_name: contractName.value } as any;
-  params.file_url = JSON.stringify(params.file_url);
-  params.annex_url = JSON.stringify(params.annex_url);
-  enterpriseContractAdd(params)
-    .then(() => {
-      ElMessage({
-        type: "success",
-        message: `新建成功`,
-      });
-      router.push({
-        name: "contractCenter",
-        query: { activeName: "enterprise" },
-      });
-    })
-    .catch((e) => {
-      console.log(e);
-    });
+  FormRef.value.validate((valid: boolean) => {
+    if (valid) {
+      const params = { ...formItem, contract_name: contractName.value } as any;
+      params.file_url = JSON.stringify(params.file_url);
+      params.annex_url = JSON.stringify(params.annex_url);
+      enterpriseContractAdd(params)
+        .then(() => {
+          ElMessage({
+            type: "success",
+            message: `新建成功`,
+          });
+          router.push({
+            name: "contractCenter",
+            query: { activeName: "enterprise" },
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  });
 };
 const handleSubmit = () => {};
 const handleClose = () => {
