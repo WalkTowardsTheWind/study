@@ -6,14 +6,14 @@
       @on-reset="handleReset"
       :label-width="100"
     >
-      <el-form-item label="">
+      <el-form-item label="" prop="invoice_name">
         <el-input v-model="formItem.invoice_name" placeholder="请输入关键字">
           <template #prefix>
             <el-icon><i-ep-Search /></el-icon>
           </template>
         </el-input>
       </el-form-item>
-      <el-form-item label="开票状态">
+      <el-form-item label="开票状态" prop="status">
         <el-select v-model="formItem.status" placeholder="全部">
           <el-option
             v-for="item in proxy.$const['statusEnum.invoiceStatus']"
@@ -23,7 +23,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="开票类型">
+      <el-form-item label="开票类型" prop="invoice_type">
         <el-select v-model="formItem.invoice_type" placeholder="请选择">
           <el-option
             v-for="item in proxy.$const['statusEnum.applyInvoiceType']"
@@ -33,7 +33,11 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="开票行业类目" v-if="type === 'enterprise'">
+      <el-form-item
+        label="开票行业类目"
+        prop="category_id"
+        v-if="type === 'enterprise'"
+      >
         <el-cascader
           v-model="formItem.category_id"
           placeholder="请选择"
@@ -43,7 +47,7 @@
           :props="{ label: 'name', value: 'id' }"
         />
       </el-form-item>
-      <el-form-item prop="date" label="申请日期">
+      <el-form-item prop="timeData" label="申请日期">
         <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>
     </zxn-search>
@@ -120,7 +124,7 @@ const formItem = reactive({
   invoice_name: "",
   tax_land_id: "",
   invoice_type: "",
-  category_id: "",
+  category_id: [],
   timeData: [],
   status: "",
 });
@@ -150,14 +154,13 @@ const columnList: any[] = reactive([
     path: "statusEnum.invoiceRequire",
     minWidth: 120,
   },
-  { label: "申请时间", prop: "add_time", sortable: "custom", minWidth: 120 },
+  { label: "申请时间", prop: "add_time", minWidth: 120 },
   { label: "结算确认函", minWidth: 120 },
   {
     label: "状态",
     type: "enum",
     path: "statusEnum.invoiceStatus",
     prop: "status",
-    fixed: "left",
     color: {
       0: { color: "#19B56B", backgroundColor: "#daf3e7" },
       1: { color: "#356FF3", backgroundColor: "#dfe8fd" },
@@ -191,6 +194,7 @@ const handlePageChange = (cur) => {
 };
 const getList = async () => {
   const params = transformTimeRange({ ...formItem });
+  params.category_id = params.category_id.pop();
   params.task_type = props.type;
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;

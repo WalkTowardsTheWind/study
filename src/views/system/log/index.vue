@@ -22,7 +22,7 @@
           <el-input v-model="formItem.admin_name" />
         </el-form-item>
         <el-form-item prop="timeData" label="操作日期">
-          <zxn-date-range v-model="formItem.timeData" />
+          <zxn-date-range v-model="formItem.timeData" valueFormat="" />
         </el-form-item>
         <template #rightBtn>
           <el-button type="primary" plain>导出</el-button>
@@ -78,7 +78,7 @@ const handlePageChange = (cur) => {
   getList();
 };
 const getList = async () => {
-  const params = transformTimeRange({ ...formItem });
+  const params = transformTimeRange({ ...formItem }, "timeData", true);
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
   try {

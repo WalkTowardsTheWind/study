@@ -38,11 +38,24 @@ export function isExternal(path: string) {
   return isExternal;
 }
 
-export function transformTimeRange(params: any, oldField = "timeData") {
+export function transformTimeRange(
+  params: any,
+  oldField = "timeData",
+  isTime = false
+) {
+  console.log(params, "222");
   const _params = JSON.parse(JSON.stringify(params));
   if (_params[oldField] && _params[oldField].length) {
     _params.start_time = _params[oldField][0] || "";
     _params.end_time = _params[oldField][1] || "";
+  }
+  if (isTime) {
+    _params.start_time = _params.start_time
+      ? new Date(_params.start_time).getTime().toString().substring(0, 10)
+      : "";
+    _params.end_time = _params.end_time
+      ? new Date(_params.end_time).getTime().toString().substring(0, 10)
+      : "";
   }
   delete _params[oldField];
   return _params;
