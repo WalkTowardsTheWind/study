@@ -48,6 +48,9 @@
             <template #append>.vue</template>
           </el-input>
         </el-form-item>
+        <el-form-item label="路由name" prop="module">
+          <el-input v-model="formItem.module" />
+        </el-form-item>
         <el-form-item label="是否菜单" prop="is_show_path">
           <zxn-button-group
             v-model="formItem.is_show_path"
@@ -103,6 +106,7 @@ const formItem = reactive({
   menu_path: "",
   path: "",
   icon: "",
+  module: "",
   is_show_path: "1",
   api_url: "",
   methods: "",
@@ -110,21 +114,23 @@ const formItem = reactive({
 const treeMenu = reactive([]);
 let id = null;
 const init = (treeData: any, detail): void => {
-  treeMenu.length = 0;
-  treeMenu.push(...treeData);
-  if (detail) {
-    id = detail.id;
-    formItem.menu_name = detail.menu_name;
-    formItem.pid = detail.pid || "";
-    formItem.auth_type = detail.auth_type + "";
-    formItem.menu_path = detail.menu_path;
-    formItem.path = detail.path;
-    formItem.is_show_path = detail.is_show_path + "";
-    formItem.api_url = detail.api_url;
-    formItem.methods = detail.methods;
-  }
-  console.log(treeMenu);
   visible.value = true;
+  nextTick(() => {
+    treeMenu.length = 0;
+    treeMenu.push(...treeData);
+    if (detail) {
+      id = detail.id;
+      formItem.menu_name = detail.menu_name;
+      formItem.pid = detail.pid || "";
+      formItem.auth_type = detail.auth_type + "";
+      formItem.menu_path = detail.menu_path;
+      formItem.path = detail.path;
+      formItem.is_show_path = detail.is_show_path + "";
+      formItem.api_url = detail.api_url;
+      formItem.methods = detail.methods;
+      formItem.module = detail.module;
+    }
+  });
 };
 const loading = ref(false);
 const form = ref();
@@ -149,6 +155,8 @@ const handleCancel = () => {
 };
 const handleClose = () => {
   id = null;
+  console.log(2222);
+  // formItem
   form.value.resetFields();
 };
 onMounted(() => {});

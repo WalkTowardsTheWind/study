@@ -6,167 +6,132 @@
       has-back
     />
     <div class="mt-10px pl-40px">
-      <el-form label-width="70px">
+      <el-form
+        ref="form"
+        label-width="70px"
+        hide-required-asterisk
+        :model="formItem"
+        :rules="rules"
+      >
         <el-row>
           <el-col :span="8">
-            <el-form-item label="角色名称">
-              <el-input v-model="formItem.name" />
+            <el-form-item label="角色名称" prop="role_name">
+              <el-input v-model="formItem.role_name" />
             </el-form-item>
           </el-col>
         </el-row>
-        <zxn-title>地区</zxn-title>
-        <el-row class="mt-16px">
-          <el-col :span="24">
-            <el-form-item label="" label-width="0">
-              <area-select
-                v-model="formItem.area"
-                :area-list="areaList as []"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
+        <!--        <zxn-title>地区</zxn-title>-->
+        <!--        <el-row class="mt-16px">-->
+        <!--          <el-col :span="24">-->
+        <!--            <el-form-item label="" label-width="0" prop="area">-->
+        <!--              <area-select-->
+        <!--                v-model="formItem.area"-->
+        <!--                :area-list="areaList as []"-->
+        <!--              />-->
+        <!--            </el-form-item>-->
+        <!--          </el-col>-->
+        <!--        </el-row>-->
         <zxn-title>功能权限</zxn-title>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="" label-width="0">
-              <role-select :role-list="roleList" />
+            <el-form-item label="" prop="checked_menus" label-width="0">
+              <role-select
+                :role-list="roleList"
+                @select-change="handleSelect"
+                @on-change="handleSelectChange"
+              />
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
     </div>
     <zxn-bottom-btn>
-      <el-button type="primary">保存</el-button>
-      <el-button>取消</el-button>
+      <el-button type="primary" :loading="loading" @click="handleSubmit"
+        >保存</el-button
+      >
+      <el-button @click="handleCancel">取消</el-button>
     </zxn-bottom-btn>
   </zxn-plan>
 </template>
 <script setup lang="ts">
-import areaSelect from "./components/areaSelect.vue";
+// import areaSelect from "./components/areaSelect.vue";
 import roleSelect from "./components/roleSelect.vue";
-import { ElButton } from "element-plus";
-const formItem = reactive({
-  name: "",
-  area: [2, 4],
-  role: [],
+import { menusIndex, getAreaList, setRole, roleView } from "@/api/system";
+import type { FormRules } from "element-plus";
+import { ElMessage } from "element-plus";
+import { useRouter, useRoute } from "vue-router";
+const router = useRouter();
+const route = useRoute();
+
+const menusRule = (rule: any, value: any, callback: any) => {
+  if (formItem.checked_menus.length) {
+    callback();
+  } else {
+    callback("请选择权限");
+  }
+};
+const rules = reactive<FormRules>({
+  role_name: [{ required: true, message: "请输入角色名称", trigger: "change" }],
+  checked_menus: [{ validator: menusRule, trigger: "change" }],
 });
-const areaList = reactive([
-  {
-    label: "湖北省",
-    children: [
-      { label: "武汉市", code: 1 },
-      { label: "黄石市", code: 2 },
-      { label: "武汉市", code: 3 },
-      { label: "黄石事实上事实上市", code: 4 },
-      { label: "武汉市", code: 5 },
-    ],
-  },
-  {
-    label: "湖南省",
-    children: [
-      { label: "长沙市", code: 11 },
-      { label: "衡阳市", code: 22 },
-    ],
-  },
-]);
+const formItem = reactive({
+  id: null,
+  role_name: "",
+  area: [],
+  checked_menus: [],
+});
+const areaList = reactive([]);
 const roleList = reactive([]);
-const getMenu = () => {
-  const menu = [
-    {
-      menu_name: "账户管理",
-      id: 1,
-      children: [
-        {
-          menu_name: "企业账户",
-          children: [
-            { menu_name: "新增", code: 1 },
-            { menu_name: "编辑", code: 2 },
-            { menu_name: "详情", code: 3 },
-          ],
-        },
-        {
-          menu_name: "企业合同",
-          children: [
-            { menu_name: "新增", code: 1 },
-            { menu_name: "编辑", code: 2 },
-            { menu_name: "详情", code: 3 },
-          ],
-        },
-        {
-          menu_name: "个人账户",
-          children: [
-            { menu_name: "新增", code: 1 },
-            { menu_name: "编辑", code: 2 },
-            { menu_name: "详情", code: 3 },
-          ],
-        },
-        {
-          menu_name: "个人账户",
-          children: [
-            { menu_name: "新增", code: 1 },
-            { menu_name: "编辑", code: 2 },
-            { menu_name: "详情", code: 3 },
-          ],
-        },
-        {
-          menu_name: "个人账户",
-          children: [
-            { menu_name: "新增", code: 1 },
-            { menu_name: "编辑", code: 2 },
-            { menu_name: "详情", code: 3 },
-          ],
-        },
-        {
-          menu_name: "个人账户",
-          children: [
-            { menu_name: "新增", code: 1 },
-            { menu_name: "编辑", code: 2 },
-            { menu_name: "详情", code: 3 },
-          ],
-        },
-      ],
-    },
-    {
-      menu_name: "任务管理",
-      children: [
-        {
-          menu_name: "人工任务",
-          children: [
-            { menu_name: "新增", code: 1 },
-            { menu_name: "编辑", code: 2 },
-            { menu_name: "详情", code: 3 },
-          ],
-        },
-        {
-          menu_name: "自动任务",
-          children: [
-            { menu_name: "新增", code: 1 },
-            { menu_name: "编辑", code: 2 },
-            { menu_name: "详情", code: 3 },
-          ],
-        },
-        {
-          menu_name: "个人账户",
-          children: [
-            { menu_name: "新增", code: 1 },
-            { menu_name: "编辑", code: 2 },
-            { menu_name: "详情", code: 3 },
-          ],
-        },
-        {
-          menu_name: "自动任务",
-          children: [
-            { menu_name: "新增", code: 1 },
-            { menu_name: "编辑", code: 2 },
-            { menu_name: "详情", code: 3 },
-          ],
-        },
-      ],
-    },
-  ];
+const form = ref();
+watch(
+  roleList,
+  (newVal, oldVal) => {
+    // upwardSelectedDeep(roleList);
+    formItem.checked_menus.length = 0;
+    getMenuChoose(roleList, false);
+    if (oldVal && oldVal.length) {
+      form.value.validateField("checked_menus");
+    }
+  },
+  { deep: true }
+);
+const getRoleView = async (id: number) => {
+  const { data } = await roleView(id);
+  const { role } = data;
+  formItem.id = id;
+  formItem.role_name = role.role_name;
+  formItem.checked_menus = role.rules.split(",").map(Number);
+  await getMenu();
+};
+// const upwardSelectedDeep = (role) => {
+//   role.forEach((it) => {
+//     if (it.children && it.children.length) {
+//       upwardSelectedDeep(it.children);
+//       it.selected = it.children.reduce((acc, cur) => {
+//         return acc && cur.selected;
+//       }, true);
+//     }
+//   });
+// };
+const getMenuChoose = (role, reserve: boolean) => {
+  role.forEach((it) => {
+    if (it.children && it.children.length) {
+      getMenuChoose(it.children, reserve);
+    }
+    if (it.selected || reserve) {
+      formItem.checked_menus.push(it.id);
+    }
+  });
+};
+const getAllAreaList = async () => {
+  const { data } = await getAreaList();
+  areaList.length = 0;
+  areaList.push(...data);
+};
+const getMenu = async () => {
+  const { data } = await menusIndex();
   roleList.length = 0;
-  roleList.push(...washMenu(menu));
-  console.log(roleList);
+  roleList.push(...washMenu(data));
 };
 const washMenu = (menu) => {
   const list = [];
@@ -178,14 +143,96 @@ const washMenu = (menu) => {
     list.push({
       id: it.id,
       label: it.menu_name,
-      selected: false,
+      selected: formItem.checked_menus.includes(it.id),
       children,
     });
   });
   return list;
 };
+const handleSelect = (obj) => {
+  const { type, val, secondRank, thirdRank } = obj;
+  switch (type) {
+    case "first":
+      changeSelect(roleList, val);
+      break;
+    case "second":
+      changeSelect(roleList[secondRank.value].children, val);
+      break;
+    case "third":
+      changeSelect(
+        roleList[secondRank.value].children[thirdRank.value].children,
+        val
+      );
+      break;
+  }
+};
+const handleSelectChange = (obj) => {
+  const { type, rank, secondRank, thirdRank } = obj;
+  let val = false;
+  switch (type) {
+    case "first":
+      val = roleList[rank].selected;
+      changeSelect(roleList[rank].children, val);
+      break;
+    case "second":
+      val = roleList[secondRank.value].children[rank].selected;
+      roleList[secondRank.value].selected =
+        roleList[secondRank.value].selected || val;
+      changeSelect(roleList[secondRank.value].children[rank].children, val);
+      break;
+    case "third":
+      val =
+        roleList[secondRank.value].children[thirdRank.value].children[rank]
+          .selected;
+      roleList[secondRank.value].selected =
+        roleList[secondRank.value].selected || val;
+      roleList[secondRank.value].children[thirdRank.value].selected =
+        roleList[secondRank.value].children[thirdRank.value].selected || val;
+      break;
+  }
+};
+const changeSelect = (role: any[], val: boolean) => {
+  role.forEach((it) => {
+    it.selected = val;
+    if (it.children && it.children.length) {
+      changeSelect(it.children, val);
+    }
+  });
+};
+const loading = ref(false);
+const handleSubmit = () => {
+  form.value.validate(async (value) => {
+    if (value) {
+      const params = {};
+      params.role_name = formItem.role_name;
+      params.status = 1;
+      params.checked_menus = formItem.checked_menus;
+      params.id = formItem.id;
+      try {
+        await setRole(params);
+        loading.value = false;
+        ElMessage({
+          type: "success",
+          message: `${params.id ? "编辑" : "新增"}成功`,
+        });
+        handleCancel();
+      } catch (e) {
+        loading.value = false;
+      }
+    }
+  });
+};
+const handleCancel = () => {
+  router.push({ name: "roleIndex" });
+};
 onMounted(() => {
-  getMenu();
+  getAllAreaList();
+  const { id } = route.params;
+  if (id) {
+    getRoleView(id * 1);
+  } else {
+    getMenu();
+  }
 });
 </script>
 <style lang="scss">

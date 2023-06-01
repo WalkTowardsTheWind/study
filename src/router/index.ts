@@ -257,6 +257,7 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
+  // 任务中心
   {
     path: "/taskManager",
     component: Layout,
@@ -311,6 +312,12 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/system/role/roleView.vue"),
         name: "addRole",
         meta: { title: "新增角色", hidden: true },
+      },
+      {
+        path: "editRole:id",
+        component: () => import("@/views/system/role/roleView.vue"),
+        name: "editRole",
+        meta: { title: "编辑角色", hidden: true },
       },
       {
         path: "menu",

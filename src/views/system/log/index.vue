@@ -11,21 +11,18 @@
         @on-search="handleSearch"
         @on-reset="handleReset"
       >
-        <el-form-item>
-          <el-input v-model="formItem.value" placeholder="请输入关键字">
+        <el-form-item prop="key_word">
+          <el-input v-model="formItem.key_word" placeholder="请输入关键字">
             <template #prefix>
               <el-icon><i-ep-Search /></el-icon>
             </template>
           </el-input>
         </el-form-item>
-        <el-form-item prop="date" label="操作账户">
-          <el-input v-model="formItem.value" />
+        <el-form-item prop="admin_name" label="联系人">
+          <el-input v-model="formItem.admin_name" />
         </el-form-item>
-        <el-form-item prop="date" label="联系人">
-          <el-input v-model="formItem.value" />
-        </el-form-item>
-        <el-form-item prop="date" label="操作日期">
-          <zxn-date-range v-model="formItem.date" />
+        <el-form-item prop="timeData" label="操作日期">
+          <zxn-date-range v-model="formItem.timeData" />
         </el-form-item>
         <template #rightBtn>
           <el-button type="primary" plain>导出</el-button>
@@ -48,7 +45,9 @@
 import { systemLog } from "@/api/system";
 import { transformTimeRange } from "@/utils";
 const formItem = reactive({
-  value: "",
+  key_word: "",
+  admin_name: "",
+  timeData: [],
 });
 const pageInfo = reactive({
   page: 1,
@@ -60,7 +59,7 @@ const columnList = [
   { label: "账户id", prop: "admin_id" },
   { label: "联系人", prop: "admin_name" },
   { label: "操作模块", prop: "path" },
-  { label: "操作内容", prop: "method" },
+  { label: "操作内容", prop: "page" },
   { label: "操作时间", prop: "add_time" },
   // { label: "操作", slot: "operation", fixed: "right", width: 90 },
 ];
@@ -84,7 +83,6 @@ const getList = async () => {
   params.limit = pageInfo.limit;
   try {
     const { data } = await systemLog(params);
-    console.log(data, "222");
     tableData.length = 0;
     pageInfo.page = data.current_page;
     pageInfo.total = data.total;

@@ -6,7 +6,17 @@ export interface RoleQuery extends PageQuery {
 }
 
 /**
- * 角色查询参数
+ * 新增角色
+ */
+export interface SetRoleQuery {
+  role_name: string;
+  status: 0 | 1;
+  checked_menu: number[];
+  id?: number;
+}
+
+/**
+ * 日志查询参数
  */
 export interface LogQuery extends PageQuery {
   path?: string;
