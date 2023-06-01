@@ -154,8 +154,8 @@ async function updateBusinessAccount() {
   let params = {
     ...formData.value,
     mobile: formData.value.contacts_mobile,
-    license_start_date: date.value[0] || "",
-    license_end_date: date.value[1] || "",
+    license_start_date: date.value ? date.value[0] : "",
+    license_end_date: date.value ? date.value[1] : "",
     contacts_mobile: undefined,
   };
   // console.log(params);

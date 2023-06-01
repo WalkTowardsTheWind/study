@@ -74,18 +74,13 @@
                   />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="税地地区">
-                  <el-select
+                  <el-cascader
                     class="w-[100%]"
                     v-model="formItem.tax_land_city_id"
-                    placeholder="Select"
-                  >
-                    <el-option
-                      v-for="item in tax_land_city_idOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    />
-                  </el-select>
+                    :options="optionsTaxLang"
+                    :props="propsTaxLang"
+                    clearable
+                  />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="网址">
                   <el-input v-model="formItem.web_url" />
@@ -117,18 +112,13 @@
                   <el-input v-model="formItem.audit_password" />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="行业类型">
-                  <el-select
+                  <el-cascader
                     class="w-[100%]"
                     v-model="formItem.industry_category_id"
-                    placeholder="Select"
-                  >
-                    <el-option
-                      v-for="item in industry_category_idOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    />
-                  </el-select>
+                    :options="optionsTrade"
+                    :props="propsTrade"
+                    clearable
+                  />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="发票类型">
                   <el-select
@@ -301,6 +291,8 @@
 import { useRouter } from "vue-router";
 import viewSteps from "../components/viewSteps.vue";
 import { selfOperatedTaxLandAdd } from "@/api/taxLandManagement/selfOperatedTaxLand";
+import { getAreaList } from "@/api/taxLandManagement";
+import { getCategoryTreeList } from "@/api/category";
 const { proxy } = getCurrentInstance() as any;
 const router = useRouter();
 const activeName = ref("1");
@@ -321,20 +313,51 @@ const stepList = [
   { desc: "发票厂家信息" },
   { desc: "行业与合同信息" },
 ];
-//
-
-const tax_land_city_idOptions = ref([
-  { label: "薪龙网", value: 1 },
-  { label: "某某网", value: 2 },
-  { label: "某某网", value: 3 },
-  { label: "某某网", value: 4 },
-] as any);
-const industry_category_idOptions = ref([
-  { label: "薪龙网", value: 1 },
-  { label: "某某网", value: 2 },
-  { label: "某某网", value: 3 },
-  { label: "某某网", value: 4 },
-] as any);
+//行业
+var optionsTrade = ref([]);
+const getTradeList = async () => {
+  try {
+    const { data } = await getCategoryTreeList({ type: "0" });
+    console.log(data, "wwwwww");
+    const newData = JSON.parse(
+      JSON.stringify(data)
+        .replace(/"id"/g, '"value"')
+        .replace(/"name"/g, '"label"')
+        .replace(/"children"/g, '"children"')
+    );
+    optionsTrade.value = newData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+getTradeList();
+const propsTrade = {
+  // multiple: true,
+  expandTrigger: "hover" as const,
+};
+//税地
+var optionsTaxLang = ref([]);
+const getTaxLangList = async () => {
+  try {
+    const { data } = await getAreaList(0);
+    const newData = JSON.parse(
+      JSON.stringify(data)
+        .replace(/"id"/g, '"value"')
+        .replace(/"name"/g, '"label"')
+        .replace(/"cityList"/g, '"children"')
+        .replace(/"taxLandList"/g, '"children"')
+        .replace(/"child"/g, '"children"')
+    );
+    optionsTaxLang.value = newData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+getTaxLangList();
+const propsTaxLang = {
+  // multiple: true,
+  expandTrigger: "hover" as const,
+};
 
 //表单信息
 const formItem = reactive({
@@ -348,14 +371,16 @@ const formItem = reactive({
   calculation_type: "",
   min_employment_year: "",
   max_employment_year: "",
-  tax_land_city_id: "",
+  //税地地区
+  tax_land_city_id: [],
   web_url: "",
   tax_land_license: [],
   company_qualifications: [],
   audit_web_url: "",
   audit_account: "",
   audit_password: "",
-  industry_category_id: "",
+  // 行业
+  industry_category_id: [],
   invoice_type: "",
   invoice_denomination: "",
   max_money: "",
@@ -381,6 +406,8 @@ const handleSubmit = () => {
     );
     params.invoice_sample = JSON.stringify(params.invoice_sample);
     params.agreement_url = JSON.stringify(params.agreement_url);
+    params.tax_land_city_id = params.tax_land_city_id.slice(-1)[0];
+    params.industry_category_id = params.industry_category_id.slice(-1)[0];
     selfOperatedTaxLandAdd(params)
       .then(() => {
         ElMessage({
