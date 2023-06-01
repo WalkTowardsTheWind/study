@@ -79,6 +79,6 @@ declare module '@vue/runtime-core' {
     ZxnTitle: typeof import('./../components/zxnTitle/index.vue')['default']
   }
   export interface ComponentCustomProperties {
-    vLoading: typeof import("element-plus/es")["ElLoadingDirective"]
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }
