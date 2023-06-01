@@ -142,15 +142,11 @@ const props = defineProps({
 
 const formData = ref({} as any);
 
-const date = ref([] as any);
-
 async function updateBusinessAccount() {
   // 后台返回的 contacts_mobile 更新修改为 mobile
   let params = {
     ...formData.value,
     mobile: formData.value.contacts_mobile,
-    license_start_date: date.value ? date.value[0] : "",
-    license_end_date: date.value ? date.value[1] : "",
     contacts_mobile: undefined,
   };
   // console.log(params);
@@ -172,7 +168,6 @@ async function getAccountDetail() {
 
     try {
       formData.value = res.data;
-      date.value = [res.data.license_start_date, res.data.license_end_date];
     } catch (error: any) {
       return new Error("error", error);
     }

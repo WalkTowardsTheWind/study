@@ -282,8 +282,6 @@ const cateGoryOptions = ref([] as any);
 
 const addFormRef = ref<FormInstance>();
 
-const date = ref([] as any);
-
 const addForm: ICreateBusinessAccount = reactive({
   account: "",
   pwd: "",
@@ -348,8 +346,6 @@ async function submit(formEl: FormInstance | undefined) {
   if (!formEl) return;
   await formEl.validate(async (valid, fields) => {
     if (valid) {
-      addForm.license_start_date = date[0] || "";
-      addForm.license_end_date = date[1] || "";
       const res = await createBusinessAccount(addForm);
       try {
         if (res.status === 200) {

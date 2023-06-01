@@ -131,8 +131,8 @@
 </template>
 
 <script lang="ts" setup>
+import { createBusinessAccount } from "@/api/account/business";
 import { addProduct, delProduct } from "@/api/account/channel";
-import { createPersonalAccount } from "@/api/account/personal";
 import router from "@/router";
 
 const stepList = [{ desc: "基本信息" }, { desc: "公司信息" }, { desc: "完成" }];
@@ -208,7 +208,7 @@ const sumbit = () => {
     is_channel: 1,
     product: product.value,
   };
-  createPersonalAccount(params).then((res) => {
+  createBusinessAccount(params).then((res) => {
     console.log(res);
     ElMessage({
       type: "success",
