@@ -29,7 +29,7 @@
         </template>
         <template #operation="{ row }">
           <el-button link type="primary" @click="handleDetail(row.id)"
-            >详情</el-button
+            >编辑</el-button
           >
           <el-button link type="primary" @click="handleRemove(row.id)"
             >删除</el-button

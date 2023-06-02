@@ -8,17 +8,18 @@
         id="industry"
         :chart-data="chartData"
         :hasRing="false"
-        :color="['#f4e036', '#F3B736']"
       />
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import PieChart from "./PieChart.vue";
-const chartData = reactive([
-  { value: 36, name: "建筑" },
-  { value: 64, name: "其他" },
-]);
+defineProps({
+  chartData: {
+    type: Array,
+    default: () => [],
+  },
+});
 </script>
 <style lang="scss" scoped>
 .risk-ring {
