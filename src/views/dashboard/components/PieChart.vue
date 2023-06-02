@@ -7,7 +7,7 @@
       :class="className"
       :style="{ height }"
     />
-    <div class="pie-chart-legend">
+    <el-scrollbar ref="scrollbar" class="pie-chart-legend">
       <div
         class="pie-chart-legend-item"
         v-for="(item, index) in chartData"
@@ -21,9 +21,11 @@
           />
           <span class="pie-chart-legend-item-name">{{ item.name }}</span>
         </div>
-        <span class="pie-chart-legend-item-rate">{{ item.value }}</span>
+        <span class="pie-chart-legend-item-rate">{{
+          item.rate ? `${item.rate}%` : item.value
+        }}</span>
       </div>
-    </div>
+    </el-scrollbar>
   </div>
 </template>
 
@@ -62,31 +64,13 @@ const props = defineProps({
     default: true,
   },
 });
-const options = {
-  tooltip: {
-    trigger: "item",
+watch(
+  () => props.chartData,
+  () => {
+    chartInit();
   },
-  legend: {
-    show: false,
-  },
-  color: props.color,
-  series: [
-    {
-      type: "pie",
-      radius: props.hasRing ? ["40%", "70%"] : ["70%"],
-      top: "10px",
-      bottom: "10px",
-      // right: "200px",
-      avoidLabelOverlap: false,
-      label: {
-        show: false,
-        position: "center",
-      },
-      selectedMode: "single",
-      data: props.chartData,
-    },
-  ],
-};
+  { deep: true }
+);
 let chart: echarts.ECharts | null = null;
 const handleLegendEnter = (it) => {
   chart.dispatchAction({
@@ -95,9 +79,53 @@ const handleLegendEnter = (it) => {
     name: it.name,
   });
 };
+const chartInit = () => {
+  nextTick(() => {
+    const options = {
+      tooltip: {
+        trigger: "item",
+      },
+      legend: {
+        show: false,
+        orient: "vertical",
+        right: 10,
+      },
+      color: props.color?.length
+        ? props.color
+        : [
+            "#5470c6",
+            "#91cc75",
+            "#fac858",
+            "#ee6666",
+            "#73c0de",
+            "#3ba272",
+            "#fc8452",
+            "#9a60b4",
+            "#ea7ccc",
+          ],
+      series: [
+        {
+          type: "pie",
+          radius: props.hasRing ? ["40%", "70%"] : ["70%"],
+          top: "10px",
+          bottom: "10px",
+          // right: "200px",
+          avoidLabelOverlap: false,
+          label: {
+            show: false,
+            position: "center",
+          },
+          selectedMode: "single",
+          data: props.chartData,
+        },
+      ],
+    };
+    chart.setOption(options);
+  });
+};
 onMounted(() => {
   chart = echarts.init(document.getElementById(props.id) as HTMLDivElement);
-  chart.setOption(options);
+  chartInit();
   window.addEventListener("resize", () => {
     (chart as echarts.ECharts).resize();
   });

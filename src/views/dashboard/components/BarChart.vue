@@ -14,10 +14,10 @@
           <span>本月</span>
           <span>本周</span>
         </div>
-        <div class="dashboard-bar-content-search-date">
-          <zxn-date-range class="w-272px mr-16px" />
-          <el-button type="primary">查询</el-button>
-        </div>
+        <!--        <div class="dashboard-bar-content-search-date">-->
+        <!--          <zxn-date-range class="w-272px mr-16px" />-->
+        <!--          <el-button type="primary">查询</el-button>-->
+        <!--        </div>-->
       </div>
       <div
         :id="id"
@@ -116,7 +116,7 @@ onMounted(() => {
     &-search {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
       padding: 24px 24px 0;
 
       &-quick {

@@ -22,7 +22,7 @@
         <div class="flex">
           <risk-ring />
           <div class="w-16px"></div>
-          <industry-ring />
+          <industry-ring :chart-data="industryEcharts" />
         </div>
         <el-row class="w-100%">
           <bar-chart height="400px" width="100%" />
@@ -41,28 +41,45 @@ import RiskRing from "./components/RiskRing.vue";
 import IndustryRing from "./components/IndustryRing.vue";
 import BarChart from "./components/BarChart.vue";
 import NoticeMessage from "./components/NoticeMessage.vue";
-const statisticsList = reactive([
-  {
-    title: "发布申请",
-    count: 184,
-  },
-  {
-    title: "充值订单",
-    count: 1842,
-  },
-  {
-    title: "结算订单",
-    count: 184,
-  },
-  {
-    title: "开票订单",
-    count: 184,
-  },
-  {
-    title: "异常数据",
-    count: 184,
-  },
-]);
+import { workbench } from "@/api/dashboard";
+import { getPercentValue } from "@/utils";
+const statisticsList: any[] = reactive([]);
+const industryEcharts = ref([]);
+const initData = async () => {
+  const { data } = await workbench();
+  console.log(data);
+  statisticsList.push(
+    {
+      title: "发布申请",
+      count: data.task_count || 0,
+    },
+    {
+      title: "充值订单",
+      count: data.finance_recharge_count || 0,
+    },
+    {
+      title: "结算订单",
+      count: data.finance_settlement_company_count || 0,
+    },
+    {
+      title: "开票订单",
+      count: data.invoice_count || 0,
+    },
+    {
+      title: "异常数据",
+      count: 0,
+    }
+  );
+  const numList = data.company_category.map((it) => it.num);
+  industryEcharts.value = data.company_category.map((it, index) => ({
+    value: it.num,
+    name: it.label,
+    rate: getPercentValue(numList, index, 2),
+  }));
+};
+onMounted(() => {
+  initData();
+});
 </script>
 <style lang="scss">
 .dashboard-title {
