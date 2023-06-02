@@ -95,7 +95,7 @@
               </el-select>
               <el-input class="form-item" v-model="item.cooperate_point" />
               <div
-                class="add"
+                class="add del"
                 v-if="product.length > 0"
                 @click="delClick(index, item.product_id)"
               >

@@ -1,6 +1,10 @@
 <template>
   <div class="p-[24px] p-b-[0]">
-    <zxn-search :formItem="formItem" @on-search="handleSearch">
+    <zxn-search
+      :formItem="formItem"
+      @on-search="handleSearch"
+      @on-reset="handleReset"
+    >
       <el-form-item>
         <el-input v-model="formItem.name" placeholder="请输入关键字">
           <template #prefix>
@@ -233,7 +237,7 @@ const pageInfo = reactive({
   total: 0,
 });
 
-const date = ref("");
+const date = ref([] as any);
 
 const formItem = reactive({
   name: "",
@@ -425,9 +429,9 @@ function addSubmit() {
   if (typeof area.value === "object") {
     addForm.area_id = Object.values(area.value);
   }
-  area.value.forEach((item) => {
+  area.value.forEach((item: any) => {
     if (Array.isArray(item)) {
-      addForm.area_id = area.value.map((item2) => item2[1]);
+      addForm.area_id = area.value.map((item2: any) => item2[1]);
     }
   });
 
@@ -458,6 +462,13 @@ function addSubmit() {
 
 function resetPwd(id) {
   console.log(id);
+}
+
+function handleReset() {
+  formItem.name = "";
+  formItem.status = "";
+  formItem.roles = "";
+  date.value = [];
 }
 
 handleSearch();

@@ -1,6 +1,10 @@
 <template>
   <div class="p-[24px] p-b-[0]">
-    <zxn-search :formItem="formItem" @on-search="getList">
+    <zxn-search
+      :formItem="formItem"
+      @on-search="getList"
+      @on-reset="handleReset"
+    >
       <el-form-item>
         <el-input v-model="formItem.name" placeholder="请输入关键字">
           <template #prefix>
@@ -311,6 +315,15 @@ function del(item: any) {
       getList();
     });
   }
+}
+
+function handleReset() {
+  formItem.name = "";
+  formItem.status = "";
+  formItem.channel_type = "";
+  formItem.channel_admin_name = "";
+  formItem.level = "";
+  date.value = [];
 }
 getList();
 </script>
