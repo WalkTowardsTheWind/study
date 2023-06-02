@@ -1,6 +1,6 @@
 <template>
   <zxn-step :step-list="stepList" :active-step="activeStep" />
-  <el-form label-width="100px">
+  <el-form label-width="150px">
     <el-row :gutter="30">
       <template v-if="activeStep === 0">
         <el-col :span="6">
@@ -23,14 +23,8 @@
       </template>
       <template v-if="activeStep === 1">
         <el-col :span="6">
-          <el-form-item label="营业执照有效期">
+          <el-form-item label="营业执照到期时间">
             <div class="license">
-              <el-date-picker
-                class="picker"
-                v-model="addForm.license_start_date"
-                value-format="YYYY-MM-DD"
-              />
-              <span class="m-x-[10px]">-</span>
               <el-date-picker
                 class="picker"
                 v-model="addForm.license_end_date"
@@ -99,7 +93,7 @@
                   :value="item.value"
                 ></el-option>
               </el-select>
-              <el-input class="form-item" v-model="item.cooperate_poi" />
+              <el-input class="form-item" v-model="item.cooperate_point" />
               <div
                 class="add"
                 v-if="product.length > 0"
@@ -137,8 +131,8 @@
 </template>
 
 <script lang="ts" setup>
+import { createBusinessAccount } from "@/api/account/business";
 import { addProduct, delProduct } from "@/api/account/channel";
-import { createPersonalAccount } from "@/api/account/personal";
 import router from "@/router";
 
 const stepList = [{ desc: "基本信息" }, { desc: "公司信息" }, { desc: "完成" }];
@@ -211,9 +205,10 @@ const invoiceType = [
 const sumbit = () => {
   let params = {
     ...addForm.value,
+    is_channel: 1,
     product: product.value,
   };
-  createPersonalAccount(params).then((res) => {
+  createBusinessAccount(params).then((res) => {
     console.log(res);
     ElMessage({
       type: "success",
@@ -233,7 +228,7 @@ const addClick = () => {
       product_id: res.data.id,
       product_type: "",
       invoice_type: "",
-      cooperate_poi: "",
+      cooperate_point: "",
     });
   });
 };
@@ -246,14 +241,3 @@ const delClick = (index, id) => {
   });
 };
 </script>
-
-<style scoped lang="scss">
-.license {
-  display: flex;
-  width: 100%;
-
-  .picker {
-    width: 200px;
-  }
-}
-</style>

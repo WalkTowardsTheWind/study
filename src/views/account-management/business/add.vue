@@ -44,14 +44,10 @@
           <el-form-item label="统一社会信用代码">
             <el-input placeholder="请输入" v-model="addForm.credit_code" />
           </el-form-item>
-          <el-form-item label="营业执照有效期">
+          <el-form-item label="营业执照到期时间">
             <el-date-picker
-              v-model="date"
-              type="daterange"
+              v-model="addForm.license_end_date"
               unlink-panels
-              range-separator="~"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
               value-format="YYYY-MM-DD"
             />
           </el-form-item>
@@ -286,8 +282,6 @@ const cateGoryOptions = ref([] as any);
 
 const addFormRef = ref<FormInstance>();
 
-const date = ref([] as any);
-
 const addForm: ICreateBusinessAccount = reactive({
   account: "",
   pwd: "",
@@ -352,8 +346,6 @@ async function submit(formEl: FormInstance | undefined) {
   if (!formEl) return;
   await formEl.validate(async (valid, fields) => {
     if (valid) {
-      addForm.license_start_date = date[0] || "";
-      addForm.license_end_date = date[1] || "";
       const res = await createBusinessAccount(addForm);
       try {
         if (res.status === 200) {

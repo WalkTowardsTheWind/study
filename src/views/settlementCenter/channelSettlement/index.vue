@@ -117,8 +117,9 @@ const handleSearch = () => {
   getTableData();
 };
 const handlePageChange = (cur: any) => {
-  const { page } = cur;
+  const { page, limit } = cur;
   pageInfo.page = page;
+  pageInfo.limit = limit;
   getTableData();
 };
 // 累计
@@ -173,7 +174,7 @@ const handleThaw = async (scope: any) => {
       company_name,
       settlement_time,
       real_money,
-      cooperate_point,
+      cooperate_pointnt,
       channel_name,
       before_tax,
       after_tax,
@@ -187,7 +188,7 @@ const handleThaw = async (scope: any) => {
       company_name,
       settlement_time,
       real_money,
-      cooperate_point,
+      cooperate_pointnt,
       channel_name,
       before_tax,
       after_tax,
@@ -272,7 +273,7 @@ const getTableData = async () => {
     const { data } = await getChannelSettlementList(params);
 
     pageInfo.page = data.current_page;
-    pageInfo.total = data.count;
+    pageInfo.total = data.total;
     console.log(data);
     total_pay_money.value = data.data.total_pay_money;
 

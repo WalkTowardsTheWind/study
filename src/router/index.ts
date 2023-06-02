@@ -158,7 +158,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/settlementCenter/enterpriseSettlement/enterpriseSettlementDetails.vue"
           ),
         name: "enterpriseSettlementDetails",
-        meta: { title: "企业结算详情", icon: "homepage" },
+        meta: { title: "企业结算详情", icon: "homepage", hidden: true },
       },
       {
         path: "enterpriseSettlementA",
@@ -167,7 +167,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/settlementCenter/enterpriseSettlement/enterpriseSettlementA.vue"
           ),
         name: "enterpriseSettlementA",
-        meta: { title: "企业", icon: "homepage" },
+        meta: { title: "企业", icon: "homepage", hidden: true },
       },
       {
         path: "channelSettlementA",
@@ -176,7 +176,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/settlementCenter/channelSettlement/channelSettlementA.vue"
           ),
         name: "channelSettlementA",
-        meta: { title: "渠道佣金介绍", icon: "homepage" },
+        meta: { title: "渠道佣金介绍", icon: "homepage", hidden: true },
       },
       {
         path: "channelSettlementB",
@@ -185,7 +185,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/settlementCenter/channelSettlement/channelSettlementB.vue"
           ),
         name: "channelSettlementB",
-        meta: { title: "任务", icon: "homepage" },
+        meta: { title: "任务", icon: "homepage", hidden: true },
       },
     ],
   },
@@ -208,7 +208,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/taxLandManagement/selfOperatedTaxLand/selfOperatedTaxLandAdd.vue"
           ),
         name: "selfOperatedTaxLandAdd",
-        meta: { title: "新建自营税地", icon: "homepage" },
+        meta: { title: "新建自营税地", icon: "homepage", hidden: true },
       },
       {
         path: "selfOperatedTaxLandEdit",
@@ -217,7 +217,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/taxLandManagement/selfOperatedTaxLand/selfOperatedTaxLandEdit.vue"
           ),
         name: "selfOperatedTaxLandEdit",
-        meta: { title: "编辑自营税地", icon: "homepage" },
+        meta: { title: "编辑自营税地", icon: "homepage", hidden: true },
       },
       {
         path: "selfOperatedTaxLandDetails",
@@ -226,7 +226,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/taxLandManagement/selfOperatedTaxLand/selfOperatedTaxLandDetails.vue"
           ),
         name: "selfOperatedTaxLandDetails",
-        meta: { title: "自营税地详情", icon: "homepage" },
+        meta: { title: "自营税地详情", icon: "homepage", hidden: true },
       },
       {
         path: "purchaseTaxLandAdd",
@@ -235,7 +235,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/taxLandManagement/purchaseTaxLand/purchaseTaxLandAdd.vue"
           ),
         name: "purchaseTaxLandAdd",
-        meta: { title: "新建采购税地", icon: "homepage" },
+        meta: { title: "新建采购税地", icon: "homepage", hidden: true },
       },
       {
         path: "selfOperatedTaxLandEdit",
@@ -244,7 +244,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/taxLandManagement/purchaseTaxLand/purchaseTaxLandEdit.vue"
           ),
         name: "purchaseTaxLandEdit",
-        meta: { title: "编辑采购税地", icon: "homepage" },
+        meta: { title: "编辑采购税地", icon: "homepage", hidden: true },
       },
       {
         path: "selfOperatedTaxLandDetails",
@@ -253,7 +253,7 @@ export const constantRoutes: RouteRecordRaw[] = [
             "@/views/taxLandManagement/purchaseTaxLand/purchaseTaxLandDetails.vue"
           ),
         name: "purchaseTaxLandDetails",
-        meta: { title: "采购税地详情", icon: "homepage" },
+        meta: { title: "采购税地详情", icon: "homepage", hidden: true },
       },
     ],
   },

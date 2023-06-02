@@ -1,17 +1,11 @@
 <template>
   <div class="add-cont">
     <zxn-plan>
-      <zxn-tabs :tabs-list="tabsList" v-model:activeName="activeName" hasBack>
-        <template #0>
-          <AddPersonal />
-        </template>
-        <template #1>
-          <AddBusiness />
-        </template>
-        <template #2>
-          <AddExist />
-        </template>
+      <zxn-tabs :tabs-list="tabsList" v-model:activeName="activeName">
       </zxn-tabs>
+      <AddPersonal v-if="activeName == 0" />
+      <AddBusiness v-if="activeName == 1" />
+      <AddExist v-if="activeName == 2" />
     </zxn-plan>
   </div>
 </template>

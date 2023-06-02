@@ -32,13 +32,16 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="甲方">
-                  <el-input v-model="formItem.party_a" />
+                  <el-input placeholder="请输入" v-model="formItem.party_a" />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="乙方">
-                  <el-input v-model="formItem.party_b" />
+                  <el-input placeholder="请输入" v-model="formItem.party_b" />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="签约点位">
-                  <el-input v-model="formItem.tax_location" />
+                  <el-input
+                    placeholder="请输入"
+                    v-model="formItem.tax_location"
+                  />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="合同期限">
                   <el-select
@@ -75,7 +78,11 @@
                   />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="备注要求">
-                  <el-input v-model="formItem.remarks" type="textarea" />
+                  <el-input
+                    placeholder="请输入"
+                    v-model="formItem.remarks"
+                    type="textarea"
+                  />
                 </el-form-item>
               </div>
               <div class="w-[33%]">
@@ -117,7 +124,7 @@
                   </el-col>
                   <el-col class="tac" :span="6">
                     <el-input
-                      v-model="item.cooperate_point"
+                      v-model="item.cooperate_pointnt"
                       placeholder="请输入"
                     ></el-input>
                   </el-col>
@@ -186,7 +193,7 @@ const formItem = reactive({
   remarks: "",
   file_url: [],
   annex_url: [],
-  // product: [{ product_type: null, invoice_type: null, cooperate_point: "" }],
+  // product: [{ product_type: null, invoice_type: null, cooperate_pointnt: "" }],
 });
 // 计算属性
 var contractName = computed(() => {
@@ -199,7 +206,7 @@ var contractName = computed(() => {
 //   formItem.product.push({
 //     product_type: null,
 //     invoice_type: null,
-//     cooperate_point: "",
+//     cooperate_pointnt: "",
 //   });
 // };
 const handleChannelContractAdd = () => {
@@ -234,6 +241,7 @@ onMounted(() => {});
     .el-input__wrapper {
       width: 100%;
     }
+
     //  flex-grow: 1
   }
 }

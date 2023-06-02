@@ -5,7 +5,7 @@
       <div class="head-title">企业基本信息</div>
       <div class="tag">{{ businessType[formData.status] }}</div>
     </div>
-    <el-form :form="formData" label-width="120px">
+    <el-form :form="formData" label-width="150px">
       <div class="main">
         <el-row :gutter="50">
           <el-col :span="8">
@@ -41,20 +41,15 @@
               <el-input v-model="formData.contacts" v-if="isEdit" />
               <span v-else>{{ formData.contacts }}</span>
             </el-form-item>
-            <el-form-item label="营业执照有效期">
+            <el-form-item label="营业执照到期时间" class="w-full">
               <el-date-picker
+                class="w-full"
                 v-if="isEdit"
-                v-model="date"
-                type="daterange"
+                v-model="formData.license_end_date"
                 unlink-panels
-                range-separator="~"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
                 value-format="YYYY-MM-DD"
               />
-              <span v-else>{{
-                formData.license_start_date + " - " + formData.license_end_date
-              }}</span>
+              <span v-else>{{ formData.license_end_date }}</span>
             </el-form-item>
           </el-col>
         </el-row>
@@ -147,15 +142,11 @@ const props = defineProps({
 
 const formData = ref({} as any);
 
-const date = ref([] as any);
-
 async function updateBusinessAccount() {
   // 后台返回的 contacts_mobile 更新修改为 mobile
   let params = {
     ...formData.value,
     mobile: formData.value.contacts_mobile,
-    license_start_date: date.value ? date.value[0] : "",
-    license_end_date: date.value ? date.value[1] : "",
     contacts_mobile: undefined,
   };
   // console.log(params);
@@ -177,7 +168,6 @@ async function getAccountDetail() {
 
     try {
       formData.value = res.data;
-      date.value = [res.data.license_start_date, res.data.license_end_date];
     } catch (error: any) {
       return new Error("error", error);
     }

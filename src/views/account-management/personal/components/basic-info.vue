@@ -59,10 +59,10 @@
         </el-col>
       </el-row>
     </el-form>
-    <div class="btn" v-if="isEdit">
+    <zxn-bottom-btn v-if="isEdit">
       <el-button type="primary" @click="save">保存</el-button>
       <el-button type="info" plain>取消</el-button>
-    </div>
+    </zxn-bottom-btn>
   </zxn-plan>
 </template>
 
