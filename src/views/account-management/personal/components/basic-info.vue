@@ -35,66 +35,26 @@
         <el-col :span="8">
           <el-form-item label="身份证">
             <MultiUpload v-if="isEdit" v-model="formData.idcard_img" />
-            <el-image
-              v-else
-              style="width: 100px; height: 100px"
-              :src="formData.idcard_img"
-              :zoom-rate="1.2"
-              :preview-src-list="[formData.idcard_img]"
-              :initial-index="4"
-              fit="cover"
-            />
+            <PicturePreview :image-list="formData.idcard_img" />
           </el-form-item>
           <el-form-item label="银行卡">
             <MultiUpload v-if="isEdit" v-model="formData.bank_card_img" />
-            <el-image
-              v-else
-              style="width: 100px; height: 100px"
-              :src="formData.bank_card_img"
-              :zoom-rate="1.2"
-              :preview-src-list="[formData.bank_card_img]"
-              :initial-index="4"
-              fit="cover"
-            />
+            <PicturePreview :image-list="formData.bank_card_img" />
           </el-form-item>
           <el-form-item label="认证视频">
             <MultiUpload
               v-if="isEdit"
               v-model="formData.attestation_video_url"
             />
-            <el-image
-              v-else
-              style="width: 100px; height: 100px"
-              :src="formData.attestation_video_url"
-              :zoom-rate="1.2"
-              :preview-src-list="[formData.attestation_video_url]"
-              :initial-index="4"
-              fit="cover"
-            />
+            <PicturePreview :image-list="formData.attestation_video_url" />
           </el-form-item>
           <el-form-item label="认证照片">
             <MultiUpload v-if="isEdit" v-model="formData.attestation_img_url" />
-            <el-image
-              v-else
-              style="width: 100px; height: 100px"
-              :src="formData.attestation_img_url"
-              :zoom-rate="1.2"
-              :preview-src-list="[formData.attestation_img_url]"
-              :initial-index="4"
-              fit="cover"
-            />
+            <PicturePreview :image-list="formData.attestation_img_url" />
           </el-form-item>
           <el-form-item label="个人签字">
             <MultiUpload v-if="isEdit" v-model="formData.sign_img" />
-            <el-image
-              v-else
-              style="width: 100px; height: 100px"
-              :src="formData.sign_img"
-              :zoom-rate="1.2"
-              :preview-src-list="[formData.sign_img]"
-              :initial-index="4"
-              fit="cover"
-            />
+            <PicturePreview :image-list="formData.sign_img" />
           </el-form-item>
         </el-col>
       </el-row>
