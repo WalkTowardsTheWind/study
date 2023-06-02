@@ -162,22 +162,15 @@
         </div>
       </template>
     </zxn-tabs>
-    <zxn-bottom-btn
-      ><div class="but">
-        <el-button type="primary" @click="handleSubmit">保存</el-button>
-        <el-button @click="handleClose">取消</el-button>
-      </div></zxn-bottom-btn
-    >
   </zxn-plan>
 </template>
 <script setup lang="ts">
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { selfOperatedTaxLandDetails } from "@/api/taxLandManagement/selfOperatedTaxLand";
 import { getAreaList } from "@/api/taxLandManagement";
 import { getCategoryTreeList } from "@/api/category";
 const { proxy } = getCurrentInstance() as any;
 const route = useRoute();
-const router = useRouter();
 const activeName = ref("1");
 const tabsList = [
   {
@@ -229,18 +222,6 @@ const formItem = ref({
   incoming_materials: "",
   agreement_url: [],
 });
-const handleSubmit = () => {
-  router.push({
-    name: "taxLandManagementIndex",
-    query: { activeName: "purchase" },
-  });
-};
-const handleClose = () => {
-  router.push({
-    name: "taxLandManagementIndex",
-    query: { activeName: "purchase" },
-  });
-};
 
 const getData = async () => {
   const ID = Number(route.query.id);
