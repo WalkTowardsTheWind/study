@@ -1,4 +1,5 @@
 export enum TaskEnum {
+  "待申请",
   "申请中",
   "驳回",
   "报名中",
