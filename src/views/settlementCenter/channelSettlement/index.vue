@@ -17,7 +17,9 @@
       <el-form-item label="任务状态">
         <el-select v-model="formItem.status" placeholder="全部" clearable>
           <el-option
-            v-for="item in proxy.$const['settlementCenterEnum.statusType']"
+            v-for="item in proxy.$const[
+              'settlementCenterEnum.settlementCenterEnum'
+            ]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -274,8 +276,8 @@ const getTableData = async () => {
 
     pageInfo.page = data.current_page;
     pageInfo.total = data.total;
-    console.log(data);
-    total_pay_money.value = data.data.total_pay_money;
+    console.log(data, "=======>");
+    total_pay_money.value = data.total_pay_money;
 
     var newData = data.data.map((item: any) => {
       return {
