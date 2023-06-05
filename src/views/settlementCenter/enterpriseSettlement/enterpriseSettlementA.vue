@@ -71,11 +71,11 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="任务时间">
-                    <!-- <el-text class="mx-1"
+                    <el-text class="mx-1"
                       >{{ formItem.task_start_time }}-{{
                         formItem.task_end_time
                       }}</el-text
-                    > -->
+                    >
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -278,7 +278,7 @@ const formItem = ref({
   task_head_phone: "",
   task_date_type: "",
   task_start_time: "",
-  // task_end_time: "",
+  task_end_time: "",
   salary: "",
   request: [],
   address: "",
@@ -354,84 +354,84 @@ const getTableData = async () => {
     const { data } = await getTaskView(Number(route.query.task_id));
     console.log(data);
 
-    // const {
-    //   task_name,
-    //   category_name,
-    //   open_type,
-    //   open_start_time,
-    //   open_end_time,
-    //   task_head,
-    //   task_head_phone,
-    //   request,
-    //   address,
-    //   company_name,
-    //   status,
-    //   bank_account,
-    //   check_url,
-    // } = data;
-    // const {
-    //   person_count,
-    //   task_date_type,
-    //   task_start_time,
-    //   // task_end_time,
-    //   salary,
-    //   condition_desc,
-    // } = data.taskAttribute;
-    // console.log(data.taskAttribute);
+    const {
+      task_name,
+      category_name,
+      open_type,
+      open_start_time,
+      open_end_time,
+      task_head,
+      task_head_phone,
+      request,
+      address,
+      company_name,
+      status,
+      bank_account,
+      check_url,
+    } = data;
+    const {
+      person_count,
+      task_date_type,
+      task_start_time,
+      task_end_time,
+      salary,
+      condition_desc,
+    } = data.taskAttribute;
+    console.log(data.taskAttribute);
 
-    // const { require_desc } = data.taskAttributeUser;
-    // const {
-    //   settlement_person_count,
-    //   settlement_amount,
-    //   payment_amount,
-    //   payment_time,
-    //   invoice_status,
-    // } = data.finance_settlement_company_task;
-    // formItem.value = {
-    //   task_name,
-    //   category_name,
-    //   person_count,
-    //   open_type,
-    //   open_start_time,
-    //   open_end_time,
-    //   task_head,
-    //   task_head_phone,
-    //   task_date_type,
-    //   task_start_time,
-    //   // task_end_time,
-    //   salary,
-    //   request,
-    //   address,
-    //   condition_desc,
-    //   require_desc,
-    //   settlement_person_count,
-    //   company_name,
-    //   settlement_amount,
-    //   payment_amount,
-    //   payment_time,
-    //   status,
-    //   invoice_status,
-    //   bank_account,
-    //   check_url,
-    // };
-    // const newData = data.taskUser.map((item: any) => {
-    //   return {
-    //     account: item.account,
-    //     settlement_status: item.settlement_status,
+    const { require_desc } = data.taskAttributeUser;
+    const {
+      settlement_person_count,
+      settlement_amount,
+      payment_amount,
+      payment_time,
+      invoice_status,
+    } = data.finance_settlement_company_task;
+    formItem.value = {
+      task_name,
+      category_name,
+      person_count,
+      open_type,
+      open_start_time,
+      open_end_time,
+      task_head,
+      task_head_phone,
+      task_date_type,
+      task_start_time,
+      task_end_time,
+      salary,
+      request,
+      address,
+      condition_desc,
+      require_desc,
+      settlement_person_count,
+      company_name,
+      settlement_amount,
+      payment_amount,
+      payment_time,
+      status,
+      invoice_status,
+      bank_account,
+      check_url,
+    };
+    const newData = data.taskUser.map((item: any) => {
+      return {
+        account: item.account,
+        settlement_status: item.settlement_status,
 
-    //     real_name: item.real_name,
-    //     phone: item.phone,
-    //     bank: item.bank,
-    //     bank_account: item.bank_account,
-    //     payment_time: item.payment_time,
-    //     payment_amount: item.payment_amount,
+        real_name: item.real_name,
+        phone: item.phone,
+        bank: item.bank,
+        bank_account: item.bank_account,
+        payment_time: item.payment_time,
+        payment_amount: item.payment_amount,
 
-    //     payment_receipt: item.payment_receipt,
-    //   };
-    // });
-    // tableData.length = 0;
+        payment_receipt: item.payment_receipt,
+      };
+    });
+    tableData.length = 0;
 
-    // tableData.push(...newData);
+    tableData.push(...newData);
   } catch (error) {
     console.log(error);
   }
