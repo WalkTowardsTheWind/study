@@ -209,6 +209,8 @@ const columnList = [
     },
   },
   { label: "税地名称", prop: "tax_land_name" },
+  { label: "厂商", prop: "tax_manufacturer" },
+  { label: "税地地区", prop: "merger_name" },
   { label: "成本", prop: "tax_cost_point" },
   { label: "签约数量", prop: "sign_count" },
   { label: "税率形式", prop: "calculation_type" },
@@ -356,6 +358,8 @@ const getTableData = async () => {
         tax_land_no: item.tax_land_no,
         status: item.status,
         tax_land_name: item.tax_land_name,
+        tax_manufacturer: item.tax_manufacturer,
+        merger_name: item.merger_name,
         tax_cost_point: item.tax_cost_point,
         sign_count: item.sign_count,
         calculation_type:

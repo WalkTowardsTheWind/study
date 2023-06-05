@@ -8,7 +8,6 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Breadcrumb: typeof import('./../components/Breadcrumb/index.vue')['default']
-    ElAffix: typeof import('element-plus/es')['ElAffix']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
     ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -29,7 +28,6 @@ declare module '@vue/runtime-core' {
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElPagination: typeof import('element-plus/es')['ElPagination']
-    ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     ElRow: typeof import('element-plus/es')['ElRow']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSelect: typeof import('element-plus/es')['ElSelect']
@@ -50,7 +48,6 @@ declare module '@vue/runtime-core' {
     IEpChatDotRound: typeof import('~icons/ep/chat-dot-round')['default']
     IEpCircleCloseFilled: typeof import('~icons/ep/circle-close-filled')['default']
     IEpClose: typeof import('~icons/ep/close')['default']
-    IEpDArrowRight: typeof import('~icons/ep/d-arrow-right')['default']
     IEpPlus: typeof import('~icons/ep/plus')['default']
     IEpRefreshRight: typeof import('~icons/ep/refresh-right')['default']
     IEpSearch: typeof import('~icons/ep/search')['default']
