@@ -284,7 +284,7 @@ const getTableData = async () => {
     pageInfo.page = data.current_page;
     pageInfo.total = data.total;
     console.log(data.data.total_settlement_money, "total_settlement_money");
-    total_settlement_money.value = data.data.total_settlement_money;
+    total_settlement_money.value = data.total_settlement_money;
     console.log(data.data);
 
     var newData = data.data.map((item: any) => {
