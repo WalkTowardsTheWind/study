@@ -36,54 +36,19 @@
     <!-- 详情 -->
     <template v-else>
       <el-form-item label="营业执照" label-width="120px">
-        <el-image
-          style="width: 100px; height: 100px"
-          :src="formData.license"
-          :zoom-rate="1.2"
-          :preview-src-list="[formData.license]"
-          :initial-index="4"
-          fit="cover"
-        />
+        <PicturePreview :image-list="formData.license" />
       </el-form-item>
       <el-form-item label="法人身份证" label-width="120px">
-        <el-image
-          style="width: 100px; height: 100px"
-          :src="formData.idcard_img"
-          :zoom-rate="1.2"
-          :preview-src-list="[formData.idcard_img]"
-          :initial-index="4"
-          fit="cover"
-        />
+        <PicturePreview :image-list="formData.idcard_img" />
       </el-form-item>
       <el-form-item label="纳税人类型证明" label-width="120px">
-        <el-image
-          style="width: 100px; height: 100px"
-          :src="formData.taxpayer_type_img"
-          :zoom-rate="1.2"
-          :preview-src-list="[formData.taxpayer_type_img]"
-          :initial-index="4"
-          fit="cover"
-        />
+        <PicturePreview :image-list="formData.taxpayer_type_img" />
       </el-form-item>
       <el-form-item label="公司门头照片" label-width="120px">
-        <el-image
-          style="width: 100px; height: 100px"
-          :src="formData.header_img"
-          :zoom-rate="1.2"
-          :preview-src-list="[formData.header_img]"
-          :initial-index="4"
-          fit="cover"
-        />
+        <PicturePreview :image-list="formData.header_img" />
       </el-form-item>
       <el-form-item label="办公地点照片" label-width="120px">
-        <el-image
-          style="width: 100px; height: 100px"
-          :src="formData.office_img"
-          :zoom-rate="1.2"
-          :preview-src-list="[formData.office_img]"
-          :initial-index="4"
-          fit="cover"
-        />
+        <PicturePreview :image-list="formData.office_img" />
       </el-form-item>
     </template>
   </div>

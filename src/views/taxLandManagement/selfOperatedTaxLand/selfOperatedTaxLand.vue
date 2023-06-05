@@ -6,7 +6,11 @@
       @on-reset="handleReset"
     >
       <el-form-item>
-        <el-input v-model="formItem.keywords" placeholder="请输入关键字">
+        <el-input
+          v-model="formItem.keywords"
+          placeholder="请输入关键字"
+          clearable
+        >
           <template #prefix>
             <el-icon><i-ep-Search /></el-icon>
           </template>
@@ -14,7 +18,7 @@
       </el-form-item>
 
       <el-form-item label="税地状态">
-        <el-select v-model="formItem.status" placeholder="Select">
+        <el-select v-model="formItem.status" placeholder="请选择" clearable>
           <el-option
             v-for="item in proxy.$const['taxLandManagementEnum.taxLandStatus']"
             :key="item.value"
@@ -25,7 +29,11 @@
       </el-form-item>
 
       <el-form-item label="发票类型">
-        <el-select v-model="formItem.invoice_type" placeholder="Select">
+        <el-select
+          v-model="formItem.invoice_type"
+          placeholder="请选择"
+          clearable
+        >
           <el-option
             v-for="item in proxy.$const['taxLandManagementEnum.InvoiceType']"
             :key="item.value"
@@ -36,7 +44,11 @@
       </el-form-item>
 
       <el-form-item label="发票面额">
-        <el-select v-model="formItem.invoice_denomination" placeholder="Select">
+        <el-select
+          v-model="formItem.invoice_denomination"
+          placeholder="请选择"
+          clearable
+        >
           <el-option
             v-for="item in proxy.$const[
               'taxLandManagementEnum.invoice_denomination'
@@ -49,7 +61,11 @@
       </el-form-item>
 
       <el-form-item label="计算方式">
-        <el-select v-model="formItem.calculation_type" placeholder="Select">
+        <el-select
+          v-model="formItem.calculation_type"
+          placeholder="请选择"
+          clearable
+        >
           <el-option
             v-for="item in proxy.$const[
               'taxLandManagementEnum.calculationType'

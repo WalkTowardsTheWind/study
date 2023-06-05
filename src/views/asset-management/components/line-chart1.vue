@@ -79,6 +79,7 @@ const options = ref({
         name: "收入",
       },
     ],
+    selectedMode: false,
   },
   grid: {
     left: "0%",

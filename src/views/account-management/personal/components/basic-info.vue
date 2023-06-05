@@ -35,26 +35,26 @@
         <el-col :span="8">
           <el-form-item label="身份证">
             <MultiUpload v-if="isEdit" v-model="formData.idcard_img" />
-            <span v-else></span>
+            <PicturePreview :image-list="formData.idcard_img" />
           </el-form-item>
           <el-form-item label="银行卡">
             <MultiUpload v-if="isEdit" v-model="formData.bank_card_img" />
-            <span v-else></span>
+            <PicturePreview :image-list="formData.bank_card_img" />
           </el-form-item>
           <el-form-item label="认证视频">
             <MultiUpload
               v-if="isEdit"
               v-model="formData.attestation_video_url"
             />
-            <span v-else></span>
+            <PicturePreview :image-list="formData.attestation_video_url" />
           </el-form-item>
           <el-form-item label="认证照片">
             <MultiUpload v-if="isEdit" v-model="formData.attestation_img_url" />
-            <span v-else></span>
+            <PicturePreview :image-list="formData.attestation_img_url" />
           </el-form-item>
           <el-form-item label="个人签字">
             <MultiUpload v-if="isEdit" v-model="formData.sign_img" />
-            <span v-else></span>
+            <PicturePreview :image-list="formData.sign_img" />
           </el-form-item>
         </el-col>
       </el-row>

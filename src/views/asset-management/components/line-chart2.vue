@@ -88,6 +88,7 @@ const options = ref({
         name: "支出",
       },
     ],
+    selectedMode: false,
   },
   grid: {
     left: "0%",

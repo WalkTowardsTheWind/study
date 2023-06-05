@@ -47,8 +47,10 @@ if (route.query.type) {
   }
 
   .form {
+    position: relative;
     display: flex;
     gap: 0 10px;
+    align-items: center;
 
     .form-item {
       flex: 1;
@@ -64,6 +66,11 @@ if (route.query.type) {
     color: #356ff3;
     cursor: pointer;
     user-select: none;
+  }
+
+  .del {
+    position: absolute;
+    right: -50px;
   }
 }
 </style>

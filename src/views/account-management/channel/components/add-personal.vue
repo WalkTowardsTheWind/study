@@ -4,8 +4,8 @@
     <el-row :gutter="30">
       <template v-if="activeStep === 0">
         <el-col :span="6">
-          <el-form-item label="注册手机号">
-            <el-input v-model="addForm.phone" />
+          <el-form-item label="账户名称">
+            <el-input v-model="addForm.account" />
           </el-form-item>
           <el-form-item label="密码">
             <el-input v-model="addForm.pwd" />
@@ -19,6 +19,12 @@
         <el-col :span="6">
           <el-form-item label="真实姓名">
             <el-input v-model="addForm.real_name" />
+          </el-form-item>
+          <el-form-item label="手机号">
+            <el-input v-model="addForm.phone" />
+          </el-form-item>
+          <el-form-item label="身份证号">
+            <el-input v-model="addForm.idcard" />
           </el-form-item>
           <el-form-item label="开户行">
             <el-input v-model="addForm.bank" />
@@ -86,7 +92,7 @@
               </el-select>
               <el-input class="form-item" v-model="item.cooperate_point" />
               <div
-                class="add"
+                class="add del"
                 v-if="product.length > 0"
                 @click="delClick(index, item.product_id)"
               >
