@@ -5,7 +5,11 @@
         <el-button type="primary" @click="add">+ 新建</el-button>
       </div>
       <div class="right">
-        <el-input placeholder="请输入关键字" :prefix-icon="Search" />
+        <el-input
+          placeholder="请输入关键字"
+          v-model="searchForm.name"
+          clearable
+        />
         <el-button type="primary" @click="searchClick">查询</el-button>
         <el-button type="info" @click="resetSearchForm">重置</el-button>
       </div>
@@ -83,6 +87,8 @@
               :value="item.id"
             ></el-option>
           </el-select>
+          <!-- <el-tree-select v-model="addForm.parent" :data="options" :render-after-expand="false" :props="treeProps"
+						show-checkbox check-strictly check-on-click-node /> -->
         </el-form-item>
       </template>
       <!-- 编辑 -->
@@ -99,6 +105,8 @@
               :value="item.id"
             ></el-option>
           </el-select>
+          <!-- <el-tree-select v-model="addForm.parent" :data="options" :render-after-expand="false" :props="treeProps"
+						show-checkbox check-strictly check-on-click-node /> -->
         </el-form-item>
       </template>
 
@@ -139,6 +147,11 @@ const addForm = ref({
 });
 const options = ref([] as any);
 
+const treeProps = {
+  label: "name",
+  value: "id",
+};
+
 const searchForm = reactive({
   name: "",
   type: "0", // 0= 行业类目，2= 开票类目, 3= 岗位类目
@@ -173,8 +186,12 @@ function edit(item: any) {
   dialogVisible.value = true;
   dialogType.value = "edit";
 
+  if (item.pid == 0) {
+    addForm.value.parent = item.id;
+  } else {
+    addForm.value.parent = item.pid;
+  }
   addForm.value.name = item.name;
-  addForm.value.parent = item.pid;
   addForm.value.pid = item.pid;
   addForm.value.id = item.id;
 }
@@ -183,7 +200,7 @@ function getOptions() {
   getCategoryTreeList({ type: "0" })
     .then((res) => {
       options.value = res.data;
-      // console.log(res.data);
+      console.log(res.data);
     })
     .catch((err) => {
       console.log(err);
@@ -194,15 +211,27 @@ function getOptions() {
  * 删除
  */
 function del(id: string) {
-  console.log(id);
-  deleteCategory(id).then((res) => {
-    console.log(res);
-    ElMessage({
-      type: "success",
-      message: "删除成功",
+  ElMessageBox.confirm("是否删除?", "Warning", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    type: "warning",
+    center: true,
+  })
+    .then(() => {
+      deleteCategory(id).then((res) => {
+        ElMessage({
+          type: "success",
+          message: "删除成功",
+        });
+        searchClick();
+      });
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "Delete canceled",
+      });
     });
-    searchClick();
-  });
 }
 
 /**
@@ -274,7 +303,7 @@ async function addSumbit() {
     let params = {
       name: addForm.value.name,
       pid: addForm.value.pid,
-      type: "3",
+      type: "0",
       status: "1",
     };
     createCategory(params)
@@ -292,10 +321,9 @@ async function addSumbit() {
       });
   }
   if (dialogType.value == "edit") {
-    console.log(addForm.value);
     let params = {
       name: addForm.value.name,
-      pid: addForm.value.pid,
+      pid: addForm.value.parent,
       id: addForm.value.id,
     };
     updateCategory(params)

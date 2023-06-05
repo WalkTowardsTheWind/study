@@ -21,10 +21,10 @@
       <div>发佣统计</div>
     </div>
     <div class="select">
-      <el-button @click="changeType(1)">上周</el-button>
-      <el-button @click="changeType(2)">本周</el-button>
-      <el-button autofocus @click="changeType(3)">上月</el-button>
-      <el-button @click="changeType(4)">本月</el-button>
+      <el-button @click="changeType(2)">上周</el-button>
+      <el-button @click="changeType(1)">本周</el-button>
+      <el-button @click="changeType(4)">上月</el-button>
+      <el-button @click="changeType(3)">本月</el-button>
     </div>
   </div>
   <div id="main2"></div>
@@ -37,7 +37,7 @@ import jpgBottom from "@/assets/icons-jpg/bottom.png";
 import { getChannelList } from "@/api/money";
 
 // 1 2 3 4
-const time_type = ref(3);
+const time_type = ref(1);
 
 const commission_total = ref();
 const profit = ref();

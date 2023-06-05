@@ -90,6 +90,12 @@ const columnList1 = [
     label: "渠道结算税后",
     prop: "amount_after_tax",
   },
+  {
+    label: "销售部业绩",
+  },
+  {
+    label: "渠道结算合计",
+  },
 ];
 
 const columnList2 = [

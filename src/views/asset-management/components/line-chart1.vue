@@ -19,10 +19,10 @@
       <div>营收趋势图</div>
     </div>
     <div class="select">
-      <el-button @click="changeType(1)">上周</el-button>
-      <el-button @click="changeType(2)">本周</el-button>
-      <el-button @click="changeType(3)">上月</el-button>
-      <el-button @click="changeType(4)">本月</el-button>
+      <el-button @click="changeType(2)">上周</el-button>
+      <el-button @click="changeType(1)">本周</el-button>
+      <el-button @click="changeType(4)">上月</el-button>
+      <el-button @click="changeType(3)">本月</el-button>
     </div>
   </div>
   <div id="main" ref="chart"></div>
@@ -33,7 +33,7 @@ import { getFinanceList } from "@/api/money";
 import * as echarts from "echarts";
 
 // 1 2 3 4
-const time_type = ref(3);
+const time_type = ref(1);
 
 const total_channel_amount = ref();
 const total_fee_amount = ref();

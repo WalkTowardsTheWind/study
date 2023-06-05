@@ -6,7 +6,11 @@
           累计充值<span class="money">{{ total_amount }}</span>
         </div>
         <div class="p-[24px]">
-          <zxn-search :formItem="formItem" @on-search="getList">
+          <zxn-search
+            :formItem="formItem"
+            @on-search="getList"
+            @on-reset="reset"
+          >
             <el-form-item label="">
               <el-input v-model="formItem.name" placeholder="请输入">
                 <template #prefix>
@@ -225,6 +229,14 @@ function getTaxLand() {
   getLandList().then((res) => {
     taxLand.value.push(...res.data);
   });
+}
+
+function reset() {
+  formItem.name = "";
+  formItem.tax_land_id = "";
+  formItem.status = "";
+  date.value = [];
+  formItem.category_id = "";
 }
 getList();
 getTaxLand();
