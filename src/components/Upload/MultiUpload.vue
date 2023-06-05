@@ -9,6 +9,7 @@
     v-model:file-list="fileList"
     list-type="picture-card"
     :before-upload="handleBeforeUpload"
+    :on-exceed="handleExceed"
     :http-request="handleUpload"
     :on-remove="handleRemove"
     :on-preview="previewImg"
@@ -30,7 +31,7 @@ import {
   UploadFile,
   UploadProps,
 } from "element-plus";
-import { uploadFileApi, deleteFileApi } from "@/api/file";
+import { uploadFileApi } from "@/api/file";
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -99,6 +100,18 @@ async function handleUpload(options: UploadRequestOptions): Promise<any> {
     fileList.value.map((file) => file.url)
   );
 }
+/**
+ * 图片上传限制
+ */
+const handleExceed: UploadProps["onExceed"] = (files) => {
+  console.log(files);
+
+  ElMessage.warning("上传图片不能超过三张");
+  //   upload.value!.clearFiles()
+  //   const file = files[0] as UploadRawFile
+  //   file.uid = genFileId()
+  //   upload.value!.handleStart(file)
+};
 
 /**
  * 删除图片
@@ -107,13 +120,13 @@ function handleRemove(removeFile: UploadFile) {
   const filePath = removeFile.url;
 
   if (filePath) {
-    deleteFileApi(filePath).then(() => {
-      // 删除成功回调
-      emit(
-        "update:modelValue",
-        fileList.value.map((file) => file.url)
-      );
-    });
+    // deleteFileApi(filePath).then(() => {
+    // 删除成功回调
+    emit(
+      "update:modelValue",
+      fileList.value.map((file) => file.url)
+    );
+    // });
   }
 }
 

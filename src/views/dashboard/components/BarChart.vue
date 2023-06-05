@@ -77,7 +77,7 @@ const options = {
   series: [
     {
       name: "Direct",
-      type: "bar",
+      type: "line",
       barWidth: "60%",
       itemStyle: {
         color: "#356FF3",

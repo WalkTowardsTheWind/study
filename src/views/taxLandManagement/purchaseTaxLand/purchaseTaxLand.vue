@@ -14,7 +14,7 @@
       </el-form-item>
 
       <el-form-item label="税地状态">
-        <el-select v-model="formItem.status" placeholder="Select">
+        <el-select v-model="formItem.status" placeholder="请选择">
           <el-option
             v-for="item in proxy.$const['taxLandManagementEnum.taxLandStatus']"
             :key="item.value"
@@ -24,8 +24,18 @@
         </el-select>
       </el-form-item>
 
+      <el-form-item label="厂商">
+        <el-select v-model="formItem.tax_manufacturer" placeholder="请选择">
+          <el-option
+            v-for="item in optionsManufacturer"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="发票类型">
-        <el-select v-model="formItem.invoice_type" placeholder="Select">
+        <el-select v-model="formItem.invoice_type" placeholder="请选择">
           <el-option
             v-for="item in proxy.$const['taxLandManagementEnum.InvoiceType']"
             :key="item.value"
@@ -36,7 +46,7 @@
       </el-form-item>
 
       <el-form-item label="发票面额">
-        <el-select v-model="formItem.invoice_denomination" placeholder="Select">
+        <el-select v-model="formItem.invoice_denomination" placeholder="请选择">
           <el-option
             v-for="item in proxy.$const[
               'taxLandManagementEnum.invoice_denomination'
@@ -49,7 +59,7 @@
       </el-form-item>
 
       <el-form-item label="计算方式">
-        <el-select v-model="formItem.calculation_type" placeholder="Select">
+        <el-select v-model="formItem.calculation_type" placeholder="请选择">
           <el-option
             v-for="item in proxy.$const[
               'taxLandManagementEnum.calculationType'
@@ -115,10 +125,24 @@ import {
   selfOperatedTaxLandDelete,
   selfOperatedTaxLandUpdateStatus,
 } from "@/api/taxLandManagement/selfOperatedTaxLand";
+import { getManufacturer } from "@/api/taxLandManagement/purchaseTaxLand";
 import { ElMessage } from "element-plus";
 const router = useRouter();
 const { proxy } = getCurrentInstance() as any;
-
+//获取厂商列表
+const optionsManufacturer = ref([] as any);
+const getManufacturerList = async () => {
+  const { data } = await getManufacturer();
+  console.log(data);
+  const newData = data.map((item: any) => {
+    return {
+      label: item,
+      value: item,
+    };
+  });
+  optionsManufacturer.value.push(...newData);
+};
+getManufacturerList();
 // 查询重置
 const pageInfo = reactive({
   page: 1,
@@ -129,6 +153,7 @@ const handleReset = () => {
   formItem.value = {
     keywords: "",
     status: "",
+    tax_manufacturer: "",
     tax_land_type: "1",
     timeData: [],
     invoice_type: "",
@@ -154,6 +179,7 @@ const handlePageChange = (cur: any) => {
 const formItem = ref({
   keywords: "",
   status: "",
+  tax_manufacturer: "",
   tax_land_type: "1",
   timeData: [],
   invoice_type: "",
@@ -183,6 +209,8 @@ const columnList = [
     },
   },
   { label: "税地名称", prop: "tax_land_name" },
+  { label: "厂商", prop: "tax_manufacturer" },
+  { label: "税地地区", prop: "merger_name" },
   { label: "成本", prop: "tax_cost_point" },
   { label: "签约数量", prop: "sign_count" },
   { label: "税率形式", prop: "calculation_type" },
@@ -330,6 +358,8 @@ const getTableData = async () => {
         tax_land_no: item.tax_land_no,
         status: item.status,
         tax_land_name: item.tax_land_name,
+        tax_manufacturer: item.tax_manufacturer,
+        merger_name: item.merger_name,
         tax_cost_point: item.tax_cost_point,
         sign_count: item.sign_count,
         calculation_type:

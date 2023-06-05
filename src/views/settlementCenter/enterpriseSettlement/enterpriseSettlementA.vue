@@ -377,6 +377,8 @@ const getTableData = async () => {
       salary,
       condition_desc,
     } = data.taskAttribute;
+    console.log(data.taskAttribute);
+
     const { require_desc } = data.taskAttributeUser;
     const {
       settlement_person_count,
