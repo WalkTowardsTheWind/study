@@ -147,10 +147,10 @@ const addForm = ref({
 });
 const options = ref([] as any);
 
-const treeProps = {
-  label: "name",
-  value: "id",
-};
+// const treeProps = {
+//   label: "name",
+//   value: "id",
+// };
 
 const searchForm = reactive({
   name: "",
@@ -218,7 +218,7 @@ function del(id: string) {
     center: true,
   })
     .then(() => {
-      deleteCategory(id).then((res) => {
+      deleteCategory(id).then(() => {
         ElMessage({
           type: "success",
           message: "删除成功",

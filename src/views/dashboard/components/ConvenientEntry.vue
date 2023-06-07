@@ -2,11 +2,10 @@
   <div class="convenient-entry">
     <div class="convenient-entry-title">
       <span>便捷导航</span>
-      <span class="convenient-entry-title-add">+ 添加</span>
     </div>
     <div class="convenient-entry-content">
-      <div class="convenient-entry-content-item" v-for="item in 8" :key="item">
-        新建企业
+      <div class="convenient-entry-content-item" v-for="item in 1" :key="item">
+        任务中心
       </div>
     </div>
   </div>
