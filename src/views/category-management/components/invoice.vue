@@ -222,6 +222,7 @@ function del(id: string) {
           message: "删除成功",
         });
         searchClick();
+        getOptions();
       });
     })
     .catch(() => {
@@ -291,6 +292,7 @@ async function addSumbit() {
         });
         dialogVisible.value = false;
         searchClick();
+        getOptions();
       })
       .catch((err) => {
         console.log(err);
@@ -313,6 +315,7 @@ async function addSumbit() {
         });
         dialogVisible.value = false;
         searchClick();
+        getOptions();
       })
       .catch((err) => {
         console.log(err);
@@ -334,6 +337,7 @@ async function addSumbit() {
         });
         dialogVisible.value = false;
         searchClick();
+        getOptions();
       })
       .catch((err) => {
         console.log(err);
