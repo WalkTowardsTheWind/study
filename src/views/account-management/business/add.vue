@@ -207,7 +207,14 @@
               class="w-full"
               placeholder="请选择"
               v-model="addForm.tax_land_id"
-            />
+            >
+              <el-option
+                v-for="(item, index) in taxLandOption"
+                :key="index"
+                :value="item.id"
+                :label="item.tax_land_name"
+              ></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="17">
@@ -249,6 +256,7 @@
 <script lang="ts" setup>
 import { createBusinessAccount, getCategoryList } from "@/api/account/business";
 import { ICreateBusinessAccount } from "@/api/account/business/types";
+import { getLandList } from "@/api/common";
 import router from "@/router";
 import type { FormInstance, FormRules } from "element-plus";
 
@@ -269,6 +277,7 @@ const taxpayerOptions = [
 
 const activeName = ref("0");
 const activeStep = ref(0);
+const taxLandOption = ref([] as any);
 
 const tabsList = [{ name: "0", label: "新建企业" }];
 const stepList = [
@@ -370,7 +379,16 @@ function getCategoryOptions() {
     cateGoryOptions.value = res.data;
   });
 }
+
+function getTaxLandOption() {
+  taxLandOption.value.length = 0;
+  getLandList().then((res) => {
+    console.log(res);
+    taxLandOption.value.push(...res.data);
+  });
+}
 getCategoryOptions();
+getTaxLandOption();
 </script>
 
 <style scoped lang="scss">
