@@ -1,6 +1,8 @@
 <template>
   <div class="p-[24px] p-b-[0]">
-    <div>累计下发:{{ total_pay_money }}</div>
+    <div class="recharge">
+      <div>累计下发<span class="money">9999</span></div>
+    </div>
     <zxn-search
       class="m-t-[20px]"
       :formItem="formItem"
@@ -304,3 +306,23 @@ onMounted(() => {
   // rou()
 });
 </script>
+<style lang="scss" scoped>
+.recharge {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding-left: 25px;
+  font-size: 14px;
+  background: #fef1f0;
+  border-radius: 4px;
+  opacity: 1;
+}
+
+.money {
+  margin-left: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+</style>
