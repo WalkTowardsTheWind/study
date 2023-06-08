@@ -73,7 +73,7 @@
           >
         </template>
         <el-button
-          v-if="[2, 3].includes(row.status)"
+          v-if="[3, 4].includes(row.status)"
           link
           type="primary"
           @click="handleCommand('close', row.id)"
@@ -146,12 +146,13 @@ const columnList = [
     minWidth: 100,
     color: {
       0: { color: "#19B56B", backgroundColor: "#daf3e7" },
-      1: { color: "#F35135", backgroundColor: "#fde3df" },
-      2: { color: "#356FF3", backgroundColor: "#dfe8fd" },
-      3: { color: "#FFFFFF", backgroundColor: "#9ab7f9" },
-      4: { color: "#35C5F3", backgroundColor: "#dff6fd" },
-      5: { color: "#333333", backgroundColor: "#dedede" },
-      6: { color: "#333333", backgroundColor: "#999999" },
+      1: { color: "#19B56B", backgroundColor: "#daf3e7" },
+      2: { color: "#F35135", backgroundColor: "#fde3df" },
+      3: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+      4: { color: "#FFFFFF", backgroundColor: "#9ab7f9" },
+      5: { color: "#35C5F3", backgroundColor: "#dff6fd" },
+      6: { color: "#333333", backgroundColor: "#dedede" },
+      7: { color: "#333333", backgroundColor: "#999999" },
     },
   },
   {
@@ -226,12 +227,12 @@ const handleCommand = async (instar: "reject" | "fulfill" | "close", id) => {
           ids,
           status:
             instar === "close"
-              ? 6
+              ? 7
               : instar === "reject"
-              ? 1
+              ? 2
               : props.type === 1
-              ? 4
-              : 2,
+              ? 5
+              : 3,
         };
         await setTaskStatus(params);
         instance.confirmButtonLoading = false;

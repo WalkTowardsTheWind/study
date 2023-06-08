@@ -155,8 +155,8 @@ type TabsType = {
 };
 const colorType = {
   0: { color: "#19B56B", backgroundColor: "#daf3e7" },
-  1: { color: "#F35135", backgroundColor: "#fde3df" },
-  2: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+  1: { color: "#19B56B", backgroundColor: "#daf3e7" },
+  2: { color: "#F35135", backgroundColor: "#fde3df" },
   3: { color: "#356FF3", backgroundColor: "#dfe8fd" },
   4: { color: "#FFFFFF", backgroundColor: "#9ab7f9" },
   5: { color: "#35C5F3", backgroundColor: "#dff6fd" },
