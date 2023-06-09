@@ -286,11 +286,7 @@ function phoneValidator(rule: any, value: any, callback: any) {
   if (value === "") {
     callback(new Error("Please input the phone"));
   } else if (/^1[34578]\d{9}$/.test(value)) {
-    if (registerData.conf_pwd !== "") {
-      if (!registerFormRef.value) return;
-      registerFormRef.value.validateField("conf_pwd", () => null);
-    }
-    callback();
+    callback(new Error("手机号格式错误"));
   }
 }
 /**
@@ -300,6 +296,10 @@ function passwordValidator(rule: any, value: any, callback: any) {
   if (value.length < 6) {
     callback(new Error("The password can not be less than 6 digits"));
   } else {
+    // if (registerData.conf_pwd !== "") {
+    //   if (!registerFormRef.value) return;
+    //   registerFormRef.value.validateField("conf_pwd", () => null);
+    // }
     callback();
   }
 }

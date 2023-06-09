@@ -141,8 +141,8 @@ const columnList = [
     slot: "operation",
     fixed: "right",
     width: 250,
-    align: "center ",
-    headerAlign: "left",
+    align: "right ",
+    headerAlign: "right",
   },
 ];
 // 操作

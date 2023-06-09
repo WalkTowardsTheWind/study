@@ -1,7 +1,9 @@
 <template>
   <div class="p-[24px] p-b-[0]">
     <div class="recharge">
-      <div>累计结算<span class="money">9999</span></div>
+      <div>
+        累计结算<span class="money">{{ total_settlement_money }}</span>
+      </div>
     </div>
     <zxn-search
       class="m-t-[20px]"
@@ -161,7 +163,7 @@ const columnList = [
     fixed: "right",
     width: 250,
     align: "right",
-    headerAlign: "left",
+    headerAlign: "right",
   },
 ];
 // 操作

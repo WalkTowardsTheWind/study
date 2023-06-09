@@ -209,7 +209,14 @@ const columnList = [
   { label: "税地类型", prop: "tax_land_type" },
   { label: "支付方式", prop: "payment_type" },
 
-  { label: "操作", slot: "operation", fixed: "right", width: 250 },
+  {
+    label: "操作",
+    slot: "operation",
+    fixed: "right",
+    width: 250,
+    align: "right ",
+    headerAlign: "right",
+  },
 ];
 /**
  * 上下架
