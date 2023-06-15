@@ -301,13 +301,13 @@ export const constantRoutes: RouteRecordRaw[] = [
   {
     path: "/invoice",
     component: Layout,
-    meta: { title: "发票中心", icon: "invoice" },
+    meta: { title: "发票管理", icon: "invoice" },
     children: [
       {
         path: "manager",
         component: () => import("@/views/invoice/invoiceManager/index.vue"),
         name: "invoiceManager",
-        meta: { title: "发票管理" },
+        meta: { title: "发票中心" },
       },
       {
         path: "invoiceView",
