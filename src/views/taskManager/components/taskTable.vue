@@ -13,7 +13,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="任务状态" prop="status">
-        <el-select v-model="formItem.status" placeholder="全部">
+        <el-select v-model="formItem.status" placeholder="全部" clearable>
           <el-option
             v-for="item in proxy.$const['statusEnum.TaskEnum']"
             :key="item.value"
@@ -58,7 +58,7 @@
         </el-dropdown>
       </template>
       <template #operation="{ row }">
-        <template v-if="row.status === 0">
+        <template v-if="row.status === 1">
           <el-button
             link
             type="primary"
@@ -120,6 +120,23 @@ const columnList = [
     visible: props.type !== 1,
     minWidth: 140,
   },
+  {
+    label: "状态",
+    type: "enum",
+    path: "statusEnum.TaskEnum",
+    prop: "status",
+    minWidth: 100,
+    color: {
+      0: { color: "#19B56B", backgroundColor: "#daf3e7" },
+      1: { color: "#19B56B", backgroundColor: "#daf3e7" },
+      2: { color: "#F35135", backgroundColor: "#fde3df" },
+      3: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+      4: { color: "#FFFFFF", backgroundColor: "#9ab7f9" },
+      5: { color: "#35C5F3", backgroundColor: "#dff6fd" },
+      6: { color: "#333333", backgroundColor: "#dedede" },
+      7: { color: "#333333", backgroundColor: "#999999" },
+    },
+  },
   { label: "任务名称", prop: "task_name", minWidth: 120 },
   { label: "关联企业", prop: "company_name", minWidth: 140 },
   { label: "需求人数", prop: "task_attribute.person_count", type: "deep" },
@@ -137,23 +154,6 @@ const columnList = [
     visible: props.type !== 1,
     showOverflowTooltip: true,
     minWidth: 100,
-  },
-  {
-    label: "状态",
-    type: "enum",
-    path: "statusEnum.TaskEnum",
-    prop: "status",
-    minWidth: 100,
-    color: {
-      0: { color: "#19B56B", backgroundColor: "#daf3e7" },
-      1: { color: "#19B56B", backgroundColor: "#daf3e7" },
-      2: { color: "#F35135", backgroundColor: "#fde3df" },
-      3: { color: "#356FF3", backgroundColor: "#dfe8fd" },
-      4: { color: "#FFFFFF", backgroundColor: "#9ab7f9" },
-      5: { color: "#35C5F3", backgroundColor: "#dff6fd" },
-      6: { color: "#333333", backgroundColor: "#dedede" },
-      7: { color: "#333333", backgroundColor: "#999999" },
-    },
   },
   {
     label: "操作",
@@ -225,14 +225,7 @@ const handleCommand = async (instar: "reject" | "fulfill" | "close", id) => {
         instance.confirmButtonLoading = true;
         const params = {
           ids,
-          status:
-            instar === "close"
-              ? 7
-              : instar === "reject"
-              ? 2
-              : props.type === 1
-              ? 5
-              : 3,
+          status: instar === "close" ? 7 : instar === "reject" ? 2 : 3,
         };
         await setTaskStatus(params);
         instance.confirmButtonLoading = false;
@@ -281,6 +274,9 @@ const handleDelete = (row: { id: number }) => {
 const handleView = (row: { id: number }) => {
   router.push({ name: "taskManagerView", query: { id: row.id } });
 };
+onMounted(() => {
+  getTaskList();
+});
 defineExpose({
   getTaskList,
 });
