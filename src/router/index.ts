@@ -26,7 +26,7 @@ export const constantRoutes: RouteRecordRaw[] = [
     component: Layout,
     redirect: "/dashboard",
     name: "dashboard",
-    meta: { title: "首页", icon: "invoice" },
+    meta: { title: "首页", icon: "dashboard" },
     children: [
       {
         path: "dashboard",
@@ -49,7 +49,7 @@ export const constantRoutes: RouteRecordRaw[] = [
   {
     path: "/accountManage",
     component: Layout,
-    meta: { title: "账户管理", icon: "homepage" },
+    meta: { title: "账户管理", icon: "account" },
     children: [
       {
         path: "business-account",
