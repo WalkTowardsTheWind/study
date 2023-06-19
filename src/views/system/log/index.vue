@@ -32,6 +32,7 @@
         :table-data="tableData"
         :column-list="columnList"
         :page-info="pageInfo"
+        :loading="loading"
         @page-change="handlePageChange"
       >
         <template #operation>
@@ -77,17 +78,21 @@ const handlePageChange = (cur) => {
   pageInfo.limit = limit;
   getList();
 };
+const loading = ref(false);
 const getList = async () => {
   const params = transformTimeRange({ ...formItem }, "timeData", true);
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
+  loading.value = true;
   try {
     const { data } = await systemLog(params);
+    loading.value = false;
     tableData.length = 0;
     pageInfo.page = data.current_page;
     pageInfo.total = data.total;
     tableData.push(...data.data);
   } catch (e) {
+    loading.value = false;
     console.log(e);
   }
 };

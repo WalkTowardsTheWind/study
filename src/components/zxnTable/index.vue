@@ -12,10 +12,11 @@
       style="width: 100%"
       @selection-change="handleSelect"
       @sort-change="handleSort"
-      :max-height="maxHeight"
+      :max-height="tableHeight || maxHeight"
       class="zxn-table"
       :row-key="rowKey"
       :defaultExpandAll="defaultExpandAll"
+      v-loading="loading"
     >
       <el-table-column
         v-if="hasSelect"
@@ -24,12 +25,20 @@
       />
       <el-table-column v-if="hasIndex" type="index" label="序号" width="65" />
       <template v-for="(item, index) in tableColumnList" :key="index">
-        <el-table-column v-if="item.slot" v-bind="item">
+        <el-table-column
+          v-if="item.slot"
+          v-bind="item"
+          :showOverflowTooltip="true"
+        >
           <template #default="scope">
             <slot :name="item.slot" v-bind="scope" />
           </template>
         </el-table-column>
-        <el-table-column v-else-if="item.type" v-bind="item">
+        <el-table-column
+          v-else-if="item.type"
+          v-bind="item"
+          :showOverflowTooltip="true"
+        >
           <template #default="{ row }">
             <div
               v-if="
@@ -43,7 +52,7 @@
             <div v-if="item.type === 'deep'">{{ deepRender(row, item) }}</div>
           </template>
         </el-table-column>
-        <el-table-column v-else v-bind="item" />
+        <el-table-column v-else v-bind="item" :showOverflowTooltip="true" />
       </template>
     </el-table>
     <pagination
@@ -73,6 +82,8 @@ const props = defineProps({
   selectable: { type: Function },
   rowKey: { type: String },
   defaultExpandAll: { type: Boolean, default: false },
+  loading: { type: Boolean, default: false },
+  tableHeight: { type: Number },
 });
 const emit = defineEmits(["sort-change", "selection-change", "page-change"]);
 const handleSort = ({ column, prop, order }: SortParams<any>) => {
@@ -127,6 +138,9 @@ const resetHeight = () => {
     // zxnTable.value.doLayout()
   });
 };
+const getTable = () => {
+  return zxnTable.value;
+};
 onMounted(() => {
   resetHeight();
   const context = reactive({
@@ -138,6 +152,7 @@ onMounted(() => {
 defineExpose({
   resetHeight,
   getSelectionRows,
+  getTable,
 });
 </script>
 <style lang="scss" scoped>

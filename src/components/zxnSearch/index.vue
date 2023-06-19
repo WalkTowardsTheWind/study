@@ -37,7 +37,9 @@ const searchBtn = ref(HTMLElement);
 let item_width = ref("");
 const resetWidth = () => {
   nextTick(() => {
-    item_width.value = `calc((100% - ${searchBtn.value.clientWidth}px) / 3)`;
+    item_width.value = `calc((100% - ${Math.ceil(
+      searchBtn.value.clientWidth * window.devicePixelRatio
+    )}px) / 3)`;
   });
 };
 const zxnSearch = ref<HTMLDivElement>();

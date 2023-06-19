@@ -206,7 +206,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "index",
         component: () => import("@/views/taskManager/index.vue"),
         name: "taskManagerIndex",
-        meta: { title: "任务中心" },
+        meta: { title: "任务中心", keepAlive: true },
       },
       {
         path: "view",
@@ -307,7 +307,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "manager",
         component: () => import("@/views/invoice/invoiceManager/index.vue"),
         name: "invoiceManager",
-        meta: { title: "发票中心" },
+        meta: { title: "发票中心", keepAlive: true },
       },
       {
         path: "invoiceView",

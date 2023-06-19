@@ -45,11 +45,11 @@ export enum personnelType {
 }
 
 export enum invoiceStatus {
-  "待开票",
+  "申请中",
   "已开票",
-  "已邮寄",
   "驳回",
   "冲红",
+  "已收票",
 }
 
 export enum invoiceType {

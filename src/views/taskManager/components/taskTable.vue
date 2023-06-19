@@ -41,6 +41,7 @@
       hasSelect
       :page-info="pageInfo"
       :selectable="selectable"
+      :loading="loading"
       @page-change="handlePageChange"
     >
       <template #tableTop>
@@ -176,19 +177,23 @@ const handlePageChange = (cur) => {
   pageInfo.limit = limit;
   getTaskList();
 };
+const loading = ref(false);
 const getTaskList = async () => {
   const params = transformTimeRange({ ...formItem });
   params.category_id = params.category_id.pop();
   params.task_type = props.type;
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
+  loading.value = true;
   try {
     const { data } = await getTaskIndex(params);
+    loading.value = false;
     tableData.length = 0;
     pageInfo.page = data.current_page;
     pageInfo.total = data.total;
     tableData.push(...data.data);
   } catch (e) {
+    loading.value = false;
     console.log(e);
   }
 };
@@ -274,7 +279,7 @@ const handleDelete = (row: { id: number }) => {
 const handleView = (row: { id: number }) => {
   router.push({ name: "taskManagerView", query: { id: row.id } });
 };
-onMounted(() => {
+onActivated(() => {
   getTaskList();
 });
 defineExpose({

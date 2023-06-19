@@ -24,6 +24,7 @@
         :table-data="tableData"
         :column-list="columnList"
         hasSelect
+        :loading="loading"
         :hasPagination="false"
       >
         <template #tableTop>
@@ -109,14 +110,18 @@ const columnList = [
 const handleSearch = () => {
   getList();
 };
+const loading = ref(false);
 const getList = async () => {
   const params = { ...formItem };
+  loading.value = true;
   try {
     const { data } = await getRolePage(params);
+    loading.value = false;
     tableData.length = 0;
     tableData.push(...data.list);
     console.log(tableData);
   } catch (e) {
+    loading.value = false;
     console.log(e);
   }
 };

@@ -95,7 +95,7 @@ export function channelSetStatus(data: invoiceStatus): AxiosPromise {
  */
 export function setStatus(data: invoiceStatus): AxiosPromise {
   return request({
-    url: `/adminapi/invoice/set_status/`,
+    url: `/adminapi/invoice/set_status`,
     method: "PUT",
     data,
   });

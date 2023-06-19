@@ -5,6 +5,11 @@
     <task-table ref="manual" :type="0" :industry-list="industryList" />
   </zxn-plan>
 </template>
+<script lang="ts">
+export default {
+  name: "taskManagerIndex",
+};
+</script>
 <script setup lang="ts">
 import taskTable from "./components/taskTable.vue";
 import { getTreeList } from "@/api/common";
@@ -22,7 +27,7 @@ const getIndustryList = async () => {
   industryList.length = 0;
   industryList.push(...data);
 };
-onMounted(() => {
+onActivated(() => {
   getIndustryList();
 });
 </script>

@@ -8,6 +8,7 @@
         :column-list="columnList"
         :hasPagination="false"
         rowKey="id"
+        :loading="loading"
         default-expand-all
       >
         <template #tableTop>
@@ -78,15 +79,17 @@ const formItem = reactive({
   keyword: "",
 });
 const tableData = reactive([]);
+const loading = ref(false);
 const getList = async () => {
   const params = { ...formItem };
+  loading.value = true;
   try {
     const { data } = await menusIndex(params);
-    console.log(data, "==========");
+    loading.value = false;
     tableData.length = 0;
     tableData.push(...data);
-    console.log(tableData);
   } catch (e) {
+    loading.value = false;
     console.log(e);
   }
 };

@@ -8,7 +8,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Breadcrumb: typeof import('./../components/Breadcrumb/index.vue')['default']
-    ElAffix: typeof import('element-plus/es')['ElAffix']
+    ElAffix: typeof import("element-plus/es")["ElAffix"]
     ElAlert: typeof import("element-plus/es")["ElAlert"]
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
     ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
@@ -35,7 +35,7 @@ declare module '@vue/runtime-core' {
     ElPagination: typeof import('element-plus/es')['ElPagination']
     ElPopover: typeof import('element-plus/es')['ElPopover']
     ElRadio: typeof import("element-plus/es")["ElRadio"]
-    ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
+    ElRadioGroup: typeof import("element-plus/es")["ElRadioGroup"]
     ElRow: typeof import('element-plus/es')['ElRow']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSelect: typeof import('element-plus/es')['ElSelect']
@@ -63,7 +63,7 @@ declare module '@vue/runtime-core' {
     IEpCircleCloseFilled: typeof import('~icons/ep/circle-close-filled')['default']
     IEpClose: typeof import('~icons/ep/close')['default']
     IEpCollection: typeof import("~icons/ep/collection")["default"]
-    IEpDArrowRight: typeof import('~icons/ep/d-arrow-right')['default']
+    IEpDArrowRight: typeof import("~icons/ep/d-arrow-right")["default"]
     IEpDelete: typeof import("~icons/ep/delete")["default"]
     IEpDownload: typeof import("~icons/ep/download")["default"]
     IEpEdit: typeof import("~icons/ep/edit")["default"]
@@ -99,6 +99,6 @@ declare module '@vue/runtime-core' {
     ZxnTitle: typeof import('./../components/zxnTitle/index.vue')['default']
   }
   export interface ComponentCustomProperties {
-    vLoading: typeof import("element-plus/es")["ElLoadingDirective"]
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }

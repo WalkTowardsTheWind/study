@@ -58,6 +58,7 @@
       hasSelect
       :page-info="pageInfo"
       :selectable="selectable"
+      :loading="loading"
       @page-change="handlePageChange"
     >
       <template #tableTop>
@@ -129,9 +130,23 @@ const formItem = reactive({
   status: "",
 });
 const columnList: any[] = reactive([
-  { label: "发票任务编号", prop: "invoice_no", minWidth: 150 },
+  { label: "任务编号", prop: "invoice_no", minWidth: 150 },
   {
-    label: "关联任务数量",
+    label: "状态",
+    type: "enum",
+    path: "statusEnum.invoiceStatus",
+    prop: "status",
+    color: {
+      0: { color: "#35C5F3", backgroundColor: "#dff6fd" },
+      1: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+      2: { color: "#F35135", backgroundColor: "#fde3df" },
+      3: { color: "#FFFFFF", backgroundColor: "#f9a89a" },
+      4: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+    },
+    minWidth: 120,
+  },
+  {
+    label: "发票类目",
     prop: "task_list",
     slot: "taskLength",
     minWidth: 120,
@@ -157,20 +172,6 @@ const columnList: any[] = reactive([
   { label: "申请时间", prop: "add_time", minWidth: 120 },
   { label: "结算确认函", minWidth: 120 },
   {
-    label: "状态",
-    type: "enum",
-    path: "statusEnum.invoiceStatus",
-    prop: "status",
-    color: {
-      0: { color: "#19B56B", backgroundColor: "#daf3e7" },
-      1: { color: "#356FF3", backgroundColor: "#dfe8fd" },
-      2: { color: "#356FF3", backgroundColor: "#dfe8fd" },
-      3: { color: "#F35135", backgroundColor: "#fde3df" },
-      4: { color: "#FFFFFF", backgroundColor: "#f9a89a" },
-    },
-    minWidth: 120,
-  },
-  {
     label: "操作",
     slot: "operation",
     fixed: "right",
@@ -192,22 +193,26 @@ const handlePageChange = (cur) => {
   pageInfo.page = page;
   getList();
 };
+const loading = ref(false);
 const getList = async () => {
   const params = transformTimeRange({ ...formItem });
   params.category_id = params.category_id.pop();
   params.task_type = props.type;
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
+  loading.value = true;
   try {
     const { data } =
       props.type === "enterprise"
         ? await getInvoiceInCompany(params)
         : await getInvoiceInChannel(params);
+    loading.value = false;
     tableData.length = 0;
     pageInfo.page = data.current_page;
     pageInfo.total = data.total;
     tableData.push(...data.data);
   } catch (e) {
+    loading.value = false;
     console.log(e);
   }
 };
@@ -222,7 +227,6 @@ const table = ref();
 const handleCommand = async (id) => {
   const selected = table.value.getSelectionRows();
   const ids = isNumber(id) ? [id] : selected.map((it) => it.id);
-  console.log(ids, "2222");
   if (!ids.length) {
     return ElMessage({
       type: "error",
@@ -244,7 +248,7 @@ const handleCommand = async (id) => {
         instance.confirmButtonLoading = true;
         const params = {
           ids,
-          status: 3,
+          status: 2,
         };
         props.type === "enterprise"
           ? await setStatus(params)
