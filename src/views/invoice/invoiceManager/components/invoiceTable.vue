@@ -7,7 +7,10 @@
       :label-width="100"
     >
       <el-form-item label="" prop="invoice_name">
-        <el-input v-model="formItem.invoice_name" placeholder="请输入关键字">
+        <el-input
+          v-model="formItem.invoice_name"
+          placeholder="请输入任务编号、申请开票企业"
+        >
           <template #prefix>
             <el-icon><i-ep-Search /></el-icon>
           </template>

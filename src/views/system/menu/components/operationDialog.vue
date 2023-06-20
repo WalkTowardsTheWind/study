@@ -3,7 +3,7 @@
     v-model="visible"
     @close="handleClose"
     class="zxn-dialog"
-    title="新增菜单"
+    :title="id ? '编辑菜单' : '新增菜单'"
     width="452"
   >
     <el-form
