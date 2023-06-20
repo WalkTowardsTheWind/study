@@ -25,12 +25,13 @@ export const constantRoutes: RouteRecordRaw[] = [
     path: "/",
     component: Layout,
     redirect: "/dashboard",
+    name: "dashboard",
+    meta: { title: "首页", icon: "dashboard" },
     children: [
       {
         path: "dashboard",
         component: () => import("@/views/dashboard/index.vue"),
-        name: "Dashboard",
-        meta: { title: "dashboard", icon: "homepage", affix: true },
+        meta: { title: "工作台", affix: true },
       },
       {
         path: "401",
@@ -44,18 +45,75 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
-  // 合同中心
+  // 账户管理
   {
-    path: "/contractCenter",
+    path: "/accountManage",
     component: Layout,
-    redirect: "/contractCenter",
-    meta: { title: "合同中心", icon: "homepage" },
+    meta: { title: "账户管理", icon: "account" },
     children: [
+      {
+        path: "business-account",
+        component: () => import("@/views/account-management/index.vue"),
+        name: "business-account",
+        meta: { title: "账户中心" },
+      },
+      {
+        path: "business-account-detail",
+        component: () =>
+          import("@/views/account-management/business/detail-or-edit.vue"),
+        name: "business-account-detail",
+        meta: {
+          hidden: true,
+        },
+      },
+      {
+        path: "business-account-add",
+        component: () => import("@/views/account-management/business/add.vue"),
+        name: "business-account-add",
+        meta: {
+          hidden: true,
+        },
+      },
+      {
+        path: "channel-account-detail",
+        component: () =>
+          import("@/views/account-management/channel/detail-or-edit.vue"),
+        name: "channel-account-detail",
+        meta: {
+          hidden: true,
+        },
+      },
+      {
+        path: "channel-account-add",
+        component: () => import("@/views/account-management/channel/add.vue"),
+        name: "channel-account-add",
+        meta: {
+          hidden: true,
+        },
+      },
+      // {
+      // 	path: "personal-account",
+      // 	component: () =>
+      // 		import("@/views/account-management/personal/index.vue"),
+      // 	name: "personal-account",
+      // 	meta: {
+      // 		hidden: true,
+      // 	},
+      // },
+      {
+        path: "personal-account-detail",
+        component: () =>
+          import("@/views/account-management/personal/detail-or-edit.vue"),
+        name: "personal-account-detail",
+        meta: {
+          hidden: true,
+        },
+      },
       {
         path: "contractCenter",
         component: () => import("@/views/contractCenter/index.vue"),
         name: "contractCenter",
-        meta: { title: "合同中心", icon: "homepage" },
+        meta: { title: "合同中心" },
       },
       {
         path: "enterpriseContractAdd",
@@ -138,136 +196,17 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
-  // 资产
-  {
-    path: "/settlementCenter",
-    component: Layout,
-    redirect: "/settlementCenter",
-    meta: { title: "结算中心", icon: "homepage" },
-    children: [
-      {
-        path: "settlementCenter",
-        component: () => import("@/views/settlementCenter/index.vue"),
-        name: "settlementCenter",
-        meta: { title: "结算中心", icon: "homepage" },
-      },
-      {
-        path: "enterpriseSettlementDetails",
-        component: () =>
-          import(
-            "@/views/settlementCenter/enterpriseSettlement/enterpriseSettlementDetails.vue"
-          ),
-        name: "enterpriseSettlementDetails",
-        meta: { title: "企业结算详情", icon: "homepage", hidden: true },
-      },
-      {
-        path: "enterpriseSettlementA",
-        component: () =>
-          import(
-            "@/views/settlementCenter/enterpriseSettlement/enterpriseSettlementA.vue"
-          ),
-        name: "enterpriseSettlementA",
-        meta: { title: "企业", icon: "homepage", hidden: true },
-      },
-      {
-        path: "channelSettlementA",
-        component: () =>
-          import(
-            "@/views/settlementCenter/channelSettlement/channelSettlementA.vue"
-          ),
-        name: "channelSettlementA",
-        meta: { title: "渠道佣金介绍", icon: "homepage", hidden: true },
-      },
-      {
-        path: "channelSettlementB",
-        component: () =>
-          import(
-            "@/views/settlementCenter/channelSettlement/channelSettlementB.vue"
-          ),
-        name: "channelSettlementB",
-        meta: { title: "任务", icon: "homepage", hidden: true },
-      },
-    ],
-  },
-  {
-    path: "/taxLandManagement",
-    component: Layout,
-    redirect: "/taxLandManagement",
-    meta: { title: "税地管理", icon: "homepage" },
-    children: [
-      {
-        path: "taxLandManagement",
-        component: () => import("@/views/taxLandManagement/index.vue"),
-        name: "taxLandManagementIndex",
-        meta: { title: "税地管理", icon: "homepage" },
-      },
-      {
-        path: "selfOperatedTaxLandAdd",
-        component: () =>
-          import(
-            "@/views/taxLandManagement/selfOperatedTaxLand/selfOperatedTaxLandAdd.vue"
-          ),
-        name: "selfOperatedTaxLandAdd",
-        meta: { title: "新建自营税地", icon: "homepage", hidden: true },
-      },
-      {
-        path: "selfOperatedTaxLandEdit",
-        component: () =>
-          import(
-            "@/views/taxLandManagement/selfOperatedTaxLand/selfOperatedTaxLandEdit.vue"
-          ),
-        name: "selfOperatedTaxLandEdit",
-        meta: { title: "编辑自营税地", icon: "homepage", hidden: true },
-      },
-      {
-        path: "selfOperatedTaxLandDetails",
-        component: () =>
-          import(
-            "@/views/taxLandManagement/selfOperatedTaxLand/selfOperatedTaxLandDetails.vue"
-          ),
-        name: "selfOperatedTaxLandDetails",
-        meta: { title: "自营税地详情", icon: "homepage", hidden: true },
-      },
-      {
-        path: "purchaseTaxLandAdd",
-        component: () =>
-          import(
-            "@/views/taxLandManagement/purchaseTaxLand/purchaseTaxLandAdd.vue"
-          ),
-        name: "purchaseTaxLandAdd",
-        meta: { title: "新建采购税地", icon: "homepage", hidden: true },
-      },
-      {
-        path: "selfOperatedTaxLandEdit",
-        component: () =>
-          import(
-            "@/views/taxLandManagement/purchaseTaxLand/purchaseTaxLandEdit.vue"
-          ),
-        name: "purchaseTaxLandEdit",
-        meta: { title: "编辑采购税地", icon: "homepage", hidden: true },
-      },
-      {
-        path: "selfOperatedTaxLandDetails",
-        component: () =>
-          import(
-            "@/views/taxLandManagement/purchaseTaxLand/purchaseTaxLandDetails.vue"
-          ),
-        name: "purchaseTaxLandDetails",
-        meta: { title: "采购税地详情", icon: "homepage", hidden: true },
-      },
-    ],
-  },
   // 任务中心
   {
     path: "/taskManager",
     component: Layout,
-    meta: { title: "任务管理", icon: "homepage" },
+    meta: { title: "任务管理", icon: "task" },
     children: [
       {
         path: "index",
         component: () => import("@/views/taskManager/index.vue"),
         name: "taskManagerIndex",
-        meta: { title: "任务中心", icon: "homepage" },
+        meta: { title: "任务中心", keepAlive: true },
       },
       {
         path: "view",
@@ -277,16 +216,98 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
+  // 财务
+  {
+    path: "/assetManagement",
+    component: Layout,
+    meta: { title: "财务管理", icon: "asset" },
+    children: [
+      {
+        path: "assetIndex",
+        component: () => import("@/views/asset-management/index.vue"),
+        name: "asset-management",
+        meta: { title: "财务中心" },
+      },
+      {
+        path: "asset-management-detail",
+        component: () => import("@/views/asset-management/detail.vue"),
+        name: "asset-management-detail",
+        meta: { hidden: true },
+      },
+      {
+        path: "recharge-detail",
+        component: () =>
+          import("@/views/asset-management/components/recharge-detail.vue"),
+        name: "recharge-detail",
+        meta: { hidden: true, title: "企业列表详情" },
+      },
+      {
+        path: "rechargeIndex",
+        component: () => import("@/views/recharge-center/index.vue"),
+        name: "recharge-center",
+        meta: { title: "充值中心" },
+      },
+      {
+        path: "rechargeDetail",
+        component: () => import("@/views/recharge-center/detail.vue"),
+        name: "recharge-center-detail",
+        meta: { hidden: true },
+      },
+      {
+        path: "settlementCenter",
+        component: () => import("@/views/settlementCenter/index.vue"),
+        name: "settlementCenter",
+        meta: { title: "结算中心" },
+      },
+      {
+        path: "enterpriseSettlementDetails",
+        component: () =>
+          import(
+            "@/views/settlementCenter/enterpriseSettlement/enterpriseSettlementDetails.vue"
+          ),
+        name: "enterpriseSettlementDetails",
+        meta: { title: "企业结算详情", hidden: true },
+      },
+      {
+        path: "enterpriseSettlementA",
+        component: () =>
+          import(
+            "@/views/settlementCenter/enterpriseSettlement/enterpriseSettlementA.vue"
+          ),
+        name: "enterpriseSettlementA",
+        meta: { title: "企业", hidden: true },
+      },
+      {
+        path: "channelSettlementA",
+        component: () =>
+          import(
+            "@/views/settlementCenter/channelSettlement/channelSettlementA.vue"
+          ),
+        name: "channelSettlementA",
+        meta: { title: "渠道佣金介绍", hidden: true },
+      },
+      {
+        path: "channelSettlementB",
+        component: () =>
+          import(
+            "@/views/settlementCenter/channelSettlement/channelSettlementB.vue"
+          ),
+        name: "channelSettlementB",
+        meta: { title: "任务", hidden: true },
+      },
+    ],
+  },
+  // 发票
   {
     path: "/invoice",
     component: Layout,
-    meta: { title: "发票中心", icon: "homepage" },
+    meta: { title: "发票管理", icon: "invoice" },
     children: [
       {
         path: "manager",
         component: () => import("@/views/invoice/invoiceManager/index.vue"),
         name: "invoiceManager",
-        meta: { title: "发票管理", icon: "homepage" },
+        meta: { title: "发票中心", keepAlive: true },
       },
       {
         path: "invoiceView",
@@ -296,16 +317,100 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
+  // 帨地
+  {
+    path: "/taxLandManagement",
+    component: Layout,
+    redirect: "/taxLandManagement",
+    meta: { title: "税地管理", icon: "taxLand" },
+    children: [
+      {
+        path: "taxLandManagement",
+        component: () => import("@/views/taxLandManagement/index.vue"),
+        name: "taxLandManagementIndex",
+        meta: { title: "税地管理" },
+      },
+      {
+        path: "selfOperatedTaxLandAdd",
+        component: () =>
+          import(
+            "@/views/taxLandManagement/selfOperatedTaxLand/selfOperatedTaxLandAdd.vue"
+          ),
+        name: "selfOperatedTaxLandAdd",
+        meta: { title: "新建自营税地", hidden: true },
+      },
+      {
+        path: "selfOperatedTaxLandEdit",
+        component: () =>
+          import(
+            "@/views/taxLandManagement/selfOperatedTaxLand/selfOperatedTaxLandEdit.vue"
+          ),
+        name: "selfOperatedTaxLandEdit",
+        meta: { title: "编辑自营税地", hidden: true },
+      },
+      {
+        path: "selfOperatedTaxLandDetails",
+        component: () =>
+          import(
+            "@/views/taxLandManagement/selfOperatedTaxLand/selfOperatedTaxLandDetails.vue"
+          ),
+        name: "selfOperatedTaxLandDetails",
+        meta: { title: "自营税地详情", hidden: true },
+      },
+      {
+        path: "purchaseTaxLandAdd",
+        component: () =>
+          import(
+            "@/views/taxLandManagement/purchaseTaxLand/purchaseTaxLandAdd.vue"
+          ),
+        name: "purchaseTaxLandAdd",
+        meta: { title: "新建采购税地", hidden: true },
+      },
+      {
+        path: "selfOperatedTaxLandEdit",
+        component: () =>
+          import(
+            "@/views/taxLandManagement/purchaseTaxLand/purchaseTaxLandEdit.vue"
+          ),
+        name: "purchaseTaxLandEdit",
+        meta: { title: "编辑采购税地", hidden: true },
+      },
+      {
+        path: "selfOperatedTaxLandDetails",
+        component: () =>
+          import(
+            "@/views/taxLandManagement/purchaseTaxLand/purchaseTaxLandDetails.vue"
+          ),
+        name: "purchaseTaxLandDetails",
+        meta: { title: "采购税地详情", hidden: true },
+      },
+    ],
+  },
+  // 类目
+  {
+    path: "/category-management",
+    component: Layout,
+    meta: { title: "类目管理", icon: "category" },
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/category-management/index.vue"),
+        name: "category-management",
+        meta: { title: "类目中心" },
+      },
+    ],
+  },
+  // 系统设置
   {
     path: "/system",
     component: Layout,
-    meta: { title: "系统设置", icon: "homepage" },
+    meta: { title: "系统设置", icon: "system" },
     children: [
       {
         path: "role",
         component: () => import("@/views/system/role/index.vue"),
         name: "roleIndex",
-        meta: { title: "角色管理", icon: "homepage" },
+        meta: { title: "角色管理" },
       },
       {
         path: "addRole",
@@ -323,145 +428,19 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "menu",
         component: () => import("@/views/system/menu/index.vue"),
         name: "menuIndex",
-        meta: { title: "菜单管理", icon: "homepage" },
+        meta: { title: "菜单管理" },
       },
       {
         path: "log",
         component: () => import("@/views/system/log/index.vue"),
         name: "log",
-        meta: { title: "日志中心", icon: "homepage" },
+        meta: { title: "日志中心" },
       },
       {
         path: "account",
         component: () => import("@/views/system/account/index.vue"),
         name: "account",
         meta: { title: "账号设置", hidden: true },
-      },
-    ],
-  },
-  // 账户管理模块
-  {
-    path: "/account-management",
-    component: Layout,
-    name: "account-management",
-    children: [
-      {
-        path: "business-account",
-        component: () => import("@/views/account-management/index.vue"),
-        name: "business-account",
-        meta: { title: "账户管理", icon: "homepage" },
-      },
-      {
-        path: "business-account-detail",
-        component: () =>
-          import("@/views/account-management/business/detail-or-edit.vue"),
-        name: "business-account-detail",
-        meta: {
-          hidden: true,
-        },
-      },
-      {
-        path: "business-account-add",
-        component: () => import("@/views/account-management/business/add.vue"),
-        name: "business-account-add",
-        meta: {
-          hidden: true,
-        },
-      },
-      {
-        path: "channel-account-detail",
-        component: () =>
-          import("@/views/account-management/channel/detail-or-edit.vue"),
-        name: "channel-account-detail",
-        meta: {
-          hidden: true,
-        },
-      },
-      {
-        path: "channel-account-add",
-        component: () => import("@/views/account-management/channel/add.vue"),
-        name: "channel-account-add",
-        meta: {
-          hidden: true,
-        },
-      },
-      {
-        path: "personal-account",
-        component: () =>
-          import("@/views/account-management/personal/index.vue"),
-        name: "personal-account",
-        meta: {
-          hidden: true,
-        },
-      },
-      {
-        path: "personal-account-detail",
-        component: () =>
-          import("@/views/account-management/personal/detail-or-edit.vue"),
-        name: "personal-account-detail",
-        meta: {
-          hidden: true,
-        },
-      },
-    ],
-  },
-  {
-    path: "/asset-management",
-    component: Layout,
-    meta: { title: "财务中心", icon: "homepage" },
-    children: [
-      {
-        path: "index",
-        component: () => import("@/views/asset-management/index.vue"),
-        name: "asset-management",
-        meta: { title: "资产管理", icon: "homepage" },
-      },
-      {
-        path: "asset-management-detail",
-        component: () => import("@/views/asset-management/detail.vue"),
-        name: "asset-management-detail",
-        meta: { hidden: true },
-      },
-      {
-        path: "recharge-detail",
-        component: () =>
-          import("@/views/asset-management/components/recharge-detail.vue"),
-        name: "recharge-detail",
-        meta: { hidden: true, title: "企业列表详情" },
-      },
-    ],
-  },
-
-  {
-    path: "/recharge-center",
-    component: Layout,
-    meta: { title: "充值中心", icon: "homepage" },
-    children: [
-      {
-        path: "index",
-        component: () => import("@/views/recharge-center/index.vue"),
-        name: "recharge-center",
-        meta: { title: "充值中心", icon: "homepage" },
-      },
-      {
-        path: "detail",
-        component: () => import("@/views/recharge-center/detail.vue"),
-        name: "recharge-center-detail",
-        meta: { hidden: true },
-      },
-    ],
-  },
-  // 类目
-  {
-    path: "/category-management",
-    component: Layout,
-    meta: { title: "类目管理", icon: "homepage" },
-    children: [
-      {
-        path: "index",
-        component: () => import("@/views/category-management/index.vue"),
-        name: "category-management",
-        meta: { title: "类目管理", icon: "homepage" },
       },
     ],
   },

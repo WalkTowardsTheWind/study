@@ -1,52 +1,33 @@
 <template>
   <zxn-plan>
-    <zxn-tabs
-      v-model:activeName="activeName"
-      :tabsList="tabsList"
-      @tabChange="handleTabChange"
-      hasUpdate
-    >
-      <template #auto>
-        <task-table ref="auto" :type="1" :industry-list="industryList" />
-      </template>
-      <template #manual>
-        <task-table ref="manual" :type="0" :industry-list="industryList" />
-      </template>
+    <zxn-tabs v-model:activeName="activeName" :tabsList="tabsList" hasUpdate>
     </zxn-tabs>
+    <task-table ref="manual" :type="0" :industry-list="industryList" />
   </zxn-plan>
 </template>
+<script lang="ts">
+export default {
+  name: "taskManagerIndex",
+};
+</script>
 <script setup lang="ts">
 import taskTable from "./components/taskTable.vue";
 import { getTreeList } from "@/api/common";
-const activeName = ref("auto");
+const activeName = ref("task");
 const tabsList = [
   {
-    name: "auto",
-    label: "自动任务",
-  },
-  {
-    name: "manual",
-    label: "人工任务",
+    name: "task",
+    label: "任务中心",
   },
 ];
 const industryList = reactive([]);
-const auto = ref();
 const manual = ref();
 const getIndustryList = async () => {
   const { data } = await getTreeList({ type: 0 });
   industryList.length = 0;
   industryList.push(...data);
 };
-const handleTabChange = () => {
-  if (activeName.value === "auto") {
-    auto.value.getTaskList();
-  } else {
-    console.log(22222222);
-    manual.value.getTaskList();
-  }
-};
-onMounted(() => {
+onActivated(() => {
   getIndustryList();
-  handleTabChange();
 });
 </script>

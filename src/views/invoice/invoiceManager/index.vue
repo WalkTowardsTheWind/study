@@ -28,6 +28,11 @@
     <logistics-dialog ref="logisticsDialogRef" />
   </zxn-plan>
 </template>
+<script lang="ts">
+export default {
+  name: "invoiceManager",
+};
+</script>
 <script setup lang="ts">
 import taskDialog from "./components/taskDialog.vue";
 import addInvoice from "./components/addinvoice.vue";
@@ -61,7 +66,7 @@ const logisticsDialogRef = ref();
 const handleLogistics = (cur) => {
   logisticsDialogRef.value.init(cur.id);
 };
-onMounted(() => {
+onActivated(() => {
   handleTabChange();
 });
 // const taskDialogRef = ref(null);

@@ -27,17 +27,17 @@
       <el-button type="info" @click="reject">驳回</el-button>
       <el-button type="primary" @click="pass">通过</el-button>
     </zxn-bottom-btn>
+    <!-- 驳回 -->
+    <el-dialog v-model="dialogVisible" top="30vh" title="驳回原因" width="20%">
+      <el-form-item>
+        <el-input v-model="reject_reason" placeholder="请输入" />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="checkReject">确认</el-button>
+        <el-button @click="dialogVisible = false">取消</el-button>
+      </el-form-item>
+    </el-dialog>
   </zxn-plan>
-  <!-- 驳回 -->
-  <el-dialog v-model="dialogVisible" top="30vh" title="驳回原因" width="20%">
-    <el-form-item>
-      <el-input v-model="reject_reason" placeholder="请输入" />
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="checkReject">确认</el-button>
-      <el-button @click="dialogVisible = false">取消</el-button>
-    </el-form-item>
-  </el-dialog>
 </template>
 
 <script lang="ts" setup>

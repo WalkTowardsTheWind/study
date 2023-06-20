@@ -86,89 +86,98 @@
         >
       </template>
     </zxn-table>
+    <el-dialog
+      v-model="visible"
+      :title="dialogTitle"
+      width="500px"
+      :close-on-click-modal="false"
+    >
+      <!-- 新增编辑 -->
+      <el-form label-width="70px" v-if="isAdd">
+        <el-form-item label="账户名">
+          <el-input v-model="addForm.account" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item v-if="!isEdit" label="密码">
+          <el-input
+            v-model="addForm.pwd"
+            type="password"
+            placeholder="请输入"
+            show-password
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item v-if="!isEdit" label="确认密码">
+          <el-input
+            v-model="addForm.conf_pwd"
+            type="password"
+            placeholder="请输入"
+            show-password
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item label="角色">
+          <el-select
+            class="w-full"
+            placeholder="请选择"
+            v-model="addForm.roles"
+          >
+            <el-option
+              v-for="item in roleOption"
+              :key="item.id"
+              :label="item.role_name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="地区">
+          <el-cascader
+            class="w-full"
+            v-model="area"
+            :options="options"
+            :props="props2"
+            clearable
+            placeholder="请选择"
+            :show-all-levels="false"
+          />
+        </el-form-item>
+        <el-form-item label="联系人">
+          <el-input v-model="addForm.real_name" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="联系方式">
+          <el-input
+            v-if="isAdd"
+            v-model="addForm.mobile"
+            placeholder="请输入"
+          />
+          <span v-else>{{ addForm.mobile }}</span>
+        </el-form-item>
+        <div class="btn">
+          <el-button @click="addSubmit">{{
+            isAdd ? "保存" : "完成"
+          }}</el-button>
+          <el-button @click="visible = false">取消</el-button>
+        </div>
+      </el-form>
+      <!-- 详情 -->
+      <el-form label-width="70px" v-else>
+        <el-form-item label="账户名">
+          <span>{{ addForm.account }}</span>
+        </el-form-item>
+        <el-form-item label="角色">
+          <span>{{ addForm.role_name }}</span>
+        </el-form-item>
+        <el-form-item label="地区">
+          <span>{{ addForm.areas_name }}</span>
+        </el-form-item>
+        <el-form-item label="联系人">
+          <span>{{ addForm.real_name }}</span>
+        </el-form-item>
+        <el-form-item label="联系方式">
+          <span>{{ addForm.mobile }}</span>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
-
-  <el-dialog
-    v-model="visible"
-    :title="dialogTitle"
-    width="500px"
-    :close-on-click-modal="false"
-  >
-    <!-- 新增编辑 -->
-    <el-form label-width="70px" v-if="isAdd">
-      <el-form-item label="账户名">
-        <el-input v-model="addForm.account" placeholder="请输入" />
-      </el-form-item>
-      <el-form-item v-if="!isEdit" label="密码">
-        <el-input
-          v-model="addForm.pwd"
-          type="password"
-          placeholder="请输入"
-          show-password
-        >
-        </el-input>
-      </el-form-item>
-      <el-form-item v-if="!isEdit" label="确认密码">
-        <el-input
-          v-model="addForm.conf_pwd"
-          type="password"
-          placeholder="请输入"
-          show-password
-        >
-        </el-input>
-      </el-form-item>
-      <el-form-item label="角色">
-        <el-select class="w-full" placeholder="请选择" v-model="addForm.roles">
-          <el-option
-            v-for="item in roleOption"
-            :key="item.id"
-            :label="item.role_name"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="地区">
-        <el-cascader
-          class="w-full"
-          v-model="area"
-          :options="options"
-          :props="props2"
-          clearable
-          placeholder="请选择"
-          :show-all-levels="false"
-        />
-      </el-form-item>
-      <el-form-item label="联系人">
-        <el-input v-model="addForm.real_name" placeholder="请输入" />
-      </el-form-item>
-      <el-form-item label="联系方式">
-        <el-input v-if="isAdd" v-model="addForm.mobile" placeholder="请输入" />
-        <span v-else>{{ addForm.mobile }}</span>
-      </el-form-item>
-      <div class="btn">
-        <el-button @click="addSubmit">{{ isAdd ? "保存" : "完成" }}</el-button>
-        <el-button @click="visible = false">取消</el-button>
-      </div>
-    </el-form>
-    <!-- 详情 -->
-    <el-form label-width="70px" v-else>
-      <el-form-item label="账户名">
-        <span>{{ addForm.account }}</span>
-      </el-form-item>
-      <el-form-item label="角色">
-        <span>{{ addForm.role_name }}</span>
-      </el-form-item>
-      <el-form-item label="地区">
-        <span>{{ addForm.areas_name }}</span>
-      </el-form-item>
-      <el-form-item label="联系人">
-        <span>{{ addForm.real_name }}</span>
-      </el-form-item>
-      <el-form-item label="联系方式">
-        <span>{{ addForm.mobile }}</span>
-      </el-form-item>
-    </el-form>
-  </el-dialog>
 </template>
 
 <script lang="ts" setup>

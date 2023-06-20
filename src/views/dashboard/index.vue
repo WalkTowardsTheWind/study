@@ -5,6 +5,7 @@
         class="dashboard-container-statistics-item"
         v-for="item in statisticsList"
         :key="item.title"
+        @click="handleView(item)"
       >
         <div class="dashboard-container-statistics-item-icon"></div>
         <div class="dashboard-container-statistics-item-info">
@@ -43,6 +44,8 @@ import BarChart from "./components/BarChart.vue";
 import NoticeMessage from "./components/NoticeMessage.vue";
 import { workbench } from "@/api/dashboard";
 import { getPercentValue } from "@/utils";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const statisticsList: any[] = reactive([]);
 const industryEcharts = ref([]);
 const initData = async () => {
@@ -77,6 +80,16 @@ const initData = async () => {
     rate: getPercentValue(numList, index, 2),
   }));
 };
+const handleView = (item) => {
+  const routerMap = {
+    发布申请: "taskManagerIndex",
+    充值订单: "recharge-center",
+    结算订单: "settlementCenter",
+    开票订单: "invoiceManager",
+    异常数据: "Dashboard",
+  };
+  router.push({ name: routerMap[item.title] });
+};
 onMounted(() => {
   initData();
 });
@@ -104,6 +117,7 @@ onMounted(() => {
       min-width: 192px;
       height: 104px;
       padding-left: 26px;
+      cursor: pointer;
       background: #fff;
       border-radius: 4px;
 

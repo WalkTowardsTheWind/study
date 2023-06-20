@@ -12,21 +12,18 @@
         <component :is="item.subassembly"></component>
       </el-tab-pane>
     </el-tabs>
-    <div class="zxn-tabs-back" v-if="hasUpdate" @click="handleClickRight">
-      <el-icon size="14" color="#474747">
-        <!--        <i-ep-ArrowLeft v-if="hasBack" />-->
-        <i-ep-RefreshRight v-if="hasUpdate" />
-      </el-icon>
-      <span>{{ hasBack ? "返回上一级" : "更新" }}</span>
-    </div>
+    <!--    <div class="zxn-tabs-back" v-if="hasUpdate" @click="handleClickRight">-->
+    <!--&lt;!&ndash;      <el-icon size="14" color="#474747">&ndash;&gt;-->
+    <!--&lt;!&ndash;                <i-ep-ArrowLeft v-if="hasBack" />&ndash;&gt;-->
+    <!--&lt;!&ndash;        <i-ep-RefreshRight v-if="hasUpdate" />&ndash;&gt;-->
+    <!--&lt;!&ndash;      </el-icon>&ndash;&gt;-->
+    <!--&lt;!&ndash;      <span>{{ hasBack ? "返回上一级" : "更新" }}</span>&ndash;&gt;-->
+    <!--    </div>-->
   </div>
 </template>
 <script lang="ts" setup>
-import { nextTick, PropType } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { PropType } from "vue";
 import { TabsContextKey } from "@/components/constants";
-const router = useRouter();
-const route = useRoute();
 type tabsListType = {
   label: string;
   name: string;
@@ -47,17 +44,17 @@ const handleClick = (tab: string) => {
   emit("tab-change", tab);
   setTimeout(resizeSearch);
 };
-const handleClickRight = () => {
-  if (props.hasBack) {
-    return router.go(-1);
-  }
-  const { fullPath } = route;
-  nextTick(() => {
-    router.replace({ path: "/redirect" + fullPath }).catch((err) => {
-      console.warn(err);
-    });
-  });
-};
+// const handleClickRight = () => {
+//   if (props.hasBack) {
+//     return router.go(-1);
+//   }
+//   const { fullPath } = route;
+//   nextTick(() => {
+//     router.replace({ path: "/redirect" + fullPath }).catch((err) => {
+//       console.warn(err);
+//     });
+//   });
+// };
 const searchEl: any[] = [];
 const addSearch = (searchBox: any) => {
   searchEl.push(searchBox);

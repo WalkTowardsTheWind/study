@@ -1,12 +1,9 @@
 export enum TaskEnum {
-  "待申请",
-  "申请中",
-  "驳回",
-  "报名中",
-  "进行中",
-  "已验收",
-  "封停",
-  "关闭",
+  "申请中" = 1,
+  "驳回" = 2,
+  "报名中" = 3,
+  "已验收" = 5,
+  "封停" = 6,
 }
 
 export enum IndustryType {
@@ -48,11 +45,11 @@ export enum personnelType {
 }
 
 export enum invoiceStatus {
-  "待开票",
+  "申请中",
   "已开票",
-  "已邮寄",
   "驳回",
   "冲红",
+  "已收票",
 }
 
 export enum invoiceType {

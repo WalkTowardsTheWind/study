@@ -22,6 +22,7 @@ const iconSelectorRef = ref(null);
  */
 function loadIcons() {
   const icons = import.meta.glob("../../assets/icons/*.svg");
+  console.log(icons, "iconsiconsicons");
   for (const icon in icons) {
     const iconName = icon.split("assets/icons/")[1].split(".svg")[0];
     iconNames.push(iconName);
