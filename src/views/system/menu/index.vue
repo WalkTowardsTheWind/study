@@ -9,7 +9,6 @@
         :hasPagination="false"
         rowKey="id"
         :loading="loading"
-        default-expand-all
       >
         <template #tableTop>
           <div class="menu-search">

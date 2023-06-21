@@ -90,7 +90,6 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         "element-plus/es/components/tree/style/css",
         "element-plus/es/components/alert/style/css",
         "@vueuse/core",
-
         "path-to-regexp",
         "echarts",
         "@wangeditor/editor",

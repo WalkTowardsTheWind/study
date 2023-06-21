@@ -29,8 +29,14 @@ service.interceptors.response.use(
     if (status === 200) {
       return response.data;
     }
-    if (status === 410000) {
-      ElMessage.error(msg);
+    if (status === 410000 || status === 410002) {
+      ElMessageBox.confirm("当前登录已失效，请重新登录", "提示", {
+        confirmButtonText: "确定",
+        type: "warning",
+      }).then(() => {
+        localStorage.clear();
+        window.location.href = "/";
+      });
       return Promise.reject(new Error(msg));
     }
     // 响应数据为二进制流处理(Excel导出)
@@ -43,19 +49,8 @@ service.interceptors.response.use(
   },
   (error: any) => {
     if (error.response.data) {
-      const { status, msg } = error.response.data;
-      // token 过期,重新登录
-      if (status === "A0230") {
-        ElMessageBox.confirm("当前页面已失效，请重新登录", "提示", {
-          confirmButtonText: "确定",
-          type: "warning",
-        }).then(() => {
-          localStorage.clear();
-          window.location.href = "/";
-        });
-      } else {
-        ElMessage.error(msg || "系统出错");
-      }
+      const { msg } = error.response.data;
+      ElMessage.error(msg || "系统出错");
     }
     return Promise.reject(error.message);
   }

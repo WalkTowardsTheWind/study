@@ -6,7 +6,10 @@
       @on-reset="handleReset"
     >
       <el-form-item label="" prop="task_name">
-        <el-input v-model="formItem.task_name" placeholder="请输入关键字">
+        <el-input
+          v-model="formItem.task_name"
+          placeholder="请输入任务编号、申请开票企业"
+        >
           <template #prefix>
             <el-icon><i-ep-Search /></el-icon>
           </template>
