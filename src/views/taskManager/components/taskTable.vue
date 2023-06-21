@@ -150,7 +150,7 @@ const columnList = [
     label: "申请时间",
     sortable: "custom",
     minWidth: 120,
-    prop: "open_start_time",
+    prop: "add_time",
   },
   {
     label: "任务描述",

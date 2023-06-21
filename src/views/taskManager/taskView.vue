@@ -91,14 +91,14 @@
             }}</el-form-item>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row v-if="formItem.status >= 3">
           <el-col :span="24">
             <el-form-item label="通过时间">{{
               formItem.pass_time
             }}</el-form-item>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row v-if="formItem.status >= 5">
           <el-col :span="24">
             <el-form-item label="验收时间">{{
               formItem.check_time
