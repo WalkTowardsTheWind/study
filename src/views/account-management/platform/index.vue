@@ -6,7 +6,7 @@
       @on-reset="handleReset"
     >
       <el-form-item>
-        <el-input v-model="formItem.name" placeholder="请输入关键字">
+        <el-input v-model="formItem.name" placeholder="请输入联系人或联系账户">
           <template #prefix>
             <i-ep-Search />
           </template>
