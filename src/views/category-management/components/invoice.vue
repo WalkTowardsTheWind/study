@@ -162,6 +162,7 @@ function add() {
   dialogTitle.value = "新增分类";
   dialogVisible.value = true;
   dialogType.value = "add";
+  resetForm();
 }
 
 /**
