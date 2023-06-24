@@ -76,14 +76,14 @@
             >驳回</el-button
           >
         </template>
-        <el-button
-          v-if="[3, 4].includes(row.status)"
-          link
-          type="primary"
-          @click="handleCommand('close', row.id)"
-        >
-          关闭
-        </el-button>
+        <!--        <el-button-->
+        <!--          v-if="[3, 4].includes(row.status)"-->
+        <!--          link-->
+        <!--          type="primary"-->
+        <!--          @click="handleCommand('close', row.id)"-->
+        <!--        >-->
+        <!--          关闭-->
+        <!--        </el-button>-->
         <el-button link type="primary" @click="handleView(row)">详情</el-button>
         <el-button link type="primary" @click="handleDelete(row)"
           >删除</el-button

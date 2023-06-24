@@ -18,7 +18,7 @@ export const useUserStore = defineStore("user", () => {
   const perms = ref<Array<string>>([]); // 用户权限编码集合 → 判断按钮权限
   const taxSource = ref<string[]>(["全国"]); //  当前税地
   const sourceList = ref([]);
-  // const menus = useStorage("menus", [])
+  const menusList = useStorage("menusList", []);
 
   /**
    * 登录调用
@@ -30,9 +30,10 @@ export const useUserStore = defineStore("user", () => {
     return new Promise<void>((resolve, reject) => {
       loginApi(loginData)
         .then((response) => {
-          const { user_info } = response.data;
+          const { user_info, menus } = response.data;
           token.value = response.data.token;
           nickname.value = user_info.account;
+          menusList.value = menus;
           resolve();
         })
         .catch((error) => {
@@ -46,7 +47,6 @@ export const useUserStore = defineStore("user", () => {
     return new Promise<void>((resolve, reject) => {
       logoutApi()
         .then(() => {
-          console.log(111);
           resetRouter();
           resetToken();
           resolve();
@@ -64,6 +64,7 @@ export const useUserStore = defineStore("user", () => {
     avatar.value = "";
     roles.value = [];
     perms.value = [];
+    menusList.value = [];
   }
 
   function taxSourceChange(value: []): void {
@@ -95,6 +96,7 @@ export const useUserStore = defineStore("user", () => {
     taxSourceChange,
     sourceList,
     getSourceList,
+    menusList,
   };
 });
 

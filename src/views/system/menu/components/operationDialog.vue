@@ -57,6 +57,12 @@
             :options="proxy.$const['system.yesOrNo']"
           />
         </el-form-item>
+        <el-form-item label="是否缓存" prop="cache">
+          <zxn-button-group
+            v-model="formItem.cache"
+            :options="proxy.$const['system.yesOrNo']"
+          />
+        </el-form-item>
         <el-form-item
           label="图标"
           prop="icon"
@@ -108,6 +114,7 @@ const formItem = reactive({
   icon: "",
   module: "",
   is_show_path: "1",
+  cache: "0",
   api_url: "",
   methods: "",
 });
@@ -126,6 +133,7 @@ const init = (treeData: any, detail): void => {
       formItem.menu_path = detail.menu_path;
       formItem.path = detail.path;
       formItem.is_show_path = detail.is_show_path + "";
+      formItem.cache = detail.cache;
       formItem.api_url = detail.api_url;
       formItem.methods = detail.methods;
       formItem.module = detail.module;
