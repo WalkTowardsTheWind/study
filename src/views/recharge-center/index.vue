@@ -66,11 +66,6 @@
             hasSelect
             :page-info="pageInfo"
           >
-            <template #certificate="scope">
-              <el-button link @click="toSee(scope.row.certificate)"
-                >查看</el-button
-              >
-            </template>
             <template #tableTop>
               <el-dropdown class="" trigger="click">
                 <el-button type="primary" plain>批量操作</el-button>
@@ -81,6 +76,17 @@
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
+            </template>
+            <template #certificate="scope">
+              <el-image
+                style="width: 30px; height: 30px"
+                :src="scope.row.certificate"
+                :zoom-rate="1.2"
+                :preview-src-list="[scope.row.certificate]"
+                fit="contain"
+                :z-index="999"
+                :preview-teleported="true"
+              />
             </template>
             <template #operation="scope">
               <el-button
@@ -168,7 +174,7 @@ const pageInfo = reactive({
 
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "充值单号", prop: "recharge_order_no" },
+  { label: "充值单号", prop: "recharge_order_no", width: 200 },
   {
     label: "状态",
     prop: "status",
@@ -186,11 +192,14 @@ const columnList = [
     },
   },
   { label: "企业名称", prop: "company_name" },
-  { label: "关联任务", prop: "certificate", slot: "certificate" },
+  // { label: "关联任务", prop: "certificate", slot: "certificate" },
   { label: "行业", prop: "category" },
   { label: "税源地", prop: "tax_land_name" },
-  { label: "税地账户", prop: "bank_account" },
-  { label: "操作", slot: "operation", fixed: "right", width: 250 },
+  { label: "税地账户", prop: "bank_account", width: 200 },
+  { label: "充值额度", prop: "amount" },
+  { label: "充值时间", prop: "add_time", width: 200 },
+  { label: "充值凭证", slot: "certificate" },
+  { label: "操作", slot: "operation", fixed: "right", width: 200 },
 ];
 
 const toDetail = (id: string) => {
