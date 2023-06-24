@@ -66,3 +66,10 @@ export enum invoiceRequire {
   "充值开票",
   "预开票",
 }
+
+export enum openStatus {
+  "一个月",
+  "三个月",
+  "半年",
+  "长期",
+}

@@ -61,6 +61,13 @@
           </template>
         </el-dropdown>
       </template>
+      <template #salary="{ row }">
+        {{
+          row.task_attribute.salary_type === 1
+            ? row.task_attribute.salary
+            : `${row.task_attribute.salary_min} - ${row.task_attribute.salary_max}`
+        }}
+      </template>
       <template #operation="{ row }">
         <template v-if="row.status === 1">
           <el-button
@@ -145,11 +152,11 @@ const columnList = [
   { label: "关联企业", prop: "company_name", minWidth: 140 },
   { label: "需求人数", prop: "task_attribute.person_count", type: "deep" },
   { label: "行业", prop: "category_name", minWidth: 80 },
-  { label: "金额", prop: "task_attribute.salary", type: "deep" },
+  { label: "金额", slot: "salary", minWidth: 180 },
   {
     label: "申请时间",
     sortable: "custom",
-    minWidth: 120,
+    minWidth: 180,
     prop: "add_time",
   },
   {
@@ -201,7 +208,7 @@ const getTaskList = async () => {
   }
 };
 const selectable = (row) => {
-  return Boolean(!row.status);
+  return Boolean(row.status === 1);
 };
 const taskTable = ref();
 const statusMessage = {

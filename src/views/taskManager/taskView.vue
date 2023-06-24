@@ -26,7 +26,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="行业">{{ formItem.category_id }}</el-form-item>
+            <el-form-item label="行业">{{
+              formItem.category_name
+            }}</el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="需求人数">
@@ -35,17 +37,17 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="公示周期">
-              {{ formItem.open_time }}
+              {{ proxy.$enumSet["statusEnum.openStatus"][formItem.open_type] }}
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="负责人">{{ formItem.task_head }}</el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="联系方式">
-              {{ formItem.task_head_phone }}
-            </el-form-item>
-          </el-col>
+          <!--          <el-col :span="8">-->
+          <!--            <el-form-item label="负责人">{{ formItem.task_head }}</el-form-item>-->
+          <!--          </el-col>-->
+          <!--          <el-col :span="8">-->
+          <!--            <el-form-item label="联系方式">-->
+          <!--              {{ formItem.task_head_phone }}-->
+          <!--            </el-form-item>-->
+          <!--          </el-col>-->
           <el-col :span="8">
             <el-form-item label="任务日期">
               {{ formItem.task_date }}
@@ -195,9 +197,9 @@ const columnList = [
 const formItem = reactive({
   status: "",
   task_name: "",
-  category_id: "",
+  category_name: "",
   person_count: "",
-  open_time: "",
+  open_type: "",
   task_head: "",
   task_head_phone: "",
   task_date: "",
@@ -213,8 +215,6 @@ const formItem = reactive({
 });
 const tableData = reactive([]);
 const getView = async () => {
-  tabsList[1].disabled = true;
-  tabsList[2].disabled = true;
   const { id } = route.query;
   const loading = ElLoading.service({
     text: "加载中...",
@@ -223,15 +223,13 @@ const getView = async () => {
     const { data } = await getTaskView(id * 1);
     loading.close();
     const taskAttribute = data.taskAttribute || {};
+    tabsList[1].disabled = ![3, 5].includes(data.status);
+    tabsList[2].disabled = ![5].includes(data.status);
     formItem.status = data.status;
     formItem.task_name = data.task_name;
-    formItem.category_id = data.category_id;
+    formItem.category_name = data.category_name;
     formItem.person_count = taskAttribute.person_count || "";
-    formItem.open_time =
-      data.open_type === 1
-        ? "长期"
-        : `${data.open_start_time} - ${data.open_end_time}`;
-
+    formItem.open_type = data.open_type + "";
     formItem.task_head = data.task_head;
     formItem.task_head_phone = data.task_head_phone;
     formItem.task_date =
@@ -259,7 +257,6 @@ const getView = async () => {
     formItem.check_time = data.check_time;
     formItem.pass_time = data.pass_time;
     if (data.taskUser && data.taskUser.length) {
-      tabsList[1].disabled = false;
       tableData.push(...data.taskUser);
     }
   } catch (err) {
