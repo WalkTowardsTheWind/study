@@ -229,7 +229,7 @@ function del(id: string) {
     .catch(() => {
       ElMessage({
         type: "info",
-        message: "Delete canceled",
+        message: "取消删除",
       });
     });
 }
