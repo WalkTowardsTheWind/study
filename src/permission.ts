@@ -6,7 +6,7 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 NProgress.configure({ showSpinner: false }); // 进度条
 
-usePermissionStoreHook();
+const permissionStore = usePermissionStoreHook();
 
 // 白名单路由
 const whiteList = ["/login"];
@@ -22,33 +22,34 @@ router.beforeEach(async (to, from, next) => {
     } else {
       const userStore = useUserStoreHook();
       const hasLand = userStore.sourceList && userStore.sourceList.length > 0;
-      // const hasRoles = userStore.roles && userStore.roles.length > 0;
+      const hasRoles = permissionStore.hasRoles;
       if (!hasLand) {
         // await userStore.getSourceList();
       }
-      next();
-      // if (hasRoles) {
-      //   // 未匹配到任何路由，跳转404
-      //   if (to.matched.length === 0) {
-      //     from.name ? next({ name: from.name }) : next("/404");
-      //   } else {
-      //     next();
-      //   }
-      // } else {
-      //   try {
-      //     const { roles } = await userStore.getInfo();
-      //     const accessRoutes = await permissionStore.generateRoutes(roles);
-      //     accessRoutes.forEach((route) => {
-      //       router.addRoute(route);
-      //     });
-      //     next({ ...to, replace: true });
-      //   } catch (error) {
-      //     // 移除 token 并跳转登录页
-      //     await userStore.resetToken();
-      //     next(`/login?redirect=${to.path}`);
-      //     NProgress.done();
-      //   }
-      // }
+      // next();
+      if (hasRoles) {
+        // 未匹配到任何路由，跳转404
+        if (to.matched.length === 0) {
+          from.name ? next({ name: from.name }) : next("/404");
+        } else {
+          next();
+        }
+      } else {
+        try {
+          const menuList = userStore.menusList;
+          const accessRoutes = permissionStore.generateRoutes(menuList);
+          console.log(accessRoutes, "2222");
+          accessRoutes.forEach((route) => {
+            router.addRoute(route);
+          });
+          next({ ...to, replace: true });
+        } catch (error) {
+          // 移除 token 并跳转登录页
+          await userStore.resetToken();
+          next(`/login?redirect=${to.path}`);
+          NProgress.done();
+        }
+      }
     }
   } else {
     // 未登录可以访问白名单页面
