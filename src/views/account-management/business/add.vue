@@ -84,7 +84,7 @@
             <el-input placeholder="请输入" v-model="addForm.company_address" />
           </el-form-item>
         </el-col>
-        <el-col :span="17">
+        <el-col :span="7">
           <el-form-item label="营业执照">
             <MultiUpload v-model="addForm.license">
               <i-ep-Plus />
@@ -92,6 +92,11 @@
           </el-form-item>
           <el-form-item label="法人身份证">
             <MultiUpload v-model="addForm.idcard_img">
+              <i-ep-Plus />
+            </MultiUpload>
+          </el-form-item>
+          <el-form-item label="企业印章">
+            <MultiUpload v-model="addForm.yinzhang">
               <i-ep-Plus />
             </MultiUpload>
           </el-form-item>
@@ -216,6 +221,22 @@
               ></el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="认证规则">
+            <el-select
+              class="w-full"
+              placeholder="请选择（单选）"
+              v-model="addForm.tax_land_id"
+            >
+            </el-select>
+          </el-form-item>
+          <el-form-item label="签约规则">
+            <el-select
+              class="w-full"
+              placeholder="请选择（单选）"
+              v-model="addForm.tax_land_id"
+            >
+            </el-select>
+          </el-form-item>
         </el-col>
         <el-col :span="17">
           <el-form-item label="上传合同">
@@ -330,6 +351,7 @@ const addForm: ICreateBusinessAccount = reactive({
   parent_channel_id: "",
   tax_point: "",
   contract_img: [],
+  yinzhang: [], // 企业印章
 });
 
 const isDisabled = computed(() => {

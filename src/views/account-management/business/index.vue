@@ -48,7 +48,7 @@
           >+ 新建</el-button
         >
         <el-dropdown class="ml-4" trigger="click">
-          <el-button type="primary">批量操作</el-button>
+          <el-button type="primary" plain>批量操作</el-button>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="1">封停</el-dropdown-item>
@@ -144,7 +144,7 @@ const date = ref("");
 
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "账户ID", prop: "company_id", width: 80 },
+  { label: "账户ID", prop: "company_id" },
   {
     label: "状态",
     type: "enum",
@@ -158,11 +158,11 @@ const columnList = [
       4: { color: "#333333", background: "#dedede" },
     },
   },
-  { label: "企业", prop: "company_name", width: 200 },
-  { label: "联系人", prop: "contacts", width: 150 },
-  { label: "联系方式", prop: "mobile", width: 150 },
-  { label: "客户点位", prop: "tax_point", width: 80 },
-  { label: "创建时间", prop: "add_time", width: 200 },
+  { label: "企业", prop: "company_name" },
+  { label: "联系人", prop: "contacts" },
+  { label: "联系方式", prop: "mobile" },
+  { label: "客户点位", prop: "tax_point" },
+  { label: "创建时间", prop: "add_time" },
   { label: "操作", slot: "operation", fixed: "right", width: 280 },
 ];
 

@@ -1,6 +1,6 @@
 <template>
   <zxn-step :step-list="stepList" :active-step="activeStep" />
-  <el-form label-width="100px" :model="addForm">
+  <el-form label-width="120px" :model="addForm">
     <el-row :gutter="30">
       <template v-if="activeStep === 0">
         <el-col :span="6">

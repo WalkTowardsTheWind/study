@@ -1,113 +1,112 @@
 <template>
   <zxn-step :step-list="stepList" :active-step="activeStep" />
-  <el-form label-width="150px">
-    <el-row :gutter="30">
-      <template v-if="activeStep === 0">
-        <el-col :span="6">
-          <el-form-item label="企业名称">
-            <el-input v-model="addForm.company_name" />
-          </el-form-item>
-          <el-form-item label="密码">
-            <el-input v-model="addForm.pwd" />
-          </el-form-item>
-          <el-form-item label="确认密码">
-            <el-input v-model="addForm.conf_pwd" />
-          </el-form-item>
-          <el-form-item label="企业联系人">
-            <el-input v-model="addForm.contacts" />
-          </el-form-item>
-          <el-form-item label="联系方式">
-            <el-input v-model="addForm.mobile" />
-          </el-form-item>
-        </el-col>
-      </template>
-      <template v-if="activeStep === 1">
-        <el-col :span="6">
-          <el-form-item label="营业执照到期时间">
-            <div class="license">
+  <div>
+    <el-form label-width="120px">
+      <el-row :gutter="30">
+        <template v-if="activeStep === 0">
+          <el-col :span="6">
+            <el-form-item label="企业名称">
+              <el-input v-model="addForm.company_name" />
+            </el-form-item>
+            <el-form-item label="密码">
+              <el-input v-model="addForm.pwd" />
+            </el-form-item>
+            <el-form-item label="确认密码">
+              <el-input v-model="addForm.conf_pwd" />
+            </el-form-item>
+            <el-form-item label="企业联系人">
+              <el-input v-model="addForm.contacts" />
+            </el-form-item>
+            <el-form-item label="联系方式">
+              <el-input v-model="addForm.mobile" />
+            </el-form-item>
+          </el-col>
+        </template>
+        <template v-if="activeStep === 1">
+          <el-col :span="6">
+            <el-form-item class="w-full" label="营业执照到期时间">
               <el-date-picker
-                class="picker"
                 v-model="addForm.license_end_date"
                 value-format="YYYY-MM-DD"
               />
-            </div>
-          </el-form-item>
-          <el-form-item label="开户行">
-            <el-input v-model="addForm.bank" />
-          </el-form-item>
-          <el-form-item label="银行账户">
-            <el-input v-model="addForm.bank_account" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="营业执照">
-            <MultiUpload v-model="addForm.license" />
-          </el-form-item>
-        </el-col>
-      </template>
-      <template v-if="activeStep === 2">
-        <el-col :span="8">
-          <el-form-item label="佣金结算时间">
-            <el-select v-model="addForm.commission_settlement_type">
-              <el-option value="1" label="按周结"></el-option>
-              <el-option value="2" label="按月结"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="绑定渠道">
-            <el-select v-model="addForm" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="合伙人协议">
-            <el-select v-model="addForm.contract_id">
-              <el-option
-                v-for="item in contractOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <div class="product">
-            <div class="head">
-              <span>产品</span>
-              <span>票面种类及税点</span>
-              <span>合作价格</span>
-            </div>
-            <div class="form" v-for="(item, index) in product" :key="index">
-              <el-select v-model="item.product_type" class="form-item">
+            </el-form-item>
+            <el-form-item label="开户行">
+              <el-input v-model="addForm.bank" />
+            </el-form-item>
+            <el-form-item label="银行账户">
+              <el-input v-model="addForm.bank_account" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="营业执照">
+              <MultiUpload v-model="addForm.license" />
+            </el-form-item>
+          </el-col>
+        </template>
+        <template v-if="activeStep === 2">
+          <el-col :span="6">
+            <el-form-item label="佣金结算时间">
+              <el-select v-model="addForm.commission_settlement_type">
+                <el-option value="1" label="按周结"></el-option>
+                <el-option value="2" label="按月结"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="绑定渠道">
+              <el-select v-model="addForm" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="合伙人协议">
+              <el-select v-model="addForm.contract_id">
                 <el-option
-                  v-for="item in productType"
+                  v-for="item in contractOptions"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
                 ></el-option>
               </el-select>
-              <el-select class="form-item item3" v-model="item.invoice_type">
-                <el-option
-                  v-for="item in invoiceType"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
-              <el-input class="form-item" v-model="item.cooperate_point" />
-              <div
-                class="add del"
-                v-if="product.length > 0"
-                @click="delClick(index, item.product_id)"
-              >
-                - 删除
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <div class="product">
+              <div class="head">
+                <span>产品</span>
+                <span>票面种类及税点</span>
+                <span>合作价格</span>
               </div>
+              <div class="form" v-for="(item, index) in product" :key="index">
+                <el-select v-model="item.product_type" class="form-item">
+                  <el-option
+                    v-for="item in productType"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+                <el-select class="form-item item3" v-model="item.invoice_type">
+                  <el-option
+                    v-for="item in invoiceType"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+                <el-input class="form-item" v-model="item.cooperate_point" />
+                <div
+                  class="add del"
+                  v-if="product.length > 0"
+                  @click="delClick(index, item.product_id)"
+                >
+                  - 删除
+                </div>
+              </div>
+              <div class="add" @click="addClick">+ 添加产品</div>
             </div>
-            <div class="add" @click="addClick">+ 添加产品</div>
-          </div>
-        </el-col>
-      </template>
-    </el-row>
-  </el-form>
+          </el-col>
+        </template>
+      </el-row>
+    </el-form>
+  </div>
   <zxn-bottom-btn>
     <el-button
       type="primary"
