@@ -144,7 +144,7 @@ const columnList: any[] = reactive([
       1: { color: "#356FF3", backgroundColor: "#dfe8fd" },
       2: { color: "#F35135", backgroundColor: "#fde3df" },
       3: { color: "#FFFFFF", backgroundColor: "#f9a89a" },
-      4: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+      5: { color: "#356FF3", backgroundColor: "#dfe8fd" },
     },
     minWidth: 120,
   },

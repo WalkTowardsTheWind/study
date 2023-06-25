@@ -49,7 +49,7 @@ export enum invoiceStatus {
   "已开票",
   "驳回",
   "冲红",
-  "已收票",
+  "已收票" = 5,
 }
 
 export enum invoiceType {
