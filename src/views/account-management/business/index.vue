@@ -138,7 +138,7 @@ const date = ref("");
 
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "账户ID", prop: "company_id", width: 100 },
+  { label: "账户ID", prop: "company_id", width: 80 },
   {
     label: "状态",
     type: "enum",
@@ -150,14 +150,13 @@ const columnList = [
       2: { color: "#356FF3", background: "#dfe8fd" },
       3: { color: "#F35036", background: "#fde3df" },
       4: { color: "#333333", background: "#dedede" },
-      width: 80,
     },
   },
-  { label: "企业", prop: "company_name" },
-  { label: "联系人", prop: "contacts" },
-  { label: "联系方式", prop: "mobile" },
-  { label: "客户点位", prop: "tax_point" },
-  { label: "创建时间", prop: "add_time" },
+  { label: "企业", prop: "company_name", width: 200 },
+  { label: "联系人", prop: "contacts", width: 150 },
+  { label: "联系方式", prop: "mobile", width: 150 },
+  { label: "客户点位", prop: "tax_point", width: 80 },
+  { label: "创建时间", prop: "add_time", width: 200 },
   { label: "操作", slot: "operation", fixed: "right", width: 280 },
 ];
 
