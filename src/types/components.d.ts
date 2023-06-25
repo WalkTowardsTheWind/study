@@ -45,7 +45,6 @@ declare module '@vue/runtime-core' {
     Hamburger: typeof import('./../components/Hamburger/index.vue')['default']
     IconSelect: typeof import('./../components/IconSelect/index.vue')['default']
     IEpArrowDown: typeof import('~icons/ep/arrow-down')['default']
-    IEpCalendar: typeof import("~icons/ep/calendar")["default"]
     IEpChatDotRound: typeof import('~icons/ep/chat-dot-round')['default']
     IEpCircleCloseFilled: typeof import('~icons/ep/circle-close-filled')['default']
     IEpClose: typeof import('~icons/ep/close')['default']
