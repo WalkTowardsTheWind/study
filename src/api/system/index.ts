@@ -136,3 +136,14 @@ export function getAreaList(): AxiosPromise {
     method: "GET",
   });
 }
+
+/**
+ * 修改当前用户信息
+ */
+export function updateAdmin(data: any): AxiosPromise {
+  return request({
+    url: "/adminapi/setting/update_admin",
+    method: "PUT",
+    data,
+  });
+}
