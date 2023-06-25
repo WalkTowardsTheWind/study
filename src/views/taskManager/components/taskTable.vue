@@ -55,7 +55,7 @@
           <el-button type="primary" plain>批量操作</el-button>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="reject">驳回</el-dropdown-item>
+              <!--              <el-dropdown-item command="reject">驳回</el-dropdown-item>-->
               <el-dropdown-item command="fulfill">通过</el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -70,16 +70,10 @@
       </template>
       <template #operation="{ row }">
         <template v-if="row.status === 1">
-          <el-button
-            link
-            type="primary"
-            @click="handleCommand('fulfill', row.id)"
+          <el-button link type="primary" @click="handleCommand(row.id)"
             >通过</el-button
           >
-          <el-button
-            link
-            type="primary"
-            @click="handleCommand('reject', row.id)"
+          <el-button link type="primary" @click="handleReject(row.id)"
             >驳回</el-button
           >
         </template>
@@ -104,6 +98,7 @@ import { transformTimeRange } from "@/utils";
 import { getTaskIndex, removeTask, setTaskStatus } from "@/api/task";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
+import { isNumber } from "@/utils/is";
 const router = useRouter();
 
 const props = defineProps({
@@ -211,14 +206,43 @@ const selectable = (row) => {
   return Boolean(row.status === 1);
 };
 const taskTable = ref();
-const statusMessage = {
-  reject: "驳回",
-  fulfill: "通过",
-  close: "关闭",
+
+const handleReject = (id: number) => {
+  ElMessageBox.prompt("", "驳回原因", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    inputErrorMessage: "请输入驳回原因",
+    beforeClose: async (
+      action: string,
+      instance: { confirmButtonLoading: boolean; inputValue: string },
+      done: () => void
+    ) => {
+      console.log(instance, "222");
+      if (action === "confirm") {
+        instance.confirmButtonLoading = true;
+        const params = {
+          ids: [id],
+          status: 2,
+          reject_reason: instance.inputValue,
+        };
+        await setTaskStatus(params);
+        instance.confirmButtonLoading = false;
+        done();
+      } else {
+        done();
+      }
+    },
+  }).then(() => {
+    ElMessage({
+      type: "success",
+      message: "驳回成功",
+    });
+    getTaskList();
+  });
 };
-const handleCommand = async (instar: "reject" | "fulfill" | "close", id) => {
+const handleCommand = async (id: number) => {
   const selected = taskTable.value.getSelectionRows();
-  const ids = id ? [id] : selected.map((it) => it.id);
+  const ids = isNumber(id) ? [id] : selected.map((it) => it.id);
   if (!ids.length) {
     return ElMessage({
       type: "error",
@@ -227,7 +251,7 @@ const handleCommand = async (instar: "reject" | "fulfill" | "close", id) => {
   }
   ElMessageBox({
     title: "",
-    message: h("p", null, `确定${statusMessage[instar]}该任务`),
+    message: h("p", null, `确定通过该任务`),
     showCancelButton: true,
     confirmButtonText: "确定",
     cancelButtonText: "取消",
@@ -240,7 +264,7 @@ const handleCommand = async (instar: "reject" | "fulfill" | "close", id) => {
         instance.confirmButtonLoading = true;
         const params = {
           ids,
-          status: instar === "close" ? 7 : instar === "reject" ? 2 : 3,
+          status: 3,
         };
         await setTaskStatus(params);
         instance.confirmButtonLoading = false;
@@ -252,7 +276,7 @@ const handleCommand = async (instar: "reject" | "fulfill" | "close", id) => {
   }).then(() => {
     ElMessage({
       type: "success",
-      message: `${statusMessage[instar]}成功`,
+      message: `通过成功`,
     });
     getTaskList();
   });

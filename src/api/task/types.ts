@@ -13,4 +13,5 @@ export interface taskList extends PageQuery {
 export interface taskStatus {
   ids: string[];
   status: number;
+  reject_reason?: string;
 }
