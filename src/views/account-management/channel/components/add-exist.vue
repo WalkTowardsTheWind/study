@@ -34,7 +34,7 @@
             ></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="合作人协议">
             <el-select v-model="addForm.contract_id">
               <el-option
@@ -46,7 +46,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <div class="product">
             <div class="head">
               <span>产品</span>

@@ -84,7 +84,7 @@
             <el-input placeholder="请输入" v-model="addForm.company_address" />
           </el-form-item>
         </el-col>
-        <el-col :span="17">
+        <el-col :span="7">
           <el-form-item label="营业执照">
             <MultiUpload v-model="addForm.license">
               <i-ep-Plus />
@@ -92,6 +92,11 @@
           </el-form-item>
           <el-form-item label="法人身份证">
             <MultiUpload v-model="addForm.idcard_img">
+              <i-ep-Plus />
+            </MultiUpload>
+          </el-form-item>
+          <el-form-item label="企业印章">
+            <MultiUpload v-model="addForm.yinzhang">
               <i-ep-Plus />
             </MultiUpload>
           </el-form-item>
@@ -147,47 +152,48 @@
         </el-col>
       </el-row>
       <el-row :gutter="30" v-show="activeStep === 3">
-        <el-col :span="7">
+        <el-col :span="8">
           <el-form-item label="企业模式">
             <el-radio-group v-model="addForm.company_source">
               <template #default>
                 <el-button
                   class="radioBtn"
-                  :class="addForm.company_source === 0 ? 'is-active' : ''"
-                  @click="addForm.company_source = 0"
+                  :class="addForm.company_source == '0' ? 'is-active' : ''"
+                  @click="addForm.company_source = '0'"
                   >自营</el-button
                 >
                 <el-button
                   class="radioBtn"
-                  :class="addForm.company_source === 1 ? 'is-active' : ''"
-                  @click="addForm.company_source = 1"
+                  :class="addForm.company_source == '1' ? 'is-active' : ''"
+                  @click="addForm.company_source = '1'"
                   >渠道推广</el-button
                 >
               </template>
             </el-radio-group>
           </el-form-item>
-          <template v-if="addForm.company_source === 1">
+          <template v-if="addForm.company_source == '1'">
             <el-form-item label="上级ID绑定" class="w-full">
-              <el-row :gutter="10" class="">
-                <el-col :span="8">
-                  <el-select
-                    placeholder="请选择"
-                    v-model="addForm.channel_type"
-                  >
-                    <el-option label="个人" :value="1"></el-option>
-                    <el-option label="企业" :value="2"></el-option>
-                  </el-select>
-                </el-col>
-                <el-col :span="16">
-                  <el-input
-                    placeholder="请输入"
-                    v-model="addForm.parent_channel_id"
-                  />
-                </el-col>
-              </el-row>
+              <div style="display: flex; gap: 0 10px">
+                <el-select placeholder="请选择" v-model="addForm.channel_type">
+                  <el-option label="个人" :value="1"></el-option>
+                  <el-option label="企业" :value="2"></el-option>
+                </el-select>
+                <el-input
+                  placeholder="请输入"
+                  v-model="addForm.parent_channel_id"
+                />
+              </div>
             </el-form-item>
             <el-form-item label="客户点位">
               <el-input placeholder="请输入" v-model="addForm.tax_point" />
+            </el-form-item>
+            <el-form-item label="认证规则">
+              <el-select class="w-full" placeholder="请选择（单选）">
+              </el-select>
+            </el-form-item>
+            <el-form-item label="签约规则">
+              <el-select class="w-full" placeholder="请选择（单选）">
+              </el-select>
             </el-form-item>
           </template>
           <el-form-item label="企业邮箱">
@@ -217,7 +223,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="17">
+        <el-col :span="8">
           <el-form-item label="上传合同">
             <MultiUpload v-model="addForm.contract_img">
               <i-ep-Plus />
@@ -295,7 +301,7 @@ const cateGoryOptions = ref([] as any);
 
 const addFormRef = ref<FormInstance>();
 
-const addForm: ICreateBusinessAccount = reactive({
+const addForm = reactive({
   account: "",
   pwd: "",
   conf_pwd: "",
@@ -330,6 +336,7 @@ const addForm: ICreateBusinessAccount = reactive({
   parent_channel_id: "",
   tax_point: "",
   contract_img: [],
+  yinzhang: [], // 企业印章
 });
 
 const isDisabled = computed(() => {

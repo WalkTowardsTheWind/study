@@ -1,5 +1,5 @@
 <template>
-  <div class="add-cont">
+  <div class="">
     <zxn-plan>
       <zxn-tabs :tabs-list="tabsList" v-model:activeName="activeName">
       </zxn-tabs>
@@ -36,7 +36,7 @@ if (route.query.type) {
 
 <style lang="scss">
 .product {
-  width: 402px;
+  width: 400px;
 
   .head {
     display: flex;
