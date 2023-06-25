@@ -110,6 +110,14 @@
           </template>
         </el-dropdown>
       </template>
+      <template #IndustryRestrictions="scope">
+        <el-button
+          link
+          type="primary"
+          @click="handleIndustryRestrictions(scope)"
+          >查看</el-button
+        >
+      </template>
       <template #operation="scope">
         <el-button link type="primary" @click="handleUpdateStatus(scope)">{{
           [0, 2].includes(scope.row.status) ? "上架" : "下架"
@@ -123,6 +131,11 @@
       </template>
     </zxn-table>
   </div>
+  <InspectDialog
+    v-model:dialogVisible="dialogVisible"
+    :imageList="imageList"
+    :title="title"
+  />
 </template>
 <script setup lang="ts">
 import { transformTimeRange } from "@/utils";
@@ -133,8 +146,15 @@ import {
   selfOperatedTaxLandUpdateStatus,
 } from "@/api/taxLandManagement/selfOperatedTaxLand";
 import { ElMessage } from "element-plus";
+import InspectDialog from "../components/InspectDialog.vue";
 const router = useRouter();
 const { proxy } = getCurrentInstance() as any;
+
+//
+const dialogVisible = ref(false);
+const title = ref("");
+const imageList = ref([]);
+//
 
 // 查询重置
 const pageInfo = reactive({
@@ -202,13 +222,18 @@ const columnList = [
   { label: "税地名称", prop: "tax_land_name" },
   { label: "成本", prop: "tax_cost_point" },
   { label: "签约数量", prop: "sign_count" },
-  { label: "税率形式", prop: "calculation_type" },
+  { label: "计算形式", prop: "calculation_type" },
   { label: "对接人", prop: "tax_land_head" },
   { label: "税地发票类型", prop: "invoice_type", width: 120 },
+  { label: "发票面额", prop: "invoice_denomination", width: 120 },
   { label: "上架时间", prop: "ground_time", sortable: "custom", width: 120 },
-  { label: "税地类型", prop: "tax_land_type" },
-  { label: "支付方式", prop: "payment_type" },
-
+  {
+    label: "行业限制",
+    slot: "IndustryRestrictions",
+    width: 100,
+    align: " center ",
+    headerAlign: "center",
+  },
   {
     label: "操作",
     slot: "operation",
@@ -218,6 +243,12 @@ const columnList = [
     headerAlign: "right",
   },
 ];
+
+const handleIndustryRestrictions = (scope: any) => {
+  dialogVisible.value = true;
+  imageList.value = scope.row.settlement_confirmation_letter;
+  title.value = "行业限制";
+};
 /**
  * 上下架
  */
@@ -364,6 +395,10 @@ const getTableData = async () => {
         invoice_type:
           proxy.$enumSet["taxLandManagementEnum.InvoiceType"][
             item.invoice_type
+          ],
+        invoice_denomination:
+          proxy.$enumSet["taxLandManagementEnum.invoice_denomination"][
+            item.invoice_denomination
           ],
         ground_time: item.ground_time,
         tax_land_type:
