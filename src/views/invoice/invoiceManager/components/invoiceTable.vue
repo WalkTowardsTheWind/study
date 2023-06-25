@@ -58,17 +58,15 @@
       ref="table"
       :table-data="tableData"
       :column-list="columnList"
-      hasSelect
       :page-info="pageInfo"
-      :selectable="selectable"
       :loading="loading"
       @page-change="handlePageChange"
     >
-      <template #tableTop>
-        <el-button type="primary" plain @click="handleCommand"
-          >批量驳回</el-button
-        >
-      </template>
+      <!--      <template #tableTop>-->
+      <!--        <el-button type="primary" plain @click="handleCommand"-->
+      <!--          >批量驳回</el-button-->
+      <!--        >-->
+      <!--      </template>-->
       <template #taskLength="{ row }">
         <span>{{ row.task_list.length }}</span>
       </template>
@@ -105,7 +103,6 @@ import {
   channelSetStatus,
 } from "@/api/invoice";
 import { transformTimeRange } from "@/utils";
-import { isNumber } from "@/utils/is";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 const router = useRouter();
@@ -219,32 +216,19 @@ const getList = async () => {
     console.log(e);
   }
 };
-
-const selectable = (row) => {
-  return Boolean(!row.status);
-};
 const handleView = (cur) => {
   router.push({ name: "invoiceView", query: { id: cur.id, type: props.type } });
 };
 const table = ref();
-const handleCommand = async (id) => {
-  const selected = table.value.getSelectionRows();
-  const ids = isNumber(id) ? [id] : selected.map((it) => it.id);
-  if (!ids.length) {
-    return ElMessage({
-      type: "error",
-      message: `请选择数据`,
-    });
-  }
-  ElMessageBox({
-    title: "",
-    message: h("p", null, `确定驳回该发票`),
-    showCancelButton: true,
+const handleCommand = async (id: number) => {
+  const ids = [id];
+  ElMessageBox.prompt("", "驳回原因", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
+    inputErrorMessage: "请输入驳回原因",
     beforeClose: async (
       action: string,
-      instance: { confirmButtonLoading: boolean },
+      instance: { confirmButtonLoading: boolean; inputValue: string },
       done: () => void
     ) => {
       if (action === "confirm") {
@@ -252,6 +236,7 @@ const handleCommand = async (id) => {
         const params = {
           ids,
           status: 2,
+          reject_reason: instance.inputValue,
         };
         props.type === "enterprise"
           ? await setStatus(params)
