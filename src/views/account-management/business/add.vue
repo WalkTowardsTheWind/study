@@ -233,13 +233,17 @@
           @click="activeStep = 3"
           >跳过此步骤</el-button
         >
-        <el-button type="info" v-if="activeStep === 0" @click="$router.back()"
+        <el-button type="info" v-if="activeStep === 0" @click="$router.go(-1)"
           >取消</el-button
         >
         <el-button type="info" v-if="activeStep !== 0" @click="activeStep--"
           >上一步</el-button
         >
-        <el-button type="primary" v-if="activeStep !== 3" @click="activeStep++"
+        <el-button
+          type="primary"
+          v-if="activeStep !== 3"
+          :disabled="isDisabled"
+          @click="activeStep++"
           >下一步</el-button
         >
         <el-button

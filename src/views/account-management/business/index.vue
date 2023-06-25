@@ -91,14 +91,20 @@
           @click="toDetail('upload', scope.row.company_id)"
           >上传</el-button
         >
-        <el-button link type="primary" @click="toDetail('edit', scope.row)"
+        <el-button
+          link
+          type="primary"
+          @click="toDetail('edit', scope.row.company_id)"
           >编辑</el-button
         >
-        <el-button link type="primary" @click="del(scope.row.id)"
+        <el-button link type="primary" @click="del(scope.row.company_id)"
           >删除</el-button
         >
         <el-button link type="primary">导出</el-button>
-        <el-button link type="primary" @click="toDetail('detail', scope.row)"
+        <el-button
+          link
+          type="primary"
+          @click="toDetail('detail', scope.row.company_id)"
           >详情</el-button
         >
       </template>
@@ -138,7 +144,7 @@ const date = ref("");
 
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "账户ID", prop: "company_id", width: 100 },
+  { label: "账户ID", prop: "company_id", width: 80 },
   {
     label: "状态",
     type: "enum",
@@ -150,23 +156,21 @@ const columnList = [
       2: { color: "#356FF3", background: "#dfe8fd" },
       3: { color: "#F35036", background: "#fde3df" },
       4: { color: "#333333", background: "#dedede" },
-      width: 80,
     },
   },
-  { label: "企业", prop: "company_name" },
-  { label: "联系人", prop: "contacts" },
-  { label: "联系方式", prop: "mobile" },
-  { label: "客户点位", prop: "tax_point" },
-  { label: "创建时间", prop: "add_time" },
+  { label: "企业", prop: "company_name", width: 200 },
+  { label: "联系人", prop: "contacts", width: 150 },
+  { label: "联系方式", prop: "mobile", width: 150 },
+  { label: "客户点位", prop: "tax_point", width: 80 },
+  { label: "创建时间", prop: "add_time", width: 200 },
   { label: "操作", slot: "operation", fixed: "right", width: 280 },
 ];
 
-const toDetail = (status: string, item: any) => {
+const toDetail = (status: string, id: any) => {
   // console.log(item);
-
   router.push({
     name: "business-account-detail",
-    query: { status, id: item.company_id },
+    query: { status, id },
   });
 };
 
