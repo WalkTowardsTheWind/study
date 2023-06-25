@@ -101,3 +101,8 @@ export function isUrl(path: string): boolean {
   const reg = /^http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?/;
   return reg.test(path);
 }
+
+export function isPwd(pwd: string): boolean {
+  const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[a-zA-Z0-9]{6,16}$/;
+  return reg.test(pwd);
+}
