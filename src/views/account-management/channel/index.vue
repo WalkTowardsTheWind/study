@@ -2,11 +2,14 @@
   <div class="p-[24px] p-b-[0]">
     <zxn-search
       :formItem="formItem"
-      @on-search="getList"
+      @on-search="handleSearch"
       @on-reset="handleReset"
     >
       <el-form-item>
-        <el-input v-model="formItem.name" placeholder="请输入关键字">
+        <el-input
+          v-model="formItem.name"
+          placeholder="请输入公司或个人名称或联系人、联系人号码"
+        >
           <template #prefix>
             <i-ep-Search />
           </template>
@@ -205,7 +208,7 @@ const toDetail = (status: string, item: any) => {
   });
 };
 
-function getList() {
+function handleSearch() {
   let params = {
     ...pageInfo,
     ...formItem,
@@ -240,7 +243,7 @@ function stop(id: number, status: number, channelType: number) {
               type: "success",
               message: "操作成功",
             });
-            getList();
+            handleSearch();
           });
         }
         if (channelType === 2) {
@@ -249,7 +252,7 @@ function stop(id: number, status: number, channelType: number) {
               type: "success",
               message: "操作成功",
             });
-            getList();
+            handleSearch();
           });
         }
       })
@@ -273,7 +276,7 @@ function stop(id: number, status: number, channelType: number) {
               type: "success",
               message: "操作成功",
             });
-            getList();
+            handleSearch();
           });
         }
         if (channelType === 2) {
@@ -282,7 +285,7 @@ function stop(id: number, status: number, channelType: number) {
               type: "success",
               message: "操作成功",
             });
-            getList();
+            handleSearch();
           });
         }
       })
@@ -302,7 +305,7 @@ function del(item: any) {
         type: "success",
         message: "操作成功",
       });
-      getList();
+      handleSearch();
     });
   }
   // 2 企业
@@ -312,7 +315,7 @@ function del(item: any) {
         type: "success",
         message: "操作成功",
       });
-      getList();
+      handleSearch();
     });
   }
 }
@@ -324,8 +327,9 @@ function handleReset() {
   formItem.channel_admin_name = "";
   formItem.level = "";
   date.value = [];
+  handleSearch();
 }
-getList();
+handleSearch();
 </script>
 
 <style lang="scss">

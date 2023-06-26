@@ -29,7 +29,7 @@ const activeName = ref("1");
 const tabsList = [
   {
     name: "1",
-    label: "企业账号",
+    label: "企业账户",
   },
   {
     name: "2",

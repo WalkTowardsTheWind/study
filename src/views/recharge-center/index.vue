@@ -8,8 +8,8 @@
         <div class="p-[24px]">
           <zxn-search
             :formItem="formItem"
-            @on-search="getList"
-            @on-reset="reset"
+            @on-search="handleSearch"
+            @on-reset="handleReset"
           >
             <el-form-item label="">
               <el-input v-model="formItem.name" placeholder="请输入">
@@ -28,7 +28,7 @@
                 />
               </el-select>
             </el-form-item>
-            <el-form-item label="任务状态">
+            <el-form-item label="充值状态">
               <el-select v-model="formItem.status" placeholder="请选择">
                 <el-option
                   v-for="item in taskStatus"
@@ -214,14 +214,13 @@ const toSee = (url: string) => {
   console.log(url);
 };
 
-function getList() {
+function handleSearch() {
   let params = {
     ...pageInfo,
     ...formItem,
   };
   getRechargeTaskList(params).then((res) => {
-    console.log(res);
-
+    tableData.length = 0;
     total_amount.value = res.data.total_amount;
     tableData.push(...res.data.data);
     pageInfo.total = res.data.total;
@@ -240,14 +239,15 @@ function getTaxLand() {
   });
 }
 
-function reset() {
+function handleReset() {
   formItem.name = "";
   formItem.tax_land_id = "";
   formItem.status = "";
   date.value = [];
   formItem.category_id = "";
+  handleSearch();
 }
-getList();
+handleSearch();
 getTaxLand();
 getCategory();
 </script>
