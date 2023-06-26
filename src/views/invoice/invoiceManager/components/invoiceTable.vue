@@ -80,7 +80,7 @@
           >
         </template>
         <el-button
-          v-if="row.status === 2 || row.status === 1"
+          v-if="row.status === 5 || row.status === 1"
           link
           type="primary"
           @click="handleLogistics(row)"

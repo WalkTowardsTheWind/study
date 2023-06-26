@@ -59,7 +59,13 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="薪资待遇">{{ formItem.salary }}</el-form-item>
+            <el-form-item label="薪资待遇">
+              {{ formItem.salary }}/{{
+                proxy.$enumSet["statusEnum.settlementTypeStatus"][
+                  formItem.settlement_type
+                ] || ""
+              }}
+            </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="人员要求">{{ formItem.request }}</el-form-item>
@@ -205,6 +211,7 @@ const formItem = reactive({
   task_date: "",
   task_time: "",
   salary: "",
+  settlement_type: "",
   request: "",
   address: "",
   task_desc: "",
@@ -248,7 +255,7 @@ const getView = async () => {
         : `${taskAttribute.salary_min || ""} - ${
             taskAttribute.salary_max || ""
           }`;
-
+    formItem.settlement_type = taskAttribute.settlement_type;
     formItem.request = data.request.filter(Boolean).join("/");
     formItem.address = data.address;
     formItem.require_desc = data.taskAttributeUser?.require_desc || "";

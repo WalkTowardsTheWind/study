@@ -73,3 +73,10 @@ export enum openStatus {
   "半年",
   "长期",
 }
+
+export enum settlementTypeStatus {
+  "日结" = 1,
+  "周结",
+  "月结",
+  "完工结",
+}
