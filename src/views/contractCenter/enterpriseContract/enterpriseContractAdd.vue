@@ -106,11 +106,13 @@
                 <el-form-item class="mb-[0]" label="合同文件" prop="file_url">
                   <multi-upload
                     v-model:modelValue="formItem.file_url"
+                    :limit="3"
                   ></multi-upload>
                 </el-form-item>
                 <el-form-item class="mt-13px" label="附件" prop="annex_url">
                   <multi-upload
                     v-model:modelValue="formItem.annex_url"
+                    :limit="3"
                   ></multi-upload>
                 </el-form-item>
               </div>
@@ -165,8 +167,8 @@ const Rules = {
   sign_time: [{ required: true, message: "请输入", trigger: "blur" }],
   end_time: [{ required: true, message: "请输入", trigger: "blur" }],
   remarks: [{ required: true, message: "请输入", trigger: "blur" }],
-  file_url: [{ required: true, message: "请输入", trigger: "blur" }],
-  annex_url: [{ required: true, message: "请输入", trigger: "blur" }],
+  file_url: [{ required: true, message: "请上传图片", trigger: "blur" }],
+  annex_url: [{ required: true, message: "请上传图片", trigger: "blur" }],
 };
 const formItem = reactive({
   online_type: 1,

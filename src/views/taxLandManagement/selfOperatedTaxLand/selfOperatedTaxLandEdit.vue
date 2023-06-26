@@ -164,8 +164,8 @@
             class="zxn-box"
             :model="formItem"
             label-width="130px"
-            ref="FormRef"
-            :rules="Rules"
+            ref="FormRef2"
+            :rules="Rules2"
           >
             <div class="flex">
               <div class="w-[33%]">
@@ -322,8 +322,8 @@
             class="zxn-box"
             :model="formItem"
             label-width="130px"
-            ref="FormRef"
-            :rules="Rules"
+            ref="FormRef3"
+            :rules="Rules3"
           >
             <div class="flex">
               <div class="w-[33%]">
@@ -409,7 +409,7 @@
                 <el-form-item
                   class="mb-[0]"
                   label="结算确认单"
-                  prop="agreement_url"
+                  prop="settlement_confirmation_letter"
                 >
                   <multi-upload
                     v-model="formItem.settlement_confirmation_letter"
@@ -531,6 +531,8 @@ const propsTaxLang = {
 //表单信息
 
 const FormRef = ref(ElForm);
+const FormRef2 = ref(ElForm);
+const FormRef3 = ref(ElForm);
 const Rules = {
   tax_land_type: [{ required: true, message: "请输入", trigger: "blur" }],
   tax_land_head: [{ required: true, message: "请输入", trigger: "blur" }],
@@ -542,10 +544,15 @@ const Rules = {
   max_employment_year: [{ required: true, message: "请输入", trigger: "blur" }],
   tax_land_city_id: [{ required: true, message: "请输入", trigger: "blur" }],
   web_url: [{ required: true, message: "请输入", trigger: "blur" }],
-  tax_land_license: [{ required: true, message: "请输入", trigger: "blur" }],
-  company_qualifications: [
-    { required: true, message: "请输入", trigger: "blur" },
+
+  tax_land_license: [
+    { required: true, message: "请上传图片", trigger: "blur" },
   ],
+  company_qualifications: [
+    { required: true, message: "请上传图片", trigger: "blur" },
+  ],
+};
+const Rules2 = {
   invoice_type: [{ required: true, message: "请输入", trigger: "blur" }],
   category_id: [{ required: true, message: "请输入", trigger: "blur" }],
   invoice_denomination: [
@@ -557,10 +564,12 @@ const Rules = {
   payment_type: [{ required: true, message: "请输入", trigger: "blur" }],
   depositBank: [{ required: true, message: "请输入", trigger: "blur" }],
   bank_account: [{ required: true, message: "请输入", trigger: "blur" }],
-  invoice_sample: [{ required: true, message: "请输入", trigger: "blur" }],
+  invoice_sample: [{ required: true, message: "请上传图片", trigger: "blur" }],
   industryRestrictions: [
-    { required: true, message: "请输入", trigger: "blur" },
+    { required: true, message: "请上传图片", trigger: "blur" },
   ],
+};
+const Rules3 = {
   certificationRules: [{ required: true, message: "请输入", trigger: "blur" }],
   signingRules: [{ required: true, message: "请输入", trigger: "blur" }],
   individualMonthlyLimit: [
@@ -569,9 +578,9 @@ const Rules = {
   entrustedCollectionPeriod: [
     { required: true, message: "请输入", trigger: "blur" },
   ],
-  agreement_url: [{ required: true, message: "请输入", trigger: "blur" }],
+  agreement_url: [{ required: true, message: "请上传图片", trigger: "blur" }],
   settlement_confirmation_letter: [
-    { required: true, message: "请输入", trigger: "blur" },
+    { required: true, message: "请上传图片", trigger: "blur" },
   ],
 };
 const formItem = ref({
@@ -609,39 +618,49 @@ const formItem = ref({
 const handleSelfOperatedTaxLandEdit = () => {
   FormRef.value.validate((valid: boolean) => {
     if (valid) {
-      const ID = Number(route.query.id);
-      const params = { ...formItem.value } as any;
-      params.tax_land_license = JSON.stringify(params.tax_land_license);
-      params.company_qualifications = JSON.stringify(
-        params.company_qualifications
-      );
-      params.invoice_sample = JSON.stringify(params.invoice_sample);
-      params.industryRestrictions = JSON.stringify(params.industryRestrictions);
-      params.agreement_url = JSON.stringify(params.agreement_url);
-      params.settlement_confirmation_letter = JSON.stringify(
-        params.settlement_confirmation_letter
-      );
-      if (isArray(params.tax_land_city_id)) {
-        params.tax_land_city_id = params.tax_land_city_id.slice(-1)[0];
-      }
-      if (isArray(params.category_id)) {
-        params.category_id = params.category_id.slice(-1)[0];
-      }
+      FormRef2.value.validate((valid: boolean) => {
+        if (valid) {
+          FormRef3.value.validate((valid: boolean) => {
+            if (valid) {
+              const ID = Number(route.query.id);
+              const params = { ...formItem.value } as any;
+              params.tax_land_license = JSON.stringify(params.tax_land_license);
+              params.company_qualifications = JSON.stringify(
+                params.company_qualifications
+              );
+              params.invoice_sample = JSON.stringify(params.invoice_sample);
+              params.industryRestrictions = JSON.stringify(
+                params.industryRestrictions
+              );
+              params.agreement_url = JSON.stringify(params.agreement_url);
+              params.settlement_confirmation_letter = JSON.stringify(
+                params.settlement_confirmation_letter
+              );
+              if (isArray(params.tax_land_city_id)) {
+                params.tax_land_city_id = params.tax_land_city_id.slice(-1)[0];
+              }
+              if (isArray(params.category_id)) {
+                params.category_id = params.category_id.slice(-1)[0];
+              }
 
-      selfOperatedTaxLandEdit(ID, params)
-        .then(() => {
-          ElMessage({
-            type: "success",
-            message: `编辑税地成功`,
+              selfOperatedTaxLandEdit(ID, params)
+                .then(() => {
+                  ElMessage({
+                    type: "success",
+                    message: `编辑税地成功`,
+                  });
+                  router.push({
+                    name: "taxLandManagementIndex",
+                    query: { activeName: "selfOperated" },
+                  });
+                })
+                .catch((e) => {
+                  console.log(e);
+                });
+            }
           });
-          router.push({
-            name: "taxLandManagementIndex",
-            query: { activeName: "selfOperated" },
-          });
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+        }
+      });
     }
   });
 };
