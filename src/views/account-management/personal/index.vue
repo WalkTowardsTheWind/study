@@ -6,7 +6,7 @@
       @on-reset="handleReset"
     >
       <el-form-item>
-        <el-input v-model="formItem.name" placeholder="请输入关键字">
+        <el-input v-model="formItem.name" placeholder="请输入姓名或联系号码">
           <template #prefix>
             <i-ep-Search />
           </template>
@@ -161,7 +161,7 @@ async function handleSearch() {
     end_time: date.value[1],
   };
   const { data } = await getPersonalAccountList(params);
-  pageInfo.total = data.count;
+  pageInfo.total = data.total;
   tableData.push(...data.data);
 }
 /**
@@ -171,6 +171,7 @@ function handleReset() {
   formItem.name = "";
   formItem.status = "";
   date.value = "";
+  handleSearch();
 }
 
 /**
@@ -196,7 +197,7 @@ function del(id) {
     .catch(() => {
       ElMessage({
         type: "info",
-        message: "Delete canceled",
+        message: "取消删除",
       });
     });
 }
@@ -222,7 +223,7 @@ function stop(id: number, status: number) {
       .catch(() => {
         ElMessage({
           type: "info",
-          message: "Delete canceled",
+          message: "取消删除",
         });
       });
   }
@@ -246,7 +247,7 @@ function stop(id: number, status: number) {
       .catch(() => {
         ElMessage({
           type: "info",
-          message: "Delete canceled",
+          message: "取消删除",
         });
       });
   }

@@ -478,6 +478,7 @@ function handleReset() {
   formItem.status = "";
   formItem.roles = "";
   date.value = [];
+  handleSearch();
 }
 
 handleSearch();

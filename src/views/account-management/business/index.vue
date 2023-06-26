@@ -202,6 +202,7 @@ function handleReset() {
   formItem.company_name = "";
   formItem.status = "";
   date.value = "";
+  handleSearch();
 }
 
 /**
