@@ -23,6 +23,10 @@
         <ChannelInfo :isEdit="isEdit" :id="id" />
       </template>
     </zxn-tabs>
+    <!-- <zxn-bottom-btn v-if="isEdit">
+			<el-button>取消</el-button>
+			<el-button @click="updateBusinessAccount">保存</el-button>
+		</zxn-bottom-btn> -->
     <zxn-bottom-btn v-if="isCheck">
       <el-button type="info" @click="reject">驳回</el-button>
       <el-button type="primary" @click="pass">通过</el-button>
@@ -137,4 +141,23 @@ function checkReject() {
       return new Error("err", err);
     });
 }
+
+// async function updateBusinessAccount() {
+// 	// 后台返回的 contacts_mobile 更新修改为 mobile
+// 	let params = {
+// 		...formData.value,
+// 		mobile: formData.value.contacts_mobile,
+// 		contacts_mobile: undefined,
+// 	};
+// 	// console.log(params);
+// 	try {
+// 		await editBusinessAccount(params);
+// 		ElMessage({
+// 			message: "编辑成功",
+// 			type: "success",
+// 		});
+// 	} catch (error: any) {
+// 		return new Error(error);
+// 	}
+// }
 </script>
