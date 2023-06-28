@@ -20,7 +20,7 @@
             ref="username"
             size="large"
             v-model="loginData.account"
-            placeholder="用户名"
+            placeholder="请输入用户名"
             name="username"
             clearable
           />
@@ -30,7 +30,7 @@
           <el-input
             class="flex-1"
             v-model="loginData.pwd"
-            placeholder="密码"
+            placeholder="请输入密码"
             type="password"
             size="large"
             name="password"
@@ -103,7 +103,7 @@
               ref="phone"
               size="large"
               v-model="registerData.mobile"
-              placeholder="手机号"
+              placeholder="请输入手机号"
               name="phone"
             />
           </el-form-item>
@@ -111,7 +111,7 @@
             <el-input
               v-model="registerData.code"
               auto-complete="off"
-              placeholder="验证码"
+              placeholder="请输入验证码"
               size="large"
               @keyup.enter="handleRegister"
             />
@@ -129,7 +129,7 @@
             <el-input
               class="flex-1"
               v-model="registerData.pwd"
-              placeholder="密码"
+              placeholder="请输入新密码"
               :type="passwordVisible === false ? 'password' : 'input'"
               size="large"
               name="password"
@@ -142,7 +142,7 @@
             <el-input
               class="flex-1"
               v-model="registerData.conf_pwd"
-              placeholder="确认密码"
+              placeholder="确认新密码"
               :type="password2Visible === false ? 'password' : 'input'"
               size="large"
               name="password2"
