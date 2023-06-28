@@ -367,8 +367,13 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="单人每月限额">
-                  <el-input v-model="formItem.individualMonthlyLimit" readonly>
+                <el-form-item
+                  class="mt-25px"
+                  label="单人每月限额"
+                  prop="individualMonthlyLimit"
+                >
+                  <el-input v-model="formItem.individualMonthlyLimit">
+                    <template #append>万</template>
                   </el-input>
                 </el-form-item>
                 <el-form-item
@@ -533,6 +538,19 @@ const propsTaxLang = {
 const FormRef = ref(ElForm);
 const FormRef2 = ref(ElForm);
 const FormRef3 = ref(ElForm);
+const validateIndividualMonthlyLimit = (
+  rule: any,
+  value: any,
+  callback: any
+) => {
+  if (value === "") {
+    callback(new Error("请输入"));
+  } else if (!/^\d+(\.\d{1,2})?$/.test(value)) {
+    callback(new Error("请输入正确格式，（例如：2，2.2，2.22）"));
+  } else {
+    callback();
+  }
+};
 const Rules = {
   tax_land_type: [{ required: true, message: "请输入", trigger: "blur" }],
   tax_land_head: [{ required: true, message: "请输入", trigger: "blur" }],
@@ -573,7 +591,11 @@ const Rules3 = {
   certificationRules: [{ required: true, message: "请输入", trigger: "blur" }],
   signingRules: [{ required: true, message: "请输入", trigger: "blur" }],
   individualMonthlyLimit: [
-    { required: true, message: "请输入", trigger: "blur" },
+    {
+      required: true,
+      validator: validateIndividualMonthlyLimit,
+      trigger: "blur",
+    },
   ],
   entrustedCollectionPeriod: [
     { required: true, message: "请输入", trigger: "blur" },
