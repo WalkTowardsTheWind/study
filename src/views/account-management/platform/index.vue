@@ -403,10 +403,9 @@ const stop = (id: string, status: string) => {
 };
 
 const del = (id: string) => {
-  ElMessageBox.confirm("是否删除账号?", "Warning", {
+  ElMessageBox.confirm("是否删除账号?", "", {
     confirmButtonText: "确认",
     cancelButtonText: "取消",
-    type: "warning",
     center: true,
   }).then(() => {
     delOtherAccount(id)
@@ -420,7 +419,7 @@ const del = (id: string) => {
       .catch(() => {
         ElMessage({
           type: "info",
-          message: "canceled",
+          message: "取消删除",
         });
       });
   });
