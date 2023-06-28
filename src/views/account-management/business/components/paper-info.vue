@@ -1,5 +1,5 @@
 <template>
-  <div class="p-[30px]">
+  <div class="p-[30px] relative box">
     <!-- 编辑 -->
     <template v-if="isEdit">
       <el-form :form="formData" label-width="120px">
@@ -28,6 +28,10 @@
             <i-ep-Plus />
           </MultiUpload>
         </el-form-item>
+        <div class="bottom-btn">
+          <el-button>取消</el-button>
+          <el-button @click="updateBusinessAccount">保存</el-button>
+        </div>
       </el-form>
       <el-dialog v-model="dialogVisible">
         <img w-full :src="dialogImageUrl" alt="Preview Image" />
@@ -52,10 +56,6 @@
       </el-form-item>
     </template>
   </div>
-  <zxn-bottom-btn v-if="isEdit">
-    <el-button>取消</el-button>
-    <el-button @click="updateBusinessAccount">保存</el-button>
-  </zxn-bottom-btn>
 </template>
 
 <script lang="ts" setup>
@@ -115,3 +115,15 @@ async function getAccountDetail() {
 
 getAccountDetail();
 </script>
+<style scoped lang="scss">
+.box {
+  padding-bottom: 100px;
+}
+
+.bottom-btn {
+  position: absolute;
+  bottom: 20px;
+  left: 45%;
+  transform: translateX(-50%);
+}
+</style>
