@@ -8,7 +8,7 @@
         class="login-form"
       >
         <div class="loginLogo">
-          <img class="imgs" src="@/assets/zxn.jpg" alt="" />
+          <img class="imgs" src="@/assets/logo.png" alt="" />
         </div>
         <div class="flex text-black items-center py-4">
           <span class="text-2xl flex-1 text-center">欢迎登录</span>
@@ -468,12 +468,12 @@ onMounted(() => {
 
   .loginLogo {
     position: absolute;
-    top: -20%;
-    left: calc(50% - 25px);
+    top: -25%;
+    left: calc(50% - 133px);
 
     .imgs {
-      width: 50px;
-      height: 50px;
+      width: 266px;
+      height: 74px;
     }
   }
 
