@@ -167,7 +167,22 @@ const handleReset = () => {
 const handleSearch = () => {
   console.log("查询");
   pageInfo.page = 1;
-  getTableData();
+  // 时间选择判断
+  if (!formItem.value.timeData[0] && !formItem.value.timeData[1]) {
+    getTableData();
+  } else if (formItem.value.timeData[0] && formItem.value.timeData[1]) {
+    getTableData();
+  } else if (!formItem.value.timeData[0] && formItem.value.timeData[1]) {
+    ElMessage({
+      type: "warning",
+      message: `请选择开始时间`,
+    });
+  } else if (formItem.value.timeData[0] && !formItem.value.timeData[1]) {
+    ElMessage({
+      type: "warning",
+      message: `请选择结束时间`,
+    });
+  }
 };
 const handlePageChange = (cur: any) => {
   const { page, limit } = cur;

@@ -14,7 +14,7 @@
           <span class="text-2xl flex-1 text-center">欢迎登录</span>
         </div>
 
-        <el-form-item class="mt-10" prop="username">
+        <el-form-item class="mt-10" prop="account">
           <el-input
             class="flex-1"
             ref="username"
@@ -26,7 +26,7 @@
           />
           <div class="underline"></div>
         </el-form-item>
-        <el-form-item prop="password">
+        <el-form-item prop="pwd">
           <el-input
             class="flex-1"
             v-model="loginData.pwd"
@@ -97,7 +97,7 @@
           :rules="registerRules"
           class="register-form"
         >
-          <el-form-item prop="phone">
+          <el-form-item prop="mobile">
             <el-input
               class="flex-1"
               ref="phone"
@@ -107,7 +107,7 @@
               name="phone"
             />
           </el-form-item>
-          <el-form-item prop="verifyCode">
+          <el-form-item prop="code">
             <el-input
               v-model="registerData.code"
               auto-complete="off"
@@ -125,7 +125,7 @@
               >
             </div>
           </el-form-item>
-          <el-form-item prop="password">
+          <el-form-item prop="pwd">
             <el-input
               class="flex-1"
               v-model="registerData.pwd"
@@ -138,7 +138,7 @@
             />
           </el-form-item>
 
-          <el-form-item prop="password2">
+          <el-form-item prop="conf_pwd">
             <el-input
               class="flex-1"
               v-model="registerData.conf_pwd"
@@ -255,9 +255,9 @@ const loginData = ref<LoginData>({
 });
 
 const loginRules = {
-  account: [{ required: true, trigger: "blur" }],
+  account: [{ required: true, message: "请输入用户名", trigger: "blur" }],
   pwd: [{ required: true, trigger: "blur", validator: passwordValidator }],
-  // verifyCode: [{ required: true, trigger: "blur" }],
+  imgcode: [{ required: true, message: "请输入验证码", trigger: "blur" }],
 };
 /**
  * 忘记密码表单引用
@@ -277,14 +277,14 @@ const registerRules = {
   conf_pwd: [
     { required: true, trigger: "blur", validator: password2Validator },
   ],
-  code: [{ required: true, trigger: "blur" }],
+  code: [{ required: true, message: "请输入验证码", trigger: "blur" }],
 };
 /**
  * 手机号校验器
  */
 function phoneValidator(rule: any, value: any, callback: any) {
   if (value === "") {
-    callback(new Error("Please input the phone"));
+    callback(new Error("请输入手机号"));
   } else if (/^1[34578]\d{9}$/.test(value)) {
     callback(new Error("手机号格式错误"));
   }
@@ -293,18 +293,22 @@ function phoneValidator(rule: any, value: any, callback: any) {
  * 密码校验器
  */
 function passwordValidator(rule: any, value: any, callback: any) {
-  if (value.length < 6) {
-    callback(new Error("The password can not be less than 6 digits"));
+  if (value === "") {
+    callback(new Error("请输入密码"));
+  } else if (value.length < 6) {
+    callback(new Error("密码长度应该等于或大于6"));
   } else {
-    // if (registerData.conf_pwd !== "") {
-    //   if (!registerFormRef.value) return;
-    //   registerFormRef.value.validateField("conf_pwd", () => null);
-    // }
+    if (registerData.conf_pwd !== "") {
+      if (!registerFormRef.value) return;
+      registerFormRef.value.validateField("conf_pwd", () => null);
+    }
     callback();
   }
 }
 function password2Validator(rule: any, value: any, callback: any) {
-  if (value != registerRules.pwd) {
+  if (value === "") {
+    callback(new Error("请确认密码"));
+  } else if (value != registerData.pwd) {
     callback(new Error("二次密码输入不一致"));
   } else {
     callback();
@@ -515,6 +519,11 @@ onMounted(() => {
       max-height: calc(100% - 30px);
       margin: 0 !important;
       transform: translate(-50%, -50%);
+    }
+
+    :deep(.el-dialog__title) {
+      font-size: 1.5rem;
+      font-weight: bold;
     }
 
     :deep(.el-dialog .el-dialog__body) {
