@@ -182,6 +182,7 @@ export interface ICreateBusinessAccount {
    * 产品列表 product_type产品类型  invoice_type票面种类及税点 cooperate_pointnt价格
    */
   product?: string[];
+  is_active?: number;
 }
 
 export interface IEditBusinessAccount {
