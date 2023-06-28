@@ -1,6 +1,10 @@
 <template>
   <div class="p-[24px] p-b-[0]">
-    <div>累计结算: {{ total_settlement_money }}</div>
+    <div class="recharge">
+      <div>
+        累计结算<span class="money">{{ total_settlement_money }}</span>
+      </div>
+    </div>
     <zxn-search
       class="m-t-[20px]"
       :formItem="formItem"
@@ -110,7 +114,22 @@ const handleReset = () => {
 const handleSearch = () => {
   console.log("查询");
   pageInfo.page = 1;
-  getTableData();
+  // 时间选择判断
+  if (!formItem.value.timeData[0] && !formItem.value.timeData[1]) {
+    getTableData();
+  } else if (formItem.value.timeData[0] && formItem.value.timeData[1]) {
+    getTableData();
+  } else if (!formItem.value.timeData[0] && formItem.value.timeData[1]) {
+    ElMessage({
+      type: "warning",
+      message: `请选择开始时间`,
+    });
+  } else if (formItem.value.timeData[0] && !formItem.value.timeData[1]) {
+    ElMessage({
+      type: "warning",
+      message: `请选择结束时间`,
+    });
+  }
 };
 const handlePageChange = (cur: any) => {
   const { page, limit } = cur;
@@ -159,7 +178,7 @@ const columnList = [
     fixed: "right",
     width: 250,
     align: "right",
-    headerAlign: "left",
+    headerAlign: "right",
   },
 ];
 // 操作
@@ -313,3 +332,23 @@ onMounted(() => {
   // rou()
 });
 </script>
+<style lang="scss" scoped>
+.recharge {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding-left: 25px;
+  font-size: 14px;
+  background: #fef1f0;
+  border-radius: 4px;
+  opacity: 1;
+}
+
+.money {
+  margin-left: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+</style>

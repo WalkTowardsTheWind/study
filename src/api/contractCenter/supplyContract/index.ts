@@ -6,7 +6,7 @@ import {
 } from "./types";
 
 /**
- * 新建企业合同
+ * 新建供应合同
  *
  * @param data {supplyContractAddType}
  * @returns
@@ -20,7 +20,7 @@ export function supplyContractAdd(data: supplyContractAddType) {
 }
 
 /**
- * 获取企业合同列表
+ * 获取供应合同列表
  *
  *
  */
