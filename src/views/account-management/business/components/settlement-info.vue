@@ -4,6 +4,7 @@
       :table-data="tableData"
       :column-list="columnList"
       :page-info="pageInfo"
+      @page-change="pageChange"
     >
       <template #status="scope" v-if="isEdit">
         <span>{{ status[scope.row.status] }}</span>
@@ -73,6 +74,12 @@ async function getList() {
     tableData.push(...res.data.data);
     pageInfo.total = res.data.total;
   }
+}
+function pageChange(current: any) {
+  const { page, limit } = current;
+  pageInfo.limit = limit;
+  pageInfo.page = page;
+  getList();
 }
 
 getList();

@@ -130,6 +130,8 @@ function checkReject() {
         type: "success",
         message: "驳回成功",
       });
+      dialogVisible.value = false;
+      router.go(-1);
     })
     .catch((err) => {
       return new Error("err", err);

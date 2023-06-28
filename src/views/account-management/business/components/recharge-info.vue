@@ -4,6 +4,7 @@
       :table-data="tableData"
       :column-list="columnList"
       :page-info="pageInfo"
+      @page-change="pageChange"
     >
       <template #operation="scope" v-if="isEdit">
         <el-button v-if="scope" link type="primary">下载</el-button>
@@ -56,6 +57,12 @@ function getList() {
       pageInfo.total = res.data.total;
     });
   }
+}
+function pageChange(current: any) {
+  const { page, limit } = current;
+  pageInfo.limit = limit;
+  pageInfo.page = page;
+  getList();
 }
 
 getList();

@@ -4,6 +4,7 @@
       :table-data="tableData"
       :column-list="columnList"
       :page-info="pageInfo"
+      @page-change="pageChange"
     >
       <template #contract_kind="scope" v-if="isEdit">
         <span>{{ contract_kind[scope.row.contract_kind] }}</span>
@@ -54,12 +55,12 @@ const props = defineProps({
   },
 });
 
-watch(
-  () => props.id,
-  (newV, oldV) => {
-    console.log(newV, oldV);
-  }
-);
+function pageChange(current: any) {
+  const { page, limit } = current;
+  pageInfo.limit = limit;
+  pageInfo.page = page;
+  getList();
+}
 
 const searchForm = reactive({
   company_id: "",

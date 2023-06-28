@@ -39,6 +39,7 @@
       :column-list="columnList"
       hasSelect
       :page-info="pageInfo"
+      @page-change="pageChange"
     >
       <template #tableTop>
         <el-dropdown trigger="click">
@@ -148,6 +149,17 @@ const columnList = [
 const toDetail = (status: string, id: number) => {
   router.push({ name: "personal-account-detail", query: { status, id } });
 };
+
+/**
+ * 页面
+ */
+function pageChange(current: any) {
+  console.log(current);
+  const { page, limit } = current;
+  pageInfo.limit = limit;
+  pageInfo.page = page;
+  handleSearch();
+}
 
 /**
  * 查询

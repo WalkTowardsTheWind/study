@@ -65,6 +65,7 @@
             :column-list="columnList"
             hasSelect
             :page-info="pageInfo"
+            @page-change="pageChange"
           >
             <template #tableTop>
               <el-dropdown class="" trigger="click">
@@ -238,6 +239,12 @@ function getTaxLand() {
     taxLand.value.push(...res.data);
   });
 }
+function pageChange(current: any) {
+  const { page, limit } = current;
+  pageInfo.limit = limit;
+  pageInfo.page = page;
+  handleSearch();
+}
 
 function handleReset() {
   formItem.name = "";
@@ -247,6 +254,7 @@ function handleReset() {
   formItem.category_id = "";
   handleSearch();
 }
+
 handleSearch();
 getTaxLand();
 getCategory();

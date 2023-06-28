@@ -209,7 +209,6 @@ function handleReset() {
  * 页面
  */
 function pageChange(current: any) {
-  console.log(current);
   const { page, limit } = current;
   pageInfo.limit = limit;
   pageInfo.page = page;

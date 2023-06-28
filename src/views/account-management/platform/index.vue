@@ -48,6 +48,7 @@
       :column-list="columnList"
       hasSelect
       :page-info="pageInfo"
+      @page-change="pageChange"
     >
       <template #tableTop>
         <el-button type="primary" @click="add('add')">+ 新建</el-button>
@@ -478,6 +479,17 @@ function handleReset() {
   formItem.status = "";
   formItem.roles = "";
   date.value = [];
+  handleSearch();
+}
+
+/**
+ * 页面
+ */
+function pageChange(current: any) {
+  console.log(current);
+  const { page, limit } = current;
+  pageInfo.limit = limit;
+  pageInfo.page = page;
   handleSearch();
 }
 
