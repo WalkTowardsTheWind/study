@@ -228,7 +228,7 @@ const columnList = [
   { label: "税地地区", prop: "merger_name" },
   { label: "成本", prop: "tax_cost_point" },
   { label: "签约数量", prop: "sign_count" },
-  { label: "税率形式", prop: "calculation_type" },
+  { label: "计算方式", prop: "calculation_type" },
   { label: "对接人", prop: "tax_land_head" },
   { label: "税地发票类型", prop: "invoice_type", width: 120 },
   { label: "上架时间", prop: "ground_time", sortable: "custom", width: 120 },

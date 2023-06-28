@@ -233,7 +233,7 @@ const columnList = [
   { label: "税地名称", prop: "tax_land_name" },
   { label: "成本", prop: "tax_cost_point" },
   { label: "签约数量", prop: "sign_count" },
-  { label: "计算形式", prop: "calculation_type" },
+  { label: "计算方式", prop: "calculation_type" },
   { label: "对接人", prop: "tax_land_head" },
   { label: "税地发票类型", prop: "invoice_type", width: 120 },
   { label: "发票面额", prop: "invoice_denomination", width: 120 },
