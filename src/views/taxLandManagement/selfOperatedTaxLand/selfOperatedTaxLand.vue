@@ -18,7 +18,7 @@
       </el-form-item>
 
       <el-form-item label="税地状态">
-        <el-select v-model="formItem.status" placeholder="请选择" clearable>
+        <el-select v-model="formItem.status" placeholder="全部" clearable>
           <el-option
             v-for="item in proxy.$const['taxLandManagementEnum.taxLandStatus']"
             :key="item.value"
@@ -29,11 +29,7 @@
       </el-form-item>
 
       <el-form-item label="发票类型">
-        <el-select
-          v-model="formItem.invoice_type"
-          placeholder="请选择"
-          clearable
-        >
+        <el-select v-model="formItem.invoice_type" placeholder="全部" clearable>
           <el-option
             v-for="item in proxy.$const['taxLandManagementEnum.InvoiceType']"
             :key="item.value"
@@ -46,7 +42,7 @@
       <el-form-item label="发票面额">
         <el-select
           v-model="formItem.invoice_denomination"
-          placeholder="请选择"
+          placeholder="全部"
           clearable
         >
           <el-option
@@ -63,7 +59,7 @@
       <el-form-item label="计算方式">
         <el-select
           v-model="formItem.calculation_type"
-          placeholder="请选择"
+          placeholder="全部"
           clearable
         >
           <el-option
