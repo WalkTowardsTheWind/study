@@ -190,10 +190,9 @@ function handleReset() {
  * 删除个人账户
  */
 function del(id) {
-  ElMessageBox.confirm("是否删除账号?", "Warning", {
+  ElMessageBox.confirm("是否删除账号?", "", {
     confirmButtonText: "确认",
     cancelButtonText: "取消",
-    type: "warning",
     center: true,
   })
     .then(() => {
