@@ -272,7 +272,7 @@ const registerData = reactive<RegisterData>({
 });
 
 const registerRules = {
-  mobile: [{ required: true, trigger: "blur", validator: phoneValidator }],
+  mobile: [{ required: true, validator: phoneValidator, trigger: "blur" }],
   pwd: [{ required: true, trigger: "blur", validator: passwordValidator }],
   conf_pwd: [
     { required: true, trigger: "blur", validator: password2Validator },
@@ -285,7 +285,7 @@ const registerRules = {
 function phoneValidator(rule: any, value: any, callback: any) {
   if (value === "") {
     callback(new Error("请输入手机号"));
-  } else if (/^1[34578]\d{9}$/.test(value)) {
+  } else if (!/^1[3456789]\d{9}$/.test(value)) {
     callback(new Error("手机号格式错误"));
   }
 }
@@ -361,7 +361,6 @@ function getPhoneCaptcha() {
         countNum.value = 60;
         let timer: any;
         if (timer) clearInterval(timer);
-        console.log(123123123);
         timer = setInterval(() => {
           countNum.value = (countNum.value as number) - 1;
           if (countNum.value == 0) {

@@ -57,7 +57,9 @@
                   <el-input
                     placeholder="请输入"
                     v-model="formItem.tax_location"
-                  />
+                  >
+                    <template #append>%</template>
+                  </el-input>
                 </el-form-item>
                 <el-form-item
                   class="mt-25px"
@@ -158,12 +160,23 @@ const tabsList = [
 
 //表单信息
 const FormRef = ref(ElForm);
+const validateTax_location = (rule: any, value: any, callback: any) => {
+  if (value === "") {
+    callback(new Error("请输入点位"));
+  } else if (!/^([0-9]\d{0,1}|100$)(\.\d{1,2})?$/.test(value)) {
+    callback(new Error("请输入正确格式"));
+  } else {
+    callback();
+  }
+};
 const Rules = {
   online_type: [{ required: true, message: "请输入", trigger: "blur" }],
   contract_kind: [{ required: true, message: "请输入", trigger: "blur" }],
   party_a: [{ required: true, message: "请输入", trigger: "blur" }],
   party_b: [{ required: true, message: "请输入", trigger: "blur" }],
-  tax_location: [{ required: true, message: "请输入", trigger: "blur" }],
+  tax_location: [
+    { required: true, validator: validateTax_location, trigger: "blur" },
+  ],
   contract_term: [{ required: true, message: "请输入", trigger: "blur" }],
   sign_time: [{ required: true, message: "请输入", trigger: "blur" }],
   end_time: [{ required: true, message: "请输入", trigger: "blur" }],
