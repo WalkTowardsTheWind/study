@@ -249,8 +249,8 @@ const countNum = ref<number>();
 const loginFormRef = ref(ElForm);
 
 const loginData = ref<LoginData>({
-  account: "admin",
-  pwd: "123456",
+  account: "",
+  pwd: "",
   imgcode: "",
 });
 
