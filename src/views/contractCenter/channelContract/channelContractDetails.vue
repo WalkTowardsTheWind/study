@@ -102,7 +102,6 @@
 </template>
 <script setup lang="ts">
 import { useRoute } from "vue-router";
-import { channelContractDetailsType } from "@/api/contractCenter/channelContract/types";
 import { getContractDetails } from "@/api/contractCenter";
 const route = useRoute();
 const { proxy } = getCurrentInstance() as any;
@@ -119,7 +118,7 @@ const tabsList = [
 ];
 
 //表单信息
-const formItem = ref<channelContractDetailsType>({
+const formItem = ref({
   contract_name: "",
   contract_no: "",
   contract_kind: "",
@@ -157,7 +156,7 @@ const getData = () => {
         file_url,
         annex_url,
       } = response.data.info;
-      const product = response.data.product.map((item) => {
+      const product = response.data.product.map((item: any) => {
         return {
           product_type: item.product_type,
           invoice_type: item.invoice_type,

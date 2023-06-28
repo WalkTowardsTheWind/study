@@ -7,7 +7,7 @@
   >
     <template #header>
       <div class="my-header">
-        <h4>凭证查看</h4>
+        <h4>{{ title }}</h4>
       </div>
     </template>
     <div>
@@ -26,10 +26,12 @@ const emit = defineEmits(["update:dialogVisible"]);
 const props = defineProps({
   dialogVisible: { type: Boolean, default: false },
   imageList: { type: Array, equired: true, default: () => [] },
+  title: { type: String, equired: true, default: () => "" },
 });
 
 let dialogVisible = computed(() => props.dialogVisible);
 let imageList = computed(() => props.imageList);
+let title = computed(() => props.title);
 const handleConfirm = () => {
   emit("update:dialogVisible", false);
 };

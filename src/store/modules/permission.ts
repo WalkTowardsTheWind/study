@@ -58,6 +58,8 @@ export const usePermissionStore = defineStore("permission", () => {
    * @returns
    */
   function generateRoutes(menuList: any) {
+    console.log(menuList);
+    console.log(filterAsyncRoutes);
     // const accessedRoutes = filterAsyncRoutes(menuList);
     const accessedRoutes: any[] = [];
     setRoutes(accessedRoutes);

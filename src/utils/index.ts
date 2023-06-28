@@ -1,3 +1,6 @@
+import { isNumber, isStringNumber, isString } from "@/utils/is";
+import { dateUtil } from "./dateUtil";
+
 /**
  * Check if an element has a class
  * @param {HTMLElement} ele
@@ -43,18 +46,20 @@ export function transformTimeRange(
   oldField = "timeData",
   isTime = false
 ) {
-  console.log(params, "222");
   const _params = JSON.parse(JSON.stringify(params));
   if (_params[oldField] && _params[oldField].length) {
     _params.start_time = _params[oldField][0] || "";
     _params.end_time = _params[oldField][1] || "";
   }
   if (isTime) {
+    console.log(_params.end_time);
     _params.start_time = _params.start_time
-      ? new Date(_params.start_time).getTime().toString().substring(0, 10)
+      ? dateUtil(_params.start_time).unix()
       : "";
     _params.end_time = _params.end_time
-      ? new Date(_params.end_time).getTime().toString().substring(0, 10)
+      ? dateUtil(_params.end_time)
+          .add(24 * 60 - 1, "minute")
+          .unix()
       : "";
   }
   delete _params[oldField];
@@ -105,4 +110,13 @@ export function getPercentValue(arrList, index, precision) {
   }
 
   return seats[index] / digits;
+}
+
+export function addUnit(value?: string | number, defaultUnit = "px") {
+  if (!value) return "";
+  if (isNumber(value) || isStringNumber(value)) {
+    return `${value}${defaultUnit}`;
+  } else if (isString(value)) {
+    return value;
+  }
 }
