@@ -438,27 +438,6 @@ async function submit(formEl: FormInstance | undefined) {
             });
           });
       }
-      // if (isAllComplete) {
-      //   params.is_active = 1
-      // } else {
-      //   params.is_active = 0
-      // }
-      // console.log(params);
-
-      // const res = await createBusinessAccount(addForm);
-      // try {
-      // 	if (res.status === 200) {
-      // 		ElMessage({
-      // 			message: "新建企业账号成功",
-      // 			type: "success",
-      // 		});
-      // 		setTimeout(() => {
-      // 			router.back();
-      // 		}, 200);
-      // 	}
-      // } catch (error: any) {
-      // 	return new Error("error", error);
-      // }
     } else {
       console.log("error submit!", fields);
     }

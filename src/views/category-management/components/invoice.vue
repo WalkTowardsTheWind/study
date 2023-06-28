@@ -213,7 +213,6 @@ function del(id: string) {
   ElMessageBox.confirm("是否删除?", "Warning", {
     confirmButtonText: "确认",
     cancelButtonText: "取消",
-    type: "warning",
     center: true,
   })
     .then(() => {
