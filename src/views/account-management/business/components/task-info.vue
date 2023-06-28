@@ -4,6 +4,7 @@
       :table-data="tableData"
       :column-list="columnList"
       :page-info="pageInfo"
+      @page-change="pageChange"
     >
       <template #status="scope">
         <span>{{ status[scope.row.status] }}</span>
@@ -83,10 +84,18 @@ function getList() {
       ...pageInfo,
     };
     getBusinessAccountTaskList(params).then((res) => {
+      tableData.length = 0;
       tableData.push(...res.data.data);
       pageInfo.total = res.data.total;
     });
   }
+}
+
+function pageChange(current: any) {
+  const { page, limit } = current;
+  pageInfo.limit = limit;
+  pageInfo.page = page;
+  getList();
 }
 
 getList();

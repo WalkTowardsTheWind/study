@@ -66,6 +66,7 @@
       :column-list="columnList"
       hasSelect
       :page-info="pageInfo"
+      @page-change="pageChange"
     >
       <template #tableTop>
         <el-dropdown trigger="click">
@@ -207,6 +208,17 @@ const toDetail = (status: string, item: any) => {
     query: { status, id: item.id, type: item.channel_type },
   });
 };
+
+/**
+ * 页面
+ */
+function pageChange(current: any) {
+  console.log(current);
+  const { page, limit } = current;
+  pageInfo.limit = limit;
+  pageInfo.page = page;
+  handleSearch();
+}
 
 function handleSearch() {
   let params = {

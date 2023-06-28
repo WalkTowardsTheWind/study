@@ -20,11 +20,15 @@
       <div class="line"></div>
       <div>发佣统计</div>
     </div>
-    <div class="select">
-      <el-button @click="changeType(2)">上周</el-button>
-      <el-button @click="changeType(1)">本周</el-button>
-      <el-button @click="changeType(4)">上月</el-button>
-      <el-button @click="changeType(3)">本月</el-button>
+    <div class="date">
+      <div
+        v-for="(item, index) in dateList"
+        :key="index"
+        :class="{ active: index == currentDate }"
+        @click="get3And1List(item.val, index)"
+      >
+        {{ item.name }}
+      </div>
     </div>
   </div>
   <div id="main2"></div>
@@ -36,19 +40,22 @@ import jpgTop from "@/assets/icons-jpg/top.png";
 import jpgBottom from "@/assets/icons-jpg/bottom.png";
 import { getChannelList } from "@/api/money";
 
-// 1 2 3 4
-const time_type = ref(1);
+const dateList = [
+  { name: "上周", val: "2" },
+  { name: "本周", val: "1" },
+  { name: "上月", val: "4" },
+  { name: "本月", val: "3" },
+];
+const currentDate = ref(3);
 
 const commission_total = ref();
 const profit = ref();
 const profit_rate = ref();
 
-function get3And1List() {
-  // 时间类型 1本周 2上周 3本月 4上月
-  let params = {
-    time_type: time_type.value,
-  };
-  getChannelList(params).then((res) => {
+function get3And1List(time_type: number, index: number) {
+  currentDate.value = index;
+
+  getChannelList({ time_type }).then((res) => {
     commission_total.value = res.data.commission_total;
     profit.value = res.data.profit;
     profit_rate.value = res.data.profit_rate;
@@ -64,11 +71,6 @@ function get3And1List() {
     chart.value?.clear();
     chart.value?.setOption(options.value);
   });
-}
-
-function changeType(type: number) {
-  time_type.value = type;
-  get3And1List();
 }
 
 const chart = ref({} as any);
@@ -144,7 +146,7 @@ onMounted(() => {
   });
 });
 
-get3And1List();
+get3And1List(3, 3);
 </script>
 
 <style scoped lang="scss">
@@ -210,5 +212,27 @@ get3And1List();
   margin-right: 10px;
   background: #356ff3;
   border-radius: 4px;
+}
+
+.date {
+  display: flex;
+  font-size: 14px;
+
+  div {
+    width: 60px;
+    height: 40px;
+    margin: 0 8px;
+    line-height: 40px;
+    color: #333;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+  }
+
+  div.active {
+    color: #366ff4;
+    border-color: #366ff4;
+  }
 }
 </style>

@@ -61,7 +61,7 @@
     </el-form>
     <zxn-bottom-btn v-if="isEdit">
       <el-button type="primary" @click="save">保存</el-button>
-      <el-button type="info" plain>取消</el-button>
+      <el-button type="info" plain @click="$router.go(-1)">取消</el-button>
     </zxn-bottom-btn>
   </zxn-plan>
 </template>
@@ -71,6 +71,7 @@ import {
   getPersonalAccountDetail,
   editPersonalAccount,
 } from "@/api/account/personal";
+import router from "@/router";
 
 const props = defineProps({
   isEdit: {
@@ -97,8 +98,11 @@ function save() {
         message: "编辑成功",
         type: "success",
       });
+      router.go(-1);
     })
-    .catch(() => {});
+    .catch((err) => {
+      return new Error(err);
+    });
 }
 
 getDetil();

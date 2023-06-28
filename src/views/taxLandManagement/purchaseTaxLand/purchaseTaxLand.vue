@@ -167,7 +167,22 @@ const handleReset = () => {
 const handleSearch = () => {
   console.log("查询");
   pageInfo.page = 1;
-  getTableData();
+  // 时间选择判断
+  if (!formItem.value.timeData[0] && !formItem.value.timeData[1]) {
+    getTableData();
+  } else if (formItem.value.timeData[0] && formItem.value.timeData[1]) {
+    getTableData();
+  } else if (!formItem.value.timeData[0] && formItem.value.timeData[1]) {
+    ElMessage({
+      type: "warning",
+      message: `请选择开始时间`,
+    });
+  } else if (formItem.value.timeData[0] && !formItem.value.timeData[1]) {
+    ElMessage({
+      type: "warning",
+      message: `请选择结束时间`,
+    });
+  }
 };
 const handlePageChange = (cur: any) => {
   const { page, limit } = cur;
@@ -220,7 +235,14 @@ const columnList = [
   { label: "税地类型", prop: "tax_land_type" },
   { label: "支付方式", prop: "payment_type" },
 
-  { label: "操作", slot: "operation", fixed: "right", width: 250 },
+  {
+    label: "操作",
+    slot: "operation",
+    fixed: "right",
+    width: 250,
+    align: "right ",
+    headerAlign: "right",
+  },
 ];
 /**
  * 上下架
@@ -279,16 +301,34 @@ const handleB = (scope: any) => {
  * 删除
  */
 const handleDelete = (scope: any) => {
-  selfOperatedTaxLandDelete(scope.row.id)
-    .then(() => {
-      ElMessage({
-        type: "success",
-        message: `删除税地成功`,
-      });
-      getTableData();
-    })
-    .catch();
-  console.log(scope.row.value, "删除");
+  ElMessageBox({
+    title: "",
+    message: h("p", null, `确定删除税地?`),
+    showCancelButton: true,
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    beforeClose: async (
+      action: string,
+      instance: { confirmButtonLoading: boolean },
+      done: () => void
+    ) => {
+      if (action === "confirm") {
+        instance.confirmButtonLoading = true;
+        await selfOperatedTaxLandDelete(scope.row.id);
+
+        instance.confirmButtonLoading = false;
+        done();
+      } else {
+        done();
+      }
+    },
+  }).then(() => {
+    ElMessage({
+      type: "success",
+      message: `成功删除税地`,
+    });
+    getTableData();
+  });
 };
 /**
  * 导出
