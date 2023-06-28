@@ -144,7 +144,7 @@ const getView = async () => {
     loading.close();
     formItem.invoice_type = data.invoice_type;
     formItem.invoice_require = data.invoice_require;
-    formItem.apply_invoice_type = data.apply_invoice_type;
+    formItem.apply_invoice_type = data.invoice_type;
     formItem.taxpayer_number = data.taxpayer_number;
     formItem.company_name = data.company_name;
     formItem.bank = data.bank;

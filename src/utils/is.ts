@@ -102,6 +102,13 @@ export function isUrl(path: string): boolean {
   return reg.test(path);
 }
 
+export const isStringNumber = (val: string): boolean => {
+  if (!isString(val)) {
+    return false;
+  }
+  return !Number.isNaN(Number(val));
+};
+
 export function isPwd(pwd: string): boolean {
   const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[a-zA-Z0-9]{6,16}$/;
   return reg.test(pwd);
