@@ -464,4 +464,14 @@ export function resetRouter() {
   location.reload();
 }
 
+export function refreshSelectedTag() {
+  console.log(router);
+  const { currentRoute } = router;
+  router
+    .replace({ path: "/redirect" + currentRoute.value.fullPath })
+    .catch((err) => {
+      console.warn(err);
+    });
+}
+
 export default router;

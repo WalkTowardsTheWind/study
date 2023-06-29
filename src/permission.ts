@@ -24,7 +24,7 @@ router.beforeEach(async (to, from, next) => {
       const hasLand = userStore.sourceList && userStore.sourceList.length > 0;
       const hasRoles = permissionStore.hasRoles;
       if (!hasLand) {
-        // await userStore.getSourceList();
+        await userStore.getSourceList();
       }
       // next();
       if (hasRoles) {

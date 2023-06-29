@@ -3,6 +3,8 @@ node_modules
 dist
 dist-ssr
 *.local
+components.d.ts
+auto-imports.d.ts
 
 # Editor directories and files
 .idea
@@ -12,8 +14,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.local
-
-package-lock.json
-pnpm-lock.yaml
-components.d.ts
-auto-imports.d.ts
