@@ -183,3 +183,15 @@ export function getBusinessChannelList(params: any) {
     method: "get",
   });
 }
+
+/**
+ * 税地详情
+ * @param params
+ * @returns
+ */
+export function getTaxlandDetail(params: any) {
+  return request({
+    url: `/adminapi/tax/taxLand/${params}`,
+    method: "get",
+  });
+}

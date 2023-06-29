@@ -189,14 +189,6 @@
             <el-form-item label="客户点位">
               <el-input placeholder="请输入" v-model="addForm.tax_point" />
             </el-form-item>
-            <el-form-item label="认证规则">
-              <el-select class="w-full" placeholder="请选择（单选）">
-              </el-select>
-            </el-form-item>
-            <!-- <el-form-item label="签约规则">
-							<el-select class="w-full" placeholder="请选择（单选）">
-							</el-select>
-						</el-form-item> -->
           </template>
           <el-form-item label="企业邮箱">
             <el-input placeholder="请输入" v-model="addForm.company_email" />
@@ -215,6 +207,7 @@
               class="w-full"
               placeholder="请选择"
               v-model="addForm.tax_land_id"
+              @change="selecTaxland"
             >
               <el-option
                 v-for="(item, index) in taxLandOption"
@@ -224,6 +217,26 @@
               ></el-option>
             </el-select>
           </el-form-item>
+          <template v-if="addForm.company_source == '1'">
+            <el-form-item label="认证规则">
+              <el-select
+                class="w-full"
+                placeholder="请选择（单选）"
+                v-model="addForm.auth_type"
+              >
+                <el-option
+                  v-for="(item, index) in auth_type"
+                  :key="index"
+                  :value="item.value"
+                  :label="item.label"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <!-- <el-form-item label="签约规则">
+							<el-select class="w-full" placeholder="请选择（单选）">
+							</el-select>
+						</el-form-item> -->
+          </template>
         </el-col>
         <el-col :span="8">
           <el-form-item label="上传合同">
@@ -266,7 +279,11 @@
 </template>
 
 <script lang="ts" setup>
-import { createBusinessAccount, getCategoryList } from "@/api/account/business";
+import {
+  createBusinessAccount,
+  getCategoryList,
+  getTaxlandDetail,
+} from "@/api/account/business";
 import { getLandList } from "@/api/common";
 import router from "@/router";
 import type { FormInstance, FormRules } from "element-plus";
@@ -331,6 +348,7 @@ const addForm = reactive({
   channel_type: "",
   parent_channel_id: "",
   tax_point: "",
+  auth_type: "", // 认证规则
   company_email: "",
   consignee: "",
   consignee_mobile: "",
@@ -338,6 +356,15 @@ const addForm = reactive({
   tax_land_id: "",
   contract_img: [],
 } as any);
+
+const authType = [
+  { label: "二要素（姓名、身份证）", value: "1" },
+  { label: "三要素（姓名、手机号、身份证）", value: "2" },
+  { label: "三要素（姓名、身份证、银行卡）", value: "3" },
+  { label: "四要素（姓名、手机号、身份证、银行卡）", value: "4" },
+];
+
+const auth_type = ref([] as any);
 
 const isDisabled = computed(() => {
   return (
@@ -442,8 +469,8 @@ async function submit(formEl: FormInstance | undefined) {
   if (!formEl) return;
   await formEl.validate(async (valid, fields) => {
     if (valid) {
-      console.log(isAllComplete.value);
-      console.log(addForm);
+      // console.log(isAllComplete.value);
+      // console.log(addForm);
 
       // 全部填写完成
       if (isAllComplete.value) {
@@ -521,10 +548,25 @@ function getCategoryOptions() {
 function getTaxLandOption() {
   taxLandOption.value.length = 0;
   getLandList().then((res) => {
-    console.log(res);
     taxLandOption.value.push(...res.data);
   });
 }
+
+function selecTaxland(id: string) {
+  addForm.auth_type = "";
+  auth_type.value.length = 0;
+  getTaxlandDetail(id).then((res) => {
+    const arr = res.data.info.certification_rules;
+    arr.forEach((i) => {
+      authType.forEach((j) => {
+        if (i == j.value) {
+          auth_type.value.push(j);
+        }
+      });
+    });
+  });
+}
+
 getCategoryOptions();
 getTaxLandOption();
 </script>

@@ -144,7 +144,7 @@ const date = ref("");
 
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "账户ID", prop: "company_id" },
+  { label: "账户名称", prop: "account" },
   {
     label: "状态",
     type: "enum",
