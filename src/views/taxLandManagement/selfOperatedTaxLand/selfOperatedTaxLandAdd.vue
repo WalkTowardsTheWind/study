@@ -270,8 +270,8 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="开户行" prop="depositBank">
-                  <el-input v-model="formItem.depositBank" placeholder="请输入">
+                <el-form-item class="mt-25px" label="开户行" prop="bank">
+                  <el-input v-model="formItem.bank" placeholder="请输入">
                   </el-input>
                 </el-form-item>
                 <el-form-item
@@ -299,10 +299,10 @@
                 <el-form-item
                   class="mb-[0]"
                   label="行业限制"
-                  prop="industryRestrictions"
+                  prop="industry_limit"
                 >
                   <multi-upload
-                    v-model="formItem.industryRestrictions"
+                    v-model="formItem.industry_limit"
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
@@ -313,11 +313,11 @@
                 <el-form-item
                   class="mt-25px"
                   label="认证规则"
-                  prop="certificationRules"
+                  prop="certification_rules"
                 >
                   <el-select
                     class="w-[100%]"
-                    v-model="formItem.certificationRules"
+                    v-model="formItem.certification_rules"
                     placeholder="请选择"
                   >
                     <el-option
@@ -333,11 +333,11 @@
                 <el-form-item
                   class="mt-25px"
                   label="签约规则"
-                  prop="signingRules"
+                  prop="signing_rules"
                 >
                   <el-select
                     class="w-[100%]"
-                    v-model="formItem.signingRules"
+                    v-model="formItem.signing_rules"
                     placeholder="请选择"
                   >
                     <el-option
@@ -350,18 +350,23 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="单人每月限额">
-                  <el-input v-model="formItem.individualMonthlyLimit" readonly>
+                <el-form-item
+                  class="mt-25px"
+                  label="单人每月限额"
+                  prop="individual_monthly_limit"
+                >
+                  <el-input v-model="formItem.individual_monthly_limit">
+                    <template #append>万</template>
                   </el-input>
                 </el-form-item>
                 <el-form-item
                   class="mt-25px"
                   label="委托代征年限"
-                  prop="entrustedCollectionPeriod"
+                  prop="tax_contract_term"
                 >
                   <el-select
                     class="w-[100%]"
-                    v-model="formItem.entrustedCollectionPeriod"
+                    v-model="formItem.tax_contract_term"
                     placeholder="请选择"
                   >
                     <el-option
@@ -516,6 +521,43 @@ const propsTaxLang = {
 //表单信息
 
 const FormRef = ref(ElForm);
+const validateMin_employment_year = (rule: any, value: any, callback: any) => {
+  if (value === "") {
+    callback(new Error("请输入"));
+  } else if (!/^[0-9]+$/.test(value)) {
+    callback(new Error("请输入正整数"));
+  } else if (value > formItem.max_employment_year) {
+    if (!formItem.max_employment_year) return;
+    callback(new Error("起始年龄应该小于截至年龄"));
+  } else {
+    callback();
+  }
+};
+const validateMax_employment_year = (rule: any, value: any, callback: any) => {
+  if (value === "") {
+    callback(new Error("请输入"));
+  } else if (!/^[0-9]+$/.test(value)) {
+    callback(new Error("请输入正整数"));
+  } else if (value < formItem.min_employment_year) {
+    if (!formItem.min_employment_year) return;
+    callback(new Error("起始年龄应该大于截至年龄"));
+  } else {
+    callback();
+  }
+};
+const validateIndividualMonthlyLimit = (
+  rule: any,
+  value: any,
+  callback: any
+) => {
+  if (value === "") {
+    callback(new Error("请输入"));
+  } else if (!/^\d+(\.\d{1,2})?$/.test(value)) {
+    callback(new Error("请输入正确格式，（例如：2，2.2，2.22）"));
+  } else {
+    callback();
+  }
+};
 const Rules = {
   tax_land_type: [{ required: true, message: "请输入", trigger: "blur" }],
   tax_land_head: [{ required: true, message: "请输入", trigger: "blur" }],
@@ -523,8 +565,12 @@ const Rules = {
   tax_land_name: [{ required: true, message: "请输入", trigger: "blur" }],
   tax_cost_point: [{ required: true, message: "请输入", trigger: "blur" }],
   calculation_type: [{ required: true, message: "请输入", trigger: "blur" }],
-  min_employment_year: [{ required: true, message: "请输入", trigger: "blur" }],
-  max_employment_year: [{ required: true, message: "请输入", trigger: "blur" }],
+  min_employment_year: [
+    { required: true, validator: validateMin_employment_year, trigger: "blur" },
+  ],
+  max_employment_year: [
+    { required: true, validator: validateMax_employment_year, trigger: "blur" },
+  ],
   tax_land_city_id: [{ required: true, message: "请输入", trigger: "blur" }],
   web_url: [{ required: true, message: "请输入", trigger: "blur" }],
   tax_land_license: [{ required: true, message: "请输入", trigger: "blur" }],
@@ -540,20 +586,20 @@ const Rules = {
   tax_point: [{ required: true, message: "请输入", trigger: "blur" }],
   is_payment_api: [{ required: true, message: "请输入", trigger: "blur" }],
   payment_type: [{ required: true, message: "请输入", trigger: "blur" }],
-  depositBank: [{ required: true, message: "请输入", trigger: "blur" }],
+  bank: [{ required: true, message: "请输入", trigger: "blur" }],
   bank_account: [{ required: true, message: "请输入", trigger: "blur" }],
   invoice_sample: [{ required: true, message: "请输入", trigger: "blur" }],
-  industryRestrictions: [
-    { required: true, message: "请输入", trigger: "blur" },
+  industry_limit: [{ required: true, message: "请输入", trigger: "blur" }],
+  certification_rules: [{ required: true, message: "请输入", trigger: "blur" }],
+  signing_rules: [{ required: true, message: "请输入", trigger: "blur" }],
+  individual_monthly_limit: [
+    {
+      required: true,
+      validator: validateIndividualMonthlyLimit,
+      trigger: "blur",
+    },
   ],
-  certificationRules: [{ required: true, message: "请输入", trigger: "blur" }],
-  signingRules: [{ required: true, message: "请输入", trigger: "blur" }],
-  individualMonthlyLimit: [
-    { required: true, message: "请输入", trigger: "blur" },
-  ],
-  entrustedCollectionPeriod: [
-    { required: true, message: "请输入", trigger: "blur" },
-  ],
+  tax_contract_term: [{ required: true, message: "请输入", trigger: "blur" }],
   agreement_url: [{ required: true, message: "请输入", trigger: "blur" }],
   settlement_confirmation_letter: [
     { required: true, message: "请输入", trigger: "blur" },
@@ -579,14 +625,14 @@ const formItem = reactive({
   tax_point: "",
   is_payment_api: "",
   payment_type: "",
-  depositBank: "",
+  bank: "",
   bank_account: "",
   invoice_sample: [],
-  industryRestrictions: [],
-  certificationRules: "",
-  signingRules: "",
-  individualMonthlyLimit: "",
-  entrustedCollectionPeriod: "",
+  industry_limit: [],
+  certification_rules: "",
+  signing_rules: "",
+  individual_monthly_limit: "9.8",
+  tax_contract_term: "",
   incoming_materials: "",
   agreement_url: [],
   settlement_confirmation_letter: [],
@@ -602,9 +648,7 @@ const handleSubmit = () => {
           params.company_qualifications
         );
         params.invoice_sample = JSON.stringify(params.invoice_sample);
-        params.industryRestrictions = JSON.stringify(
-          params.industryRestrictions
-        );
+        params.industry_limit = JSON.stringify(params.industry_limit);
         params.agreement_url = JSON.stringify(params.agreement_url);
         params.settlement_confirmation_letter = JSON.stringify(
           params.settlement_confirmation_letter

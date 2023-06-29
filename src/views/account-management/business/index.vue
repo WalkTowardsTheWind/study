@@ -222,7 +222,6 @@ function del(id: number) {
   ElMessageBox.confirm("是否删除企业账号?", {
     confirmButtonText: "确认",
     cancelButtonText: "取消",
-    type: "warning",
     center: true,
   })
     .then(() => {
@@ -237,7 +236,7 @@ function del(id: number) {
     .catch(() => {
       ElMessage({
         type: "info",
-        message: "取消",
+        message: "取消删除",
       });
     });
 }

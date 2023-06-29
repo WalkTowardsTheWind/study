@@ -231,6 +231,7 @@ const columnList = [
     },
   },
   { label: "税地名称", prop: "tax_land_name" },
+  { label: "税地地区", prop: "area_name" },
   { label: "成本", prop: "tax_cost_point" },
   { label: "签约数量", prop: "sign_count" },
   { label: "计算方式", prop: "calculation_type" },
@@ -414,6 +415,7 @@ const getTableData = async () => {
         tax_land_no: item.tax_land_no,
         status: item.status,
         tax_land_name: item.tax_land_name,
+        area_name: item.area_name,
         tax_cost_point: item.tax_cost_point,
         sign_count: item.sign_count,
         calculation_type:

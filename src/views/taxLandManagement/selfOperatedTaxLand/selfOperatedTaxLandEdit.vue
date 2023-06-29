@@ -367,8 +367,13 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="单人每月限额">
-                  <el-input v-model="formItem.individualMonthlyLimit" readonly>
+                <el-form-item
+                  class="mt-25px"
+                  label="单人每月限额"
+                  prop="individualMonthlyLimit"
+                >
+                  <el-input v-model="formItem.individualMonthlyLimit">
+                    <template #append>万</template>
                   </el-input>
                 </el-form-item>
                 <el-form-item
@@ -533,6 +538,43 @@ const propsTaxLang = {
 const FormRef = ref(ElForm);
 const FormRef2 = ref(ElForm);
 const FormRef3 = ref(ElForm);
+const validateMin_employment_year = (rule: any, value: any, callback: any) => {
+  if (value === "") {
+    callback(new Error("请输入"));
+  } else if (!/^[0-9]+$/.test(value)) {
+    callback(new Error("请输入正整数"));
+  } else if (value > formItem.value.max_employment_year) {
+    if (!formItem.value.max_employment_year) return;
+    callback(new Error("起始年龄应该小于截至年龄"));
+  } else {
+    callback();
+  }
+};
+const validateMax_employment_year = (rule: any, value: any, callback: any) => {
+  if (value === "") {
+    callback(new Error("请输入"));
+  } else if (!/^[0-9]+$/.test(value)) {
+    callback(new Error("请输入正整数"));
+  } else if (value < formItem.value.min_employment_year) {
+    if (!formItem.value.min_employment_year) return;
+    callback(new Error("起始年龄应该大于截至年龄"));
+  } else {
+    callback();
+  }
+};
+const validateIndividualMonthlyLimit = (
+  rule: any,
+  value: any,
+  callback: any
+) => {
+  if (value === "") {
+    callback(new Error("请输入"));
+  } else if (!/^\d+(\.\d{1,2})?$/.test(value)) {
+    callback(new Error("请输入正确格式，（例如：2，2.2，2.22）"));
+  } else {
+    callback();
+  }
+};
 const Rules = {
   tax_land_type: [{ required: true, message: "请输入", trigger: "blur" }],
   tax_land_head: [{ required: true, message: "请输入", trigger: "blur" }],
@@ -540,8 +582,12 @@ const Rules = {
   tax_land_name: [{ required: true, message: "请输入", trigger: "blur" }],
   tax_cost_point: [{ required: true, message: "请输入", trigger: "blur" }],
   calculation_type: [{ required: true, message: "请输入", trigger: "blur" }],
-  min_employment_year: [{ required: true, message: "请输入", trigger: "blur" }],
-  max_employment_year: [{ required: true, message: "请输入", trigger: "blur" }],
+  min_employment_year: [
+    { required: true, validator: validateMin_employment_year, trigger: "blur" },
+  ],
+  max_employment_year: [
+    { required: true, validator: validateMax_employment_year, trigger: "blur" },
+  ],
   tax_land_city_id: [{ required: true, message: "请输入", trigger: "blur" }],
   web_url: [{ required: true, message: "请输入", trigger: "blur" }],
 
@@ -573,7 +619,11 @@ const Rules3 = {
   certificationRules: [{ required: true, message: "请输入", trigger: "blur" }],
   signingRules: [{ required: true, message: "请输入", trigger: "blur" }],
   individualMonthlyLimit: [
-    { required: true, message: "请输入", trigger: "blur" },
+    {
+      required: true,
+      validator: validateIndividualMonthlyLimit,
+      trigger: "blur",
+    },
   ],
   entrustedCollectionPeriod: [
     { required: true, message: "请输入", trigger: "blur" },
