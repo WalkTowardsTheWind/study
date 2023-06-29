@@ -290,16 +290,12 @@ import type { FormInstance, FormRules } from "element-plus";
 
 const taxpayerOptions = [
   {
-    label: "自然人",
+    label: "小规模",
     value: "1",
   },
   {
-    label: "个体工商户",
+    label: "一般人",
     value: "2",
-  },
-  {
-    label: "法人",
-    value: "3",
   },
 ];
 
