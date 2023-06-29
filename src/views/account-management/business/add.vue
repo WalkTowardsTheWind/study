@@ -217,26 +217,24 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <template v-if="addForm.company_source == '1'">
-            <el-form-item label="认证规则">
-              <el-select
-                class="w-full"
-                placeholder="请选择（单选）"
-                v-model="addForm.auth_type"
-              >
-                <el-option
-                  v-for="(item, index) in auth_type"
-                  :key="index"
-                  :value="item.value"
-                  :label="item.label"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <!-- <el-form-item label="签约规则">
+          <el-form-item label="认证规则">
+            <el-select
+              class="w-full"
+              placeholder="请选择（单选）"
+              v-model="addForm.auth_type"
+            >
+              <el-option
+                v-for="(item, index) in auth_type"
+                :key="index"
+                :value="item.value"
+                :label="item.label"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <!-- <el-form-item label="签约规则">
 							<el-select class="w-full" placeholder="请选择（单选）">
 							</el-select>
 						</el-form-item> -->
-          </template>
         </el-col>
         <el-col :span="8">
           <el-form-item label="上传合同">
@@ -405,6 +403,7 @@ const isAllComplete = computed(() => {
       !!addForm.consignee &&
       !!addForm.consignee_mobile &&
       !!addForm.address &&
+      !!addForm.auth_type &&
       !!addForm.tax_land_id &&
       !!addForm.contract_img.length
     );
@@ -443,6 +442,7 @@ const isAllComplete = computed(() => {
       !!addForm.consignee &&
       !!addForm.consignee_mobile &&
       !!addForm.address &&
+      !!addForm.auth_type &&
       !!addForm.tax_land_id &&
       !!addForm.contract_img.length
     );
