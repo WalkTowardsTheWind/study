@@ -711,7 +711,7 @@ const formItem = ref({
   industry_limit: [],
   certification_rules: "",
   signing_rules: "",
-  individual_monthly_limit: "",
+  individual_monthly_limit: "9.8",
   tax_contract_term: "",
   incoming_materials: "",
   tax_reg_type: "",
