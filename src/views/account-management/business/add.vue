@@ -96,7 +96,7 @@
             </MultiUpload>
           </el-form-item>
           <el-form-item label="企业印章">
-            <MultiUpload v-model="addForm.yinzhang">
+            <MultiUpload v-model="addForm.seal">
               <i-ep-Plus />
             </MultiUpload>
           </el-form-item>
@@ -154,22 +154,24 @@
       <el-row :gutter="30" v-show="activeStep === 3">
         <el-col :span="8">
           <el-form-item label="企业模式">
-            <el-radio-group v-model="addForm.company_source">
-              <template #default>
-                <el-button
+            <template #default>
+              <div class="busType">
+                <div
                   class="radioBtn"
                   :class="addForm.company_source == '0' ? 'is-active' : ''"
                   @click="addForm.company_source = '0'"
-                  >自营</el-button
                 >
-                <el-button
+                  自营
+                </div>
+                <div
                   class="radioBtn"
                   :class="addForm.company_source == '1' ? 'is-active' : ''"
                   @click="addForm.company_source = '1'"
-                  >渠道推广</el-button
                 >
-              </template>
-            </el-radio-group>
+                  渠道推广
+                </div>
+              </div>
+            </template>
           </el-form-item>
           <template v-if="addForm.company_source == '1'">
             <el-form-item label="上级ID绑定" class="w-full">
@@ -191,10 +193,10 @@
               <el-select class="w-full" placeholder="请选择（单选）">
               </el-select>
             </el-form-item>
-            <el-form-item label="签约规则">
-              <el-select class="w-full" placeholder="请选择（单选）">
-              </el-select>
-            </el-form-item>
+            <!-- <el-form-item label="签约规则">
+							<el-select class="w-full" placeholder="请选择（单选）">
+							</el-select>
+						</el-form-item> -->
           </template>
           <el-form-item label="企业邮箱">
             <el-input placeholder="请输入" v-model="addForm.company_email" />
@@ -265,7 +267,6 @@
 
 <script lang="ts" setup>
 import { createBusinessAccount, getCategoryList } from "@/api/account/business";
-import { ICreateBusinessAccount } from "@/api/account/business/types";
 import { getLandList } from "@/api/common";
 import router from "@/router";
 import type { FormInstance, FormRules } from "element-plus";
@@ -309,7 +310,6 @@ const addForm = reactive({
   mobile: "",
   company_name: "",
   credit_code: "",
-  license_start_date: "",
   license_end_date: "",
   legal_person: "",
   legal_person_idcard: "",
@@ -318,6 +318,7 @@ const addForm = reactive({
   company_address: "",
   license: [],
   idcard_img: [],
+  seal: [], // 企业印章
   bank: "",
   bank_account: "",
   taxpayer_number: "",
@@ -326,17 +327,16 @@ const addForm = reactive({
   taxpayer_type_img: [],
   header_img: [],
   office_img: [],
+  company_source: "0",
   channel_type: "",
+  parent_channel_id: "",
+  tax_point: "",
   company_email: "",
   consignee: "",
   consignee_mobile: "",
   address: "",
   tax_land_id: "",
-  company_source: "",
-  parent_channel_id: "",
-  tax_point: "",
   contract_img: [],
-  yinzhang: [], // 企业印章
 } as any);
 
 const isDisabled = computed(() => {
@@ -351,12 +351,79 @@ const isDisabled = computed(() => {
 });
 
 const isAllComplete = computed(() => {
-  for (let key in addForm) {
-    if (!addForm[key] || addForm[key] === "") {
-      return false;
-    }
+  if (addForm.company_source == "0") {
+    return (
+      !!addForm.account &&
+      !!addForm.pwd &&
+      !!addForm.conf_pwd &&
+      !!addForm.contacts &&
+      !!addForm.mobile &&
+      !!addForm.company_name &&
+      !!addForm.credit_code &&
+      !!addForm.license_end_date &&
+      !!addForm.legal_person &&
+      !!addForm.legal_person_idcard &&
+      !!addForm.legal_person_mobile &&
+      !!addForm.category_id &&
+      !!addForm.company_address &&
+      !!addForm.license.length &&
+      !!addForm.idcard_img.length &&
+      !!addForm.seal.length &&
+      !!addForm.bank &&
+      !!addForm.bank_account &&
+      !!addForm.taxpayer_number &&
+      !!addForm.taxpayer_type &&
+      !!addForm.permit_img.length &&
+      !!addForm.taxpayer_type_img.length &&
+      !!addForm.header_img.length &&
+      !!addForm.office_img.length &&
+      !!addForm.company_source &&
+      !!addForm.company_email &&
+      !!addForm.consignee &&
+      !!addForm.consignee_mobile &&
+      !!addForm.address &&
+      !!addForm.tax_land_id &&
+      !!addForm.contract_img.length
+    );
   }
-  return true;
+  if (addForm.company_source == "1") {
+    return (
+      !!addForm.account &&
+      !!addForm.pwd &&
+      !!addForm.conf_pwd &&
+      !!addForm.contacts &&
+      !!addForm.mobile &&
+      !!addForm.company_name &&
+      !!addForm.credit_code &&
+      !!addForm.license_end_date &&
+      !!addForm.legal_person &&
+      !!addForm.legal_person_idcard &&
+      !!addForm.legal_person_mobile &&
+      !!addForm.category_id &&
+      !!addForm.company_address &&
+      !!addForm.license.length &&
+      !!addForm.idcard_img.length &&
+      !!addForm.seal.length &&
+      !!addForm.bank &&
+      !!addForm.bank_account &&
+      !!addForm.taxpayer_number &&
+      !!addForm.taxpayer_type &&
+      !!addForm.permit_img.length &&
+      !!addForm.taxpayer_type_img.length &&
+      !!addForm.header_img.length &&
+      !!addForm.office_img.length &&
+      !!addForm.company_source &&
+      !!addForm.channel_type &&
+      !!addForm.parent_channel_id &&
+      !!addForm.tax_point &&
+      !!addForm.company_email &&
+      !!addForm.consignee &&
+      !!addForm.consignee_mobile &&
+      !!addForm.address &&
+      !!addForm.tax_land_id &&
+      !!addForm.contract_img.length
+    );
+  }
 });
 
 const rules = reactive<FormRules>({
@@ -376,6 +443,8 @@ async function submit(formEl: FormInstance | undefined) {
   await formEl.validate(async (valid, fields) => {
     if (valid) {
       console.log(isAllComplete.value);
+      console.log(addForm);
+
       // 全部填写完成
       if (isAllComplete.value) {
         const res = await createBusinessAccount(addForm);
@@ -461,21 +530,25 @@ getTaxLandOption();
 </script>
 
 <style scoped lang="scss">
-:deep(.el-radio-group) {
+.busType {
   display: flex;
+  gap: 0 20px;
   width: 100%;
-  white-space: nowrap;
+  font-size: 14px;
+}
 
-  .radioBtn {
-    flex: 1;
-    color: #333;
-    background: #fff;
-    border-radius: 4px;
-  }
+.radioBtn {
+  flex: 1;
+  padding: 2px 0;
+  color: #333;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+}
 
-  .is-active {
-    color: #366ff3;
-    border-color: #366ff3;
-  }
+.is-active {
+  color: #366ff3;
+  border-color: #366ff3;
 }
 </style>
