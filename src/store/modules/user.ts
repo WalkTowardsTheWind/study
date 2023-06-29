@@ -2,7 +2,8 @@ import { defineStore } from "pinia";
 
 import { loginApi, logoutApi } from "@/api/login";
 import { getLandList } from "@/api/common";
-import { resetRouter } from "@/router";
+import { setTaxLand } from "@/api/system";
+import { resetRouter, refreshSelectedTag } from "@/router";
 import { store } from "@/store";
 
 import { LoginData } from "@/api/login/types";
@@ -16,7 +17,7 @@ export const useUserStore = defineStore("user", () => {
   const avatar = ref("");
   const roles = ref<Array<string>>([]); // 用户角色编码集合 → 判断路由权限
   const perms = ref<Array<string>>([]); // 用户权限编码集合 → 判断按钮权限
-  const taxSource = ref<string[]>(["全国"]); //  当前税地
+  const taxSource = useStorage("taxSource", ""); //  当前税地
   const sourceList = ref([]);
   const menusList = useStorage("menusList", []);
 
@@ -67,14 +68,23 @@ export const useUserStore = defineStore("user", () => {
     menusList.value = [];
   }
 
-  function taxSourceChange(value: []): void {
+  async function taxSourceChange(value: string): void {
     taxSource.value = value;
+    await setTaxLand({ tax_land_id: value });
+    refreshSelectedTag();
   }
   function getSourceList(): Promise<void> {
     return new Promise((resolve, reject) => {
       getLandList()
         .then(({ data }) => {
-          sourceList.value = data;
+          sourceList.value = data.map((it: any) => ({
+            label: it.tax_land_name,
+            value: it.id,
+          }));
+          // if (sourceList.value && sourceList.value.length && !taxSource.value) {
+          // 	// @ts-ignore
+          // 	taxSource.value = sourceList.value[0].value
+          // }
           resolve();
         })
         .catch((err) => {

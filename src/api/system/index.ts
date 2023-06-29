@@ -147,3 +147,14 @@ export function updateAdmin(data: any): AxiosPromise {
     data,
   });
 }
+
+/**
+ * 切换税地
+ */
+export function setTaxLand(params: any): AxiosPromise {
+  return request({
+    url: "/adminapi/setTaxLand",
+    method: "GET",
+    params,
+  });
+}
