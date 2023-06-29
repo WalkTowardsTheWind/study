@@ -198,6 +198,7 @@
                   prop="category_id"
                 >
                   <el-cascader
+                    popper-class="last-cascader"
                     class="w-[100%]"
                     v-model="formItem.category_id"
                     :options="optionsInvoicingCategory"

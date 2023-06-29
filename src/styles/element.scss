@@ -108,3 +108,13 @@
     padding: 0 10px;
   }
 }
+
+.last-cascader {
+  .el-cascader-node {
+    &:has(.arrow-right) {
+      .el-checkbox {
+        display: none;
+      }
+    }
+  }
+}
