@@ -118,7 +118,13 @@
         <el-button link type="primary" @click="handleUpdateStatus(scope)">{{
           [0, 2].includes(scope.row.status) ? "上架" : "下架"
         }}</el-button>
-        <el-button link type="primary" @click="handleB(scope)">编辑</el-button>
+        <el-button
+          v-if="scope.row.status == 0"
+          link
+          type="primary"
+          @click="handleB(scope)"
+          >编辑</el-button
+        >
         <el-button link type="primary" @click="handleDelete(scope)"
           >删除</el-button
         >
@@ -258,7 +264,7 @@ const columnList = [
 
 const handleIndustryRestrictions = (scope: any) => {
   dialogVisible.value = true;
-  imageList.value = scope.row.settlement_confirmation_letter;
+  imageList.value = scope.row.industry_limit;
   title.value = "行业限制";
 };
 /**
@@ -432,6 +438,7 @@ const getTableData = async () => {
             item.invoice_denomination
           ],
         ground_time: item.ground_time,
+        industry_limit: item.industry_limit,
         tax_land_type:
           proxy.$enumSet["taxLandManagementEnum.tax_land_type"][
             item.tax_land_type

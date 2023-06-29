@@ -632,45 +632,51 @@ const validateIndividualMonthlyLimit = (
   }
 };
 const Rules = {
-  tax_land_type: [{ required: true, message: "请输入", trigger: "blur" }],
+  tax_land_type: [{ required: true, message: "请输入", trigger: "change" }],
   tax_land_head: [{ required: true, message: "请输入", trigger: "blur" }],
   head_mobile: [{ required: true, message: "请输入", trigger: "blur" }],
   tax_land_name: [{ required: true, message: "请输入", trigger: "blur" }],
   tax_cost_point: [{ required: true, message: "请输入", trigger: "blur" }],
-  calculation_type: [{ required: true, message: "请输入", trigger: "blur" }],
+  calculation_type: [{ required: true, message: "请输入", trigger: "change" }],
   min_employment_year: [
     { required: true, validator: validateMin_employment_year, trigger: "blur" },
   ],
   max_employment_year: [
     { required: true, validator: validateMax_employment_year, trigger: "blur" },
   ],
-  tax_land_city_id: [{ required: true, message: "请输入", trigger: "blur" }],
+  tax_land_city_id: [{ required: true, message: "请输入", trigger: "change" }],
   web_url: [{ required: true, message: "请输入", trigger: "blur" }],
 
   tax_land_license: [
-    { required: true, message: "请上传图片", trigger: "blur" },
+    { required: true, message: "请上传图片", trigger: "change" },
   ],
   company_qualifications: [
-    { required: true, message: "请上传图片", trigger: "blur" },
+    { required: true, message: "请上传图片", trigger: "change" },
   ],
 };
 const Rules2 = {
-  invoice_type: [{ required: true, message: "请输入", trigger: "blur" }],
-  category_id: [{ required: true, message: "请输入", trigger: "blur" }],
+  invoice_type: [{ required: true, message: "请输入", trigger: "change" }],
+  category_id: [{ required: true, message: "请输入", trigger: "change" }],
   invoice_denomination: [
-    { required: true, message: "请输入", trigger: "blur" },
+    { required: true, message: "请输入", trigger: "change" },
   ],
   max_money: [{ required: true, message: "请输入", trigger: "blur" }],
-  is_payment_api: [{ required: true, message: "请输入", trigger: "blur" }],
-  payment_type: [{ required: true, message: "请输入", trigger: "blur" }],
+  is_payment_api: [{ required: true, message: "请输入", trigger: "change" }],
+  payment_type: [{ required: true, message: "请输入", trigger: "change" }],
   bank: [{ required: true, message: "请输入", trigger: "blur" }],
   bank_account: [{ required: true, message: "请输入", trigger: "blur" }],
-  invoice_sample: [{ required: true, message: "请上传图片", trigger: "blur" }],
-  industry_limit: [{ required: true, message: "请上传图片", trigger: "blur" }],
+  invoice_sample: [
+    { required: true, message: "请上传图片", trigger: "change" },
+  ],
+  industry_limit: [
+    { required: true, message: "请上传图片", trigger: "change" },
+  ],
 };
 const Rules3 = {
-  certification_rules: [{ required: true, message: "请输入", trigger: "blur" }],
-  signing_rules: [{ required: true, message: "请输入", trigger: "blur" }],
+  certification_rules: [
+    { required: true, message: "请输入", trigger: "change" },
+  ],
+  signing_rules: [{ required: true, message: "请输入", trigger: "change" }],
   individual_monthly_limit: [
     {
       required: true,
@@ -678,8 +684,8 @@ const Rules3 = {
       trigger: "blur",
     },
   ],
-  tax_contract_term: [{ required: true, message: "请输入", trigger: "blur" }],
-  tax_reg_type: [{ required: true, message: "请选择", trigger: "blur" }],
+  tax_contract_term: [{ required: true, message: "请输入", trigger: "change" }],
+  tax_reg_type: [{ required: true, message: "请选择", trigger: "change" }],
   tax_organ_code: [{ required: true, message: "请输入", trigger: "blur" }],
   agreement_url: [{ required: true, message: "请上传图片", trigger: "blur" }],
   settlement_confirmation_letter: [
@@ -733,7 +739,7 @@ const handleSubmit = () => {
       }
     });
   } else if (active.value == 2) {
-    FormRef.value.validate((valid: boolean) => {
+    FormRef3.value.validate((valid: boolean) => {
       if (valid) {
         const params = { ...formItem.value } as any;
         params.tax_land_license = JSON.stringify(params.tax_land_license);

@@ -725,7 +725,6 @@ const handleSelfOperatedTaxLandEdit = () => {
     if (valid) {
       FormRef2.value.validate((valid: boolean) => {
         if (valid) {
-          activeName.value = "2";
           FormRef3.value.validate((valid: boolean) => {
             if (valid) {
               const ID = Number(route.query.id);
