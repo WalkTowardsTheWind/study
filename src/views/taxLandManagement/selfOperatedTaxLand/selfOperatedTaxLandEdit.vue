@@ -1,11 +1,6 @@
 <template>
   <zxn-plan>
-    <zxn-tabs
-      :activeName="activeName"
-      :tabsList="tabsList"
-      :hasBack="true"
-      :hasUpdate="false"
-    >
+    <zxn-tabs v-model:activeName="activeName" :tabsList="tabsList">
       <template #1>
         <div class="p-[24px] p-b-[0]">
           <el-form
@@ -199,6 +194,8 @@
                     v-model="formItem.category_id"
                     :options="optionsInvoicingCategory"
                     :props="propsInvoicingCategory"
+                    collapse-tags
+                    collapse-tags-tooltip
                     clearable
                   />
                 </el-form-item>
@@ -228,10 +225,6 @@
                   prop="max_money"
                 >
                   <el-input v-model="formItem.max_money" placeholder="请输入">
-                  </el-input>
-                </el-form-item>
-                <el-form-item class="mt-25px" label="税点" prop="tax_point">
-                  <el-input v-model="formItem.tax_point" placeholder="请输入">
                   </el-input>
                 </el-form-item>
 
@@ -275,8 +268,8 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="开户行" prop="depositBank">
-                  <el-input v-model="formItem.depositBank" placeholder="请输入">
+                <el-form-item class="mt-25px" label="开户行" prop="bank">
+                  <el-input v-model="formItem.bank" placeholder="请输入">
                   </el-input>
                 </el-form-item>
                 <el-form-item
@@ -304,10 +297,10 @@
                 <el-form-item
                   class="mb-[0]"
                   label="行业限制"
-                  prop="industryRestrictions"
+                  prop="industry_limit"
                 >
                   <multi-upload
-                    v-model="formItem.industryRestrictions"
+                    v-model="formItem.industry_limit"
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
@@ -330,60 +323,50 @@
                 <el-form-item
                   class="mt-25px"
                   label="认证规则"
-                  prop="certificationRules"
+                  prop="certification_rules"
                 >
-                  <el-select
+                  <el-cascader
                     class="w-[100%]"
-                    v-model="formItem.certificationRules"
-                    placeholder="请选择"
-                  >
-                    <el-option
-                      v-for="item in proxy.$const[
-                        'taxLandManagementEnum.CertificationRules'
-                      ]"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    />
-                  </el-select>
+                    v-model="formItem.certification_rules"
+                    :options="optionsCertificationRules"
+                    :props="propsCertificationRules"
+                    collapse-tags
+                    collapse-tags-tooltip
+                    clearable
+                  />
                 </el-form-item>
                 <el-form-item
                   class="mt-25px"
                   label="签约规则"
-                  prop="signingRules"
+                  prop="signing_rules"
                 >
-                  <el-select
+                  <el-cascader
                     class="w-[100%]"
-                    v-model="formItem.signingRules"
-                    placeholder="请选择"
-                  >
-                    <el-option
-                      v-for="item in proxy.$const[
-                        'taxLandManagementEnum.SigningRules'
-                      ]"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    />
-                  </el-select>
+                    v-model="formItem.signing_rules"
+                    :options="optionsSigningRules"
+                    :props="propsSigningRules"
+                    collapse-tags
+                    collapse-tags-tooltip
+                    clearable
+                  />
                 </el-form-item>
                 <el-form-item
                   class="mt-25px"
                   label="单人每月限额"
-                  prop="individualMonthlyLimit"
+                  prop="individual_monthly_limit"
                 >
-                  <el-input v-model="formItem.individualMonthlyLimit">
+                  <el-input v-model="formItem.individual_monthly_limit">
                     <template #append>万</template>
                   </el-input>
                 </el-form-item>
                 <el-form-item
                   class="mt-25px"
                   label="委托代征年限"
-                  prop="entrustedCollectionPeriod"
+                  prop="tax_contract_term"
                 >
                   <el-select
                     class="w-[100%]"
-                    v-model="formItem.entrustedCollectionPeriod"
+                    v-model="formItem.tax_contract_term"
                     placeholder="请选择"
                   >
                     <el-option
@@ -403,6 +386,30 @@
                   >
                   </el-input>
                 </el-form-item>
+                <el-form-item
+                  class="mt-25px"
+                  label="企业注册类型"
+                  prop="tax_reg_type"
+                >
+                  <el-cascader
+                    class="w-[100%]"
+                    v-model="formItem.tax_reg_type"
+                    :options="optionsTaxRegType"
+                    :props="propsTaxRegType"
+                    collapse-tags-tooltip
+                    clearable
+                  />
+                </el-form-item>
+                <el-form-item
+                  class="mt-25px"
+                  label="组织机构代码、工商注册号或者统一社会信用代码"
+                >
+                  <el-input
+                    v-model="formItem.tax_organ_code"
+                    placeholder="请输入"
+                  >
+                  </el-input>
+                </el-form-item>
               </div>
               <div class="w-[33%]">
                 <el-form-item class="mb-[0]" label="合同" prop="agreement_url">
@@ -413,7 +420,7 @@
                 </el-form-item>
                 <el-form-item
                   class="mb-[0]"
-                  label="结算确认单"
+                  label="结算确认函"
                   prop="settlement_confirmation_letter"
                 >
                   <multi-upload
@@ -438,15 +445,20 @@
   </zxn-plan>
 </template>
 <script setup lang="ts">
+import {
+  flatten,
+  categoryTransformNumber,
+  categoryTransformArray,
+  newArrayTransform,
+  newNumberTransform,
+} from "@/utils";
 import { useRouter, useRoute } from "vue-router";
 import {
   selfOperatedTaxLandEdit,
   selfOperatedTaxLandDetails,
 } from "@/api/taxLandManagement/selfOperatedTaxLand";
 import { getAreaList } from "@/api/taxLandManagement";
-// import { getCategoryTreeList } from "@/api/category";
 import { getTreeList } from "@/api/common";
-import { isArray } from "../../../utils/is";
 const { proxy } = getCurrentInstance() as any;
 const route = useRoute();
 const router = useRouter();
@@ -484,31 +496,74 @@ const getInvoicingCategoryTradeList = async () => {
 };
 getInvoicingCategoryTradeList();
 const propsInvoicingCategory = {
+  multiple: true,
+  expandTrigger: "hover" as const,
+};
+// 认证规则选择框
+var optionsCertificationRules = ref([
+  {
+    value: 1,
+    label: "个税申报二要素（人名，身份证）",
+  },
+  {
+    value: 2,
+    label: "运营商三要素（姓名，手机号，身份证号）",
+  },
+  {
+    value: 3,
+    label: "银行卡三要素（姓名，身份证，银行卡）",
+  },
+  {
+    value: 4,
+    label: "四要素",
+  },
+]);
+const propsCertificationRules = {
+  multiple: true,
+  expandTrigger: "hover" as const,
+};
+// 签约规则选择框
+var optionsSigningRules = ref([
+  {
+    value: 1,
+    label: "静默签（下发后默认签约）",
+  },
+  {
+    value: 2,
+    label: "有感签刷脸意愿校验签约",
+  },
+  {
+    value: 3,
+    label: "有感短信校验签约",
+  },
+]);
+const propsSigningRules = {
+  multiple: true,
+  expandTrigger: "hover" as const,
+};
+// 企业注册类型选择框
+var optionsTaxRegType = ref([
+  {
+    value: 0,
+    label: "无（无个人合同，税务可行否，慎选）",
+  },
+  {
+    value: 1,
+    label: "静默签（下发后默认签约）",
+  },
+  {
+    value: 2,
+    label: "有感签刷脸意愿校验签约",
+  },
+  {
+    value: 3,
+    label: "有感短信校验签约",
+  },
+]);
+const propsTaxRegType = {
   // multiple: true,
   expandTrigger: "hover" as const,
 };
-
-//行业
-// var optionsTrade = ref([]);
-// const getTradeList = async () => {
-//   try {
-//     const { data } = await getCategoryTreeList({ type: "0" });
-//     const newData = JSON.parse(
-//       JSON.stringify(data)
-//         .replace(/"id"/g, '"value"')
-//         .replace(/"name"/g, '"label"')
-//         .replace(/"children"/g, '"children"')
-//     );
-//     optionsTrade.value = newData;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-// getTradeList();
-// const propsTrade = {
-//   // multiple: true,
-//   expandTrigger: "hover" as const,
-// };
 //税地
 var optionsTaxLang = ref([]);
 const getTaxLangList = async () => {
@@ -608,26 +663,24 @@ const Rules2 = {
   tax_point: [{ required: true, message: "请输入", trigger: "blur" }],
   is_payment_api: [{ required: true, message: "请输入", trigger: "blur" }],
   payment_type: [{ required: true, message: "请输入", trigger: "blur" }],
-  depositBank: [{ required: true, message: "请输入", trigger: "blur" }],
+  bank: [{ required: true, message: "请输入", trigger: "blur" }],
   bank_account: [{ required: true, message: "请输入", trigger: "blur" }],
   invoice_sample: [{ required: true, message: "请上传图片", trigger: "blur" }],
-  industryRestrictions: [
-    { required: true, message: "请上传图片", trigger: "blur" },
-  ],
+  industry_limit: [{ required: true, message: "请上传图片", trigger: "blur" }],
 };
 const Rules3 = {
-  certificationRules: [{ required: true, message: "请输入", trigger: "blur" }],
-  signingRules: [{ required: true, message: "请输入", trigger: "blur" }],
-  individualMonthlyLimit: [
+  certification_rules: [{ required: true, message: "请输入", trigger: "blur" }],
+  signing_rules: [{ required: true, message: "请输入", trigger: "blur" }],
+  individual_monthly_limit: [
     {
       required: true,
       validator: validateIndividualMonthlyLimit,
       trigger: "blur",
     },
   ],
-  entrustedCollectionPeriod: [
-    { required: true, message: "请输入", trigger: "blur" },
-  ],
+  tax_contract_term: [{ required: true, message: "请输入", trigger: "blur" }],
+  tax_reg_type: [{ required: true, message: "请选择", trigger: "blur" }],
+  tax_organ_code: [{ required: true, message: "请输入", trigger: "blur" }],
   agreement_url: [{ required: true, message: "请上传图片", trigger: "blur" }],
   settlement_confirmation_letter: [
     { required: true, message: "请上传图片", trigger: "blur" },
@@ -653,15 +706,17 @@ const formItem = ref({
   tax_point: "",
   is_payment_api: "",
   payment_type: "",
-  depositBank: "",
+  bank: "",
   bank_account: "",
   invoice_sample: [],
-  industryRestrictions: [],
-  certificationRules: "",
-  signingRules: "",
-  individualMonthlyLimit: "",
-  entrustedCollectionPeriod: "",
+  industry_limit: [],
+  certification_rules: "",
+  signing_rules: "",
+  individual_monthly_limit: "",
+  tax_contract_term: "",
   incoming_materials: "",
+  tax_reg_type: [] as Array<number>,
+  tax_organ_code: "",
   agreement_url: [],
   settlement_confirmation_letter: [],
 });
@@ -670,6 +725,7 @@ const handleSelfOperatedTaxLandEdit = () => {
     if (valid) {
       FormRef2.value.validate((valid: boolean) => {
         if (valid) {
+          activeName.value = "2";
           FormRef3.value.validate((valid: boolean) => {
             if (valid) {
               const ID = Number(route.query.id);
@@ -678,20 +734,19 @@ const handleSelfOperatedTaxLandEdit = () => {
               params.company_qualifications = JSON.stringify(
                 params.company_qualifications
               );
+              params.category_id = newArrayTransform(params.category_id);
               params.invoice_sample = JSON.stringify(params.invoice_sample);
-              params.industryRestrictions = JSON.stringify(
-                params.industryRestrictions
-              );
+              params.industry_limit = JSON.stringify(params.industry_limit);
+              params.certification_rules = flatten(params.certification_rules);
+              params.signing_rules = flatten(params.signing_rules);
               params.agreement_url = JSON.stringify(params.agreement_url);
               params.settlement_confirmation_letter = JSON.stringify(
                 params.settlement_confirmation_letter
               );
-              if (isArray(params.tax_land_city_id)) {
-                params.tax_land_city_id = params.tax_land_city_id.slice(-1)[0];
-              }
-              if (isArray(params.category_id)) {
-                params.category_id = params.category_id.slice(-1)[0];
-              }
+              params.tax_land_city_id = newNumberTransform(
+                params.tax_land_city_id
+              );
+              params.tax_reg_type = newNumberTransform(params.tax_reg_type);
 
               selfOperatedTaxLandEdit(ID, params)
                 .then(() => {
@@ -707,10 +762,16 @@ const handleSelfOperatedTaxLandEdit = () => {
                 .catch((e) => {
                   console.log(e);
                 });
+            } else {
+              activeName.value = "3";
             }
           });
+        } else {
+          activeName.value = "2";
         }
       });
+    } else {
+      activeName.value = "1";
     }
   });
 };
@@ -744,18 +805,21 @@ const getData = async () => {
       tax_point,
       is_payment_api,
       payment_type,
-      depositBank,
+      bank,
       bank_account,
       invoice_sample,
-      industryRestrictions,
-      certificationRules,
-      signingRules,
-      individualMonthlyLimit,
-      entrustedCollectionPeriod,
+      industry_limit,
+      certification_rules,
+      signing_rules,
+      individual_monthly_limit,
+      tax_contract_term,
       incoming_materials,
+      tax_reg_type,
+      tax_organ_code,
       agreement_url,
       settlement_confirmation_letter,
     } = data.info;
+    console.log(data.info, "data");
 
     formItem.value = {
       tax_land_type: tax_land_type + "",
@@ -766,26 +830,40 @@ const getData = async () => {
       calculation_type: calculation_type + "",
       min_employment_year,
       max_employment_year,
-      tax_land_city_id,
+      tax_land_city_id: categoryTransformNumber(
+        optionsTaxLang.value,
+        tax_land_city_id
+      ),
       web_url,
       tax_land_license,
       company_qualifications,
       invoice_type: invoice_type + "",
-      category_id,
+      category_id: categoryTransformArray(
+        optionsInvoicingCategory.value,
+        category_id
+      ),
       invoice_denomination: invoice_denomination + "",
       max_money,
       tax_point,
       is_payment_api: is_payment_api + "",
       payment_type: payment_type + "",
-      depositBank,
+      bank,
       bank_account,
       invoice_sample,
-      industryRestrictions,
-      certificationRules,
-      signingRules,
-      individualMonthlyLimit,
-      entrustedCollectionPeriod,
+      industry_limit,
+      certification_rules: categoryTransformArray(
+        optionsCertificationRules.value,
+        certification_rules
+      ),
+      signing_rules: categoryTransformArray(
+        optionsSigningRules.value,
+        signing_rules
+      ),
+      individual_monthly_limit,
+      tax_contract_term: tax_contract_term + "",
       incoming_materials,
+      tax_reg_type: [tax_reg_type * 1],
+      tax_organ_code,
       agreement_url,
       settlement_confirmation_letter,
     };
