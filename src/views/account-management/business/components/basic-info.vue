@@ -125,6 +125,7 @@ import {
   editBusinessAccount,
 } from "@/api/account/business";
 import { businessType, taxpayerType } from "@/enums/accountEnum";
+import router from "@/router";
 
 const options = Object.entries(taxpayerType)
   .map(([label, value]) => ({ label, value }))
@@ -156,6 +157,7 @@ async function updateBusinessAccount() {
       message: "编辑成功",
       type: "success",
     });
+    router.go(-1);
   } catch (error: any) {
     return new Error(error);
   }
