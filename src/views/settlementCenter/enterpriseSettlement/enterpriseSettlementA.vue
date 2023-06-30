@@ -207,7 +207,7 @@
               <el-button link type="primary" @click="handleInspect(scope)"
                 >查看回单</el-button
               >
-              <el-button link type="primary">详情</el-button>
+              <!-- <el-button link type="primary">详情</el-button> -->
             </template>
           </zxn-table>
         </div>

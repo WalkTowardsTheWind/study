@@ -42,7 +42,7 @@
       hasSelect
       @selection-change="handleSelect"
     >
-      <template #tableTop>
+      <!-- <template #tableTop>
         <el-dropdown
           class="ml-4"
           trigger="click"
@@ -56,7 +56,7 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-      </template>
+      </template> -->
       <template #inspect="scope">
         <el-button link type="primary" @click="handleInspect(scope)"
           >查看</el-button
