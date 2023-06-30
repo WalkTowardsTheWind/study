@@ -186,10 +186,10 @@
                 />
               </div>
             </el-form-item>
-            <el-form-item label="客户点位">
-              <el-input placeholder="请输入" v-model="addForm.tax_point" />
-            </el-form-item>
           </template>
+          <el-form-item label="客户点位">
+            <el-input placeholder="请输入" v-model="addForm.tax_point" />
+          </el-form-item>
           <el-form-item label="企业邮箱">
             <el-input placeholder="请输入" v-model="addForm.company_email" />
           </el-form-item>
@@ -399,6 +399,7 @@ const isAllComplete = computed(() => {
       !!addForm.header_img.length &&
       !!addForm.office_img.length &&
       !!addForm.company_source &&
+      !!addForm.tax_point &&
       !!addForm.company_email &&
       !!addForm.consignee &&
       !!addForm.consignee_mobile &&
