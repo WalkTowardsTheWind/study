@@ -287,6 +287,16 @@
                     placeholder="请输入"
                   />
                 </el-form-item>
+                <el-form-item
+                  class="mt-25px"
+                  label="企业代码"
+                  prop="company_code"
+                >
+                  <el-input
+                    v-model="formItem.company_code"
+                    placeholder="请输入"
+                  />
+                </el-form-item>
               </div>
               <div class="w-[33%]">
                 <el-form-item class="mb-[0]" label="发票票样">
@@ -665,6 +675,7 @@ const Rules2 = {
   payment_type: [{ required: true, message: "请输入", trigger: "change" }],
   bank: [{ required: true, message: "请输入", trigger: "blur" }],
   bank_account: [{ required: true, message: "请输入", trigger: "blur" }],
+  company_code: [{ required: true, message: "请输入", trigger: "blur" }],
   invoice_sample: [
     { required: true, message: "请上传图片", trigger: "change" },
   ],
@@ -713,6 +724,7 @@ const formItem = ref({
   payment_type: "",
   bank: "",
   bank_account: "",
+  company_code: "",
   invoice_sample: [],
   industry_limit: [],
   certification_rules: [],
