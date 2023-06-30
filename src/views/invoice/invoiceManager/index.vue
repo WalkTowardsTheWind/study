@@ -44,10 +44,10 @@ const tabsList = [
     name: "enterprise",
     label: "企业发票",
   },
-  {
-    name: "channel",
-    label: "渠道发票",
-  },
+  // {
+  //   name: "channel",
+  //   label: "渠道发票",
+  // },
 ];
 const enterprise = ref();
 const channel = ref();

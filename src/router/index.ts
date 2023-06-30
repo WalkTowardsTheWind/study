@@ -31,6 +31,7 @@ export const constantRoutes: RouteRecordRaw[] = [
       {
         path: "dashboard",
         component: () => import("@/views/dashboard/index.vue"),
+        name: "Dashboard",
         meta: { title: "工作台", affix: true },
       },
       {
@@ -109,12 +110,12 @@ export const constantRoutes: RouteRecordRaw[] = [
           hidden: true,
         },
       },
-      {
-        path: "contractCenter",
-        component: () => import("@/views/contractCenter/index.vue"),
-        name: "contractCenter",
-        meta: { title: "合同中心" },
-      },
+      // {
+      //   path: "contractCenter",
+      //   component: () => import("@/views/contractCenter/index.vue"),
+      //   name: "contractCenter",
+      //   meta: { title: "合同中心" },
+      // },
       {
         path: "enterpriseContractAdd",
         component: () =>
@@ -328,7 +329,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "taxLandManagement",
         component: () => import("@/views/taxLandManagement/index.vue"),
         name: "taxLandManagementIndex",
-        meta: { title: "税地管理" },
+        meta: { title: "税地中心" },
       },
       {
         path: "selfOperatedTaxLandAdd",

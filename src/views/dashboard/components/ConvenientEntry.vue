@@ -4,12 +4,33 @@
       <span>便捷导航</span>
     </div>
     <div class="convenient-entry-content">
-      <div class="convenient-entry-content-item" v-for="item in 1" :key="item">
-        任务中心
+      <div
+        class="convenient-entry-content-item"
+        v-for="item in btnList"
+        :key="item"
+        @click="handleRouter(item)"
+      >
+        {{ item.label }}
       </div>
     </div>
   </div>
 </template>
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+const router = useRouter();
+const btnList = ref([
+  { label: "新建企业", name: "business-account-add" },
+  {
+    label: "新建税地",
+    name: "selfOperatedTaxLandAdd",
+    query: { activeName: 1 },
+  },
+  // { name: '新建渠道', router: '' }
+]);
+const handleRouter = (item: any) => {
+  router.push(item);
+};
+</script>
 <style lang="scss" scoped>
 .convenient-entry {
   &-title {
@@ -55,6 +76,10 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       cursor: pointer;
+
+      &:hover {
+        color: #356ff3;
+      }
     }
   }
 }

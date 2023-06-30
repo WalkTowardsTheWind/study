@@ -31,17 +31,17 @@ const tabsList = [
     name: "1",
     label: "企业账户",
   },
-  {
-    name: "2",
-    label: "个人账户",
-  },
-  {
-    name: "3",
-    label: "渠道账户",
-  },
-  {
-    name: "4",
-    label: "其他账户",
-  },
+  // {
+  //   name: "2",
+  //   label: "个人账户",
+  // },
+  // {
+  //   name: "3",
+  //   label: "渠道账户",
+  // },
+  // {
+  //   name: "4",
+  //   label: "其他账户",
+  // },
 ];
 </script>

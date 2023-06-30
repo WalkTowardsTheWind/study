@@ -14,11 +14,11 @@ const tabsList = [
     label: "企业结算",
     subassembly: enterpriseSettlement,
   },
-  {
-    name: "2",
-    label: "渠道结算",
-    subassembly: channelSettlement,
-  },
+  // {
+  //   name: "2",
+  //   label: "渠道结算",
+  //   subassembly: channelSettlement,
+  // },
 ];
 
 onMounted(() => {

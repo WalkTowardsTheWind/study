@@ -25,10 +25,10 @@ const tabsList = reactive([
     name: "selfOperated",
     label: "自营税地",
   },
-  {
-    name: "purchase",
-    label: "采购税地",
-  },
+  // {
+  //   name: "purchase",
+  //   label: "采购税地",
+  // },
 ]);
 const selfOperated = ref();
 const purchase = ref();

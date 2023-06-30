@@ -54,12 +54,12 @@ function logout() {
     <div class="flex">
       <!-- 导航栏设置(窄屏隐藏)-->
       <div v-if="device !== 'mobile'" class="flex items-center">
-        <el-icon size="16" color="#333333" class="m-r-[20px]"
-          ><i-ep-search
-        /></el-icon>
-        <el-icon size="16" color="#333333" class="m-r-[20px]"
-          ><i-ep-ChatDotRound
-        /></el-icon>
+        <!--        <el-icon size="16" color="#333333" class="m-r-[20px]"-->
+        <!--          ><i-ep-search-->
+        <!--        /></el-icon>-->
+        <!--        <el-icon size="16" color="#333333" class="m-r-[20px]"-->
+        <!--          ><i-ep-ChatDotRound-->
+        <!--        /></el-icon>-->
         <tax-source-select />
       </div>
 

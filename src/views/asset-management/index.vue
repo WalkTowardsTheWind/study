@@ -20,10 +20,10 @@ const tabsList = [
     name: "1",
     label: "平台资产",
   },
-  {
-    name: "2",
-    label: "渠道佣金",
-  },
+  // {
+  //   name: "2",
+  //   label: "渠道佣金",
+  // },
 ];
 
 const activeName = ref("1");
