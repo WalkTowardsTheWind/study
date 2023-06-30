@@ -91,11 +91,11 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="1">新建自营税地</el-dropdown-item>
-              <el-dropdown-item command="2">新建采购税地</el-dropdown-item>
+              <!-- <el-dropdown-item command="2">新建采购税地</el-dropdown-item> -->
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        <el-dropdown class="ml-4" trigger="click" @command="handleD">
+        <!-- <el-dropdown class="ml-4" trigger="click" @command="handleD">
           <el-button type="primary">批量操作</el-button>
           <template #dropdown>
             <el-dropdown-menu>
@@ -104,7 +104,7 @@
               <el-dropdown-item command="3">导出</el-dropdown-item>
             </el-dropdown-menu>
           </template>
-        </el-dropdown>
+        </el-dropdown> -->
       </template>
       <template #IndustryRestrictions="scope">
         <el-button
@@ -128,7 +128,7 @@
         <el-button link type="primary" @click="handleDelete(scope)"
           >删除</el-button
         >
-        <el-button link type="primary" @click="handleF(scope)">导出</el-button>
+        <!-- <el-button link type="primary" @click="handleF(scope)">导出</el-button> -->
         <el-button link type="primary" @click="handleG(scope)">详情</el-button>
       </template>
     </zxn-table>
