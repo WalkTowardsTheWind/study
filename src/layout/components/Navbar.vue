@@ -13,9 +13,7 @@ const route = useRoute();
 const router = useRouter();
 
 const { device } = storeToRefs(appStore); // 设备类型：desktop-宽屏设备 || mobile-窄屏设备
-const logo = ref(
-  new URL(`../../assets/20230506141258.jpg`, import.meta.url).href
-);
+const logo = ref(new URL(`../../assets/avatar.png`, import.meta.url).href);
 
 function toggleSideBar() {
   appStore.toggleSidebar(true);

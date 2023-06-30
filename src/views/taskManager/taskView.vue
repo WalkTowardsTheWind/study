@@ -154,9 +154,6 @@ const route = useRoute();
 const { proxy } = getCurrentInstance() as any;
 
 const activeName: Ref<string> = ref("info");
-// const logo = ref(
-//   new URL(`../../assets/20230506141258.jpg`, import.meta.url).href
-// );
 type TabsType = {
   name: string;
   label: string;

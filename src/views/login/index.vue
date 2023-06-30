@@ -189,10 +189,12 @@ import { useUserStore } from "@/store/modules/user";
 // API依赖
 import { LocationQuery, LocationQueryValue, useRoute } from "vue-router";
 import { LoginData, RegisterData } from "@/api/login/types";
-import { getPhone, getRegisterData } from "@/api/login/index";
-
+import { getPhone, getRegisterData } from "@/api/login";
 const userStore = useUserStore();
 const route = useRoute();
+import DevicePixelRatio from "@/utils/devicePixelRatio";
+const devicePixel = new DevicePixelRatio();
+devicePixel.init();
 
 /**
  * 按钮loading
@@ -455,13 +457,16 @@ function Register() {
 onMounted(() => {
   getCaptchaImg();
 });
+onUnmounted(() => {
+  devicePixel.clear();
+});
 </script>
 
 <style lang="scss" scoped>
 .login-container {
   position: relative;
   width: 100%;
-  min-height: 100%;
+  height: 100%;
   overflow: hidden;
   background-color: #f6f6f6;
 
