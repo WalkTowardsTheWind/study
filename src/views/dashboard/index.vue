@@ -7,7 +7,9 @@
         :key="item.title"
         @click="handleView(item)"
       >
-        <div class="dashboard-container-statistics-item-icon"></div>
+        <div class="dashboard-container-statistics-item-icon">
+          <img :src="item.img" alt="" />
+        </div>
         <div class="dashboard-container-statistics-item-info">
           <span class="dashboard-container-statistics-item-info-title">
             {{ item.title }}
@@ -31,7 +33,7 @@
       </el-col>
       <el-col :span="8">
         <convenient-entry />
-        <notice-message />
+        <!--        <notice-message />-->
       </el-col>
     </el-row>
   </div>
@@ -55,22 +57,27 @@ const initData = async () => {
     {
       title: "发布申请",
       count: data.task_count || 0,
+      img: new URL(`@/assets/icons-jpg/banner2.png`, import.meta.url).href,
     },
     {
       title: "充值订单",
       count: data.finance_recharge_count || 0,
+      img: new URL(`@/assets/icons-jpg/banner3.png`, import.meta.url).href,
     },
     {
       title: "结算订单",
       count: data.finance_settlement_company_count || 0,
+      img: new URL(`@/assets/icons-jpg/banner4.png`, import.meta.url).href,
     },
     {
       title: "开票订单",
       count: data.invoice_count || 0,
+      img: new URL(`@/assets/icons-jpg/banner5.png`, import.meta.url).href,
     },
     {
       title: "异常数据",
       count: 0,
+      img: new URL(`@/assets/icons-jpg/banner1.png`, import.meta.url).href,
     }
   );
   const numList = data.company_category.map((it) => it.num);
@@ -124,8 +131,14 @@ onMounted(() => {
       &-icon {
         width: 37px;
         height: 37px;
+        overflow: hidden;
         background: #fff linear-gradient(#366ff3 0%, #36c5f3 0%);
         border-radius: 50%;
+
+        > img {
+          width: 37px;
+          height: 37px;
+        }
       }
 
       &-info {

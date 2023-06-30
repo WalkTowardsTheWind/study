@@ -6,7 +6,7 @@
     </div>
     <div :style="{ height: `${boxHeight}px` }">
       <el-scrollbar ref="scrollbar">
-        <div class="notice-message-item" v-for="item in 10" :key="item">
+        <div class="notice-message-item" v-for="item in 0" :key="item">
           <div class="notice-message-item-type">
             <div class="notice-message-item-type-icon"></div>
             <div class="notice-message-item-type-text">

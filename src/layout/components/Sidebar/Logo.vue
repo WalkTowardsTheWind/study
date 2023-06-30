@@ -2,15 +2,13 @@
 import { useSettingsStore } from "@/store/modules/settings";
 
 const settingsStore = useSettingsStore();
-
+const logo = new URL(`@/assets/logo.png`, import.meta.url).href;
 defineProps({
   collapse: {
     type: Boolean,
     required: true,
   },
 });
-
-// const logo = ref(new URL(`../../../assets/logo.png`, import.meta.url).href);
 </script>
 
 <template>
@@ -24,8 +22,40 @@ defineProps({
       >
         <span
           v-if="settingsStore.sidebarLogo"
-          class="w-[24px] h-[24px] bg-#3661E9 b-rd-50%"
-        />
+          class="w-[24px] h-[24px] bg-#366ff4 b-rd-50%"
+        >
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <g>
+              <line
+                stroke-width="1"
+                stroke="#ffffff"
+                y1="18"
+                x1="6"
+                y2="8"
+                x2="10"
+                fill="none"
+              />
+              <line
+                stroke-width="2"
+                stroke="#ffffff"
+                y2="16"
+                x2="14"
+                y1="8"
+                x1="10"
+                fill="none"
+              />
+              <line
+                stroke-width="1"
+                stroke="#ffffff"
+                y2="6"
+                x2="18"
+                y1="16"
+                x1="14"
+                fill="none"
+              />
+            </g>
+          </svg>
+        </span>
       </router-link>
 
       <router-link
@@ -34,10 +64,7 @@ defineProps({
         class="h-full w-full flex items-center flex-start p-l-16px"
         to="/"
       >
-        <span
-          v-if="settingsStore.sidebarLogo"
-          class="w-[24px] h-[24px] bg-#3661E9 b-rd-50%"
-        />
+        <img :src="logo" alt="" class="w-[102px] h-[28px]" />
       </router-link>
     </transition>
   </div>
