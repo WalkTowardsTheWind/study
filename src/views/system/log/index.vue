@@ -24,9 +24,9 @@
         <el-form-item prop="timeData" label="操作日期">
           <zxn-date-range v-model="formItem.timeData" valueFormat="" />
         </el-form-item>
-        <template #rightBtn>
-          <el-button type="primary" plain>导出</el-button>
-        </template>
+        <!--        <template #rightBtn>-->
+        <!--          <el-button type="primary" plain>导出</el-button>-->
+        <!--        </template>-->
       </zxn-search>
       <zxn-table
         :table-data="tableData"
