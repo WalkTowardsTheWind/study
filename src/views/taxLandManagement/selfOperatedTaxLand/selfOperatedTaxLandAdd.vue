@@ -121,11 +121,7 @@
                   </el-col>
                 </el-form-item>
 
-                <el-form-item
-                  class="mt-25px"
-                  label="税地地区"
-                  prop="tax_land_city_id"
-                >
+                <el-form-item class="mt-25px" label="税地地区">
                   <el-cascader
                     class="w-[100%]"
                     v-model="formItem.tax_land_city_id"
@@ -134,7 +130,7 @@
                     clearable
                   />
                 </el-form-item>
-                <el-form-item class="mt-25px" label="网址" prop="web_url">
+                <el-form-item class="mt-25px" label="网址">
                   <el-input v-model="formItem.web_url" placeholder="请输入" />
                 </el-form-item>
               </div>
@@ -293,21 +289,13 @@
                 </el-form-item>
               </div>
               <div class="w-[33%]">
-                <el-form-item
-                  class="mb-[0]"
-                  label="发票票样"
-                  prop="invoice_sample"
-                >
+                <el-form-item class="mb-[0]" label="发票票样">
                   <multi-upload
                     v-model="formItem.invoice_sample"
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
-                <el-form-item
-                  class="mb-[0]"
-                  label="行业限制"
-                  prop="industry_limit"
-                >
+                <el-form-item class="mb-[0]" label="行业限制">
                   <multi-upload
                     v-model="formItem.industry_limit"
                     :limit="3"
@@ -330,30 +318,42 @@
                   label="认证规则"
                   prop="certification_rules"
                 >
-                  <el-cascader
-                    class="w-[100%]"
+                  <el-select
                     v-model="formItem.certification_rules"
-                    :options="optionsCertificationRules"
-                    :props="propsCertificationRules"
+                    multiple
                     collapse-tags
                     collapse-tags-tooltip
-                    clearable
-                  />
+                    placeholder="请选择"
+                    style="width: 240px"
+                  >
+                    <el-option
+                      v-for="item in optionsCertificationRules"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
                 </el-form-item>
                 <el-form-item
                   class="mt-25px"
                   label="签约规则"
                   prop="signing_rules"
                 >
-                  <el-cascader
-                    class="w-[100%]"
+                  <el-select
                     v-model="formItem.signing_rules"
-                    :options="optionsSigningRules"
-                    :props="propsSigningRules"
+                    multiple
                     collapse-tags
                     collapse-tags-tooltip
-                    clearable
-                  />
+                    placeholder="请选择"
+                    style="width: 240px"
+                  >
+                    <el-option
+                      v-for="item in optionsSigningRules"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
                 </el-form-item>
                 <el-form-item
                   class="mt-25px"
@@ -396,19 +396,22 @@
                   label="企业注册类型"
                   prop="tax_reg_type"
                 >
-                  <el-cascader
-                    class="w-[100%]"
+                  <el-select
                     v-model="formItem.tax_reg_type"
-                    :options="optionsTaxRegType"
-                    :props="propsTaxRegType"
+                    collapse-tags
                     collapse-tags-tooltip
-                    clearable
-                  />
+                    placeholder="请选择"
+                    style="width: 240px"
+                  >
+                    <el-option
+                      v-for="item in optionsTaxRegType"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
                 </el-form-item>
-                <el-form-item
-                  class="mt-25px"
-                  label="组织机构代码、工商注册号或者统一社会信用代码"
-                >
+                <el-form-item class="mt-25px" :label="optionsTaxReg">
                   <el-input
                     v-model="formItem.tax_organ_code"
                     placeholder="请输入"
@@ -423,11 +426,7 @@
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
-                <el-form-item
-                  class="mb-[0]"
-                  label="结算确认函"
-                  prop="agreement_url"
-                >
+                <el-form-item class="mb-[0]" label="结算确认函">
                   <multi-upload
                     v-model="formItem.settlement_confirmation_letter"
                     :limit="3"
@@ -453,7 +452,7 @@
   </zxn-plan>
 </template>
 <script setup lang="ts">
-import { flatten, newArrayTransform, newNumberTransform } from "@/utils";
+import { newArrayTransform, newNumberTransform } from "@/utils";
 import { useRouter } from "vue-router";
 import viewSteps from "../components/viewSteps.vue";
 import { selfOperatedTaxLandAdd } from "@/api/taxLandManagement/selfOperatedTaxLand";
@@ -520,10 +519,7 @@ var optionsCertificationRules = ref([
     label: "四要素",
   },
 ]);
-const propsCertificationRules = {
-  multiple: true,
-  expandTrigger: "hover" as const,
-};
+
 // 签约规则选择框
 var optionsSigningRules = ref([
   {
@@ -539,33 +535,36 @@ var optionsSigningRules = ref([
     label: "有感短信校验签约",
   },
 ]);
-const propsSigningRules = {
-  multiple: true,
-  expandTrigger: "hover" as const,
-};
+
 // 企业注册类型选择框
+// 企业注册类型，NORMAL（组织机构代码）、MERGE（社会信用代码）、REGCODE（工商注册号），默认NORMAL组织机构代码、统一社会信用代码，工商注册号
+
+const optionsTaxReg = computed(() => {
+  console.log(formItem.value.tax_reg_type, optionsTaxRegType.value);
+
+  const optionsTaxReg =
+    optionsTaxRegType.value.find(
+      (item) => item.value === formItem.value.tax_reg_type
+    )?.label || "组织机构代码";
+
+  return optionsTaxReg;
+});
+
+//
 var optionsTaxRegType = ref([
   {
-    value: 0,
-    label: "无（无个人合同，税务可行否，慎选）",
+    value: "NORMAL",
+    label: "组织机构代码",
   },
   {
-    value: 1,
-    label: "静默签（下发后默认签约）",
+    value: "MERGE",
+    label: "社会信用代码",
   },
   {
-    value: 2,
-    label: "有感签刷脸意愿校验签约",
-  },
-  {
-    value: 3,
-    label: "有感短信校验签约",
+    value: "REGCODE",
+    label: "工商注册号",
   },
 ]);
-const propsTaxRegType = {
-  // multiple: true,
-  expandTrigger: "hover" as const,
-};
 //税地
 var optionsTaxLang = ref([]);
 const getTaxLangList = async () => {
@@ -614,7 +613,7 @@ const validateMax_employment_year = (rule: any, value: any, callback: any) => {
     callback(new Error("请输入正整数"));
   } else if (value < formItem.value.min_employment_year) {
     if (!formItem.value.min_employment_year) return;
-    callback(new Error("起始年龄应该大于截至年龄"));
+    callback(new Error("起始年龄应该小于截至年龄"));
   } else {
     callback();
   }
@@ -716,8 +715,8 @@ const formItem = ref({
   bank_account: "",
   invoice_sample: [],
   industry_limit: [],
-  certification_rules: "",
-  signing_rules: "",
+  certification_rules: [],
+  signing_rules: [],
   individual_monthly_limit: "9.8",
   tax_contract_term: "",
   incoming_materials: "",
@@ -750,14 +749,14 @@ const handleSubmit = () => {
         params.category_id = newArrayTransform(params.category_id);
         params.invoice_sample = JSON.stringify(params.invoice_sample);
         params.industry_limit = JSON.stringify(params.industry_limit);
-        params.certification_rules = flatten(params.certification_rules);
-        params.signing_rules = flatten(params.signing_rules);
+        // params.certification_rules = flatten(params.certification_rules);
+        // params.signing_rules = flatten(params.signing_rules);
         params.agreement_url = JSON.stringify(params.agreement_url);
         params.settlement_confirmation_letter = JSON.stringify(
           params.settlement_confirmation_letter
         );
         params.tax_land_city_id = newNumberTransform(params.tax_land_city_id);
-        params.tax_reg_type = newNumberTransform(params.tax_reg_type);
+        // params.tax_reg_type = newNumberTransform(params.tax_reg_type);
 
         console.log(params);
         selfOperatedTaxLandAdd(params)

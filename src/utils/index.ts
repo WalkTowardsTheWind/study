@@ -249,3 +249,16 @@ export function newNumberTransform(dataSource: any) {
   const parentIds = dataSource[dataSource.length - 1];
   return parentIds; // 返回子数组的最后一项
 }
+/**
+ * 将数组中字符串数字转化为数字
+ * @param {array} dataSource 数据源
+ * @returns {array} 数字数组
+ */
+
+export function StringTransformNumber(dataSource: any) {
+  // 用于存储子数组的最后一项
+  const parentIds = dataSource.map((item: any) => {
+    return item * 1;
+  });
+  return parentIds; // 返回子数组的最后一项
+}
