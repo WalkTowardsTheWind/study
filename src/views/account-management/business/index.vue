@@ -13,7 +13,11 @@
         </el-input>
       </el-form-item>
       <el-form-item label="账户状态">
-        <el-select v-model="formItem.status" placeholder="请选择">
+        <el-select
+          v-model="formItem.status"
+          placeholder="请选择"
+          @change="handleChange"
+        >
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -107,6 +111,9 @@
           @click="toDetail('detail', scope.row.company_id)"
           >详情</el-button
         >
+        <el-button link type="primary" @click="resetPWD(scope.row.company_id)"
+          >重置密码</el-button
+        >
       </template>
     </zxn-table>
   </div>
@@ -144,7 +151,7 @@ const date = ref("");
 
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "账户名称", prop: "account" },
+  { label: "账户名称", prop: "account", width: 150 },
   {
     label: "状态",
     type: "enum",
@@ -157,13 +164,14 @@ const columnList = [
       3: { color: "#F35036", background: "#fde3df" },
       4: { color: "#333333", background: "#dedede" },
     },
+    width: 100,
   },
-  { label: "企业", prop: "company_name" },
-  { label: "联系人", prop: "contacts" },
-  { label: "联系方式", prop: "mobile" },
-  { label: "客户点位", prop: "tax_point" },
-  { label: "创建时间", prop: "add_time" },
-  { label: "操作", slot: "operation", fixed: "right", width: 280 },
+  { label: "企业", prop: "company_name", minWidth: 200 },
+  { label: "联系人", prop: "contacts", width: 150 },
+  { label: "联系方式", prop: "mobile", width: 150 },
+  { label: "客户点位", prop: "tax_point", width: 80 },
+  { label: "创建时间", prop: "add_time", width: 200 },
+  { label: "操作", slot: "operation", fixed: "right", width: 350 },
 ];
 
 const toDetail = (status: string, id: any) => {
@@ -202,6 +210,10 @@ function handleReset() {
   formItem.company_name = "";
   formItem.status = "";
   date.value = "";
+  handleSearch();
+}
+
+function handleChange() {
   handleSearch();
 }
 
@@ -287,6 +299,10 @@ function free(id: string, status: string) {
         message: "取消",
       });
     });
+}
+
+function resetPWD(company_id: string) {
+  console.log(company_id);
 }
 
 handleSearch();
