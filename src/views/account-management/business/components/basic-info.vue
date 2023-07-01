@@ -126,8 +126,17 @@
         <el-row :gutter="50">
           <el-col :span="8">
             <el-form-item label="税地名称" label-width="130px">
-              <el-select v-model="item.tax_land_id" v-if="isEdit">
-                <el-option></el-option>
+              <el-select
+                class="w-full"
+                v-model="item.tax_land_id"
+                v-if="isEdit"
+              >
+                <el-option
+                  v-for="(item, index) in taxLandOption"
+                  :key="index"
+                  :value="item.id"
+                  :label="item.tax_land_name"
+                ></el-option>
               </el-select>
               <span v-else> {{ item.taxpayer_number }}</span>
             </el-form-item>
@@ -156,6 +165,8 @@ import {
   getBusinessAccountDetail,
   editBusinessAccount,
 } from "@/api/account/business";
+import { getLandList } from "@/api/common";
+
 import { businessType, taxpayerType } from "@/enums/accountEnum";
 import router from "@/router";
 
@@ -174,6 +185,7 @@ const props = defineProps({
 });
 
 const formData = ref({} as any);
+const taxLandOption = ref([] as any);
 
 const taxlandList = ref([] as any);
 
@@ -217,11 +229,19 @@ function addTaxLand() {
   });
 }
 
+function getTaxLandOption() {
+  taxLandOption.value.length = 0;
+  getLandList().then((res) => {
+    taxLandOption.value.push(...res.data);
+  });
+}
+
 function del(index) {
   taxlandList.value.splice(index, 1);
 }
 
 getAccountDetail();
+getTaxLandOption();
 </script>
 
 <style scoped lang="scss">
