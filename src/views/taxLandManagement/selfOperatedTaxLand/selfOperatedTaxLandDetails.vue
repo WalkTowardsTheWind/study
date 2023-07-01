@@ -93,6 +93,7 @@
                 <el-form-item class="mt-25px" label="税地地区">
                   <el-cascader
                     class="w-[100%]"
+                    placeholder=" "
                     v-model="formItem.tax_land_city_id"
                     :options="optionsTaxLang"
                     :props="propsTaxLang"
@@ -520,11 +521,11 @@ const getTaxLangList = async () => {
         .replace(/"child"/g, '"children"')
     );
     optionsTaxLang.value = newData;
+    getData();
   } catch (error) {
     console.log(error);
   }
 };
-getTaxLangList();
 const propsTaxLang = {
   // multiple: true,
   expandTrigger: "hover" as const,
@@ -540,12 +541,12 @@ const formItem = ref({
   calculation_type: "",
   min_employment_year: "",
   max_employment_year: "",
-  tax_land_city_id: "",
+  tax_land_city_id: [],
   web_url: "",
   tax_land_license: [],
   company_qualifications: [],
   invoice_type: "",
-  category_id: "",
+  category_id: [],
   invoice_denomination: "",
   max_money: "",
   is_payment_api: "",
@@ -554,8 +555,8 @@ const formItem = ref({
   bank_account: "",
   invoice_sample: [],
   industry_limit: [],
-  certification_rules: "",
-  signingRules: "",
+  certification_rules: [],
+  signingRules: [],
   individual_monthly_limit: "",
   entrustedCollectionPeriod: "",
   incoming_materials: "",
@@ -602,7 +603,6 @@ const getData = async () => {
       agreement_url,
       settlement_confirmation_letter,
     } = data.info;
-    console.log(incoming_materials);
     formItem.value = {
       tax_land_type: tax_land_type + "",
       tax_land_head,
@@ -648,9 +648,8 @@ const getData = async () => {
     console.log(error);
   }
 };
-
 onMounted(() => {
-  getData();
+  getTaxLangList();
 });
 </script>
 <style lang="scss" scoped>
