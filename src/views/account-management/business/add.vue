@@ -202,7 +202,7 @@
           <el-form-item label="邮寄地址">
             <el-input placeholder="请输入" v-model="addForm.address" />
           </el-form-item>
-          <el-form-item label="选择税地">
+          <el-form-item label="选择税地" prop="tax_land_id">
             <el-select
               class="w-full"
               placeholder="请选择"
@@ -457,6 +457,7 @@ const rules = reactive<FormRules>({
   contacts: [{ required: true, message: "必填", trigger: "blur" }],
   mobile: [{ required: true, message: "必填", trigger: "blur" }],
   company_name: [{ required: true, message: "必填", trigger: "blur" }],
+  tax_land_id: [{ required: true, message: "必填", trigger: "change" }],
 });
 
 /**
