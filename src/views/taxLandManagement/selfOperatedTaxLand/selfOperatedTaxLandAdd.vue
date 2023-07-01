@@ -23,7 +23,7 @@
           >
             <div class="flex" v-show="active == 0">
               <div class="w-[33%]">
-                <el-form-item
+                <!-- <el-form-item
                   class="mt-25px"
                   label="税地类型"
                   prop="tax_land_type"
@@ -42,24 +42,20 @@
                       :value="item.value"
                     />
                   </el-select>
-                </el-form-item>
-                <el-form-item label="税地负责人" prop="tax_land_head">
+                </el-form-item> -->
+                <el-form-item label="税地负责人">
                   <el-input
                     v-model="formItem.tax_land_head"
                     placeholder="请输入"
                   />
                 </el-form-item>
-                <el-form-item label="联系方式" prop="head_mobile">
+                <el-form-item label="联系方式">
                   <el-input
                     v-model="formItem.head_mobile"
                     placeholder="请输入"
                   />
                 </el-form-item>
-                <el-form-item
-                  class="mt-25px"
-                  label="税地来源"
-                  prop="tax_land_name"
-                >
+                <el-form-item class="mt-25px" label="税地来源">
                   <el-input
                     class="w-[100%]"
                     v-model="formItem.tax_land_name"
@@ -67,11 +63,7 @@
                   >
                   </el-input>
                 </el-form-item>
-                <el-form-item
-                  class="mt-25px"
-                  label="成本点位"
-                  prop="tax_cost_point"
-                >
+                <el-form-item class="mt-25px" label="成本点位">
                   <el-input
                     v-model="formItem.tax_cost_point"
                     placeholder="请输入"
@@ -97,9 +89,9 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="用工年限" required>
+                <el-form-item class="mt-25px" label="用工年限">
                   <el-col :span="11">
-                    <el-form-item prop="min_employment_year">
+                    <el-form-item>
                       <el-input
                         type="number"
                         v-model="formItem.min_employment_year"
@@ -111,7 +103,7 @@
                     <span class="text-gray-500">-</span>
                   </el-col>
                   <el-col :span="11">
-                    <el-form-item prop="max_employment_year">
+                    <el-form-item>
                       <el-input
                         type="number"
                         v-model="formItem.max_employment_year"
@@ -145,11 +137,7 @@
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
-                <el-form-item
-                  class="mt-13px"
-                  label="公司资质"
-                  prop="company_qualifications"
-                >
+                <el-form-item class="mt-13px" label="公司资质">
                   <multi-upload
                     v-model="formItem.company_qualifications"
                     :limit="3"
@@ -204,11 +192,7 @@
                     clearable
                   />
                 </el-form-item>
-                <el-form-item
-                  class="mt-25px"
-                  label="发票面额"
-                  prop="invoice_denomination"
-                >
+                <el-form-item class="mt-25px" label="发票面额">
                   <el-select
                     class="w-[100%]"
                     v-model="formItem.invoice_denomination"
@@ -224,20 +208,12 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item
-                  class="mt-25px"
-                  label="发票金额上限"
-                  prop="max_money"
-                >
+                <el-form-item class="mt-25px" label="发票金额上限">
                   <el-input v-model="formItem.max_money" placeholder="请输入">
                   </el-input>
                 </el-form-item>
 
-                <el-form-item
-                  class="mt-25px"
-                  label="是否有支付接口"
-                  prop="is_payment_api"
-                >
+                <el-form-item class="mt-25px" label="是否有支付接口">
                   <el-select
                     class="w-[100%]"
                     v-model="formItem.is_payment_api"
@@ -365,11 +341,7 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item
-                  class="mt-25px"
-                  label="单人每月限额"
-                  prop="individual_monthly_limit"
-                >
+                <el-form-item class="mt-25px" label="单人每月限额">
                   <el-input v-model="formItem.individual_monthly_limit">
                     <template #append>万</template>
                   </el-input>
@@ -421,7 +393,11 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item class="mt-25px" :label="optionsTaxReg">
+                <el-form-item
+                  class="mt-25px"
+                  :label="optionsTaxReg"
+                  prop="tax_organ_code"
+                >
                   <el-input
                     v-model="formItem.tax_organ_code"
                     placeholder="请输入"
@@ -704,7 +680,7 @@ const Rules3 = {
   ],
 };
 const formItem = ref({
-  tax_land_type: "",
+  tax_land_type: "0",
   tax_land_head: "",
   head_mobile: "",
   tax_land_name: "",
