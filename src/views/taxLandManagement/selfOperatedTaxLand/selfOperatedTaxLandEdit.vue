@@ -201,8 +201,10 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="发票金额上限">
-                  <el-input v-model="formItem.max_money" placeholder="请输入">
-                  </el-input>
+                  <zxn-money-input
+                    v-model="formItem.max_money"
+                    placeholder="请输入"
+                  />
                 </el-form-item>
 
                 <el-form-item class="mt-25px" label="是否有支付接口">
@@ -306,7 +308,7 @@
                     collapse-tags
                     collapse-tags-tooltip
                     placeholder="请选择"
-                    style="width: 240px"
+                    class="w-[100%]"
                   >
                     <el-option
                       v-for="item in optionsCertificationRules"
@@ -327,7 +329,7 @@
                     collapse-tags
                     collapse-tags-tooltip
                     placeholder="请选择"
-                    style="width: 240px"
+                    class="w-[100%]"
                   >
                     <el-option
                       v-for="item in optionsSigningRules"
@@ -338,9 +340,10 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="单人每月限额">
-                  <el-input v-model="formItem.individual_monthly_limit">
-                    <template #append>万</template>
-                  </el-input>
+                  <zxn-money-input
+                    v-model="formItem.individual_monthly_limit"
+                    placeholder="请输入"
+                  />
                 </el-form-item>
                 <el-form-item
                   class="mt-25px"
@@ -379,7 +382,7 @@
                     collapse-tags
                     collapse-tags-tooltip
                     placeholder="请选择"
-                    style="width: 240px"
+                    class="w-[100%]"
                   >
                     <el-option
                       v-for="item in optionsTaxRegType"
