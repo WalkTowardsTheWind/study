@@ -209,8 +209,10 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="发票金额上限">
-                  <el-input v-model="formItem.max_money" placeholder="请输入">
-                  </el-input>
+                  <zxn-money-input
+                    v-model="formItem.max_money"
+                    placeholder="请输入"
+                  />
                 </el-form-item>
 
                 <el-form-item class="mt-25px" label="是否有支付接口">
@@ -305,12 +307,12 @@
                   prop="certification_rules"
                 >
                   <el-select
+                    class="w-[100%]"
                     v-model="formItem.certification_rules"
                     multiple
                     collapse-tags
                     collapse-tags-tooltip
                     placeholder="请选择"
-                    style="width: 240px"
                   >
                     <el-option
                       v-for="item in optionsCertificationRules"
@@ -326,12 +328,12 @@
                   prop="signing_rules"
                 >
                   <el-select
+                    class="w-[100%]"
                     v-model="formItem.signing_rules"
                     multiple
                     collapse-tags
                     collapse-tags-tooltip
                     placeholder="请选择"
-                    style="width: 240px"
                   >
                     <el-option
                       v-for="item in optionsSigningRules"
@@ -342,9 +344,10 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="单人每月限额">
-                  <el-input v-model="formItem.individual_monthly_limit">
-                    <template #append>万</template>
-                  </el-input>
+                  <zxn-money-input
+                    v-model="formItem.individual_monthly_limit"
+                    placeholder="请输入"
+                  />
                 </el-form-item>
                 <el-form-item
                   class="mt-25px"
@@ -379,11 +382,11 @@
                   prop="tax_reg_type"
                 >
                   <el-select
+                    class="w-[100%]"
                     v-model="formItem.tax_reg_type"
                     collapse-tags
                     collapse-tags-tooltip
                     placeholder="请选择"
-                    style="width: 240px"
                   >
                     <el-option
                       v-for="item in optionsTaxRegType"
@@ -705,7 +708,7 @@ const formItem = ref({
   industry_limit: [],
   certification_rules: [],
   signing_rules: [],
-  individual_monthly_limit: "9.8",
+  individual_monthly_limit: "98000",
   tax_contract_term: "",
   incoming_materials: "",
   tax_reg_type: "",

@@ -104,7 +104,7 @@
         <el-button link type="primary" @click="del(scope.row.company_id)"
           >删除</el-button
         >
-        <el-button link type="primary">导出</el-button>
+        <!-- <el-button link type="primary">导出</el-button> -->
         <el-button
           link
           type="primary"
