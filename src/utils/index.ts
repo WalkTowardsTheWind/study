@@ -1,5 +1,6 @@
 import { isNumber, isStringNumber, isString } from "@/utils/is";
 import { dateUtil } from "./dateUtil";
+import currency from "currency.js";
 
 /**
  * Check if an element has a class
@@ -261,4 +262,18 @@ export function StringTransformNumber(dataSource: any) {
     return item * 1;
   });
   return parentIds; // 返回子数组的最后一项
+}
+
+/**
+ *
+ * @param {string, number} value
+ * @param {number} precision
+ * @returns {*}
+ */
+export function currencyFormat(value: string | number, precision = 2) {
+  if (!isNumber(value) && !value) {
+    return "";
+  }
+  // @ts-ignore
+  return currency(value, { precision, symbol: "" }).format();
 }

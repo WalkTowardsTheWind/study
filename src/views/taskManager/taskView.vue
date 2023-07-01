@@ -248,10 +248,10 @@ const getView = async () => {
 
     formItem.salary =
       taskAttribute.salary_type === 1
-        ? taskAttribute.salary
-        : `${taskAttribute.salary_min || ""} - ${
-            taskAttribute.salary_max || ""
-          }`;
+        ? proxy.$moneyFormat(taskAttribute.salary)
+        : `${proxy.$moneyFormat(
+            taskAttribute.salary_min
+          )} - ${proxy.$moneyFormat(taskAttribute.salary_max)}`;
     formItem.settlement_type = taskAttribute.settlement_type;
     formItem.request = data.request.filter(Boolean).join("/");
     formItem.address = data.address;

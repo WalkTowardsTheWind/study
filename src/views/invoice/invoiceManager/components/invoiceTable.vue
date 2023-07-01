@@ -159,7 +159,7 @@ const columnList: any[] = reactive([
     path: "statusEnum.applyInvoiceType",
     minWidth: 120,
   },
-  { label: "申请开票金额", prop: "apply_amount", minWidth: 120 },
+  { label: "申请开票金额", prop: "apply_amount", type: "money", minWidth: 120 },
   { label: "税地发票面额", prop: "invoice_denomination", minWidth: 110 },
   { label: "发票张数", prop: "invoice_num", minWidth: 80 },
   {

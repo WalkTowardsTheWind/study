@@ -50,6 +50,17 @@
               :style="item.color ? item.color[row[item.prop]] : {}"
             />
             <div v-if="item.type === 'deep'">{{ deepRender(row, item) }}</div>
+            <div v-if="item.type === 'switch'">
+              <el-switch
+                v-model="row[item.prop]"
+                @change="handleSwitchChange(row, item.prop)"
+                :active-value="item.activeValue ? item.activeValue : 0"
+                :inactive-value="item.inactiveValue ? item.inactiveValue : 1"
+              />
+            </div>
+            <div v-if="item.type === 'money'">
+              {{ proxy.$moneyFormat(row[item.prop]) }}
+            </div>
           </template>
         </el-table-column>
         <el-table-column v-else v-bind="item" :showOverflowTooltip="true" />
@@ -85,7 +96,12 @@ const props = defineProps({
   loading: { type: Boolean, default: false },
   tableHeight: { type: Number },
 });
-const emit = defineEmits(["sort-change", "selection-change", "page-change"]);
+const emit = defineEmits([
+  "sort-change",
+  "selection-change",
+  "page-change",
+  "switch-change",
+]);
 const handleSort = ({ column, prop, order }: SortParams<any>) => {
   emit("sort-change", { column, prop, order });
 };
@@ -140,6 +156,10 @@ const resetHeight = () => {
 };
 const getTable = () => {
   return zxnTable.value;
+};
+
+const handleSwitchChange = (row: any, prop: string) => {
+  emit("switch-change", row, prop);
 };
 onMounted(() => {
   resetHeight();

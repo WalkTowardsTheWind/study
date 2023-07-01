@@ -64,8 +64,10 @@
       <template #salary="{ row }">
         {{
           row.task_attribute.salary_type === 1
-            ? row.task_attribute.salary
-            : `${row.task_attribute.salary_min} - ${row.task_attribute.salary_max}`
+            ? $moneyFormat(row.task_attribute.salary)
+            : `${$moneyFormat(row.task_attribute.salary_min)} - ${$moneyFormat(
+                row.task_attribute.salary_max
+              )}`
         }}
       </template>
       <template #operation="{ row }">

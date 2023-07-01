@@ -68,7 +68,7 @@ export const useUserStore = defineStore("user", () => {
     menusList.value = [];
   }
 
-  async function taxSourceChange(value: string): void {
+  async function taxSourceChange(value: string): Promise<void> {
     taxSource.value = value;
     await setTaxLand({ tax_land_id: value });
     refreshSelectedTag();
