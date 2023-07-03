@@ -15,7 +15,7 @@
     >
       <el-row :gutter="30" v-show="activeStep === 0">
         <el-col :span="7">
-          <el-form-item label="企业账户" prop="account" required>
+          <el-form-item label="企业登录名称" prop="account" required>
             <el-input placeholder="请输入" v-model="addForm.account" />
           </el-form-item>
           <el-form-item label="密码" prop="pwd" required>
@@ -41,7 +41,7 @@
       </el-row>
       <el-row :gutter="30" v-show="activeStep === 1">
         <el-col :span="7">
-          <el-form-item label="统一社会信用代码">
+          <el-form-item label="统一社会信用代码" prop="credit_code" required>
             <el-input placeholder="请输入" v-model="addForm.credit_code" />
           </el-form-item>
           <el-form-item label="营业执照到期时间">
@@ -85,7 +85,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="7">
-          <el-form-item label="营业执照">
+          <el-form-item label="营业执照" prop="license" required>
             <MultiUpload v-model="addForm.license">
               <i-ep-Plus />
             </MultiUpload>
@@ -161,7 +161,7 @@
                   :class="addForm.company_source == '0' ? 'is-active' : ''"
                   @click="addForm.company_source = '0'"
                 >
-                  自营
+                  销售
                 </div>
                 <div
                   class="radioBtn"
@@ -173,6 +173,14 @@
               </div>
             </template>
           </el-form-item>
+          <template v-if="addForm.company_source == '0'">
+            <el-form-item label="销售负责人">
+              <el-input placeholder="请输入" />
+            </el-form-item>
+            <el-form-item label="销售所属公司">
+              <el-input placeholder="请输入" />
+            </el-form-item>
+          </template>
           <template v-if="addForm.company_source == '1'">
             <el-form-item label="上级ID绑定" class="w-full">
               <div style="display: flex; gap: 0 10px">
@@ -185,6 +193,16 @@
                   v-model="addForm.parent_channel_id"
                 />
               </div>
+            </el-form-item>
+            <el-form-item label="点位计费方式" prop="calculation_type">
+              <el-select
+                class="w-full"
+                v-model="addForm.calculation_type"
+                placeholder="请选择"
+              >
+                <el-option label="内扣" value="0" />
+                <el-option label="外扣" value="1" />
+              </el-select>
             </el-form-item>
           </template>
           <el-form-item label="客户点位" prop="tax_point">
@@ -231,10 +249,12 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <!-- <el-form-item label="签约规则">
-							<el-select class="w-full" placeholder="请选择（单选）">
-							</el-select>
-						</el-form-item> -->
+          <el-form-item label="签约规则">
+            <el-select class="w-full" placeholder="请选择（单选）">
+              <el-option value="" label="短信签约"></el-option>
+              <el-option value="" label="二维码签约"></el-option>
+            </el-select>
+          </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="上传合同">
@@ -245,24 +265,14 @@
         </el-col>
       </el-row>
       <zxn-bottom-btn>
-        <el-button
-          link
-          :disabled="isDisabled"
-          v-if="activeStep === 0"
-          @click="activeStep = 3"
-          >跳过此步骤</el-button
-        >
+        <!-- <el-button link :disabled="isDisabled" v-if="activeStep === 0" @click="activeStep = 3">跳过此步骤</el-button> -->
         <el-button type="info" v-if="activeStep === 0" @click="$router.go(-1)"
           >取消</el-button
         >
         <el-button type="info" v-if="activeStep !== 0" @click="activeStep--"
           >上一步</el-button
         >
-        <el-button
-          type="primary"
-          v-if="activeStep !== 3"
-          :disabled="isDisabled"
-          @click="activeStep++"
+        <el-button type="primary" v-if="activeStep !== 3" @click="activeStep++"
           >下一步</el-button
         >
         <el-button
@@ -348,6 +358,7 @@ const addForm = reactive({
   consignee_mobile: "",
   address: "",
   tax_land_id: "",
+  calculation_type: "",
   contract_img: [],
 } as any);
 
@@ -360,16 +371,16 @@ const authType = [
 
 const auth_type = ref([] as any);
 
-const isDisabled = computed(() => {
-  return (
-    !addForm.account ||
-    !addForm.pwd ||
-    !addForm.conf_pwd ||
-    !addForm.contacts ||
-    !addForm.mobile ||
-    !addForm.company_name
-  );
-});
+// const isDisabled = computed(() => {
+// 	return (
+// 		!addForm.account ||
+// 		!addForm.pwd ||
+// 		!addForm.conf_pwd ||
+// 		!addForm.contacts ||
+// 		!addForm.mobile ||
+// 		!addForm.company_name
+// 	);
+// });
 
 const isAllComplete = computed(() => {
   if (addForm.company_source == "0") {
@@ -459,6 +470,9 @@ const rules = reactive<FormRules>({
   company_name: [{ required: true, message: "必填", trigger: "blur" }],
   tax_point: [{ required: true, message: "必填", trigger: "blur" }],
   tax_land_id: [{ required: true, message: "必填", trigger: "change" }],
+  credit_code: [{ required: true, message: "必填", trigger: "blur" }],
+  license: [{ required: true, message: "必填", trigger: "change" }],
+  calculation_type: [{ required: true, message: "必填", trigger: "change" }],
 });
 
 /**
@@ -489,11 +503,15 @@ async function submit(formEl: FormInstance | undefined) {
         }
       } else {
         // 弹框激活
-        ElMessageBox.confirm("该企业信息暂不完善，是否立即激活企业状态？", {
-          confirmButtonText: "确定",
-          cancelButtonText: "暂不",
-          center: true,
-        })
+        ElMessageBox.confirm(
+          "该企业信息暂不完善，是否立即激活企业状态？",
+          "警告",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "暂不",
+            center: true,
+          }
+        )
           .then(async () => {
             addForm.is_active = 1;
             const res = await createBusinessAccount(addForm);
