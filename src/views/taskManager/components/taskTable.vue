@@ -8,7 +8,7 @@
       <el-form-item label="" prop="task_name">
         <el-input
           v-model="formItem.task_name"
-          placeholder="请输入任务编号、申请开票企业"
+          placeholder="请输入任务名称、关联企业"
         >
           <template #prefix>
             <el-icon><i-ep-Search /></el-icon>
@@ -16,14 +16,14 @@
         </el-input>
       </el-form-item>
       <el-form-item label="任务状态" prop="status">
-        <el-select v-model="formItem.status" placeholder="全部" clearable>
+        <zxn-select v-model="formItem.status" @change="handleSearch">
           <el-option
             v-for="item in proxy.$const['statusEnum.TaskEnum']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
+        </zxn-select>
       </el-form-item>
       <el-form-item label="行业类型" prop="category_id">
         <el-cascader
@@ -55,11 +55,25 @@
           <el-button type="primary" plain>批量操作</el-button>
           <template #dropdown>
             <el-dropdown-menu>
-              <!--              <el-dropdown-item command="reject">驳回</el-dropdown-item>-->
+              <el-dropdown-item command="reject">驳回</el-dropdown-item>
               <el-dropdown-item command="fulfill">通过</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
+      </template>
+      <template #status="{ row }">
+        <div
+          v-if="row.company_status === 4"
+          v-text="'已封停'"
+          class="zxn-table-label"
+          :style="{ color: '#333333', backgroundColor: '#999999' }"
+        />
+        <div
+          v-else
+          v-text="proxy.$enumSet['statusEnum.TaskEnum'][row.status]"
+          class="zxn-table-label"
+          :style="checkStatusColor[row.status]"
+        />
       </template>
       <template #salary="{ row }">
         {{
@@ -72,7 +86,7 @@
       </template>
       <template #operation="{ row }">
         <template v-if="row.status === 1">
-          <el-button link type="primary" @click="handleCommand(row.id)"
+          <el-button link type="primary" @click="handleFulfill(row.id)"
             >通过</el-button
           >
           <el-button link type="primary" @click="handleReject(row.id)"
@@ -100,7 +114,7 @@ import { transformTimeRange } from "@/utils";
 import { getTaskIndex, removeTask, setTaskStatus } from "@/api/task";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-import { isNumber } from "@/utils/is";
+import { isArray, isNumber } from "@/utils/is";
 const router = useRouter();
 
 const props = defineProps({
@@ -121,29 +135,22 @@ const formItem = reactive({
   task_type: "",
 });
 const tableData = reactive([]);
+const checkStatusColor = {
+  0: { color: "#19B56B", backgroundColor: "#daf3e7" },
+  1: { color: "#19B56B", backgroundColor: "#daf3e7" },
+  2: { color: "#F35135", backgroundColor: "#fde3df" },
+  3: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+  4: { color: "#FFFFFF", backgroundColor: "#9ab7f9" },
+  5: { color: "#35C5F3", backgroundColor: "#dff6fd" },
+  6: { color: "#333333", backgroundColor: "#dedede" },
+  7: { color: "#333333", backgroundColor: "#999999" },
+};
 const columnList = [
   {
     label: "任务编号",
     prop: "task_no",
     visible: props.type !== 1,
     minWidth: 140,
-  },
-  {
-    label: "状态",
-    type: "enum",
-    path: "statusEnum.TaskEnum",
-    prop: "status",
-    minWidth: 100,
-    color: {
-      0: { color: "#19B56B", backgroundColor: "#daf3e7" },
-      1: { color: "#19B56B", backgroundColor: "#daf3e7" },
-      2: { color: "#F35135", backgroundColor: "#fde3df" },
-      3: { color: "#356FF3", backgroundColor: "#dfe8fd" },
-      4: { color: "#FFFFFF", backgroundColor: "#9ab7f9" },
-      5: { color: "#35C5F3", backgroundColor: "#dff6fd" },
-      6: { color: "#333333", backgroundColor: "#dedede" },
-      7: { color: "#333333", backgroundColor: "#999999" },
-    },
   },
   { label: "任务名称", prop: "task_name", minWidth: 120 },
   { label: "关联企业", prop: "company_name", minWidth: 140 },
@@ -152,13 +159,18 @@ const columnList = [
   { label: "金额", slot: "salary", minWidth: 180 },
   {
     label: "申请时间",
-    sortable: "custom",
     minWidth: 180,
     prop: "add_time",
   },
   {
-    label: "任务描述",
-    prop: "task_desc",
+    label: "状态",
+    type: "enum",
+    slot: "status",
+    minWidth: 100,
+  },
+  {
+    label: "备注",
+    prop: "reject_reason",
     visible: props.type !== 1,
     showOverflowTooltip: true,
     minWidth: 100,
@@ -209,7 +221,7 @@ const selectable = (row) => {
 };
 const taskTable = ref();
 
-const handleReject = (id: number) => {
+const handleReject = (id: number | number[]) => {
   ElMessageBox.prompt("", "驳回原因", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
@@ -219,11 +231,10 @@ const handleReject = (id: number) => {
       instance: { confirmButtonLoading: boolean; inputValue: string },
       done: () => void
     ) => {
-      console.log(instance, "222");
       if (action === "confirm") {
         instance.confirmButtonLoading = true;
         const params = {
-          ids: [id],
+          ids: isArray(id) ? id : [id],
           status: 2,
           reject_reason: instance.inputValue,
         };
@@ -242,15 +253,25 @@ const handleReject = (id: number) => {
     getTaskList();
   });
 };
-const handleCommand = async (id: number) => {
+const handleCommand = async (type) => {
   const selected = taskTable.value.getSelectionRows();
-  const ids = isNumber(id) ? [id] : selected.map((it) => it.id);
+  const ids = selected.map((it) => it.id);
   if (!ids.length) {
     return ElMessage({
       type: "error",
       message: `请选择数据`,
     });
   }
+  switch (type) {
+    case "fulfill":
+      handleFulfill(ids);
+      break;
+    case "reject":
+      handleReject(ids);
+      break;
+  }
+};
+const handleFulfill = (id: number | number[]) => {
   ElMessageBox({
     title: "",
     message: h("p", null, `确定通过该任务`),
@@ -265,7 +286,7 @@ const handleCommand = async (id: number) => {
       if (action === "confirm") {
         instance.confirmButtonLoading = true;
         const params = {
-          ids,
+          ids: isArray(id) ? id : [id],
           status: 3,
         };
         await setTaskStatus(params);

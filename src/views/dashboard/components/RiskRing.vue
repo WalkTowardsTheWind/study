@@ -13,13 +13,7 @@
 </template>
 <script setup lang="ts">
 import PieChart from "./PieChart.vue";
-const chartData = reactive([
-  { value: 36, name: "任务" },
-  { value: 20, name: "结算" },
-  { value: 16, name: "充值" },
-  { value: 9, name: "认证审核" },
-  { value: 19, name: "发票" },
-]);
+const chartData = reactive([]);
 </script>
 <style lang="scss" scoped>
 .risk-ring {

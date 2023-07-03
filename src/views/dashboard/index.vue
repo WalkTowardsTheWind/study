@@ -25,7 +25,7 @@
         <div class="flex">
           <risk-ring />
           <div class="w-16px"></div>
-          <industry-ring :chart-data="industryEcharts" />
+          <industry-ring />
         </div>
         <el-row class="w-100%">
           <bar-chart height="400px" width="100%" />
@@ -55,7 +55,7 @@ const initData = async () => {
   console.log(data);
   statisticsList.push(
     {
-      title: "发布申请",
+      title: "待审核任务",
       count: data.task_count || 0,
       img: new URL(`@/assets/icons-jpg/banner2.png`, import.meta.url).href,
     },
@@ -70,7 +70,7 @@ const initData = async () => {
       img: new URL(`@/assets/icons-jpg/banner4.png`, import.meta.url).href,
     },
     {
-      title: "开票订单",
+      title: "开票申请",
       count: data.invoice_count || 0,
       img: new URL(`@/assets/icons-jpg/banner5.png`, import.meta.url).href,
     },
@@ -89,10 +89,10 @@ const initData = async () => {
 };
 const handleView = (item) => {
   const routerMap = {
-    发布申请: "taskManagerIndex",
+    待审核任务: "taskManagerIndex",
     充值订单: "recharge-center",
     结算订单: "settlementCenter",
-    开票订单: "invoiceManager",
+    开票申请: "invoiceManager",
     异常数据: "Dashboard",
   };
   router.push({ name: routerMap[item.title] });

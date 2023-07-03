@@ -67,17 +67,17 @@
             :page-info="pageInfo"
             @page-change="pageChange"
           >
-            <!-- <template #tableTop>
+            <template #tableTop>
               <el-dropdown class="" trigger="click">
                 <el-button type="primary" plain>批量操作</el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item command="1">删除</el-dropdown-item>
+                    <!-- <el-dropdown-item command="1">删除</el-dropdown-item> -->
                     <el-dropdown-item command="2">下载</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
-            </template> -->
+            </template>
             <template #certificate="scope">
               <el-image
                 v-if="scope.row.certificate"
@@ -98,7 +98,6 @@
                 @click="toUpload(scope.row.recharge_id)"
                 >下载</el-button
               >
-              <!-- <el-button disabled link type="primary" @click="toDetail(scope.row.recharge_id)">详情</el-button> -->
             </template>
           </zxn-table>
         </div>
@@ -171,7 +170,7 @@ const pageInfo = reactive({
 
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "充值单号", prop: "recharge_order_no", width: 200 },
+  { label: "充值单号", prop: "recharge_order_no", minWidth: 250 },
   {
     label: "状态",
     prop: "status",
@@ -188,27 +187,20 @@ const columnList = [
       },
     },
   },
-  { label: "企业名称", prop: "company_name" },
+  { label: "企业名称", prop: "company_name", minWidth: 200 },
   // { label: "关联任务", prop: "certificate", slot: "certificate" },
   { label: "行业", prop: "category" },
-  { label: "税源地", prop: "tax_land_name" },
+  { label: "税源地", prop: "tax_land_name", minWidth: 250 },
   { label: "税地账户", prop: "bank_account", width: 200 },
   { label: "充值额度", prop: "amount" },
   { label: "充值时间", prop: "add_time", width: 200 },
   { label: "充值凭证", slot: "certificate" },
-  // { label: "操作", slot: "operation", fixed: "right", width: 200 },
+  { label: "操作", slot: "operation", fixed: "right", width: 100 },
 ];
 
-const toDetail = (id: string) => {
-  router.push({ name: "recharge-center-detail", query: { id } });
-};
 const toUpload = (id: string) => {
   console.log(id);
   // router.push({ name: "recharge-center-detail", query: { id } });
-};
-
-const toSee = (url: string) => {
-  console.log(url);
 };
 
 function handleSearch() {

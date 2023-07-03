@@ -3,7 +3,7 @@ export enum TaskEnum {
   "驳回" = 2,
   "报名中" = 3,
   "已验收" = 5,
-  "封停" = 6,
+  // "封停" = 6,
 }
 
 export enum IndustryType {

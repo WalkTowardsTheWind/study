@@ -2,9 +2,11 @@
   <div class="zxn-image">
     <div
       class="zxn-image-item"
+      :class="{ 'has-click': targetClick }"
       :style="{ width: `${width}px`, height: `${height}px` }"
       v-for="(item, index) in imgList"
       :key="item"
+      @click="handleTarget(index)"
     >
       <el-image
         :style="{ width: `${width}px`, height: `${height}px` }"
@@ -20,18 +22,21 @@
       v-if="showViewer"
       :url-list="imgList"
       :initial-index="previewIndex"
+      z-index="999"
       @close="closeImgViewer"
+      :teleported="true"
     />
   </div>
 </template>
 <script setup lang="ts">
 import { useEventListener } from "@vueuse/core";
-defineProps({
+const props = defineProps({
   imgList: { type: Array, default: () => [] },
   width: { type: Number, default: 80 },
   height: { type: Number, default: 80 },
   fit: { type: String, default: "fill" },
   hasDelete: { type: Boolean, default: false },
+  targetClick: { type: Boolean, default: false },
 });
 let stopWheelListener: (() => void) | undefined;
 let prevOverflow = "";
@@ -62,6 +67,11 @@ const closeImgViewer = () => {
   stopWheelListener?.();
   document.body.style.overflow = prevOverflow;
   showViewer.value = false;
+};
+const handleTarget = (index: number) => {
+  if (props.targetClick) {
+    handlePreview(index);
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -103,6 +113,16 @@ const closeImgViewer = () => {
     &:hover {
       .zxn-image-item-bottom {
         bottom: 0;
+      }
+    }
+  }
+
+  .has-click {
+    cursor: pointer;
+
+    &:hover {
+      .zxn-image-item-bottom {
+        bottom: -25%;
       }
     }
   }
