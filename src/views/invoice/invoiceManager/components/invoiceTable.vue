@@ -17,14 +17,14 @@
         </el-input>
       </el-form-item>
       <el-form-item label="开票状态" prop="status">
-        <el-select v-model="formItem.status" placeholder="全部">
+        <zxn-select v-model="formItem.status">
           <el-option
             v-for="item in proxy.$const['statusEnum.invoiceStatus']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
+        </zxn-select>
       </el-form-item>
       <el-form-item label="开票类型" prop="invoice_type">
         <el-select v-model="formItem.invoice_type" placeholder="请选择">
@@ -69,6 +69,14 @@
       <!--      </template>-->
       <template #taskLength="{ row }">
         <span>{{ row.task_list.length }}</span>
+      </template>
+      <template #img="{ row }">
+        <zxn-image
+          :imgList="[row.invoice_sample_url]"
+          width="40"
+          height="40"
+          targetClick
+        />
       </template>
       <template #operation="{ row }">
         <template v-if="!row.status">
@@ -130,7 +138,7 @@ const formItem = reactive({
   status: "",
 });
 const columnList: any[] = reactive([
-  { label: "任务编号", prop: "invoice_no", minWidth: 150 },
+  { label: "任务编号", prop: "invoice_no", minWidth: 200 },
   {
     label: "状态",
     type: "enum",
@@ -160,7 +168,13 @@ const columnList: any[] = reactive([
     minWidth: 120,
   },
   { label: "申请开票金额", prop: "apply_amount", type: "money", minWidth: 120 },
-  { label: "税地发票面额", prop: "invoice_denomination", minWidth: 110 },
+  {
+    label: "税地发票面额",
+    prop: "invoice_denomination",
+    type: "enum",
+    path: "taxLandManagementEnum.invoice_denomination",
+    minWidth: 110,
+  },
   { label: "发票张数", prop: "invoice_num", minWidth: 80 },
   {
     label: "开票要求",
@@ -169,8 +183,8 @@ const columnList: any[] = reactive([
     path: "statusEnum.invoiceRequire",
     minWidth: 120,
   },
-  { label: "申请时间", prop: "add_time", minWidth: 120 },
-  { label: "结算确认函", minWidth: 120 },
+  { label: "申请时间", prop: "add_time", minWidth: 180 },
+  { label: "结算确认函", slot: "img", minWidth: 120 },
   {
     label: "操作",
     slot: "operation",

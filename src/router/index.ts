@@ -407,30 +407,30 @@ export const constantRoutes: RouteRecordRaw[] = [
     component: Layout,
     meta: { title: "系统设置", icon: "system" },
     children: [
-      {
-        path: "role",
-        component: () => import("@/views/system/role/index.vue"),
-        name: "roleIndex",
-        meta: { title: "角色管理" },
-      },
-      {
-        path: "addRole",
-        component: () => import("@/views/system/role/roleView.vue"),
-        name: "addRole",
-        meta: { title: "新增角色", hidden: true },
-      },
-      {
-        path: "editRole:id",
-        component: () => import("@/views/system/role/roleView.vue"),
-        name: "editRole",
-        meta: { title: "编辑角色", hidden: true },
-      },
-      {
-        path: "menu",
-        component: () => import("@/views/system/menu/index.vue"),
-        name: "menuIndex",
-        meta: { title: "菜单管理" },
-      },
+      // {
+      //   path: "role",
+      //   component: () => import("@/views/system/role/index.vue"),
+      //   name: "roleIndex",
+      //   meta: { title: "角色管理" },
+      // },
+      // {
+      //   path: "addRole",
+      //   component: () => import("@/views/system/role/roleView.vue"),
+      //   name: "addRole",
+      //   meta: { title: "新增角色", hidden: true },
+      // },
+      // {
+      //   path: "editRole:id",
+      //   component: () => import("@/views/system/role/roleView.vue"),
+      //   name: "editRole",
+      //   meta: { title: "编辑角色", hidden: true },
+      // },
+      // {
+      //   path: "menu",
+      //   component: () => import("@/views/system/menu/index.vue"),
+      //   name: "menuIndex",
+      //   meta: { title: "菜单管理" },
+      // },
       {
         path: "log",
         component: () => import("@/views/system/log/index.vue"),
