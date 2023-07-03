@@ -1,15 +1,15 @@
 <template>
   <div class="top">
     <el-card class="top-item">
-      <div class="top-item-title">净收入</div>
+      <div class="top-item-title">服务费</div>
       <div class="top-item-money">{{ total_fee_amount }}</div>
     </el-card>
     <el-card class="top-item">
-      <div class="top-item-title">打款金额</div>
+      <div class="top-item-title">企业充值金额</div>
       <div class="top-item-money">{{ total_payment_amount }}</div>
     </el-card>
     <el-card class="top-item">
-      <div class="top-item-title">下发金额</div>
+      <div class="top-item-title">企业下发金额</div>
       <div class="top-item-money">{{ total_channel_amount }}</div>
     </el-card>
   </div>
@@ -143,7 +143,7 @@ get3And1List(3, 3);
 
 <style scoped lang="scss">
 #main {
-  width: 90vw;
+  width: 80vw;
   height: 500px;
 }
 

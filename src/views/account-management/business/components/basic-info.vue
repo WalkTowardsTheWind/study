@@ -23,7 +23,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="账户名称">
+            <el-form-item label="企业登录名称">
               <el-input v-model="formData.account" v-if="isEdit" />
               <span v-else>{{ formData.admin_id }}</span>
             </el-form-item>
@@ -115,7 +115,7 @@
         <div class="line"></div>
         <div class="head-title">税地信息</div>
       </div>
-      <el-button
+      <!-- <el-button
         v-if="isEdit"
         type="primary"
         class="my-[20px]"
@@ -151,7 +151,7 @@
             <span class="del" @click="del(index)">删除</span>
           </el-col>
         </el-row>
-      </div>
+      </div> -->
     </el-form>
   </div>
   <zxn-bottom-btn v-if="isEdit">

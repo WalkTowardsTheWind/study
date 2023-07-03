@@ -168,7 +168,7 @@ export function categoryTransformNumber(dataSource: any, nodeId: any) {
 
   // 从根节点开始遍历整棵树，并调用递归函数查找子节点的所有父节点
   for (const node of dataSource) {
-    if (traverse(node, nodeId)) {
+    if (traverse(node, nodeId * 1)) {
       // 如果在当前节点的子树中找到了子节点的父节点，则直接退出循环
       parentIds.push(nodeId);
       break;

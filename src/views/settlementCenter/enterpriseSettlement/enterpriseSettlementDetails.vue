@@ -85,6 +85,11 @@
             hasSelect
             @selection-change="handleSelect"
           >
+            <template #download="scope">
+              <el-button link type="primary" @click="handleDownload(scope)"
+                >下载</el-button
+              >
+            </template>
             <template #operation="scope">
               <el-button link type="primary" @click="handleInspect(scope)"
                 >查看</el-button
@@ -155,7 +160,8 @@ const columnList = [
   { label: "需求人数", prop: "person_count", width: 120 },
   { label: "预算", prop: "salary", width: 120 },
   { label: "申请时间", prop: "add_time", width: 120 },
-  { label: "任务详情", slot: "operation", fixed: "right" },
+  { label: "下载回单", slot: "download", align: "center " },
+  { label: "任务详情", slot: "operation", align: "center ", fixed: "right" },
 ];
 /**
  * 批量选择

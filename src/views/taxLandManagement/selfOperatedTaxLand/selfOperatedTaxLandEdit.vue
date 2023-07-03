@@ -565,6 +565,7 @@ const getTaxLangList = async () => {
         .replace(/"child"/g, '"children"')
     );
     optionsTaxLang.value = newData;
+    getData();
   } catch (error) {
     console.log(error);
   }
@@ -683,12 +684,12 @@ const formItem = ref({
   calculation_type: "",
   min_employment_year: "",
   max_employment_year: "",
-  tax_land_city_id: "",
+  tax_land_city_id: [],
   web_url: "",
   tax_land_license: [],
   company_qualifications: [],
   invoice_type: "",
-  category_id: "",
+  category_id: [],
   invoice_denomination: "",
   max_money: "",
   tax_point: "",
@@ -855,9 +856,9 @@ const getData = async () => {
     console.log(error);
   }
 };
-getData();
+
 onMounted(() => {
-  getData();
+  getTaxLangList();
 });
 </script>
 <style lang="scss" scoped>

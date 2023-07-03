@@ -6,7 +6,10 @@
       @on-search="handleSearch"
     >
       <el-form-item>
-        <el-input v-model="formItem.company_name" placeholder="请输入关键字">
+        <el-input
+          v-model="formItem.company_name"
+          placeholder="请输入企业、账户名称、企业联系人、联系电话"
+        >
           <template #prefix>
             <i-ep-Search />
           </template>
@@ -36,6 +39,24 @@
           value-format="YYYY-MM-DD"
           end-placeholder="结束日期"
         />
+      </el-form-item>
+      <el-form-item label="客户点位">
+        <div class="flex">
+          <el-input v-model="formItem.min" />
+          <div class="m-x-[20px]">~</div>
+          <el-input v-model="formItem.max" />
+        </div>
+      </el-form-item>
+      <el-form-item prop=" date" label="计费方式">
+        <el-select
+          v-model="formItem.calculation_type"
+          placeholder="请选择"
+          @change="handleChange"
+        >
+          <el-option label="全部" value="" />
+          <el-option label="内扣" value="0" />
+          <el-option label="外扣" value="1" />
+        </el-select>
       </el-form-item>
     </zxn-search>
     <zxn-table
@@ -92,7 +113,7 @@
           v-if="scope.row.status === 1"
           link
           type="primary"
-          @click="toDetail('upload', scope.row.company_id)"
+          @click="toDetail('edit', scope.row.company_id)"
           >上传</el-button
         >
         <el-button
@@ -111,9 +132,7 @@
           @click="toDetail('detail', scope.row.company_id)"
           >详情</el-button
         >
-        <el-button link type="primary" @click="resetPWD(scope.row.company_id)"
-          >重置密码</el-button
-        >
+        <!-- <el-button link type="primary" @click="resetPWD(scope.row.company_id)">重置密码</el-button> -->
       </template>
     </zxn-table>
   </div>
@@ -139,9 +158,11 @@ const options = ref([
 const formItem = reactive({
   company_name: "",
   status: "",
-  start_time: "",
-  end_time: "",
-});
+  calculation_type: "",
+  min: "",
+  max: "",
+} as any);
+
 const pageInfo = reactive({
   total: 0,
   page: 1,
@@ -169,9 +190,10 @@ const columnList = [
   { label: "企业", prop: "company_name", minWidth: 200 },
   { label: "联系人", prop: "contacts", width: 150 },
   { label: "联系方式", prop: "mobile", width: 150 },
-  { label: "客户点位", prop: "tax_point", width: 80 },
+  { label: "客户点位", prop: "tax_point", width: 100 },
+  { label: "计费方式", prop: "calculation_type", width: 100 },
   { label: "创建时间", prop: "add_time", width: 200 },
-  { label: "操作", slot: "operation", fixed: "right", width: 350 },
+  { label: "操作", slot: "operation", fixed: "right", width: 250 },
 ];
 
 const toDetail = (status: string, id: any) => {
