@@ -203,6 +203,45 @@
             hasSelect
             @selection-change="handleSelect"
           >
+            <template #status="scope">
+              <div
+                v-if="scope.row.status == 0"
+                v-text="
+                  proxy.$enumSet['settlementCenterEnum.settlementCenterEnum'][
+                    scope.row.status
+                  ]
+                "
+                class="zxn-table-label"
+                :style="color ? color[scope.row.status] : {}"
+              />
+              <div
+                v-if="scope.row.status == 1"
+                v-text="
+                  proxy.$enumSet['settlementCenterEnum.settlementCenterEnum'][
+                    scope.row.status
+                  ]
+                "
+                class="zxn-table-label"
+                :style="color ? color[scope.row.status] : {}"
+              />
+              <el-tooltip
+                v-if="scope.row.status == 2"
+                class="box-item"
+                effect="dark"
+                placement="top"
+              >
+                <template #content> {{ scope.row.reason }}</template>
+                <div
+                  v-text="
+                    proxy.$enumSet['settlementCenterEnum.settlementCenterEnum'][
+                      scope.row.status
+                    ]
+                  "
+                  class="zxn-table-label"
+                  :style="color ? color[scope.row.status] : {}"
+                />
+              </el-tooltip>
+            </template>
             <template #operation="scope">
               <el-button link type="primary" @click="handleInspect(scope)"
                 >查看回单</el-button
@@ -290,6 +329,7 @@ const formItem = ref({
   payment_amount: "",
   payment_time: "",
   status: "",
+  reason: "",
   invoice_status: "",
   bank_account: "",
   check_url: [],
@@ -301,21 +341,27 @@ const tableData = reactive([
   { value: "020" },
   { value: "020" },
 ]);
+const color = {
+  0: { color: "#1AB66B", backgroundColor: "#DAF3E7" },
+  1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
+  2: { color: "#333333", backgroundColor: "#DEDEDE" },
+};
 const columnList = [
   { label: "账户ID", prop: "account" },
-  {
-    label: "结算状态",
-    type: "enum",
-    width: 100,
-    path: "settlementCenterEnum.settlementCenterEnum",
-    prop: "settlement_status",
-    // fixed: "left",
-    color: {
-      0: { color: "#1AB66B", backgroundColor: "#DAF3E7" },
-      1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
-      2: { color: "#333333", backgroundColor: "#DEDEDE" },
-    },
-  },
+  { label: "状态", slot: "status", width: 100, headerAlign: "left" },
+  // {
+  //   label: "结算状态",
+  //   type: "enum",
+  //   width: 100,
+  //   path: "settlementCenterEnum.settlementCenterEnum",
+  //   prop: "settlement_status",
+  //   // fixed: "left",
+  //   color: {
+  //     0: { color: "#1AB66B", backgroundColor: "#DAF3E7" },
+  //     1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
+  //     2: { color: "#333333", backgroundColor: "#DEDEDE" },
+  //   },
+  // },
   { label: "姓名", prop: "real_name" },
   { label: "联系方式", prop: "phone" },
   { label: "收款银行", prop: "bank" },
@@ -366,6 +412,7 @@ const getTableData = async () => {
       address,
       company_name,
       status,
+      reason,
       bank_account,
       check_url,
     } = data;
@@ -410,6 +457,7 @@ const getTableData = async () => {
       payment_amount,
       payment_time,
       status,
+      reason,
       invoice_status,
       bank_account,
       check_url,

@@ -57,6 +57,55 @@
           </template>
         </el-dropdown>
       </template> -->
+      <template #status="scope">
+        <div
+          v-if="scope.row.status == 0"
+          v-text="
+            proxy.$enumSet['settlementCenterEnum.settlementCenterEnum'][
+              scope.row.status
+            ]
+          "
+          class="zxn-table-label"
+          :style="color ? color[scope.row.status] : {}"
+        />
+        <div
+          v-if="scope.row.status == 1"
+          v-text="
+            proxy.$enumSet['settlementCenterEnum.settlementCenterEnum'][
+              scope.row.status
+            ]
+          "
+          class="zxn-table-label"
+          :style="color ? color[scope.row.status] : {}"
+        />
+        <div
+          v-if="scope.row.status == 2"
+          v-text="
+            proxy.$enumSet['settlementCenterEnum.settlementCenterEnum'][
+              scope.row.status
+            ]
+          "
+          class="zxn-table-label"
+          :style="color ? color[scope.row.status] : {}"
+        />
+        <el-tooltip
+          v-if="scope.row.status == 3"
+          class="box-item"
+          effect="dark"
+          placement="top"
+        >
+          <template #content> {{ scope.row.reason }}</template>
+          <div
+            v-text="
+              proxy.$enumSet['settlementCenterEnum.settlementCenterEnum'][
+                scope.row.status
+              ]
+            "
+            class="zxn-table-label"
+            :style="color ? color[scope.row.status] : {}"
+          />
+        </el-tooltip>
+      </template>
       <template #inspect="scope">
         <el-button link type="primary" @click="handleInspect(scope)"
           >查看</el-button
@@ -67,9 +116,11 @@
           <el-button link type="primary" @click="handleThaw(scope)">{{
             scope.row.status == 2 ? "解冻" : "冻结"
           }}</el-button>
-          <!-- <el-button v-show="[2,3].includes(scope.row.status)" link type="primary" @click="handleEdit(scope)"
-          >编辑</el-button
-        > -->
+        </template>
+        <template v-if="[1].includes(scope.row.status)">
+          <el-button link type="primary" @click="handleDownload(scope)"
+            >下载</el-button
+          >
         </template>
         <el-button link type="primary" @click="handleDelete(scope)"
           >删除</el-button
@@ -143,35 +194,35 @@ const formItem = ref({
   keywords: "",
   timeData: [],
   status: "",
+  reason: "",
   page: "",
   limit: "",
 });
 const tableData = reactive([] as any);
+const color = {
+  0: { color: "#1AB66B", backgroundColor: "#DAF3E7" },
+  1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
+  2: { color: "#333333", backgroundColor: "#DEDEDE" },
+  3: { color: "#F45136", backgroundColor: "#FDE3DF" },
+};
 const columnList = [
   { label: "结算单号", prop: "settlement_order_no" },
-  {
-    label: "状态",
-    type: "enum",
-    width: 100,
-    path: "settlementCenterEnum.settlementCenterEnum",
-    prop: "status",
-    // fixed: "left",
-    color: {
-      0: { color: "#1AB66B", backgroundColor: "#DAF3E7" },
-      1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
-      2: { color: "#333333", backgroundColor: "#DEDEDE" },
-      3: { color: "#F45136", backgroundColor: "#FDE3DF" },
-    },
-  },
+  { label: "状态", slot: "status", width: 100, headerAlign: "left" },
   { label: "任务数量", prop: "task_count" },
   { label: "结算企业", prop: "company_name" },
-  { label: "税源地", prop: "tax_land_name" },
+  { label: "税地名称", prop: "tax_land_name" },
   { label: "结算人数", prop: "total_people" },
   { label: "实际人数", prop: "total_people" },
   { label: "点位", prop: "tax_point" },
   { label: "打款金额", prop: "total_money" },
   { label: "实际下发", prop: "real_money" },
-  { label: "个人回单", slot: "inspect", headerAlign: "left" },
+  {
+    label: "结算时间",
+    prop: "settlement_time",
+    sortable: "custom",
+    width: 120,
+  },
+  // { label: "个人回单", slot: "inspect", headerAlign: "left" },
   {
     label: "操作",
     slot: "operation",
@@ -232,10 +283,9 @@ const handleDetails = (scope: any) => {
     query: { activeName: "1", id: scope.row.id },
   });
 };
-// const handleEdit = (scope: any) => {
-//   console.log("编辑");
-//   console.log(scope.row);
-// };
+const handleDownload = (scope: any) => {
+  console.log("下载");
+};
 const handleDelete = (scope: any) => {
   ElMessageBox({
     title: "",
@@ -311,6 +361,7 @@ const getTableData = async () => {
         id: item.id,
         settlement_order_no: item.settlement_order_no,
         status: item.status,
+        reason: item.reason,
         task_count: item.task_count,
         company_name: item.company_name,
         tax_land_name: item.tax_land_name,
@@ -318,6 +369,7 @@ const getTableData = async () => {
         tax_point: item.tax_point,
         total_money: item.total_money,
         real_money: item.real_money,
+        settlement_time: item.settlement_time,
         transfer_certificate: item.transfer_certificate,
       };
     });
