@@ -1,6 +1,10 @@
 <template>
   <zxn-plan>
-    <zxn-table
+    <el-form-item label="合同照片" label-width="120px">
+      <PicturePreview v-if="license.length" :image-list="license" />
+      <span v-else>--</span>
+    </el-form-item>
+    <!-- <zxn-table
       :table-data="tableData"
       :column-list="columnList"
       :page-info="pageInfo"
@@ -21,7 +25,7 @@
         <el-button link type="primary">下载</el-button>
         <el-button link type="primary">详情</el-button>
       </template>
-    </zxn-table>
+    </zxn-table> -->
   </zxn-plan>
 </template>
 
@@ -54,6 +58,8 @@ const props = defineProps({
     default: () => "",
   },
 });
+
+const license = ref([] as any);
 
 function pageChange(current: any) {
   const { page, limit } = current;
@@ -102,14 +108,12 @@ async function getList() {
   if (props.id) {
     searchForm.company_id = props.id;
     let params = {
-      ...pageInfo,
       ...searchForm,
     };
     const res = await getBusinessAccountContractList(params);
-    // console.log(res);
-    tableData.value.push(...res.data.data);
-    pageInfo.total = res.data.total;
-    // console.log(tableData.value);
+    console.log(res);
+    license.value.length = 0;
+    license.value.push(...res.data.data);
   }
 }
 

@@ -15,14 +15,23 @@
               <div class="m-l-[10px]">充值明细</div>
             </div>
             <zxn-table
-              :tab-data="tableData1"
+              :table-data="tableData1"
               :column-list="columnList1"
               :page-info="pageInfo1"
             >
               <template #certificate="scope">
-                <el-button link @click="toSee(scope.row.certificate)"
-                  >查看</el-button
-                >
+                <el-image
+                  v-if="scope.row.certificate.length"
+                  style="width: 30px; height: 30px"
+                  :src="scope.row.certificate[0]"
+                  :zoom-rate="1.2"
+                  :preview-src-list="scope.row.certificate"
+                  fit="contain"
+                  :z-index="999"
+                  :preview-teleported="true"
+                />
+                <span v-else>--</span>
+                <!-- <el-button link @click="toSee(scope.row.certificate)">查看</el-button> -->
               </template>
             </zxn-table>
           </div>
@@ -32,15 +41,13 @@
               <div class="m-l-[10px]">企业结算明细</div>
             </div>
             <zxn-table
-              :tab-data="tableData2"
+              :table-data="tableData2"
               :column-list="columnList2"
               :page-info="pageInfo2"
             >
-              <template #certificate="scope">
-                <el-button link @click="toSee(scope.row.certificate)"
-                  >查看</el-button
-                >
-              </template>
+              <!-- <template #certificate="scope">
+								<el-button link @click="toSee(scope.row.certificate)">查看</el-button>
+							</template> -->
             </zxn-table>
           </div>
         </div>
@@ -115,9 +122,11 @@ const toSee = (url: string) => {
 };
 
 function getList() {
-  getBusinessDetail({ id }).then((res) => {
+  getBusinessDetail({ id: id.value }).then((res) => {
     console.log(res);
+    tableData1.length = 0;
     tableData1.push(...res.data.data);
+    console.log(tableData1);
     pageInfo1.total = res.data.total;
   });
 }

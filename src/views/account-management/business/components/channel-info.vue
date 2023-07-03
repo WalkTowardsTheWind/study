@@ -90,7 +90,7 @@ const columnList2 = [
   { label: "税点", prop: "point" },
   { label: "税源地", prop: "tax_land_name" },
   { label: "累计结佣任务", prop: "task_count" },
-  { label: "累计借用金额", prop: "amount" },
+  { label: "累计结佣金额", prop: "amount" },
   { label: "绑定时间", prop: "add_time" },
   // { label: "操作", slot: "operation", fixed: "right", width: 250 },
 ];

@@ -40,19 +40,39 @@
     <!-- 详情 -->
     <template v-else>
       <el-form-item label="营业执照" label-width="120px">
-        <PicturePreview :image-list="formData.license" />
+        <PicturePreview
+          v-if="formData.license[0]"
+          :image-list="formData.license"
+        />
+        <span v-else>--</span>
       </el-form-item>
       <el-form-item label="法人身份证" label-width="120px">
-        <PicturePreview :image-list="formData.idcard_img" />
+        <PicturePreview
+          v-if="formData.idcard_img[0]"
+          :image-list="formData.idcard_img"
+        />
+        <span v-else>--</span>
       </el-form-item>
       <el-form-item label="纳税人类型证明" label-width="120px">
-        <PicturePreview :image-list="formData.taxpayer_type_img" />
+        <PicturePreview
+          v-if="formData.taxpayer_type_img[0]"
+          :image-list="formData.taxpayer_type_img"
+        />
+        <span v-else>--</span>
       </el-form-item>
       <el-form-item label="公司门头照片" label-width="120px">
-        <PicturePreview :image-list="formData.header_img" />
+        <PicturePreview
+          v-if="formData.header_img[0]"
+          :image-list="formData.header_img"
+        />
+        <span v-else>--</span>
       </el-form-item>
       <el-form-item label="办公地点照片" label-width="120px">
-        <PicturePreview :image-list="formData.office_img" />
+        <PicturePreview
+          v-if="formData.office_img[0]"
+          :image-list="formData.office_img"
+        />
+        <span v-else>--</span>
       </el-form-item>
     </template>
   </div>
@@ -74,7 +94,13 @@ const props = defineProps({
   },
 });
 
-const formData = ref({} as any);
+const formData = ref({
+  license: [],
+  idcard_img: [],
+  taxpayer_type_img: [],
+  header_img: [],
+  office_img: [],
+} as any);
 
 const dialogImageUrl = ref("");
 const dialogVisible = ref(false);
@@ -104,6 +130,8 @@ async function updateBusinessAccount() {
 async function getAccountDetail() {
   if (props.id) {
     const res = await getBusinessAccountDetail(props.id);
+    console.log(res);
+
     try {
       formData.value = res.data;
       // console.log(formData.value);

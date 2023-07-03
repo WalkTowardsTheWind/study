@@ -61,11 +61,11 @@
       <div class="main">
         <el-row :gutter="50">
           <el-col :span="8">
-            <el-form-item label="开户行" label-width="110px">
+            <el-form-item label="开户行" label-width="130px">
               <el-input v-model="formData.bank" v-if="isEdit" />
               <span v-else>{{ formData.bank }}</span>
             </el-form-item>
-            <el-form-item label="纳税人类型" label-width="110px">
+            <el-form-item label="纳税人类型" label-width="130px">
               <el-select
                 class="w-full"
                 v-model="formData.taxpayer_type"
@@ -80,7 +80,7 @@
               </el-select>
               <span v-else>{{ taxpayerType[formData.taxpayer_type] }}</span>
             </el-form-item>
-            <el-form-item label="接收人联系方式" label-width="110px">
+            <el-form-item label="接收人联系方式" label-width="130px">
               <el-input v-model="formData.consignee_mobile" v-if="isEdit" />
               <span v-else>{{ formData.consignee_mobile }}</span>
             </el-form-item>
@@ -100,22 +100,63 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="纳税人识别号" label-width="100px">
+            <el-form-item label="纳税人识别号">
               <el-input v-model="formData.taxpayer_number" v-if="isEdit" />
               <span v-else> {{ formData.taxpayer_number }}</span>
             </el-form-item>
-            <el-form-item label="发票接收人" label-width="100px">
+            <el-form-item label="发票接收人">
               <el-input v-model="formData.consignee" v-if="isEdit" />
               <span v-else>{{ formData.consignee }}</span>
             </el-form-item>
           </el-col>
         </el-row>
       </div>
+      <div class="head">
+        <div class="line"></div>
+        <div class="head-title">税地信息</div>
+      </div>
+      <el-button
+        v-if="isEdit"
+        type="primary"
+        class="my-[20px]"
+        @click="addTaxLand"
+        >+ 新增税地</el-button
+      >
+      <div class="" v-for="(item, index) in taxlandList" :key="index">
+        <el-row :gutter="50">
+          <el-col :span="8">
+            <el-form-item label="税地名称" label-width="130px">
+              <el-select
+                class="w-full"
+                v-model="item.tax_land_id"
+                v-if="isEdit"
+              >
+                <el-option
+                  v-for="(item, index) in taxLandOption"
+                  :key="index"
+                  :value="item.id"
+                  :label="item.tax_land_name"
+                ></el-option>
+              </el-select>
+              <span v-else> {{ item.taxpayer_number }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="客户点位">
+              <el-input v-model="item.tax_point" v-if="isEdit" />
+              <span v-else> {{ item.tax_point }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <span class="del" @click="del(index)">删除</span>
+          </el-col>
+        </el-row>
+      </div>
     </el-form>
   </div>
   <zxn-bottom-btn v-if="isEdit">
-    <el-button>取消</el-button>
-    <el-button @click="updateBusinessAccount">保存</el-button>
+    <el-button @click="$router.go(-1)">取消</el-button>
+    <el-button type="primary" @click="updateBusinessAccount">保存</el-button>
   </zxn-bottom-btn>
 </template>
 
@@ -124,6 +165,8 @@ import {
   getBusinessAccountDetail,
   editBusinessAccount,
 } from "@/api/account/business";
+import { getLandList } from "@/api/common";
+
 import { businessType, taxpayerType } from "@/enums/accountEnum";
 import router from "@/router";
 
@@ -142,6 +185,9 @@ const props = defineProps({
 });
 
 const formData = ref({} as any);
+const taxLandOption = ref([] as any);
+
+const taxlandList = ref([] as any);
 
 async function updateBusinessAccount() {
   // 后台返回的 contacts_mobile 更新修改为 mobile
@@ -176,7 +222,26 @@ async function getAccountDetail() {
   }
 }
 
+function addTaxLand() {
+  taxlandList.value.push({
+    tax_land_id: "",
+    tax_point: "",
+  });
+}
+
+function getTaxLandOption() {
+  taxLandOption.value.length = 0;
+  getLandList().then((res) => {
+    taxLandOption.value.push(...res.data);
+  });
+}
+
+function del(index) {
+  taxlandList.value.splice(index, 1);
+}
+
 getAccountDetail();
+getTaxLandOption();
 </script>
 
 <style scoped lang="scss">
@@ -214,9 +279,14 @@ getAccountDetail();
   }
 
   .main {
-    margin-top: 40px;
+    margin-top: 20px;
     font-weight: 500;
     color: #333;
   }
+}
+
+.del {
+  color: #356ff3;
+  cursor: pointer;
 }
 </style>

@@ -67,7 +67,7 @@
             :page-info="pageInfo"
             @page-change="pageChange"
           >
-            <template #tableTop>
+            <!-- <template #tableTop>
               <el-dropdown class="" trigger="click">
                 <el-button type="primary" plain>批量操作</el-button>
                 <template #dropdown>
@@ -77,9 +77,10 @@
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
-            </template>
+            </template> -->
             <template #certificate="scope">
               <el-image
+                v-if="scope.row.certificate"
                 style="width: 30px; height: 30px"
                 :src="scope.row.certificate"
                 :zoom-rate="1.2"
@@ -88,6 +89,7 @@
                 :z-index="999"
                 :preview-teleported="true"
               />
+              <span v-else>--</span>
             </template>
             <template #operation="scope">
               <el-button
@@ -96,13 +98,7 @@
                 @click="toUpload(scope.row.recharge_id)"
                 >下载</el-button
               >
-              <el-button
-                disabled
-                link
-                type="primary"
-                @click="toDetail(scope.row.recharge_id)"
-                >详情</el-button
-              >
+              <!-- <el-button disabled link type="primary" @click="toDetail(scope.row.recharge_id)">详情</el-button> -->
             </template>
           </zxn-table>
         </div>
@@ -200,7 +196,7 @@ const columnList = [
   { label: "充值额度", prop: "amount" },
   { label: "充值时间", prop: "add_time", width: 200 },
   { label: "充值凭证", slot: "certificate" },
-  { label: "操作", slot: "operation", fixed: "right", width: 200 },
+  // { label: "操作", slot: "operation", fixed: "right", width: 200 },
 ];
 
 const toDetail = (id: string) => {

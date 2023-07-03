@@ -187,7 +187,7 @@
               </div>
             </el-form-item>
           </template>
-          <el-form-item label="客户点位">
+          <el-form-item label="客户点位" prop="tax_point">
             <el-input placeholder="请输入" v-model="addForm.tax_point" />
           </el-form-item>
           <el-form-item label="企业邮箱">
@@ -457,6 +457,7 @@ const rules = reactive<FormRules>({
   contacts: [{ required: true, message: "必填", trigger: "blur" }],
   mobile: [{ required: true, message: "必填", trigger: "blur" }],
   company_name: [{ required: true, message: "必填", trigger: "blur" }],
+  tax_point: [{ required: true, message: "必填", trigger: "blur" }],
   tax_land_id: [{ required: true, message: "必填", trigger: "change" }],
 });
 
