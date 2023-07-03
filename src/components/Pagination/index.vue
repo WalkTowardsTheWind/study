@@ -1,6 +1,10 @@
 <template>
   <div :class="'zxn-pagination ' + { hidden: hidden }">
-    <div class="zxn-pagination-left">共{{ total }}条记录</div>
+    <div class="zxn-pagination-left">
+      共{{ total }}条记录 第{{ currentPage }}/{{
+        Math.ceil(total / pageSize)
+      }}页
+    </div>
     <el-pagination
       :background="background"
       v-model:current-page="currentPage"
