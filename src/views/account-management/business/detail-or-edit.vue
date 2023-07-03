@@ -7,9 +7,6 @@
       <template #2>
         <PaperInfo :isEdit="isEdit" :id="id" />
       </template>
-      <template #3>
-        <ContractInfo :isEdit="isEdit" :id="id" />
-      </template>
       <template #4>
         <TaskInfo :isEdit="isEdit" :id="id" />
       </template>
@@ -18,9 +15,6 @@
       </template>
       <template #6>
         <SettlementInfo :isEdit="isEdit" :id="id" />
-      </template>
-      <template #7>
-        <ChannelInfo :isEdit="isEdit" :id="id" />
       </template>
     </zxn-tabs>
     <!-- <zxn-bottom-btn v-if="isEdit">
@@ -47,11 +41,9 @@
 <script lang="ts" setup>
 import BasicInfo from "./components/basic-info.vue";
 import PaperInfo from "./components/paper-info.vue";
-import ContractInfo from "./components/contract-info.vue";
 import TaskInfo from "./components/task-info.vue";
 import RechargeInfo from "./components/recharge-info.vue";
 import SettlementInfo from "./components/settlement-info.vue";
-import ChannelInfo from "./components/channel-info.vue";
 
 import { useRoute } from "vue-router";
 
@@ -61,11 +53,11 @@ import router from "@/router";
 const tabsList = [
   { name: "1", label: "基本信息" },
   { name: "2", label: "证件信息" },
-  { name: "3", label: "合同信息" },
+  // { name: "3", label: "合同信息" },
   { name: "4", label: "任务记录" },
   { name: "5", label: "充值记录" },
   { name: "6", label: "结算记录" },
-  { name: "7", label: "渠道信息" },
+  // { name: "7", label: "渠道信息" },
 ];
 
 const activeName = ref("1");

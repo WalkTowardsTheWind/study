@@ -29,13 +29,12 @@
           </MultiUpload>
         </el-form-item>
         <div class="bottom-btn">
-          <el-button>取消</el-button>
-          <el-button @click="updateBusinessAccount">保存</el-button>
+          <el-button @click="$router.go(-1)">取消</el-button>
+          <el-button type="primary" @click="updateBusinessAccount"
+            >保存</el-button
+          >
         </div>
       </el-form>
-      <el-dialog v-model="dialogVisible">
-        <img w-full :src="dialogImageUrl" alt="Preview Image" />
-      </el-dialog>
     </template>
     <!-- 详情 -->
     <template v-else>
@@ -101,9 +100,6 @@ const formData = ref({
   header_img: [],
   office_img: [],
 } as any);
-
-const dialogImageUrl = ref("");
-const dialogVisible = ref(false);
 
 /**
  * 更新
