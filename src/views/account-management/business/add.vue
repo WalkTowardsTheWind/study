@@ -60,7 +60,7 @@
               v-model="addForm.legal_person_idcard"
             />
           </el-form-item>
-          <el-form-item label="法人联系方式">
+          <el-form-item label="法人电话">
             <el-input
               placeholder="请输入"
               v-model="addForm.legal_person_mobile"
@@ -109,9 +109,6 @@
           </el-form-item>
           <el-form-item label="银行账号">
             <el-input placeholder="请输入" v-model="addForm.bank_account" />
-          </el-form-item>
-          <el-form-item label="纳税人识别号">
-            <el-input placeholder="请输入" v-model="addForm.taxpayer_number" />
           </el-form-item>
           <el-form-item label="纳税人类型">
             <el-select
@@ -194,6 +191,12 @@
                 />
               </div>
             </el-form-item>
+            <el-form-item label="渠道点位">
+              <el-input placeholder="请输入" />
+            </el-form-item>
+            <el-form-item label="发票收件人">
+              <el-input placeholder="请输入" />
+            </el-form-item>
             <el-form-item label="点位计费方式" prop="calculation_type">
               <el-select
                 class="w-full"
@@ -214,7 +217,7 @@
           <el-form-item label="联系人">
             <el-input placeholder="请输入" v-model="addForm.consignee" />
           </el-form-item>
-          <el-form-item label="联系方式">
+          <el-form-item label="联系号码">
             <el-input placeholder="请输入" v-model="addForm.consignee_mobile" />
           </el-form-item>
           <el-form-item label="邮寄地址">
