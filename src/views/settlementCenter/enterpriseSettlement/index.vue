@@ -2,7 +2,8 @@
   <div class="p-[24px] p-b-[0]">
     <div class="recharge">
       <div>
-        累计结算<span class="money">{{ total_settlement_money }}</span>
+        累计结算<span class="money">{{ total_settlement_money }}</span
+        ><span class="unit">元</span>
       </div>
     </div>
     <zxn-search
@@ -399,6 +400,13 @@ onMounted(() => {
 
 .money {
   margin-left: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.unit {
+  margin-left: 5px;
   font-size: 14px;
   font-weight: 600;
   color: #333;
