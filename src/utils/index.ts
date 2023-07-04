@@ -275,5 +275,5 @@ export function currencyFormat(value: string | number, precision = 2) {
     return "";
   }
   // @ts-ignore
-  return currency(value, { precision, symbol: "" }).format();
+  return currency(value, { precision, symbol: "¥" }).format();
 }
