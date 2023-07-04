@@ -175,7 +175,14 @@
     </div>
 
     <div class="loginBanquan">
-      版权所有@copyRight中新能智能云平台有限公司 保留一切版权
+      版权所有@copyRight中新能智能云平台有限公司 <br /><a
+        target="_blank"
+        class="urlA"
+        href="http://beian.miit.gov.cn/"
+      >
+        京ICP备2022009613号-1</a
+      >
+      保留一切版权
     </div>
   </div>
 </template>
@@ -567,6 +574,12 @@ onUnmounted(() => {
     // flex-direction: column;
     // flex: 1;
     text-align: center;
+
+    .urlA {
+      &:hover {
+        color: blue;
+      }
+    }
   }
 }
 

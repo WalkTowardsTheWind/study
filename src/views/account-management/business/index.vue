@@ -231,6 +231,9 @@ async function handleSearch() {
 function handleReset() {
   formItem.company_name = "";
   formItem.status = "";
+  formItem.point_min = "";
+  formItem.point_max = "";
+  formItem.calculation_type = "";
   date.value = "";
   handleSearch();
 }

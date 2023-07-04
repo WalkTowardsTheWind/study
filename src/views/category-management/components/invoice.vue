@@ -22,7 +22,7 @@
         row-key="id"
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       >
-        <el-table-column type="selection" width="55" />
+        <!-- <el-table-column type="selection" width="55" /> -->
         <el-table-column label="编号" prop="id" width="150" />
         <el-table-column label="状态" width="180">
           <template #default="scope">
@@ -79,15 +79,18 @@
           <el-input v-model="addForm.name" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="上级分类">
-          <el-select class="w-full" v-model="addForm.parent">
-            <el-option
-              v-for="item in options"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-          <!-- <el-tree-select v-model="addForm.parent" :data="options" :render-after-expand="false" :props="treeProps" /> -->
+          <!-- <el-select class="w-full" v-model="addForm.parent">
+						<el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
+					</el-select> -->
+          <el-tree-select
+            class="w-full"
+            v-model="addForm.parent"
+            :data="options"
+            :props="treeProps"
+            check-strictly
+            :render-after-expand="false"
+            @change="selectChange"
+          />
         </el-form-item>
       </template>
       <!-- 编辑 -->
@@ -100,10 +103,13 @@
 						<el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
 					</el-select> -->
           <el-tree-select
+            class="w-full"
             v-model="addForm.parent"
             :data="options"
-            :render-after-expand="false"
             :props="treeProps"
+            check-strictly
+            :render-after-expand="false"
+            @change="selectChange"
           />
         </el-form-item>
       </template>
