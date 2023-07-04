@@ -3,7 +3,8 @@
     <div class="line-chart">
       <LineChart1 />
     </div>
-    <div>
+  </div>
+  <!-- <div>
       <div class="title">
         <div class="line"></div>
         <div>企业列表</div>
@@ -28,10 +29,10 @@
         :column-list="columnList2"
       ></zxn-table>
     </div>
-  </div>
+  </div> -->
 
   <!-- 详情 -->
-  <el-dialog v-model="visible" title="企业明细">
+  <!-- <el-dialog v-model="visible" title="企业明细">
     <div class="title">
       <span>企业名称：1000000000</span>
       <span class="ml-10">企业账户ID：1000001</span>
@@ -40,7 +41,7 @@
     <el-table></el-table>
     <h4>企业结算明细</h4>
     <el-table> </el-table>
-  </el-dialog>
+  </el-dialog> -->
 </template>
 
 <script lang="ts" setup>

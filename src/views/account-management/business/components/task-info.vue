@@ -6,9 +6,6 @@
       :page-info="pageInfo"
       @page-change="pageChange"
     >
-      <template #status="scope">
-        <span>{{ status[scope.row.status] }}</span>
-      </template>
       <template #person_count="scope">
         <span>{{ scope.row.task_attribute.person_count }}</span>
       </template>
@@ -17,16 +14,16 @@
         <span>-</span>
         <span>{{ scope.row.task_attribute.salary_max }}</span>
       </template>
-      <template #operation="scope" v-if="isEdit">
-        <el-button v-if="scope" link type="primary">通过</el-button>
-        <el-button v-if="scope" link type="primary">驳回</el-button>
-        <el-button v-if="scope" link type="primary">编辑</el-button>
-        <el-button link type="primary">删除</el-button>
-        <el-button link type="primary">详情</el-button>
-      </template>
-      <template #operation="scope" v-else>
-        <el-button link type="primary" @click="scope.row.id">查看</el-button>
-      </template>
+      <!-- <template #operation="scope" v-if="isEdit">
+				<el-button v-if="scope" link type="primary">通过</el-button>
+				<el-button v-if="scope" link type="primary">驳回</el-button>
+				<el-button v-if="scope" link type="primary">编辑</el-button>
+				<el-button link type="primary">删除</el-button>
+				<el-button link type="primary">详情</el-button>
+			</template> -->
+      <!-- <template #operation="scope" v-else>
+				<el-button link type="primary" @click="scope.row.id">查看</el-button>
+			</template> -->
     </zxn-table>
   </zxn-plan>
 </template>
@@ -62,18 +59,49 @@ const pageInfo = reactive({
 const tableData = reactive([] as any);
 
 const columnList = [
-  { label: "任务编号", prop: "task_no" },
-  { label: "任务名称", prop: "task_name" },
+  { label: "任务编号", prop: "task_no", minWidth: 200 },
+  { label: "任务名称", prop: "task_name", minWidth: 150 },
   {
     label: "状态",
     prop: "status",
-    slot: "status",
+    path: "accountEnum.taskStaus",
+    type: "enum",
+    minWidth: 150,
+    color: {
+      0: {},
+      1: {
+        color: "#366FF3",
+        background: "#DFE8FD",
+      },
+      2: {
+        color: "#333333",
+        background: "#DEDEDE",
+      },
+      3: {
+        color: "#1ee685",
+        background: "#dbfceb",
+      },
+      4: {
+        color: "#5EE9F9",
+        background: "#E5FBFE",
+      },
+      5: {
+        color: "#F35036",
+        background: "#FDE3DF	",
+      },
+    },
   },
-  { label: "税源地", prop: "tax_land_name" },
-  { label: "关联单位", prop: "company_name" },
-  { label: "行业", prop: "category_name" },
+  { label: "关联企业", prop: "company_name", minWidth: 200 },
   { label: "需求人数", prop: "task_attribute", slot: "person_count" },
-  { label: "预算", prop: "task_attribute", slot: "salary_min_max", width: 220 },
+  { label: "税地", prop: "tax_land_name", minWidth: 200 },
+  { label: "行业", prop: "category_name" },
+  {
+    label: "预算",
+    prop: "task_attribute",
+    slot: "salary_min_max",
+    minWidth: 150,
+  },
+  { label: "申请时间", prop: "add_time", minWidth: 200 },
   // { label: "操作", slot: "operation", fixed: "right", width: 250 },
 ];
 

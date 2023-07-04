@@ -129,7 +129,9 @@
           >删除</el-button
         >
         <!-- <el-button link type="primary" @click="handleF(scope)">导出</el-button> -->
-        <el-button link type="primary" @click="handleG(scope)">详情</el-button>
+        <el-button link type="primary" @click="handleDetails(scope)"
+          >详情</el-button
+        >
       </template>
     </zxn-table>
   </div>
@@ -362,7 +364,7 @@ const handleF = (scope: any) => {
 /**
  * 详情
  */
-const handleG = (scope: any) => {
+const handleDetails = (scope: any) => {
   router.push({
     name: "selfOperatedTaxLandDetails",
     query: { activeName: "1", id: scope.row.id },

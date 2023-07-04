@@ -13,23 +13,26 @@
       @on-reset="handleReset"
     >
       <el-form-item>
-        <el-input v-model="formItem.keywords" placeholder="请输入关键字">
+        <el-input
+          v-model="formItem.keywords"
+          placeholder="请输入结算企业、税地名称"
+        >
           <template #prefix>
             <el-icon><i-ep-Search /></el-icon>
           </template>
         </el-input>
       </el-form-item>
       <el-form-item label="任务状态">
-        <el-select v-model="formItem.status" placeholder="全部" clearable>
+        <zxn-select v-model="formItem.status" @change="handleSearch">
           <el-option
             v-for="item in proxy.$const[
-              'settlementCenterEnum.settlementCenterEnum'
+              'settlementCenterEnum.settlementCenterList'
             ]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
+        </zxn-select>
       </el-form-item>
       <el-form-item prop="date" label="申请日期">
         <zxn-date-range v-model="formItem.timeData" />
@@ -37,6 +40,7 @@
     </zxn-search>
     <zxn-table
       :table-data="tableData"
+      :hasIndex="true"
       :column-list="columnList"
       :page-info="pageInfo"
       @page-change="handlePageChange"
@@ -62,7 +66,7 @@
         <div
           v-if="scope.row.status == 0"
           v-text="
-            proxy.$enumSet['settlementCenterEnum.settlementCenterEnum'][
+            proxy.$enumSet['settlementCenterEnum.settlementCenterList'][
               scope.row.status
             ]
           "
@@ -72,7 +76,7 @@
         <div
           v-if="scope.row.status == 1"
           v-text="
-            proxy.$enumSet['settlementCenterEnum.settlementCenterEnum'][
+            proxy.$enumSet['settlementCenterEnum.settlementCenterList'][
               scope.row.status
             ]
           "
@@ -82,7 +86,7 @@
         <div
           v-if="scope.row.status == 2"
           v-text="
-            proxy.$enumSet['settlementCenterEnum.settlementCenterEnum'][
+            proxy.$enumSet['settlementCenterEnum.settlementCenterList'][
               scope.row.status
             ]
           "
@@ -90,7 +94,7 @@
           :style="color ? color[scope.row.status] : {}"
         />
         <el-tooltip
-          v-if="scope.row.status == 3"
+          v-if="scope.row.status == 4"
           class="box-item"
           effect="dark"
           placement="top"
@@ -98,7 +102,7 @@
           <template #content> {{ scope.row.reason }}</template>
           <div
             v-text="
-              proxy.$enumSet['settlementCenterEnum.settlementCenterEnum'][
+              proxy.$enumSet['settlementCenterEnum.settlementCenterList'][
                 scope.row.status
               ]
             "
@@ -164,7 +168,6 @@ const handleReset = () => {
   handleSearch();
 };
 const handleSearch = () => {
-  console.log("查询");
   pageInfo.page = 1;
   // 时间选择判断
   if (!formItem.value.timeData[0] && !formItem.value.timeData[1]) {
@@ -182,6 +185,7 @@ const handleSearch = () => {
       message: `请选择结束时间`,
     });
   }
+  getTableData();
 };
 const handlePageChange = (cur: any) => {
   const { page, limit } = cur;
@@ -208,10 +212,23 @@ const color = {
 };
 const columnList = [
   { label: "结算单号", prop: "settlement_order_no" },
-  { label: "状态", slot: "status", width: 100, headerAlign: "left" },
+  // { label: "状态", slot: "status", width: 100, headerAlign: "left" },
+  {
+    label: "状态",
+    type: "enum",
+    path: "settlementCenterEnum.settlementCenterList",
+    prop: "status",
+    // fixed: "left",
+    color: {
+      0: { color: "#1EE685", backgroundColor: "#DBFBEB" },
+      1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
+      2: { color: "#36C5F4", backgroundColor: "#DFF6FD" },
+      4: { color: "#333333", backgroundColor: "#DEDEDE" },
+    },
+  },
   { label: "任务数量", prop: "task_count" },
   { label: "结算企业", prop: "company_name" },
-  { label: "税地名称", prop: "tax_land_name" },
+  { label: "税源地", prop: "tax_land_name" },
   { label: "结算人数", prop: "total_people" },
   { label: "实际人数", prop: "total_people" },
   { label: "点位", prop: "tax_point" },

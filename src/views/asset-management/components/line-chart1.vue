@@ -16,7 +16,11 @@
   <div class="time">
     <div class="title">
       <div class="line"></div>
-      <div>营收趋势图</div>
+      <div>营收趋势</div>
+    </div>
+    <div class="line_type">
+      <div class="income">收入</div>
+      <div class="spend">支出</div>
     </div>
     <div class="date">
       <div
@@ -90,6 +94,7 @@ const options = ref({
     containLabel: true,
   },
   toolbox: {
+    show: false,
     feature: {
       saveAsImage: {},
     },
@@ -122,6 +127,22 @@ const options = ref({
         },
       },
     },
+    {
+      name: "支出",
+      type: "line",
+      stack: "total",
+      data: [], // 数据
+      showSymbol: false,
+      smooth: true,
+      itemStyle: {
+        color: "#35C5F3", // 折线颜色
+        symbol: "circle", // 圆点标记
+        symbolSize: 10, // 圆点大小
+        lineStyle: {
+          width: 1, // 折线宽度
+        },
+      },
+    },
   ],
 });
 
@@ -143,7 +164,7 @@ get3And1List(3, 3);
 
 <style scoped lang="scss">
 #main {
-  width: 80vw;
+  width: 60vw;
   height: 500px;
 }
 
@@ -206,7 +227,7 @@ get3And1List(3, 3);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 85%;
+  width: 55vw;
 }
 
 .line {
@@ -237,6 +258,43 @@ get3And1List(3, 3);
   div.active {
     color: #366ff4;
     border-color: #366ff4;
+  }
+}
+
+.line_type {
+  display: flex;
+  gap: 0 50px;
+  margin-left: 40%;
+  font-size: 14px;
+
+  .income {
+    position: relative;
+
+    &::before {
+      position: absolute;
+      top: 7px;
+      left: -20px;
+      width: 8px;
+      height: 8px;
+      content: "";
+      background-color: #366ff4;
+      border-radius: 50%;
+    }
+  }
+
+  .spend {
+    position: relative;
+
+    &::before {
+      position: absolute;
+      top: 7px;
+      left: -20px;
+      width: 8px;
+      height: 8px;
+      content: "";
+      background-color: #36c5f4;
+      border-radius: 50%;
+    }
   }
 }
 </style>

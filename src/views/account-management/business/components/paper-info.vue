@@ -13,18 +13,23 @@
             <i-ep-Plus />
           </MultiUpload>
         </el-form-item>
-        <el-form-item label="纳税人类型证明">
+        <el-form-item label="纳税证明">
           <MultiUpload v-model="formData.taxpayer_type_img">
             <i-ep-Plus />
           </MultiUpload>
         </el-form-item>
-        <el-form-item label="公司门头照片">
+        <el-form-item label="公司照片">
           <MultiUpload v-model="formData.header_img">
             <i-ep-Plus />
           </MultiUpload>
         </el-form-item>
-        <el-form-item label="办公地点照片">
-          <MultiUpload v-model="formData.office_img">
+        <el-form-item label="开户许可证">
+          <MultiUpload v-model="formData.permit_img">
+            <i-ep-Plus />
+          </MultiUpload>
+        </el-form-item>
+        <el-form-item label="企业印章">
+          <MultiUpload v-model="formData.seal">
             <i-ep-Plus />
           </MultiUpload>
         </el-form-item>
@@ -40,36 +45,43 @@
     <template v-else>
       <el-form-item label="营业执照" label-width="120px">
         <PicturePreview
-          v-if="formData.license[0]"
+          v-if="formData.license.length"
           :image-list="formData.license"
         />
         <span v-else>--</span>
       </el-form-item>
       <el-form-item label="法人身份证" label-width="120px">
         <PicturePreview
-          v-if="formData.idcard_img[0]"
+          v-if="formData.idcard_img.length"
           :image-list="formData.idcard_img"
         />
         <span v-else>--</span>
       </el-form-item>
-      <el-form-item label="纳税人类型证明" label-width="120px">
+      <el-form-item label="纳税证明" label-width="120px">
         <PicturePreview
-          v-if="formData.taxpayer_type_img[0]"
+          v-if="formData.taxpayer_type_img.length"
           :image-list="formData.taxpayer_type_img"
         />
         <span v-else>--</span>
       </el-form-item>
-      <el-form-item label="公司门头照片" label-width="120px">
+      <el-form-item label="公司照片" label-width="120px">
         <PicturePreview
-          v-if="formData.header_img[0]"
+          v-if="formData.header_img.length"
           :image-list="formData.header_img"
         />
         <span v-else>--</span>
       </el-form-item>
-      <el-form-item label="办公地点照片" label-width="120px">
+      <el-form-item label="开户许可证" label-width="120px">
         <PicturePreview
-          v-if="formData.office_img[0]"
-          :image-list="formData.office_img"
+          v-if="formData.permit_img.length"
+          :image-list="formData.permit_img"
+        />
+        <span v-else>--</span>
+      </el-form-item>
+      <el-form-item label="企业印章" label-width="120px">
+        <PicturePreview
+          v-if="formData.seal.length"
+          :image-list="formData.seal"
         />
         <span v-else>--</span>
       </el-form-item>
@@ -98,7 +110,8 @@ const formData = ref({
   idcard_img: [],
   taxpayer_type_img: [],
   header_img: [],
-  office_img: [],
+  permit_img: [],
+  seal: [],
 } as any);
 
 /**

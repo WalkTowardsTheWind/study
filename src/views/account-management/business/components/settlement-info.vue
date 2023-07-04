@@ -6,10 +6,7 @@
       :page-info="pageInfo"
       @page-change="pageChange"
     >
-      <template #status="scope" v-if="isEdit">
-        <span>{{ status[scope.row.status] }}</span>
-      </template>
-      <template #operation="scope">
+      <template #operation="scope" v-if="isEdit">
         <el-button v-if="scope" link type="primary">解冻</el-button>
         <el-button v-if="scope" link type="primary">编辑</el-button>
         <el-button v-if="scope" link type="primary">删除</el-button>
@@ -21,13 +18,6 @@
 
 <script lang="ts" setup>
 import { getBusinessAccountSettlementList } from "@/api/account/business";
-
-enum status {
-  "待结算",
-  "已结算",
-  "冻结",
-  "异常",
-}
 
 const props = defineProps({
   isEdit: {
@@ -48,18 +38,49 @@ const pageInfo = reactive({
 const tableData = reactive([] as any);
 
 const columnList = [
-  { label: "结算单号", prop: "settlement_order_no" },
-  { label: "任务数量", prop: "task_count" },
-  { label: "结算企业", prop: "company_name", width: 200 },
-  { label: "税源名称", prop: "tax_land_name" },
+  { label: "任务编号", prop: "settlement_order_no", minWidth: 250 },
+  {
+    label: "状态",
+    prop: "status",
+    type: "enum",
+    path: "accountEnum.settleStatus",
+    minWidth: 150,
+    color: {
+      0: {
+        color: "#1ee685",
+        background: "#dbfbeb",
+      },
+      1: {
+        color: "#356FF3",
+        background: "#DFE8FD",
+      },
+      2: {
+        color: "#5EE9F9",
+        background: "#E5FBFE",
+      },
+      3: {
+        color: "#F35135",
+        background: "#FDE3DF",
+      },
+      4: {
+        color: "#333333",
+        background: "#DEDEDE",
+      },
+    },
+  },
+  { label: "任务名称", prop: "", minWidth: 200 },
+
+  // { label: "任务数量", prop: "task_count" },
+  // { label: "结算企业", prop: "company_name", width: 200 },
+  { label: "税地", prop: "tax_land_name", minWidth: 250 },
   { label: "结算人数", prop: "person_count" },
-  { label: "实际人数", prop: "total_people" },
-  { label: "点位", prop: "tax_point" },
-  { label: "打款金额", prop: "total_money" },
-  { label: "实际下发", prop: "real_money" },
-  { label: "个人回单", prop: "transfer_certificate" },
+  // { label: "实际人数", prop: "total_people" },
+  // { label: "点位", prop: "tax_point" },
+  { label: "打款金额", prop: "total_money", type: "money" },
+  // { label: "实际下发", prop: "real_money" },
+  // { label: "个人回单", prop: "transfer_certificate" },
   { label: "结算时间", prop: "settlement_time", width: 200 },
-  { label: "状态", prop: "status", slot: "status" },
+
   // { label: "操作", slot: "operation", fixed: "right", width: 250 },
 ];
 

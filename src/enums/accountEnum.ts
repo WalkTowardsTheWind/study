@@ -29,3 +29,21 @@ export enum taskType {
   "未到账" = 0,
   "已到账",
 }
+
+export enum settleStatus {
+  "结算中",
+  "已结算",
+  "部分结算",
+  "结算失败",
+  "冻结",
+}
+
+export enum taskStaus {
+  "待申请",
+  "申请中",
+  "驳回",
+  "报名中",
+  "已验收",
+  "封停",
+  "关闭",
+}
