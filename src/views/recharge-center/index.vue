@@ -272,6 +272,7 @@ getCategory();
   margin-right: 28px;
   margin-left: 25px;
   font-size: 14px;
+  line-height: 50px;
   background: #fef1ef;
   border-radius: 2px;
 }

@@ -22,7 +22,7 @@
         row-key="id"
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       >
-        <el-table-column type="selection" width="55" />
+        <!-- <el-table-column type="selection" width="55" /> -->
         <el-table-column label="编号" prop="id" width="150" />
         <el-table-column label="状态" width="180">
           <template #default="scope">
