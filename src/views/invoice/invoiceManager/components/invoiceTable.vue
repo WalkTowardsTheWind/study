@@ -57,6 +57,8 @@
       :column-list="columnList"
       :page-info="pageInfo"
       :loading="loading"
+      hasSelect
+      :selectable="selectable"
       @page-change="handlePageChange"
     >
       <template #tableTop>
@@ -227,6 +229,9 @@ const getList = async () => {
     loading.value = false;
     console.log(e);
   }
+};
+const selectable = (row) => {
+  return Boolean(!row.status);
 };
 const handleView = (cur) => {
   router.push({ name: "invoiceView", query: { id: cur.id, type: props.type } });
