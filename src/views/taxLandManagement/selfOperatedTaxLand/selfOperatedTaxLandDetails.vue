@@ -397,8 +397,6 @@ import {
   StringTransformNumber,
   categoryTransformNumber,
   categoryTransformArray,
-  newArrayTransform,
-  newNumberTransform,
 } from "@/utils";
 import { useRoute } from "vue-router";
 import { selfOperatedTaxLandDetails } from "@/api/taxLandManagement/selfOperatedTaxLand";

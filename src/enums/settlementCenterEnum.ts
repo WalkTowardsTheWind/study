@@ -1,3 +1,9 @@
+export enum settlementCenterList {
+  "结算中",
+  "结算成功",
+  "部分结算成功",
+  "冻结" = 4,
+}
 export enum settlementCenterEnum {
   "待结算",
   "已结算",
