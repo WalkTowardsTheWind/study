@@ -2,7 +2,9 @@
   <div class="p-[24px] p-b-[0]">
     <div class="recharge">
       <div>
-        累计结算<span class="money">{{ total_settlement_money }}</span
+        累计结算<span class="money">{{
+          proxy.$moneyFormat(total_settlement_money)
+        }}</span
         ><span class="unit">元</span>
       </div>
     </div>
@@ -169,23 +171,23 @@ const handleReset = () => {
 };
 const handleSearch = () => {
   pageInfo.page = 1;
-  // 时间选择判断
-  if (!formItem.value.timeData[0] && !formItem.value.timeData[1]) {
-    getTableData();
-  } else if (formItem.value.timeData[0] && formItem.value.timeData[1]) {
-    getTableData();
-  } else if (!formItem.value.timeData[0] && formItem.value.timeData[1]) {
-    ElMessage({
-      type: "warning",
-      message: `请选择开始时间`,
-    });
-  } else if (formItem.value.timeData[0] && !formItem.value.timeData[1]) {
-    ElMessage({
-      type: "warning",
-      message: `请选择结束时间`,
-    });
-  }
   getTableData();
+  // 时间选择判断
+  // if (!formItem.value.timeData[0] && !formItem.value.timeData[1]) {
+  //   getTableData();
+  // } else if (formItem.value.timeData[0] && formItem.value.timeData[1]) {
+  //   getTableData();
+  // } else if (!formItem.value.timeData[0] && formItem.value.timeData[1]) {
+  //   ElMessage({
+  //     type: "warning",
+  //     message: `请选择开始时间`,
+  //   });
+  // } else if (formItem.value.timeData[0] && !formItem.value.timeData[1]) {
+  //   ElMessage({
+  //     type: "warning",
+  //     message: `请选择结束时间`,
+  //   });
+  // }
 };
 const handlePageChange = (cur: any) => {
   const { page, limit } = cur;
