@@ -8,7 +8,7 @@
       <el-form-item>
         <el-input
           v-model="formItem.keywords"
-          placeholder="请输入关键字"
+          placeholder="请输入名称、区域、对接人"
           clearable
         >
           <template #prefix>
