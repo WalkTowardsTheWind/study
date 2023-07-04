@@ -178,7 +178,6 @@ const handleSelect = (data: any) => {
  */
 const getTableData = async () => {
   const ID = Number(route.query.id);
-  console.log(ID);
   await getEnterpriseSettlementDetails(ID)
     .then((response) => {
       const {
@@ -216,9 +215,8 @@ const getTableData = async () => {
   try {
     const { data } = await getTaskList(params);
     tableData.length = 0;
-    pageInfo.page = data.current_page;
-    pageInfo.total = data.total;
-    console.log(data.list.data);
+    pageInfo.page = data.list.current_page;
+    pageInfo.total = data.list.total;
 
     var newData = data.list.data.map((item: any) => {
       return {
