@@ -66,9 +66,6 @@
           >批量驳回</el-button
         >
       </template>
-      <template #taskLength="{ row }">
-        <span>{{ row.task_list.length }}</span>
-      </template>
       <template #img="{ row }">
         <zxn-image
           :imgList="[row.invoice_sample_url]"
@@ -141,8 +138,7 @@ const columnList: any[] = reactive([
   { label: "发票任务编号", prop: "invoice_no", minWidth: 200 },
   {
     label: "发票类目",
-    prop: "task_list",
-    slot: "taskLength",
+    prop: "category_num",
     minWidth: 120,
   },
   { label: "申请开票企业", prop: "company_name", minWidth: 150 },
@@ -185,6 +181,7 @@ const columnList: any[] = reactive([
     },
     minWidth: 120,
   },
+  { label: "备注", prop: "reject_reason", minWidth: 180 },
   {
     label: "操作",
     slot: "operation",

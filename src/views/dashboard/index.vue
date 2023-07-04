@@ -33,7 +33,7 @@
       </el-col>
       <el-col :span="8">
         <convenient-entry />
-        <!--        <notice-message />-->
+        <notice-message />
       </el-col>
     </el-row>
   </div>

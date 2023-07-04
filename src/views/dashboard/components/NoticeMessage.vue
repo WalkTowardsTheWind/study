@@ -2,7 +2,7 @@
   <div ref="noticeMessage" class="notice-message">
     <div class="notice-message-header">
       <span class="notice-message-header-title">系统通知</span>
-      <span class="notice-message-header-more">更多></span>
+      <!--      <span class="notice-message-header-more">更多></span>-->
     </div>
     <div :style="{ height: `${boxHeight}px` }">
       <el-scrollbar ref="scrollbar">
