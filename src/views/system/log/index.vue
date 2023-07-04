@@ -57,8 +57,8 @@ const pageInfo = reactive({
 });
 const tableData = reactive([]);
 const columnList = [
-  { label: "账户id", prop: "admin_id" },
-  { label: "联系人", prop: "admin_name" },
+  { label: "账户名称", prop: "admin_name" },
+  { label: "联系人", prop: "real_name" },
   { label: "操作模块", prop: "path" },
   { label: "操作内容", prop: "page" },
   { label: "操作时间", prop: "add_time" },

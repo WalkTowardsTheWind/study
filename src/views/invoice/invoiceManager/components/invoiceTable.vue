@@ -7,10 +7,7 @@
       :label-width="100"
     >
       <el-form-item label="" prop="invoice_name">
-        <el-input
-          v-model="formItem.invoice_name"
-          placeholder="请输入任务编号、申请开票企业"
-        >
+        <el-input v-model="formItem.invoice_name" placeholder="请输入企业名称">
           <template #prefix>
             <el-icon><i-ep-Search /></el-icon>
           </template>
@@ -62,11 +59,11 @@
       :loading="loading"
       @page-change="handlePageChange"
     >
-      <!--      <template #tableTop>-->
-      <!--        <el-button type="primary" plain @click="handleCommand"-->
-      <!--          >批量驳回</el-button-->
-      <!--        >-->
-      <!--      </template>-->
+      <template #tableTop>
+        <el-button type="primary" plain @click="handleCommand"
+          >批量驳回</el-button
+        >
+      </template>
       <template #taskLength="{ row }">
         <span>{{ row.task_list.length }}</span>
       </template>
@@ -104,6 +101,7 @@
 import type { ComponentInternalInstance } from "vue";
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 import { getTreeList } from "@/api/common";
+import { isNumber } from "@/utils/is";
 import {
   getInvoiceInCompany,
   getInvoiceInChannel,
@@ -138,21 +136,7 @@ const formItem = reactive({
   status: "",
 });
 const columnList: any[] = reactive([
-  { label: "任务编号", prop: "invoice_no", minWidth: 200 },
-  {
-    label: "状态",
-    type: "enum",
-    path: "statusEnum.invoiceStatus",
-    prop: "status",
-    color: {
-      0: { color: "#35C5F3", backgroundColor: "#dff6fd" },
-      1: { color: "#356FF3", backgroundColor: "#dfe8fd" },
-      2: { color: "#F35135", backgroundColor: "#fde3df" },
-      3: { color: "#FFFFFF", backgroundColor: "#f9a89a" },
-      5: { color: "#356FF3", backgroundColor: "#dfe8fd" },
-    },
-    minWidth: 120,
-  },
+  { label: "发票任务编号", prop: "invoice_no", minWidth: 200 },
   {
     label: "发票类目",
     prop: "task_list",
@@ -185,6 +169,20 @@ const columnList: any[] = reactive([
   },
   { label: "申请时间", prop: "add_time", minWidth: 180 },
   { label: "结算确认函", slot: "img", minWidth: 120 },
+  {
+    label: "状态",
+    type: "enum",
+    path: "statusEnum.invoiceStatus",
+    prop: "status",
+    color: {
+      0: { color: "#35C5F3", backgroundColor: "#dff6fd" },
+      1: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+      2: { color: "#F35135", backgroundColor: "#fde3df" },
+      3: { color: "#FFFFFF", backgroundColor: "#f9a89a" },
+      5: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+    },
+    minWidth: 120,
+  },
   {
     label: "操作",
     slot: "operation",
@@ -235,7 +233,14 @@ const handleView = (cur) => {
 };
 const table = ref();
 const handleCommand = async (id: number) => {
-  const ids = [id];
+  const selected = table.value.getSelectionRows();
+  const ids = isNumber(id) ? [id] : selected.map((it) => it.id);
+  if (!ids.length) {
+    return ElMessage({
+      type: "error",
+      message: `请选择数据`,
+    });
+  }
   ElMessageBox.prompt("", "驳回原因", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",

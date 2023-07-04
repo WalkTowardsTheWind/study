@@ -195,7 +195,7 @@ const columnList = [
   { label: "姓名", prop: "real_name" },
   { label: "联系方式", prop: "phone" },
   { label: "申请时间", prop: "settlement_time" },
-  { label: "操作", slot: "operation", fixed: "right", width: 75 },
+  // { label: "操作", slot: "operation", fixed: "right", width: 75 },
 ];
 const formItem = reactive({
   status: "",
