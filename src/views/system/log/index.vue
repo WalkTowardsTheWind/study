@@ -12,15 +12,15 @@
         @on-reset="handleReset"
       >
         <el-form-item prop="key_word">
-          <el-input v-model="formItem.key_word" placeholder="请输入关键字">
+          <el-input v-model="formItem.key_word" placeholder="请输入账户ID">
             <template #prefix>
               <el-icon><i-ep-Search /></el-icon>
             </template>
           </el-input>
         </el-form-item>
-        <el-form-item prop="admin_name" label="联系人">
-          <el-input v-model="formItem.admin_name" />
-        </el-form-item>
+        <!--        <el-form-item prop="admin_name" label="联系人">-->
+        <!--          <el-input v-model="formItem.admin_name" />-->
+        <!--        </el-form-item>-->
         <el-form-item prop="timeData" label="操作日期">
           <zxn-date-range v-model="formItem.timeData" valueFormat="" />
         </el-form-item>

@@ -3,9 +3,9 @@
     <div v-if="$slots.tableTop" class="integration-table-top">
       <slot name="tableTop" />
     </div>
-    <!--    <div v-if="selectedNumber" class="integration-table-selected">-->
-    <!--      已选择 {{ selectedNumber }} 项-->
-    <!--    </div>-->
+    <div v-if="selectedNumber" class="integration-table-selected">
+      已选择 {{ selectedNumber }} 项
+    </div>
     <el-table
       ref="zxnTable"
       :data="tableData"
@@ -179,6 +179,19 @@ defineExpose({
 .integration-table {
   &-top {
     margin-bottom: 16px;
+  }
+
+  &-selected {
+    height: 48px;
+    padding: 0 24px;
+    margin-bottom: 16px;
+    font-family: SourceHanSansSC-Medium, SourceHanSansSC, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 48px;
+    color: #333;
+    background: #fef1f0;
+    border-radius: 4px;
   }
 }
 </style>

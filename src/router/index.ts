@@ -32,7 +32,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "dashboard",
         component: () => import("@/views/dashboard/index.vue"),
         name: "Dashboard",
-        meta: { title: "工作台", affix: true },
+        meta: { title: "工作台", affix: true, icon: "dashboard" },
       },
       {
         path: "401",
@@ -56,7 +56,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "business-account",
         component: () => import("@/views/account-management/index.vue"),
         name: "business-account",
-        meta: { title: "账户中心" },
+        meta: { title: "账户中心", icon: "account" },
       },
       {
         path: "business-account-detail",
@@ -207,7 +207,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "index",
         component: () => import("@/views/taskManager/index.vue"),
         name: "taskManagerIndex",
-        meta: { title: "任务中心", keepAlive: true },
+        meta: { title: "任务中心", keepAlive: true, icon: "task" },
       },
       {
         path: "view",
@@ -227,7 +227,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "assetIndex",
         component: () => import("@/views/asset-management/index.vue"),
         name: "asset-management",
-        meta: { title: "财务中心" },
+        meta: { title: "财务中心", icon: "asset" },
       },
       {
         path: "asset-management-detail",
@@ -246,7 +246,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "rechargeIndex",
         component: () => import("@/views/recharge-center/index.vue"),
         name: "recharge-center",
-        meta: { title: "充值中心" },
+        meta: { title: "充值中心", icon: "recharge" },
       },
       {
         path: "rechargeDetail",
@@ -258,7 +258,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "settlementCenter",
         component: () => import("@/views/settlementCenter/index.vue"),
         name: "settlementCenter",
-        meta: { title: "结算中心" },
+        meta: { title: "结算中心", icon: "recharge" },
       },
       {
         path: "enterpriseSettlementDetails",
@@ -308,7 +308,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "manager",
         component: () => import("@/views/invoice/invoiceManager/index.vue"),
         name: "invoiceManager",
-        meta: { title: "发票中心", keepAlive: true },
+        meta: { title: "发票中心", keepAlive: true, icon: "invoice" },
       },
       {
         path: "invoiceView",
@@ -329,7 +329,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "taxLandManagement",
         component: () => import("@/views/taxLandManagement/index.vue"),
         name: "taxLandManagementIndex",
-        meta: { title: "税地中心" },
+        meta: { title: "税地中心", icon: "taxLand" },
       },
       {
         path: "selfOperatedTaxLandAdd",
@@ -397,7 +397,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "index",
         component: () => import("@/views/category-management/index.vue"),
         name: "category-management",
-        meta: { title: "类目中心" },
+        meta: { title: "类目中心", icon: "category" },
       },
     ],
   },
@@ -435,13 +435,13 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "log",
         component: () => import("@/views/system/log/index.vue"),
         name: "log",
-        meta: { title: "日志中心" },
+        meta: { title: "日志中心", icon: "log" },
       },
       {
         path: "account",
         component: () => import("@/views/system/account/index.vue"),
         name: "account",
-        meta: { title: "账号设置", hidden: true },
+        meta: { title: "账号设置", icon: "account" },
       },
     ],
   },
