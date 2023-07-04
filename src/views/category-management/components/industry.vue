@@ -79,16 +79,18 @@
           <el-input v-model="addForm.name" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="上级分类">
-          <el-select class="w-full" v-model="addForm.parent">
-            <el-option
-              v-for="item in options"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-          <!-- <el-tree-select v-model="addForm.parent" :data="options" :render-after-expand="false" :props="treeProps"
-						show-checkbox check-strictly check-on-click-node /> -->
+          <!-- <el-select class="w-full" v-model="addForm.parent">
+						<el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
+					</el-select> -->
+          <el-tree-select
+            class="w-full"
+            v-model="addForm.parent"
+            :data="options"
+            :props="treeProps"
+            check-strictly
+            :render-after-expand="false"
+            @change="selectChange"
+          />
         </el-form-item>
       </template>
       <!-- 编辑 -->
@@ -97,16 +99,18 @@
           <el-input v-model="addForm.name" />
         </el-form-item>
         <el-form-item label="上级分类">
-          <el-select class="w-full" v-model="addForm.parent">
-            <el-option
-              v-for="item in options"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-          <!-- <el-tree-select v-model="addForm.parent" :data="options" :render-after-expand="false" :props="treeProps"
-						show-checkbox check-strictly check-on-click-node /> -->
+          <!-- <el-select class="w-full" v-model="addForm.parent">
+						<el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
+					</el-select> -->
+          <el-tree-select
+            class="w-full"
+            v-model="addForm.parent"
+            :data="options"
+            :props="treeProps"
+            check-strictly
+            :render-after-expand="false"
+            @change="selectChange"
+          />
         </el-form-item>
       </template>
 
@@ -147,10 +151,10 @@ const addForm = ref({
 });
 const options = ref([] as any);
 
-// const treeProps = {
-//   label: "name",
-//   value: "id",
-// };
+const treeProps = {
+  label: "name",
+  value: "id",
+};
 
 const searchForm = reactive({
   name: "",
@@ -207,11 +211,15 @@ function getOptions() {
     });
 }
 
+function selectChange(val) {
+  console.log(val);
+}
+
 /**
  * 删除
  */
 function del(id: string) {
-  ElMessageBox.confirm("是否删除?", "Warning", {
+  ElMessageBox.confirm("是否删除?", "", {
     confirmButtonText: "确认",
     cancelButtonText: "取消",
     center: true,
@@ -223,6 +231,7 @@ function del(id: string) {
           message: "删除成功",
         });
         searchClick();
+        getOptions();
       });
     })
     .catch(() => {
