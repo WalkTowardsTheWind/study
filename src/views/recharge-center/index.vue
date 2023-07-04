@@ -3,7 +3,13 @@
     <zxn-tabs :tabs-list="tabsList" v-model:activeName="activeName">
       <template #1>
         <div class="recharge">
-          累计充值<span class="money">{{ total_amount }}</span>
+          累计充值<span class="money"
+            >{{ proxy.$moneyFormat(total_amount) }} &nbsp;<span
+              class="text-[14px]"
+            >
+              元
+            </span></span
+          >
         </div>
         <div class="p-[24px]">
           <zxn-search
@@ -12,7 +18,10 @@
             @on-reset="handleReset"
           >
             <el-form-item label="">
-              <el-input v-model="formItem.name" placeholder="请输入">
+              <el-input
+                v-model="formItem.name"
+                placeholder="请输入企业名称、税地名称"
+              >
                 <template #prefix>
                   <i-ep-Search />
                 </template>
@@ -49,16 +58,11 @@
                 end-placeholder="结束日期"
               />
             </el-form-item>
-            <el-form-item label="行业">
-              <el-select v-model="formItem.category_id" placeholder="请选择">
-                <el-option
-                  v-for="(item, index) in categoryList"
-                  :key="index"
-                  :label="item.name"
-                  :value="item.id"
-                />
-              </el-select>
-            </el-form-item>
+            <!-- <el-form-item label="行业">
+							<el-select v-model="formItem.category_id" placeholder="请选择">
+								<el-option v-for="(item, index) in categoryList" :key="index" :label="item.name" :value="item.id" />
+							</el-select>
+						</el-form-item> -->
           </zxn-search>
           <zxn-table
             :table-data="tableData"
@@ -112,6 +116,8 @@ import { getLandList } from "@/api/common";
 import { getRechargeTaskList } from "@/api/recharge";
 import router from "@/router";
 
+const { proxy } = getCurrentInstance() as any;
+
 const tabsList = [
   {
     name: "1",
@@ -155,8 +161,8 @@ const date = ref([] as any);
 
 const formItem = reactive({
   name: "",
-  status: "",
-  category_id: "",
+  status: "1",
+  // category_id: "",
   tax_land_id: "",
   start_time: date[0] || "",
   end_time: date[1] || "",
@@ -186,13 +192,14 @@ const columnList = [
         background: "#dfe8fd",
       },
     },
+    minWidth: 150,
   },
   { label: "企业名称", prop: "company_name", minWidth: 200 },
   // { label: "关联任务", prop: "certificate", slot: "certificate" },
-  { label: "行业", prop: "category" },
-  { label: "税源地", prop: "tax_land_name", minWidth: 250 },
+  // { label: "行业", prop: "category" },
+  { label: "税源地名称", prop: "tax_land_name", minWidth: 250 },
   { label: "税地账户", prop: "bank_account", width: 200 },
-  { label: "充值额度", prop: "amount" },
+  { label: "充值金额", prop: "amount", type: "money", minWidth: 100 },
   { label: "充值时间", prop: "add_time", width: 200 },
   { label: "充值凭证", slot: "certificate" },
   { label: "操作", slot: "operation", fixed: "right", width: 100 },

@@ -37,12 +37,12 @@ const tableData = reactive([] as any);
 
 const columnList = [
   { label: "充值单号", prop: "recharge_order_no" },
-  { label: "关联任务", prop: "value" },
+  // { label: "关联任务", prop: "value" },
   { label: "税源地", prop: "tax_land_name" },
   { label: "税地账户", prop: "bank_account" },
   { label: "充值额度", prop: "amount" },
   { label: "充值时间", prop: "add_time" },
-  { label: "充值凭证", prop: "certificate", slot: "certificate" },
+  // { label: "充值凭证", prop: "certificate", slot: "certificate" },
   // { label: "操作", slot: "operation", fixed: "right", width: 250 },
 ];
 

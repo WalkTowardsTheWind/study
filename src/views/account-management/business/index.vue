@@ -42,9 +42,9 @@
       </el-form-item>
       <el-form-item label="客户点位">
         <div class="flex">
-          <el-input v-model="formItem.min" />
+          <el-input v-model="formItem.point_min" placeholder="请输入" />
           <div class="m-x-[20px]">~</div>
-          <el-input v-model="formItem.max" />
+          <el-input v-model="formItem.point_max" placeholder="请输入" />
         </div>
       </el-form-item>
       <el-form-item prop=" date" label="计费方式">
@@ -159,8 +159,8 @@ const formItem = reactive({
   company_name: "",
   status: "",
   calculation_type: "",
-  min: "",
-  max: "",
+  point_min: "",
+  point_max: "",
 } as any);
 
 const pageInfo = reactive({
@@ -188,8 +188,8 @@ const columnList = [
     width: 100,
   },
   { label: "企业", prop: "company_name", minWidth: 200 },
-  { label: "联系人", prop: "contacts", width: 150 },
-  { label: "联系方式", prop: "mobile", width: 150 },
+  { label: "企业联系人", prop: "contacts", width: 150 },
+  { label: "联系号码", prop: "mobile", width: 150 },
   { label: "客户点位", prop: "tax_point", width: 100 },
   { label: "计费方式", prop: "calculation_type", width: 100 },
   { label: "创建时间", prop: "add_time", width: 200 },

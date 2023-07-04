@@ -172,10 +172,10 @@
           </el-form-item>
           <template v-if="addForm.company_source == '0'">
             <el-form-item label="销售负责人">
-              <el-input placeholder="请输入" />
+              <el-input placeholder="请输入" v-model="sale_head" />
             </el-form-item>
             <el-form-item label="销售所属公司">
-              <el-input placeholder="请输入" />
+              <el-input placeholder="请输入" v-model="sale_company" />
             </el-form-item>
           </template>
           <template v-if="addForm.company_source == '1'">
@@ -192,10 +192,7 @@
               </div>
             </el-form-item>
             <el-form-item label="渠道点位">
-              <el-input placeholder="请输入" />
-            </el-form-item>
-            <el-form-item label="发票收件人">
-              <el-input placeholder="请输入" />
+              <el-input placeholder="请输入" v-model="addForm.channel_point" />
             </el-form-item>
             <el-form-item label="点位计费方式" prop="calculation_type">
               <el-select
@@ -214,7 +211,7 @@
           <el-form-item label="企业邮箱">
             <el-input placeholder="请输入" v-model="addForm.company_email" />
           </el-form-item>
-          <el-form-item label="联系人">
+          <el-form-item label="发票收件人">
             <el-input placeholder="请输入" v-model="addForm.consignee" />
           </el-form-item>
           <el-form-item label="联系号码">
@@ -253,9 +250,14 @@
             </el-select>
           </el-form-item>
           <el-form-item label="签约规则">
-            <el-select class="w-full" placeholder="请选择（单选）">
-              <el-option value="" label="短信签约"></el-option>
-              <el-option value="" label="二维码签约"></el-option>
+            <el-select
+              class="w-full"
+              placeholder="请选择（单选）"
+              v-model="addForm.sign_type"
+            >
+              <el-option value="1" label="静默签"></el-option>
+              <el-option value="2" label="二维码签约"></el-option>
+              <el-option value="3" label="短信签约"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -352,15 +354,19 @@ const addForm = reactive({
   header_img: [],
   office_img: [],
   company_source: "0",
+  sale_head: "",
+  sale_company: "",
   channel_type: "",
   parent_channel_id: "",
   tax_point: "",
   auth_type: "", // 认证规则
+  sign_type: "", // 签约规则
   company_email: "",
   consignee: "",
   consignee_mobile: "",
   address: "",
   tax_land_id: "",
+  channel_point: "",
   calculation_type: "",
   contract_img: [],
 } as any);
@@ -413,12 +419,16 @@ const isAllComplete = computed(() => {
       !!addForm.header_img.length &&
       !!addForm.office_img.length &&
       !!addForm.company_source &&
+      !!addForm.sale_head &&
+      !!addForm.sale_company &&
+      !!addForm.company_source &&
       !!addForm.tax_point &&
       !!addForm.company_email &&
       !!addForm.consignee &&
       !!addForm.consignee_mobile &&
       !!addForm.address &&
       !!addForm.auth_type &&
+      !!addForm.sign_type &&
       !!addForm.tax_land_id &&
       !!addForm.contract_img.length
     );
@@ -451,14 +461,17 @@ const isAllComplete = computed(() => {
       !!addForm.office_img.length &&
       !!addForm.company_source &&
       !!addForm.channel_type &&
+      !!addForm.channel_point &&
+      !!addForm.calculation_type &&
       !!addForm.parent_channel_id &&
       !!addForm.tax_point &&
       !!addForm.company_email &&
       !!addForm.consignee &&
       !!addForm.consignee_mobile &&
       !!addForm.address &&
-      !!addForm.auth_type &&
       !!addForm.tax_land_id &&
+      !!addForm.auth_type &&
+      !!addForm.sign_type &&
       !!addForm.contract_img.length
     );
   }
@@ -548,10 +561,6 @@ async function submit(formEl: FormInstance | undefined) {
             } catch (error: any) {
               return new Error("error", error);
             }
-            ElMessage({
-              type: "success",
-              message: "新建企业账号成功",
-            });
           });
       }
     } else {
