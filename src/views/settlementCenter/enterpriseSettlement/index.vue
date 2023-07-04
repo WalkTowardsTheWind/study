@@ -213,7 +213,7 @@ const color = {
   3: { color: "#F45136", backgroundColor: "#FDE3DF" },
 };
 const columnList = [
-  { label: "结算单号", prop: "settlement_order_no" },
+  { label: "结算单号", prop: "settlement_order_no", width: 200 },
   // { label: "状态", slot: "status", width: 100, headerAlign: "left" },
   {
     label: "状态",
@@ -387,8 +387,8 @@ const getTableData = async () => {
         tax_land_name: item.tax_land_name,
         total_people: item.total_people,
         tax_point: item.tax_point,
-        total_money: item.total_money,
-        real_money: item.real_money,
+        total_money: proxy.$moneyFormat(item.total_money),
+        real_money: proxy.$moneyFormat(item.real_money),
         settlement_time: item.settlement_time,
         transfer_certificate: item.transfer_certificate,
       };
