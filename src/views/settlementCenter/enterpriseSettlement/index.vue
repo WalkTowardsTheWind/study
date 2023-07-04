@@ -40,7 +40,7 @@
     </zxn-search>
     <zxn-table
       :table-data="tableData"
-      :hasIndex="false"
+      :hasIndex="true"
       :column-list="columnList"
       :page-info="pageInfo"
       @page-change="handlePageChange"
