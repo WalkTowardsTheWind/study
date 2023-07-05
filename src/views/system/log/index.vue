@@ -12,7 +12,7 @@
         @on-reset="handleReset"
       >
         <el-form-item prop="key_word">
-          <el-input v-model="formItem.key_word" placeholder="请输入账户ID">
+          <el-input v-model="formItem.key_word" placeholder="请输入账户名称">
             <template #prefix>
               <el-icon><i-ep-Search /></el-icon>
             </template>
