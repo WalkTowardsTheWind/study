@@ -125,13 +125,17 @@ const taskStatus = [
     label: "全部",
     value: "",
   },
-  {
-    label: "未到账 ",
-    value: "0",
-  },
+  // {
+  // 	label: "未到账 ",
+  // 	value: "0",
+  // },
   {
     label: "已到账 ",
     value: "1",
+  },
+  {
+    label: "异常充值 ",
+    value: "2",
   },
 ];
 const total_amount = ref();
@@ -185,6 +189,10 @@ const columnList = [
       1: {
         color: "#366FF3",
         background: "#dfe8fd",
+      },
+      2: {
+        color: "#F35135",
+        background: "#FDE3DF",
       },
     },
     minWidth: 150,

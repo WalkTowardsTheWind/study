@@ -27,6 +27,7 @@ export enum statusType {
 export enum taskType {
   "未到账" = 0,
   "已到账",
+  "异常充值",
 }
 
 export enum settleStatus {

@@ -195,3 +195,10 @@ export function getTaxlandDetail(params: any) {
     method: "get",
   });
 }
+
+export function resetAccountPwd(id) {
+  return request({
+    url: `/adminapi/account/company/reset_pwd/${id}`,
+    method: "post",
+  });
+}
