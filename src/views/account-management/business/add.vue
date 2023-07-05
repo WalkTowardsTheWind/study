@@ -618,4 +618,8 @@ getTaxLandOption();
   color: #366ff3;
   border-color: #366ff3;
 }
+
+:deep(.el-input__wrapper) {
+  width: 100% !important;
+}
 </style>

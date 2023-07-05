@@ -51,12 +51,15 @@
               </el-select>
             </el-form-item>
             <el-form-item label="营业执照有效期">
-              <el-date-picker
-                :readonly="!isEdit"
-                v-model="formData.license_end_date"
-                unlink-panels
-                value-format="YYYY-MM-DD"
-              />
+              <div style="width: 100%">
+                <el-date-picker
+                  style="width: 100%"
+                  :readonly="!isEdit"
+                  v-model="formData.license_end_date"
+                  unlink-panels
+                  value-format="YYYY-MM-DD"
+                />
+              </div>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -331,5 +334,9 @@ getCategoryOptions();
   right: 10px;
   color: #356ff3;
   cursor: pointer;
+}
+
+:deep(.el-input__wrapper) {
+  width: 100% !important;
 }
 </style>
