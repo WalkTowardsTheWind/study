@@ -73,6 +73,7 @@ import {
 import router from "@/router";
 
 const authType = [
+  { label: "无", value: 0 },
   { label: "二要素（姓名、身份证）", value: 1 },
   { label: "三要素（姓名、手机号、身份证）", value: 2 },
   { label: "三要素（姓名、身份证、银行卡）", value: 3 },
