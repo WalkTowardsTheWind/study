@@ -6,28 +6,32 @@
     :style="{ width, height: `${boxHeight}px` }"
   >
     <div class="dashboard-title mt-30px">盈利看板</div>
-    <div class="dashboard-bar-content">
-      <div class="dashboard-bar-content-search">
-        <div class="dashboard-bar-content-search-quick">
-          <span
-            v-for="item in typeMap"
-            :key="item.value"
-            :class="{ active: activeType === item.value }"
-            @click="handleChange(item)"
-          >
-            {{ item.label }}
-          </span>
-        </div>
-        <!--        <div class="dashboard-bar-content-search-date">-->
-        <!--          <zxn-date-range class="w-272px mr-16px" />-->
-        <!--          <el-button type="primary">查询</el-button>-->
-        <!--        </div>-->
-      </div>
-      <div
-        :id="id"
-        :class="className"
-        :style="{ height: `${boxHeight - 110}px`, width }"
-      />
+    <div
+      class="dashboard-bar-content relative"
+      :style="{ height: `${boxHeight - 40}px` }"
+    >
+      <!--      <div class="dashboard-bar-content-search">-->
+      <!--        <div class="dashboard-bar-content-search-quick">-->
+      <!--          <span-->
+      <!--            v-for="item in typeMap"-->
+      <!--            :key="item.value"-->
+      <!--            :class="{ active: activeType === item.value }"-->
+      <!--            @click="handleChange(item)"-->
+      <!--          >-->
+      <!--            {{ item.label }}-->
+      <!--          </span>-->
+      <!--        </div>-->
+      <!--        &lt;!&ndash;        <div class="dashboard-bar-content-search-date">&ndash;&gt;-->
+      <!--        &lt;!&ndash;          <zxn-date-range class="w-272px mr-16px" />&ndash;&gt;-->
+      <!--        &lt;!&ndash;          <el-button type="primary">查询</el-button>&ndash;&gt;-->
+      <!--        &lt;!&ndash;        </div>&ndash;&gt;-->
+      <!--      </div>-->
+      <!--      <div-->
+      <!--        :id="id"-->
+      <!--        :class="className"-->
+      <!--        :style="{ height: `${boxHeight - 110}px`, width }"-->
+      <!--      />-->
+      <empty-box />
     </div>
   </div>
 </template>

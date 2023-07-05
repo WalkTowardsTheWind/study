@@ -4,7 +4,7 @@
       <span class="notice-message-header-title">系统通知</span>
       <!--      <span class="notice-message-header-more">更多></span>-->
     </div>
-    <div :style="{ height: `${boxHeight}px` }">
+    <div :style="{ height: `${boxHeight}px` }" class="bg-[#fff]">
       <el-scrollbar ref="scrollbar">
         <div class="notice-message-item" v-for="item in 0" :key="item">
           <div class="notice-message-item-type">
@@ -20,6 +20,7 @@
             <el-button>确定</el-button>
           </div>
         </div>
+        <empty-box />
       </el-scrollbar>
     </div>
   </div>
@@ -31,7 +32,7 @@ onMounted(() => {
   setTimeout(() => {
     const parentHeight = noticeMessage.value.offsetParent.clientHeight;
     const offTop = noticeMessage.value.offsetTop;
-    boxHeight.value = parentHeight - offTop - 37;
+    boxHeight.value = parentHeight - offTop - 20;
   });
 });
 </script>
