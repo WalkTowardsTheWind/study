@@ -223,7 +223,7 @@ async function handleSearch() {
   tableData.length = 0;
   let params = {
     ...formItem,
-    page: pageInfo.page,
+    page: 1,
     limit: pageInfo.limit,
     start_time: date.value[0] || "",
     end_time: date.value[1] || "",
