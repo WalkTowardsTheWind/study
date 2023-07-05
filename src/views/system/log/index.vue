@@ -35,6 +35,7 @@
         :loading="loading"
         @page-change="handlePageChange"
       >
+        <template #page>--</template>
         <template #operation>
           <el-button link type="primary">查看</el-button>
         </template>
@@ -60,7 +61,7 @@ const columnList = [
   { label: "账户名称", prop: "admin_name" },
   { label: "联系人", prop: "real_name" },
   { label: "操作模块", prop: "path" },
-  { label: "操作内容", prop: "page" },
+  { label: "操作内容", prop: "page", slot: "page" },
   { label: "操作时间", prop: "add_time" },
   // { label: "操作", slot: "operation", fixed: "right", width: 90 },
 ];

@@ -83,6 +83,7 @@
             >上传发票</el-button
           >
         </template>
+        <el-button link type="primary" @click="handleView(row)">详情</el-button>
         <el-button
           v-if="row.status === 5 || row.status === 1"
           link
@@ -90,7 +91,6 @@
           @click="handleLogistics(row)"
           >查看物流</el-button
         >
-        <el-button link type="primary" @click="handleView(row)">详情</el-button>
         <!--        <el-button link type="primary">导出</el-button>-->
       </template>
     </zxn-table>

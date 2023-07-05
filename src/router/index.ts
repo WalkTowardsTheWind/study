@@ -258,7 +258,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "settlementCenter",
         component: () => import("@/views/settlementCenter/index.vue"),
         name: "settlementCenter",
-        meta: { title: "结算中心", icon: "recharge" },
+        meta: { title: "结算中心", icon: "fail" },
       },
       {
         path: "enterpriseSettlementDetails",
@@ -394,10 +394,22 @@ export const constantRoutes: RouteRecordRaw[] = [
     meta: { title: "类目管理", icon: "category" },
     children: [
       {
-        path: "index",
+        path: "categoryIndustry",
         component: () => import("@/views/category-management/index.vue"),
         name: "category-management",
-        meta: { title: "类目中心", icon: "category" },
+        meta: { title: "行业分类", icon: "industry" },
+      },
+      {
+        path: "categoryPosition",
+        component: () => import("@/views/category-management/index.vue"),
+        name: "categoryPosition",
+        meta: { title: "职位分类", icon: "position" },
+      },
+      {
+        path: "categoryInvoice",
+        component: () => import("@/views/category-management/index.vue"),
+        name: "categoryInvoice",
+        meta: { title: "发票分类", icon: "invoice" },
       },
     ],
   },

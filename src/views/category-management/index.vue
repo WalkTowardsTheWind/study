@@ -18,20 +18,15 @@
 import IndustryView from "./components/industry.vue";
 import PostView from "./components/post.vue";
 import InvoiceView from "./components/invoice.vue";
-
-const activeName = ref("1");
-const tabsList = ref([
-  {
-    name: "1",
-    label: "行业分类",
-  },
-  {
-    name: "2",
-    label: "岗位分类",
-  },
-  {
-    name: "3",
-    label: "发票分类",
-  },
-]);
+import { useRoute } from "vue-router";
+const route = useRoute();
+const routeName = route.name;
+console.log(route.name);
+const routeSet = {
+  "category-management": { name: "1", label: "行业分类" },
+  categoryPosition: { name: "2", label: "岗位分类" },
+  categoryInvoice: { name: "3", label: "发票分类" },
+};
+const activeName = ref(routeSet[routeName].name);
+const tabsList = ref([routeSet[routeName]]);
 </script>
