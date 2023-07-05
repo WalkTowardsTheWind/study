@@ -15,9 +15,8 @@ export enum personalType {
 }
 
 export enum taxpayerType {
-  "自然人" = 1,
-  "个体工商户",
-  "法人",
+  "小规模" = 1,
+  "一般人",
 }
 
 export enum statusType {

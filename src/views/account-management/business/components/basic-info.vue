@@ -17,9 +17,13 @@
               <el-input v-model="formData.credit_code" v-if="isEdit" />
               <span v-else>{{ formData.credit_code }}</span>
             </el-form-item>
-            <el-form-item label="联系方式" label-width="130px">
+            <el-form-item label="电话" label-width="130px">
               <el-input v-model="formData.contacts_mobile" v-if="isEdit" />
               <span v-else>{{ formData.contacts_mobile }}</span>
+            </el-form-item>
+            <el-form-item label="法人身份证号" label-width="130px">
+              <el-input v-model="formData.legal_person_idcard" v-if="isEdit" />
+              <span v-else>{{ formData.legal_person_idcard }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -27,29 +31,54 @@
               <el-input v-model="formData.account" v-if="isEdit" />
               <span v-else>{{ formData.admin_id }}</span>
             </el-form-item>
-            <el-form-item label="法人姓名">
+            <el-form-item label="法定代表人">
               <el-input v-model="formData.legal_person" v-if="isEdit" />
               <span v-else>{{ formData.legal_person }}</span>
             </el-form-item>
-            <el-form-item label="营业地址">
-              <el-input v-model="formData.company_address" v-if="isEdit" />
-              <span v-else>{{ formData.company_address }}</span>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="联系人">
-              <el-input v-model="formData.contacts" v-if="isEdit" />
-              <span v-else>{{ formData.contacts }}</span>
-            </el-form-item>
-            <el-form-item label="营业执照到期时间" class="w-full">
-              <el-date-picker
+            <el-form-item label="行业">
+              <el-select
                 class="w-full"
+                placeholder="请选择"
+                v-model="formData.category_id"
+                v-if="isEdit"
+              >
+                <el-option
+                  v-for="item in cateGoryOptions"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+              <span v-else>{{ formData.category }}</span>
+            </el-form-item>
+            <el-form-item label="营业执照有效期">
+              <el-date-picker
                 v-if="isEdit"
                 v-model="formData.license_end_date"
                 unlink-panels
                 value-format="YYYY-MM-DD"
               />
               <span v-else>{{ formData.license_end_date }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="密码">
+              <el-input
+                class="w-[100%]"
+                value="********"
+                v-if="isEdit"
+                readonly
+              />
+              <span v-else>********</span>
+              <span v-if="isEdit" class="resetPWD">重置密码</span>
+            </el-form-item>
+            <el-form-item label="联系人">
+              <el-input v-model="formData.contacts" v-if="isEdit" />
+              <span v-else>{{ formData.contacts }}</span>
+            </el-form-item>
+            <el-form-item label="法人电话">
+              <el-input v-model="formData.legal_person_mobile" v-if="isEdit" />
+              <span v-else>{{ formData.legal_person_mobile }}</span>
             </el-form-item>
           </el-col>
         </el-row>
@@ -80,23 +109,48 @@
               </el-select>
               <span v-else>{{ taxpayerType[formData.taxpayer_type] }}</span>
             </el-form-item>
-            <el-form-item label="接收人联系方式" label-width="130px">
-              <el-input v-model="formData.consignee_mobile" v-if="isEdit" />
-              <span v-else>{{ formData.consignee_mobile }}</span>
+            <el-form-item label="渠道点位" label-width="130px">
+              <el-input v-if="isEdit" v-model="formData.channel_point" />
+              <span v-else>{{ formData.channel_point }}</span>
             </el-form-item>
+            <el-form-item label="计费方式" label-width="130px">
+              <el-select
+                class="w-full"
+                v-model="formData.calculation_type"
+                v-if="isEdit"
+              >
+                <el-option :value="1" label="外扣"></el-option>
+                <el-option :value="2" label="内扣"></el-option>
+              </el-select>
+              <div v-else>
+                {{ ["", "外扣", "内扣"][formData.calculation_type] }}
+              </div>
+            </el-form-item>
+            <el-form-item label="快递地址" label-width="130px">
+              <el-input v-if="isEdit" v-model="formData.address" />
+              <span v-else>{{ formData.address }}</span>
+            </el-form-item>
+            <!-- <el-form-item label="接收人联系方式" label-width="130px">
+							<el-input v-model="formData.consignee_mobile" v-if="isEdit" />
+							<span v-else>{{ formData.consignee_mobile }}</span>
+						</el-form-item> -->
           </el-col>
           <el-col :span="8">
             <el-form-item label="银行账号">
               <el-input v-model="formData.bank_account" v-if="isEdit" />
               <span v-else>{{ formData.bank_account }}</span>
             </el-form-item>
-            <!-- <el-form-item label="渠道来源">
-							<el-input v-if="isEdit" />
-							<span v-else>江西某某某公司</span>
-						</el-form-item> -->
-            <el-form-item label="邮寄地址">
-              <el-input v-model="formData.address" v-if="isEdit" />
-              <span v-else>{{ formData.address }}</span>
+            <el-form-item label="企业邮箱">
+              <el-input v-model="formData.company_email" v-if="isEdit" />
+              <span v-else>{{ formData.company_email }}</span>
+            </el-form-item>
+            <el-form-item label="企业地址">
+              <el-input v-model="formData.company_address" v-if="isEdit" />
+              <span v-else>{{ formData.company_address }}</span>
+            </el-form-item>
+            <el-form-item label="发票接收人">
+              <el-input v-model="formData.consignee" v-if="isEdit" />
+              <span v-else>{{ formData.consignee }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -104,54 +158,26 @@
               <el-input v-model="formData.taxpayer_number" v-if="isEdit" />
               <span v-else> {{ formData.taxpayer_number }}</span>
             </el-form-item>
-            <el-form-item label="发票接收人">
+            <el-form-item label="企业来源">
+              <el-select
+                class="w-full"
+                v-model="formData.company_source"
+                v-if="isEdit"
+              >
+                <el-option :value="0" label="销售"></el-option>
+                <el-option :value="1" label="渠道推广"></el-option>
+              </el-select>
+              <span v-else>
+                {{ ["销售", "渠道退款"][formData.company_source] }}</span
+              >
+            </el-form-item>
+            <el-form-item label="接收人号码">
               <el-input v-model="formData.consignee" v-if="isEdit" />
               <span v-else>{{ formData.consignee }}</span>
             </el-form-item>
           </el-col>
         </el-row>
       </div>
-      <div class="head">
-        <div class="line"></div>
-        <div class="head-title">税地信息</div>
-      </div>
-      <!-- <el-button
-        v-if="isEdit"
-        type="primary"
-        class="my-[20px]"
-        @click="addTaxLand"
-        >+ 新增税地</el-button
-      >
-      <div class="" v-for="(item, index) in taxlandList" :key="index">
-        <el-row :gutter="50">
-          <el-col :span="8">
-            <el-form-item label="税地名称" label-width="130px">
-              <el-select
-                class="w-full"
-                v-model="item.tax_land_id"
-                v-if="isEdit"
-              >
-                <el-option
-                  v-for="(item, index) in taxLandOption"
-                  :key="index"
-                  :value="item.id"
-                  :label="item.tax_land_name"
-                ></el-option>
-              </el-select>
-              <span v-else> {{ item.taxpayer_number }}</span>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="客户点位">
-              <el-input v-model="item.tax_point" v-if="isEdit" />
-              <span v-else> {{ item.tax_point }}</span>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <span class="del" @click="del(index)">删除</span>
-          </el-col>
-        </el-row>
-      </div> -->
     </el-form>
   </div>
   <zxn-bottom-btn v-if="isEdit">
@@ -164,11 +190,14 @@
 import {
   getBusinessAccountDetail,
   editBusinessAccount,
+  getCategoryList,
 } from "@/api/account/business";
 import { getLandList } from "@/api/common";
 
 import { businessType, taxpayerType } from "@/enums/accountEnum";
 import router from "@/router";
+
+const cateGoryOptions = ref([] as any);
 
 const options = Object.entries(taxpayerType)
   .map(([label, value]) => ({ label, value }))
@@ -222,13 +251,11 @@ async function getAccountDetail() {
   }
 }
 
-function addTaxLand() {
-  taxlandList.value.push({
-    tax_land_id: "",
-    tax_point: "",
+function getCategoryOptions() {
+  getCategoryList().then((res) => {
+    cateGoryOptions.value = res.data;
   });
 }
-
 function getTaxLandOption() {
   taxLandOption.value.length = 0;
   getLandList().then((res) => {
@@ -242,6 +269,7 @@ function del(index) {
 
 getAccountDetail();
 getTaxLandOption();
+getCategoryOptions();
 </script>
 
 <style scoped lang="scss">
@@ -286,6 +314,13 @@ getTaxLandOption();
 }
 
 .del {
+  color: #356ff3;
+  cursor: pointer;
+}
+
+.resetPWD {
+  position: absolute;
+  right: 10px;
   color: #356ff3;
   cursor: pointer;
 }
