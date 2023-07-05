@@ -18,32 +18,31 @@
       </el-form-item>
 
       <el-form-item label="税地状态">
-        <el-select v-model="formItem.status" placeholder="全部" clearable>
+        <zxn-select v-model="formItem.status" @change="handleSearch">
           <el-option
             v-for="item in proxy.$const['taxLandManagementEnum.taxLandStatus']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
+        </zxn-select>
       </el-form-item>
 
       <el-form-item label="发票类型">
-        <el-select v-model="formItem.invoice_type" placeholder="全部" clearable>
+        <zxn-select v-model="formItem.invoice_type" @change="handleSearch">
           <el-option
             v-for="item in proxy.$const['taxLandManagementEnum.InvoiceType']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
+        </zxn-select>
       </el-form-item>
 
       <el-form-item label="发票面额">
-        <el-select
+        <zxn-select
           v-model="formItem.invoice_denomination"
-          placeholder="全部"
-          clearable
+          @change="handleSearch"
         >
           <el-option
             v-for="item in proxy.$const[
@@ -53,15 +52,11 @@
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
+        </zxn-select>
       </el-form-item>
 
       <el-form-item label="计算方式">
-        <el-select
-          v-model="formItem.calculation_type"
-          placeholder="全部"
-          clearable
-        >
+        <zxn-select v-model="formItem.calculation_type" @change="handleSearch">
           <el-option
             v-for="item in proxy.$const[
               'taxLandManagementEnum.calculationType'
@@ -70,7 +65,7 @@
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
+        </zxn-select>
       </el-form-item>
       <el-form-item prop="date" label="申请日期">
         <zxn-date-range v-model="formItem.timeData" />
