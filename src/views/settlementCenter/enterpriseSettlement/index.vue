@@ -2,7 +2,9 @@
   <div class="p-[24px] p-b-[0]">
     <div class="recharge">
       <div>
-        累计结算<span class="money">{{ total_settlement_money }}</span
+        累计结算<span class="money">{{
+          proxy.$moneyFormat(total_settlement_money)
+        }}</span
         ><span class="unit">元</span>
       </div>
     </div>
@@ -169,23 +171,23 @@ const handleReset = () => {
 };
 const handleSearch = () => {
   pageInfo.page = 1;
-  // 时间选择判断
-  if (!formItem.value.timeData[0] && !formItem.value.timeData[1]) {
-    getTableData();
-  } else if (formItem.value.timeData[0] && formItem.value.timeData[1]) {
-    getTableData();
-  } else if (!formItem.value.timeData[0] && formItem.value.timeData[1]) {
-    ElMessage({
-      type: "warning",
-      message: `请选择开始时间`,
-    });
-  } else if (formItem.value.timeData[0] && !formItem.value.timeData[1]) {
-    ElMessage({
-      type: "warning",
-      message: `请选择结束时间`,
-    });
-  }
   getTableData();
+  // 时间选择判断
+  // if (!formItem.value.timeData[0] && !formItem.value.timeData[1]) {
+  //   getTableData();
+  // } else if (formItem.value.timeData[0] && formItem.value.timeData[1]) {
+  //   getTableData();
+  // } else if (!formItem.value.timeData[0] && formItem.value.timeData[1]) {
+  //   ElMessage({
+  //     type: "warning",
+  //     message: `请选择开始时间`,
+  //   });
+  // } else if (formItem.value.timeData[0] && !formItem.value.timeData[1]) {
+  //   ElMessage({
+  //     type: "warning",
+  //     message: `请选择结束时间`,
+  //   });
+  // }
 };
 const handlePageChange = (cur: any) => {
   const { page, limit } = cur;
@@ -211,7 +213,7 @@ const color = {
   3: { color: "#F45136", backgroundColor: "#FDE3DF" },
 };
 const columnList = [
-  { label: "结算单号", prop: "settlement_order_no" },
+  { label: "结算单号", prop: "settlement_order_no", width: 200 },
   // { label: "状态", slot: "status", width: 100, headerAlign: "left" },
   {
     label: "状态",
@@ -385,8 +387,8 @@ const getTableData = async () => {
         tax_land_name: item.tax_land_name,
         total_people: item.total_people,
         tax_point: item.tax_point,
-        total_money: item.total_money,
-        real_money: item.real_money,
+        total_money: proxy.$moneyFormat(item.total_money),
+        real_money: proxy.$moneyFormat(item.real_money),
         settlement_time: item.settlement_time,
         transfer_certificate: item.transfer_certificate,
       };

@@ -83,17 +83,12 @@
               </el-dropdown>
             </template>
             <template #certificate="scope">
-              <el-image
-                v-if="scope.row.certificate"
-                style="width: 30px; height: 30px"
-                :src="scope.row.certificate"
-                :zoom-rate="1.2"
-                :preview-src-list="[scope.row.certificate]"
-                fit="contain"
-                :z-index="999"
-                :preview-teleported="true"
+              <zxn-image
+                :imgList="scope.row.certificate"
+                width="40"
+                height="40"
+                targetClick
               />
-              <span v-else>--</span>
             </template>
             <template #operation="scope">
               <el-button
@@ -195,8 +190,6 @@ const columnList = [
     minWidth: 150,
   },
   { label: "企业名称", prop: "company_name", minWidth: 200 },
-  // { label: "关联任务", prop: "certificate", slot: "certificate" },
-  // { label: "行业", prop: "category" },
   { label: "税源地名称", prop: "tax_land_name", minWidth: 250 },
   { label: "税地账户", prop: "bank_account", width: 200 },
   { label: "充值金额", prop: "amount", type: "money", minWidth: 100 },

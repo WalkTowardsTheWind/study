@@ -42,17 +42,21 @@
       </el-form-item>
       <el-form-item label="客户点位">
         <div class="flex">
-          <el-input v-model="formItem.point_min" placeholder="请输入" />
+          <el-input
+            v-model="formItem.point_min"
+            placeholder="请输入"
+            clearable
+          />
           <div class="m-x-[20px]">~</div>
-          <el-input v-model="formItem.point_max" placeholder="请输入" />
+          <el-input
+            v-model="formItem.point_max"
+            placeholder="请输入"
+            clearable
+          />
         </div>
       </el-form-item>
       <el-form-item prop=" date" label="计费方式">
-        <el-select
-          v-model="formItem.calculation_type"
-          placeholder="请选择"
-          @change="handleChange"
-        >
+        <el-select v-model="formItem.calculation_type" placeholder="请选择">
           <el-option label="全部" value="" />
           <el-option label="内扣" value="0" />
           <el-option label="外扣" value="1" />

@@ -8,7 +8,7 @@
       <el-form-item>
         <el-input
           v-model="formItem.keywords"
-          placeholder="请输入关键字"
+          placeholder="请输入名称、区域、对接人"
           clearable
         >
           <template #prefix>
@@ -183,22 +183,23 @@ const handleReset = () => {
 const handleSearch = () => {
   console.log("查询");
   pageInfo.page = 1;
+  getTableData();
   // 时间选择判断
-  if (!formItem.value.timeData[0] && !formItem.value.timeData[1]) {
-    getTableData();
-  } else if (formItem.value.timeData[0] && formItem.value.timeData[1]) {
-    getTableData();
-  } else if (!formItem.value.timeData[0] && formItem.value.timeData[1]) {
-    ElMessage({
-      type: "warning",
-      message: `请选择开始时间`,
-    });
-  } else if (formItem.value.timeData[0] && !formItem.value.timeData[1]) {
-    ElMessage({
-      type: "warning",
-      message: `请选择结束时间`,
-    });
-  }
+  // if (!formItem.value.timeData[0] && !formItem.value.timeData[1]) {
+  //   getTableData();
+  // } else if (formItem.value.timeData[0] && formItem.value.timeData[1]) {
+  //   getTableData();
+  // } else if (!formItem.value.timeData[0] && formItem.value.timeData[1]) {
+  //   ElMessage({
+  //     type: "warning",
+  //     message: `请选择开始时间`,
+  //   });
+  // } else if (formItem.value.timeData[0] && !formItem.value.timeData[1]) {
+  //   ElMessage({
+  //     type: "warning",
+  //     message: `请选择结束时间`,
+  //   });
+  // }
 };
 const handlePageChange = (cur: any) => {
   const { page, limit } = cur;
