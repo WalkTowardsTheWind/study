@@ -156,7 +156,10 @@
               </el-select>
             </el-form-item>
             <el-form-item label="接收人号码">
-              <el-input v-model="formData.consignee" :readonly="!isEdit" />
+              <el-input
+                v-model="formData.consignee_mobile"
+                :readonly="!isEdit"
+              />
             </el-form-item>
           </el-col>
         </el-row>
