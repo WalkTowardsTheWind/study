@@ -69,7 +69,7 @@
           <el-form-item label="选择行业">
             <el-select
               class="w-full"
-              placeholder="请输入"
+              placeholder="请选择"
               v-model="addForm.category_id"
             >
               <el-option
@@ -172,10 +172,10 @@
           </el-form-item>
           <template v-if="addForm.company_source == '0'">
             <el-form-item label="销售负责人">
-              <el-input placeholder="请输入" v-model="sale_head" />
+              <el-input placeholder="请输入" v-model="addForm.sale_head" />
             </el-form-item>
             <el-form-item label="销售所属公司">
-              <el-input placeholder="请输入" v-model="sale_company" />
+              <el-input placeholder="请输入" v-model="addForm.sale_company" />
             </el-form-item>
           </template>
           <template v-if="addForm.company_source == '1'">
