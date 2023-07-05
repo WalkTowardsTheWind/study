@@ -270,7 +270,6 @@
         </el-col>
       </el-row>
       <zxn-bottom-btn>
-        <!-- <el-button link :disabled="isDisabled" v-if="activeStep === 0" @click="activeStep = 3">跳过此步骤</el-button> -->
         <el-button type="info" v-if="activeStep === 0" @click="$router.go(-1)"
           >取消</el-button
         >
@@ -379,17 +378,6 @@ const authType = [
 ];
 
 const auth_type = ref([] as any);
-
-// const isDisabled = computed(() => {
-// 	return (
-// 		!addForm.account ||
-// 		!addForm.pwd ||
-// 		!addForm.conf_pwd ||
-// 		!addForm.contacts ||
-// 		!addForm.mobile ||
-// 		!addForm.company_name
-// 	);
-// });
 
 const isAllComplete = computed(() => {
   if (addForm.company_source == "0") {
@@ -525,6 +513,7 @@ async function submit(formEl: FormInstance | undefined) {
           {
             confirmButtonText: "确定",
             cancelButtonText: "暂不",
+            distinguishCancelAndClose: true,
             center: true,
           }
         )
@@ -545,25 +534,35 @@ async function submit(formEl: FormInstance | undefined) {
               return new Error("error", error);
             }
           })
-          .catch(async () => {
-            addForm.is_active = 0;
-            const res = await createBusinessAccount(addForm);
-            try {
-              if (res.status === 200) {
-                ElMessage({
-                  message: "新建企业账号成功",
-                  type: "success",
-                });
-                setTimeout(() => {
-                  router.go(-1);
-                }, 200);
+          .catch(async (action) => {
+            if (action == "close") {
+              ElMessage({
+                type: "info",
+                message: "取消新建",
+              });
+            } else {
+              addForm.is_active = 0;
+              const res = await createBusinessAccount(addForm);
+              try {
+                if (res.status === 200) {
+                  ElMessage({
+                    message: "新建企业账号成功",
+                    type: "success",
+                  });
+                  setTimeout(() => {
+                    router.go(-1);
+                  }, 200);
+                }
+              } catch (error: any) {
+                return new Error("error", error);
               }
-            } catch (error: any) {
-              return new Error("error", error);
             }
           });
       }
     } else {
+      ElMessage.error({
+        message: "当前表单必填项还未填写！",
+      });
       console.log("error submit!", fields);
     }
   });
