@@ -4,6 +4,9 @@
       <template #1>
         <BasicInfo :isEdit="isEdit" :id="id" />
       </template>
+      <template #3>
+        <TaxlandInfo :isEdit="isEdit" :id="id" />
+      </template>
       <template #2>
         <PaperInfo :isEdit="isEdit" :id="id" />
       </template>
@@ -44,6 +47,7 @@ import PaperInfo from "./components/paper-info.vue";
 import TaskInfo from "./components/task-info.vue";
 import RechargeInfo from "./components/recharge-info.vue";
 import SettlementInfo from "./components/settlement-info.vue";
+import TaxlandInfo from "./components/taxland-info.vue";
 
 import { useRoute } from "vue-router";
 
@@ -52,6 +56,7 @@ import router from "@/router";
 
 const tabsList = [
   { name: "1", label: "基本信息" },
+  { name: "3", label: "税地信息" },
   { name: "2", label: "证件信息" },
   // { name: "3", label: "合同信息" },
   { name: "4", label: "任务记录" },

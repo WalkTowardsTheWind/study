@@ -12,7 +12,7 @@
           >
             <div class="flex">
               <div class="w-[33%]">
-                <!-- <el-form-item
+                <el-form-item
                   class="mt-25px"
                   label="税地类型"
                   prop="tax_land_type"
@@ -31,7 +31,7 @@
                       :value="item.value"
                     />
                   </el-select>
-                </el-form-item> -->
+                </el-form-item>
                 <el-form-item label="税地负责人">
                   <el-input
                     v-model="formItem.tax_land_head"
@@ -44,7 +44,11 @@
                     placeholder="请输入"
                   />
                 </el-form-item>
-                <el-form-item class="mt-25px" label="税地来源">
+                <el-form-item
+                  class="mt-25px"
+                  label="税地来源"
+                  prop="tax_land_name"
+                >
                   <el-input
                     class="w-[100%]"
                     v-model="formItem.tax_land_name"
@@ -58,7 +62,7 @@
                     placeholder="请输入"
                   />
                 </el-form-item>
-                <el-form-item
+                <!-- <el-form-item
                   class="mt-25px"
                   label="计算方式"
                   prop="calculation_type"
@@ -77,7 +81,7 @@
                       :value="item.value"
                     />
                   </el-select>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item class="mt-25px" label="用工年限">
                   <el-col :span="11">
                     <el-form-item>
@@ -111,9 +115,9 @@
                     clearable
                   />
                 </el-form-item>
-                <el-form-item class="mt-25px" label="网址">
+                <!-- <el-form-item class="mt-25px" label="网址">
                   <el-input v-model="formItem.web_url" placeholder="请输入" />
-                </el-form-item>
+                </el-form-item> -->
               </div>
               <div class="w-[33%]">
                 <el-form-item
@@ -148,11 +152,7 @@
           >
             <div class="flex">
               <div class="w-[33%]">
-                <el-form-item
-                  class="mt-25px"
-                  label="税地发票类型"
-                  prop="invoice_type"
-                >
+                <el-form-item class="mt-25px" label="税地发票类型">
                   <el-select
                     class="w-[100%]"
                     v-model="formItem.invoice_type"
@@ -168,11 +168,7 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item
-                  class="mt-25px"
-                  label="开票类目"
-                  prop="category_id"
-                >
+                <el-form-item class="mt-25px" label="开票类目">
                   <el-cascader
                     popper-class="last-cascader"
                     class="w-[100%]"
@@ -243,21 +239,17 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="开户行" prop="bank">
+                <el-form-item class="mt-25px" label="开户行">
                   <el-input v-model="formItem.bank" placeholder="请输入">
                   </el-input>
                 </el-form-item>
-                <el-form-item
-                  class="mt-25px"
-                  label="银行账户"
-                  prop="bank_account"
-                >
+                <el-form-item class="mt-25px" label="开户行账户">
                   <el-input
                     v-model="formItem.bank_account"
                     placeholder="请输入"
                   />
                 </el-form-item>
-                <el-form-item
+                <!-- <el-form-item
                   class="mt-25px"
                   label="企业代码"
                   prop="company_code"
@@ -266,7 +258,7 @@
                     v-model="formItem.company_code"
                     placeholder="请输入"
                   />
-                </el-form-item>
+                </el-form-item> -->
               </div>
               <div class="w-[33%]">
                 <el-form-item class="mb-[0]" label="发票票样">
@@ -372,7 +364,7 @@
                   >
                   </el-input>
                 </el-form-item>
-                <el-form-item
+                <!-- <el-form-item
                   class="mt-25px"
                   label="企业注册类型"
                   prop="tax_reg_type"
@@ -402,12 +394,18 @@
                     placeholder="请输入"
                   >
                   </el-input>
-                </el-form-item>
+                </el-form-item> -->
               </div>
               <div class="w-[33%]">
-                <el-form-item class="mb-[0]" label="合同" prop="agreement_url">
+                <el-form-item class="mb-[0]" label="个人合同模板">
                   <multi-upload
                     v-model="formItem.agreement_url"
+                    :limit="3"
+                  ></multi-upload>
+                </el-form-item>
+                <el-form-item class="mb-[0]" label="企业合同模板">
+                  <multi-upload
+                    v-model="formItem.contract_img"
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
@@ -671,6 +669,7 @@ const Rules3 = {
   tax_reg_type: [{ required: true, message: "请选择", trigger: "blur" }],
   tax_organ_code: [{ required: true, message: "请输入", trigger: "blur" }],
   agreement_url: [{ required: true, message: "请上传图片", trigger: "blur" }],
+  contract_img: [{ required: true, message: "请上传图片", trigger: "blur" }],
   settlement_confirmation_letter: [
     { required: true, message: "请上传图片", trigger: "blur" },
   ],
@@ -708,6 +707,7 @@ const formItem = ref({
   tax_reg_type: "",
   tax_organ_code: "",
   agreement_url: [],
+  contract_img: [],
   settlement_confirmation_letter: [],
 });
 const handleSelfOperatedTaxLandEdit = () => {
@@ -729,6 +729,7 @@ const handleSelfOperatedTaxLandEdit = () => {
               // params.certification_rules = flatten(params.certification_rules);
               // params.signing_rules = flatten(params.signing_rules);
               params.agreement_url = JSON.stringify(params.agreement_url);
+              params.contract_img = JSON.stringify(params.contract_img);
               params.settlement_confirmation_letter = JSON.stringify(
                 params.settlement_confirmation_letter
               );
@@ -809,6 +810,7 @@ const getData = async () => {
       tax_reg_type,
       tax_organ_code,
       agreement_url,
+      contract_img,
       settlement_confirmation_letter,
     } = data.info;
     formItem.value = {
@@ -850,6 +852,7 @@ const getData = async () => {
       tax_reg_type: tax_reg_type + "",
       tax_organ_code,
       agreement_url,
+      contract_img,
       settlement_confirmation_letter,
     };
   } catch (error) {

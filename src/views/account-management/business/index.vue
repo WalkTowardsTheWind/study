@@ -87,6 +87,9 @@
           </template>
         </el-dropdown>
       </template>
+      <template #calculation_type="scope">
+        <span>{{ ["", "内扣", "外扣"][scope.row.calculation_type] }}</span>
+      </template>
       <template #operation="scope">
         <el-button
           v-if="
@@ -195,7 +198,12 @@ const columnList = [
   { label: "企业联系人", prop: "contacts", width: 150 },
   { label: "联系号码", prop: "mobile", width: 150 },
   { label: "客户点位", prop: "tax_point", width: 100 },
-  { label: "计费方式", prop: "calculation_type", width: 100 },
+  {
+    label: "计费方式",
+    prop: "calculation_type",
+    slot: "calculation_type",
+    width: 100,
+  },
   { label: "创建时间", prop: "add_time", width: 200 },
   { label: "操作", slot: "operation", fixed: "right", width: 250 },
 ];
@@ -215,7 +223,7 @@ async function handleSearch() {
   tableData.length = 0;
   let params = {
     ...formItem,
-    page: pageInfo.page,
+    page: 1,
     limit: pageInfo.limit,
     start_time: date.value[0] || "",
     end_time: date.value[1] || "",

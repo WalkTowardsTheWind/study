@@ -8,7 +8,7 @@
       <el-form-item>
         <el-input
           v-model="formItem.keywords"
-          placeholder="请输入名称、区域、对接人"
+          placeholder="请输入名称/区域/对接人"
           clearable
         >
           <template #prefix>
@@ -18,32 +18,31 @@
       </el-form-item>
 
       <el-form-item label="税地状态">
-        <el-select v-model="formItem.status" placeholder="全部" clearable>
+        <zxn-select v-model="formItem.status" @change="handleSearch">
           <el-option
             v-for="item in proxy.$const['taxLandManagementEnum.taxLandStatus']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
+        </zxn-select>
       </el-form-item>
 
-      <el-form-item label="发票类型">
-        <el-select v-model="formItem.invoice_type" placeholder="全部" clearable>
+      <el-form-item label="税地发票类型" label-width="110px">
+        <zxn-select v-model="formItem.invoice_type" @change="handleSearch">
           <el-option
             v-for="item in proxy.$const['taxLandManagementEnum.InvoiceType']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
+        </zxn-select>
       </el-form-item>
 
-      <el-form-item label="发票面额">
-        <el-select
+      <!-- <el-form-item label="发票面额">
+        <zxn-select
           v-model="formItem.invoice_denomination"
-          placeholder="全部"
-          clearable
+          @change="handleSearch"
         >
           <el-option
             v-for="item in proxy.$const[
@@ -53,15 +52,11 @@
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
-      </el-form-item>
+        </zxn-select>
+      </el-form-item> -->
 
-      <el-form-item label="计算方式">
-        <el-select
-          v-model="formItem.calculation_type"
-          placeholder="全部"
-          clearable
-        >
+      <!-- <el-form-item label="计算方式">
+        <zxn-select v-model="formItem.calculation_type" @change="handleSearch">
           <el-option
             v-for="item in proxy.$const[
               'taxLandManagementEnum.calculationType'
@@ -70,8 +65,8 @@
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
-      </el-form-item>
+        </zxn-select>
+      </el-form-item> -->
       <el-form-item prop="date" label="申请日期">
         <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>
@@ -95,6 +90,7 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
+        <el-button class="ml-4" type="primary" plain>导出税地资料</el-button>
         <!-- <el-dropdown class="ml-4" trigger="click" @command="handleD">
           <el-button type="primary">批量操作</el-button>
           <template #dropdown>
@@ -118,6 +114,9 @@
         <el-button link type="primary" @click="handleUpdateStatus(scope)">{{
           [0, 2].includes(scope.row.status) ? "上架" : "下架"
         }}</el-button>
+        <el-button link type="primary" @click="handleDelete(scope)"
+          >删除</el-button
+        >
         <el-button
           v-if="scope.row.status == 0"
           link
@@ -125,9 +124,7 @@
           @click="handleB(scope)"
           >编辑</el-button
         >
-        <el-button link type="primary" @click="handleDelete(scope)"
-          >删除</el-button
-        >
+
         <!-- <el-button link type="primary" @click="handleF(scope)">导出</el-button> -->
         <el-button link type="primary" @click="handleDetails(scope)"
           >详情</el-button
@@ -241,9 +238,11 @@ const columnList = [
   },
   { label: "税地名称", prop: "tax_land_name" },
   { label: "税地地区", prop: "merger_name" },
-  { label: "成本", prop: "tax_cost_point" },
+  { label: "税地成本", prop: "tax_cost_point" },
   { label: "签约数量", prop: "sign_count" },
-  { label: "计算方式", prop: "calculation_type" },
+  { label: "税地类型", prop: "tax_land_type", width: 120 },
+
+  // { label: "计算方式", prop: "calculation_type" },
   { label: "对接人", prop: "tax_land_head" },
   { label: "税地发票类型", prop: "invoice_type", width: 120 },
   { label: "发票面额", prop: "invoice_denomination", width: 120 },

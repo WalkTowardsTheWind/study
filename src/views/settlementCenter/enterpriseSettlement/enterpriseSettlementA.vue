@@ -288,10 +288,10 @@ const tabsList = [
     name: "2",
     label: "任务成员",
   },
-  {
-    name: "3",
-    label: "验收凭证",
-  },
+  // {
+  //   name: "3",
+  //   label: "验收凭证",
+  // },
 ];
 // 查询重置
 const pageInfo = reactive({

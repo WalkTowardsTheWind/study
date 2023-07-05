@@ -10,37 +10,37 @@
         <el-row :gutter="50">
           <el-col :span="8">
             <el-form-item label="企业名称" align="right" label-width="130px">
-              <el-input v-model="formData.company_name" v-if="isEdit" />
-              <span v-else>{{ formData.company_name }}</span>
+              <el-input v-model="formData.company_name" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="统一社会信用代码" label-width="130px">
-              <el-input v-model="formData.credit_code" v-if="isEdit" />
-              <span v-else>{{ formData.credit_code }}</span>
+              <el-input v-model="formData.credit_code" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="电话" label-width="130px">
-              <el-input v-model="formData.contacts_mobile" v-if="isEdit" />
-              <span v-else>{{ formData.contacts_mobile }}</span>
+              <el-input
+                v-model="formData.contacts_mobile"
+                :readonly="!isEdit"
+              />
             </el-form-item>
             <el-form-item label="法人身份证号" label-width="130px">
-              <el-input v-model="formData.legal_person_idcard" v-if="isEdit" />
-              <span v-else>{{ formData.legal_person_idcard }}</span>
+              <el-input
+                v-model="formData.legal_person_idcard"
+                :readonly="!isEdit"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="企业登录名称">
-              <el-input v-model="formData.account" v-if="isEdit" />
-              <span v-else>{{ formData.admin_id }}</span>
+              <el-input v-model="formData.account" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="法定代表人">
-              <el-input v-model="formData.legal_person" v-if="isEdit" />
-              <span v-else>{{ formData.legal_person }}</span>
+              <el-input v-model="formData.legal_person" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="行业">
               <el-select
                 class="w-full"
                 placeholder="请选择"
                 v-model="formData.category_id"
-                v-if="isEdit"
+                :readonly="!isEdit"
               >
                 <el-option
                   v-for="item in cateGoryOptions"
@@ -49,36 +49,34 @@
                   :value="item.id"
                 ></el-option>
               </el-select>
-              <span v-else>{{ formData.category }}</span>
             </el-form-item>
             <el-form-item label="营业执照有效期">
-              <el-date-picker
-                v-if="isEdit"
-                v-model="formData.license_end_date"
-                unlink-panels
-                value-format="YYYY-MM-DD"
-              />
-              <span v-else>{{ formData.license_end_date }}</span>
+              <div style="width: 100%">
+                <el-date-picker
+                  style="width: 100%"
+                  :readonly="!isEdit"
+                  v-model="formData.license_end_date"
+                  unlink-panels
+                  value-format="YYYY-MM-DD"
+                />
+              </div>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="密码">
-              <el-input
-                class="w-[100%]"
-                value="********"
-                v-if="isEdit"
-                readonly
-              />
-              <span v-else>********</span>
-              <span v-if="isEdit" class="resetPWD">重置密码</span>
+              <el-input class="w-[100%]" value="********" :readonly="!isEdit" />
+              <span v-if="isEdit" class="resetPWD" @click="resetPWD"
+                >重置密码</span
+              >
             </el-form-item>
             <el-form-item label="联系人">
-              <el-input v-model="formData.contacts" v-if="isEdit" />
-              <span v-else>{{ formData.contacts }}</span>
+              <el-input v-model="formData.contacts" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="法人电话">
-              <el-input v-model="formData.legal_person_mobile" v-if="isEdit" />
-              <span v-else>{{ formData.legal_person_mobile }}</span>
+              <el-input
+                v-model="formData.legal_person_mobile"
+                :readonly="!isEdit"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -91,14 +89,13 @@
         <el-row :gutter="50">
           <el-col :span="8">
             <el-form-item label="开户行" label-width="130px">
-              <el-input v-model="formData.bank" v-if="isEdit" />
-              <span v-else>{{ formData.bank }}</span>
+              <el-input v-model="formData.bank" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="纳税人类型" label-width="130px">
               <el-select
                 class="w-full"
                 v-model="formData.taxpayer_type"
-                v-if="isEdit"
+                :readonly="!isEdit"
               >
                 <el-option
                   v-for="item in options"
@@ -107,73 +104,65 @@
                   :value="item.value"
                 />
               </el-select>
-              <span v-else>{{ taxpayerType[formData.taxpayer_type] }}</span>
             </el-form-item>
             <el-form-item label="渠道点位" label-width="130px">
-              <el-input v-if="isEdit" v-model="formData.channel_point" />
-              <span v-else>{{ formData.channel_point }}</span>
+              <el-input :readonly="!isEdit" v-model="formData.channel_point">
+                <template #append>%</template>
+              </el-input>
             </el-form-item>
             <el-form-item label="计费方式" label-width="130px">
               <el-select
                 class="w-full"
                 v-model="formData.calculation_type"
-                v-if="isEdit"
+                :readonly="!isEdit"
               >
                 <el-option :value="1" label="外扣"></el-option>
                 <el-option :value="2" label="内扣"></el-option>
               </el-select>
-              <div v-else>
-                {{ ["", "外扣", "内扣"][formData.calculation_type] }}
-              </div>
             </el-form-item>
             <el-form-item label="快递地址" label-width="130px">
-              <el-input v-if="isEdit" v-model="formData.address" />
-              <span v-else>{{ formData.address }}</span>
+              <el-input :readonly="!isEdit" v-model="formData.address" />
             </el-form-item>
-            <!-- <el-form-item label="接收人联系方式" label-width="130px">
-							<el-input v-model="formData.consignee_mobile" v-if="isEdit" />
-							<span v-else>{{ formData.consignee_mobile }}</span>
-						</el-form-item> -->
           </el-col>
           <el-col :span="8">
             <el-form-item label="银行账号">
-              <el-input v-model="formData.bank_account" v-if="isEdit" />
-              <span v-else>{{ formData.bank_account }}</span>
+              <el-input v-model="formData.bank_account" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="企业邮箱">
-              <el-input v-model="formData.company_email" v-if="isEdit" />
-              <span v-else>{{ formData.company_email }}</span>
+              <el-input v-model="formData.company_email" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="企业地址">
-              <el-input v-model="formData.company_address" v-if="isEdit" />
-              <span v-else>{{ formData.company_address }}</span>
+              <el-input
+                v-model="formData.company_address"
+                :readonly="!isEdit"
+              />
             </el-form-item>
             <el-form-item label="发票接收人">
-              <el-input v-model="formData.consignee" v-if="isEdit" />
-              <span v-else>{{ formData.consignee }}</span>
+              <el-input v-model="formData.consignee" :readonly="!isEdit" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="纳税人识别号">
-              <el-input v-model="formData.taxpayer_number" v-if="isEdit" />
-              <span v-else> {{ formData.taxpayer_number }}</span>
+              <el-input
+                v-model="formData.taxpayer_number"
+                :readonly="!isEdit"
+              />
             </el-form-item>
             <el-form-item label="企业来源">
               <el-select
                 class="w-full"
                 v-model="formData.company_source"
-                v-if="isEdit"
+                :readonly="!isEdit"
               >
                 <el-option :value="0" label="销售"></el-option>
                 <el-option :value="1" label="渠道推广"></el-option>
               </el-select>
-              <span v-else>
-                {{ ["销售", "渠道退款"][formData.company_source] }}</span
-              >
             </el-form-item>
             <el-form-item label="接收人号码">
-              <el-input v-model="formData.consignee" v-if="isEdit" />
-              <span v-else>{{ formData.consignee }}</span>
+              <el-input
+                v-model="formData.consignee_mobile"
+                :readonly="!isEdit"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -191,6 +180,7 @@ import {
   getBusinessAccountDetail,
   editBusinessAccount,
   getCategoryList,
+  resetAccountPwd,
 } from "@/api/account/business";
 import { getLandList } from "@/api/common";
 
@@ -249,6 +239,27 @@ async function getAccountDetail() {
       return new Error("error", error);
     }
   }
+}
+function resetPWD() {
+  ElMessageBox.confirm("是否重置密码?", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    center: true,
+  })
+    .then(() => {
+      resetAccountPwd(props.id).then((res) => {
+        ElMessage.success({
+          message: "重置密码成功",
+        });
+      });
+    })
+    .catch((err) => {
+      ElMessage({
+        type: "info",
+        message: "取消重置密码",
+      });
+      console.log(err);
+    });
 }
 
 function getCategoryOptions() {
@@ -323,5 +334,9 @@ getCategoryOptions();
   right: 10px;
   color: #356ff3;
   cursor: pointer;
+}
+
+:deep(.el-input__wrapper) {
+  width: 100% !important;
 }
 </style>

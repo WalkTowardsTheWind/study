@@ -346,7 +346,6 @@ const addForm = reactive({
   seal: [], // 企业印章
   bank: "",
   bank_account: "",
-  taxpayer_number: "",
   taxpayer_type: "",
   permit_img: [],
   taxpayer_type_img: [],
@@ -400,7 +399,6 @@ const isAllComplete = computed(() => {
       !!addForm.seal.length &&
       !!addForm.bank &&
       !!addForm.bank_account &&
-      !!addForm.taxpayer_number &&
       !!addForm.taxpayer_type &&
       !!addForm.permit_img.length &&
       !!addForm.taxpayer_type_img.length &&
@@ -441,7 +439,6 @@ const isAllComplete = computed(() => {
       !!addForm.seal.length &&
       !!addForm.bank &&
       !!addForm.bank_account &&
-      !!addForm.taxpayer_number &&
       !!addForm.taxpayer_type &&
       !!addForm.permit_img.length &&
       !!addForm.taxpayer_type_img.length &&
@@ -486,79 +483,79 @@ async function submit(formEl: FormInstance | undefined) {
   if (!formEl) return;
   await formEl.validate(async (valid, fields) => {
     if (valid) {
-      // console.log(isAllComplete.value);
-      // console.log(addForm);
+      console.log(isAllComplete.value);
+      console.log(addForm);
 
       // 全部填写完成
-      if (isAllComplete.value) {
-        const res = await createBusinessAccount(addForm);
-        try {
-          if (res.status === 200) {
-            ElMessage({
-              message: "新建企业账号成功",
-              type: "success",
-            });
-            setTimeout(() => {
-              router.go(-1);
-            }, 200);
-          }
-        } catch (error: any) {
-          return new Error("error", error);
-        }
-      } else {
-        // 弹框激活
-        ElMessageBox.confirm(
-          "该企业信息暂不完善，是否立即激活企业状态？",
-          "警告",
-          {
-            confirmButtonText: "确定",
-            cancelButtonText: "暂不",
-            distinguishCancelAndClose: true,
-            center: true,
-          }
-        )
-          .then(async () => {
-            addForm.is_active = 1;
-            const res = await createBusinessAccount(addForm);
-            try {
-              if (res.status === 200) {
-                ElMessage({
-                  message: "新建企业账号成功",
-                  type: "success",
-                });
-                setTimeout(() => {
-                  router.go(-1);
-                }, 200);
-              }
-            } catch (error: any) {
-              return new Error("error", error);
-            }
-          })
-          .catch(async (action) => {
-            if (action == "close") {
-              ElMessage({
-                type: "info",
-                message: "取消新建",
-              });
-            } else {
-              addForm.is_active = 0;
-              const res = await createBusinessAccount(addForm);
-              try {
-                if (res.status === 200) {
-                  ElMessage({
-                    message: "新建企业账号成功",
-                    type: "success",
-                  });
-                  setTimeout(() => {
-                    router.go(-1);
-                  }, 200);
-                }
-              } catch (error: any) {
-                return new Error("error", error);
-              }
-            }
-          });
-      }
+      // if (isAllComplete.value) {
+      //   const res = await createBusinessAccount(addForm);
+      //   try {
+      //     if (res.status === 200) {
+      //       ElMessage({
+      //         message: "新建企业账号成功",
+      //         type: "success",
+      //       });
+      //       setTimeout(() => {
+      //         router.go(-1);
+      //       }, 200);
+      //     }
+      //   } catch (error: any) {
+      //     return new Error("error", error);
+      //   }
+      // } else {
+      //   // 弹框激活
+      //   ElMessageBox.confirm(
+      //     "该企业信息暂不完善，是否立即激活企业状态？",
+      //     "警告",
+      //     {
+      //       confirmButtonText: "确定",
+      //       cancelButtonText: "暂不",
+      //       distinguishCancelAndClose: true,
+      //       center: true,
+      //     }
+      //   )
+      //     .then(async () => {
+      //       addForm.is_active = 1;
+      //       const res = await createBusinessAccount(addForm);
+      //       try {
+      //         if (res.status === 200) {
+      //           ElMessage({
+      //             message: "新建企业账号成功",
+      //             type: "success",
+      //           });
+      //           setTimeout(() => {
+      //             router.go(-1);
+      //           }, 200);
+      //         }
+      //       } catch (error: any) {
+      //         return new Error("error", error);
+      //       }
+      //     })
+      //     .catch(async (action) => {
+      //       if (action == "close") {
+      //         ElMessage({
+      //           type: "info",
+      //           message: "取消新建",
+      //         });
+      //       } else {
+      //         addForm.is_active = 0;
+      //         const res = await createBusinessAccount(addForm);
+      //         try {
+      //           if (res.status === 200) {
+      //             ElMessage({
+      //               message: "新建企业账号成功",
+      //               type: "success",
+      //             });
+      //             setTimeout(() => {
+      //               router.go(-1);
+      //             }, 200);
+      //           }
+      //         } catch (error: any) {
+      //           return new Error("error", error);
+      //         }
+      //       }
+      //     });
+      // }
     } else {
       ElMessage.error({
         message: "当前表单必填项还未填写！",
@@ -620,5 +617,9 @@ getTaxLandOption();
 .is-active {
   color: #366ff3;
   border-color: #366ff3;
+}
+
+:deep(.el-input__wrapper) {
+  width: 100% !important;
 }
 </style>
