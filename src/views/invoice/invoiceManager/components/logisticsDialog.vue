@@ -6,7 +6,7 @@
           <zxn-image :imgList="[formItem.invoice_sample_url]" />
         </el-form-item>
         <el-form-item label="物流面单">
-          <zxn-image :imgList="[formItem.invoice_sample_url]" />
+          <zxn-image :imgList="[formItem.express_url]" />
         </el-form-item>
       </el-form>
       <div class="logistics-info">

@@ -68,10 +68,11 @@
       </template>
       <template #img="{ row }">
         <zxn-image
-          :imgList="[row.invoice_sample_url]"
+          :imgList="row.settlement_confirmation_letter"
           width="40"
           height="40"
           targetClick
+          ellipsis
         />
       </template>
       <template #operation="{ row }">
@@ -166,7 +167,7 @@ const columnList: any[] = reactive([
     minWidth: 120,
   },
   { label: "申请时间", prop: "add_time", minWidth: 180 },
-  { label: "结算确认函", slot: "img", minWidth: 120 },
+  { label: "结算确认函", slot: "img", minWidth: 200 },
   {
     label: "状态",
     type: "enum",

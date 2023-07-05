@@ -4,7 +4,7 @@
       class="zxn-image-item"
       :class="{ 'has-click': targetClick }"
       :style="{ width: `${width}px`, height: `${height}px` }"
-      v-for="(item, index) in imgList"
+      v-for="(item, index) in currentImg"
       :key="item"
       @click="handleTarget(index)"
     >
@@ -17,10 +17,16 @@
         <span @click="handlePreview(index)">预览</span>
         <span v-if="hasDelete">删除</span>
       </div>
+      <div
+        class="zxn-image-item-ellipsis"
+        v-if="ellipsis && index === currentImg.length - 1"
+      >
+        + {{ imgList.length - 2 }}
+      </div>
     </div>
     <el-image-viewer
       v-if="showViewer"
-      :url-list="imgList"
+      :url-list="currentImg"
       :initial-index="previewIndex"
       z-index="999"
       @close="closeImgViewer"
@@ -30,6 +36,7 @@
 </template>
 <script setup lang="ts">
 import { useEventListener } from "@vueuse/core";
+import { isArray } from "@/utils/is";
 const props = defineProps({
   imgList: { type: Array, default: () => [] },
   width: { type: Number, default: 80 },
@@ -37,6 +44,11 @@ const props = defineProps({
   fit: { type: String, default: "fill" },
   hasDelete: { type: Boolean, default: false },
   targetClick: { type: Boolean, default: false },
+  ellipsis: { type: Boolean, default: false },
+});
+const currentImg = computed(() => {
+  const _imgList = isArray(props.imgList) ? props.imgList : [props.imgList];
+  return props.ellipsis ? _imgList.filter((i, r) => r >= 1) : _imgList;
 });
 let stopWheelListener: (() => void) | undefined;
 let prevOverflow = "";
@@ -86,6 +98,17 @@ const handleTarget = (index: number) => {
     font-size: 0;
     border-radius: 8px;
 
+    &-ellipsis {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #fff;
+      background: rgb(51 51 51 / 60%);
+    }
+
     &-bottom {
       position: absolute;
       right: 0;
@@ -122,7 +145,7 @@ const handleTarget = (index: number) => {
 
     &:hover {
       .zxn-image-item-bottom {
-        bottom: -25%;
+        bottom: -25% !important;
       }
     }
   }
