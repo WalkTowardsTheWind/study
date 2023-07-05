@@ -37,7 +37,11 @@
         <el-table-column
           v-else-if="item.type"
           v-bind="item"
-          :showOverflowTooltip="true"
+          :showOverflowTooltip="
+            isBoolean(item.showOverflowTooltip)
+              ? item.showOverflowTooltip
+              : true
+          "
         >
           <template #default="{ row }">
             <div
@@ -63,7 +67,15 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column v-else v-bind="item" :showOverflowTooltip="true" />
+        <el-table-column
+          v-else
+          v-bind="item"
+          :showOverflowTooltip="
+            isBoolean(item.showOverflowTooltip)
+              ? item.showOverflowTooltip
+              : true
+          "
+        />
       </template>
     </el-table>
     <pagination
@@ -79,7 +91,7 @@
 import { PropType } from "vue";
 import { TabsContextKey } from "@/components/constants";
 import type { SortParams } from "./tableType";
-import { isNumber } from "@/utils/is";
+import { isBoolean, isNumber } from "@/utils/is";
 
 const tabsContext = inject(TabsContextKey, undefined);
 const { proxy } = getCurrentInstance() as any;
