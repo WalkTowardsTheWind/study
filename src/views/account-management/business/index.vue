@@ -223,7 +223,7 @@ async function handleSearch() {
   tableData.length = 0;
   let params = {
     ...formItem,
-    page: 1,
+    page: pageInfo.page,
     limit: pageInfo.limit,
     start_time: date.value[0] || "",
     end_time: date.value[1] || "",
@@ -231,7 +231,6 @@ async function handleSearch() {
   try {
     const { data } = await getBusinessAccountList(params);
     pageInfo.total = data.total;
-    pageInfo.page = data.current_page;
     tableData.push(...data.data);
   } catch (error: any) {
     return new Error("error", error);
