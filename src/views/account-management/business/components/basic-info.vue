@@ -95,7 +95,7 @@
               <el-select
                 class="w-full"
                 v-model="formData.taxpayer_type"
-                :readonly="!isEdit"
+                :disabled="!isEdit"
               >
                 <el-option
                   v-for="item in options"
@@ -114,7 +114,7 @@
               <el-select
                 class="w-full"
                 v-model="formData.calculation_type"
-                :readonly="!isEdit"
+                :disabled="!isEdit"
               >
                 <el-option :value="1" label="外扣"></el-option>
                 <el-option :value="2" label="内扣"></el-option>
@@ -152,7 +152,7 @@
               <el-select
                 class="w-full"
                 v-model="formData.company_source"
-                :readonly="!isEdit"
+                :disabled="!isEdit"
               >
                 <el-option :value="0" label="销售"></el-option>
                 <el-option :value="1" label="渠道推广"></el-option>

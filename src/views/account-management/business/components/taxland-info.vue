@@ -10,7 +10,7 @@
             <el-select
               class="w-full"
               v-model="formData.auth_type"
-              :readonly="!isEdit"
+              :disabled="!isEdit"
             >
               <el-option
                 v-for="(item, index) in authType"
@@ -26,7 +26,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="客户点位">
-            <el-input v-model="formData.tax_point">
+            <el-input v-model="formData.tax_point" :readonly="!isEdit">
               <template #append>%</template>
             </el-input>
           </el-form-item>
@@ -35,7 +35,7 @@
               class="w-full"
               placeholder="请选择（单选）"
               v-model="formData.sign_type"
-              :readonly="!isEdit"
+              :disabled="!isEdit"
             >
               <el-option :value="0" label="无"></el-option>
               <el-option :value="1" label="静默签"></el-option>
