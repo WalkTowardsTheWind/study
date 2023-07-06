@@ -1,14 +1,14 @@
 <template>
   <zxn-plan>
-    <zxn-tabs v-model:activeName="activeName" :tabs-list="tabsList" hasBack>
+    <zxn-tabs v-model:activeName="activeName" :tabs-list="tabsList">
       <template #1>
-        <BasicInfo :isEdit="isEdit" :id="id" />
+        <BasicInfo :isEdit="isEdit" :id="id" v-model:childData="formItem" />
       </template>
       <template #3>
-        <TaxlandInfo :isEdit="isEdit" :id="id" />
+        <TaxlandInfo :isEdit="isEdit" :id="id" v-model:childData="formItem" />
       </template>
       <template #2>
-        <PaperInfo :isEdit="isEdit" :id="id" />
+        <PaperInfo :isEdit="isEdit" :id="id" v-model:childData="formItem" />
       </template>
       <template #4>
         <TaskInfo :isEdit="isEdit" :id="id" />
@@ -20,10 +20,10 @@
         <SettlementInfo :isEdit="isEdit" :id="id" />
       </template>
     </zxn-tabs>
-    <!-- <zxn-bottom-btn v-if="isEdit">
-			<el-button>取消</el-button>
-			<el-button @click="updateBusinessAccount">保存</el-button>
-		</zxn-bottom-btn> -->
+    <zxn-bottom-btn v-if="isEdit && !['4', '5', '6'].includes(activeName)">
+      <el-button @click="$router.go(-1)">取消</el-button>
+      <el-button type="primary" @click="updateBusinessAccount">保存</el-button>
+    </zxn-bottom-btn>
     <zxn-bottom-btn v-if="isCheck">
       <el-button type="info" @click="reject">驳回</el-button>
       <el-button type="primary" @click="pass">通过</el-button>
@@ -51,7 +51,11 @@ import TaxlandInfo from "./components/taxland-info.vue";
 
 import { useRoute } from "vue-router";
 
-import { checkBusinessAccount } from "@/api/account/business";
+import {
+  checkBusinessAccount,
+  editBusinessAccount,
+  getBusinessAccountDetail,
+} from "@/api/account/business";
 import router from "@/router";
 
 const tabsList = [
@@ -75,6 +79,8 @@ const isEdit = ref(false);
 const isCheck = ref(false);
 const id = ref();
 const dialogVisible = ref(false);
+
+const formItem = ref({} as any);
 
 if (route.query.status === "edit") {
   isEdit.value = true;
@@ -139,22 +145,37 @@ function checkReject() {
     });
 }
 
-// async function updateBusinessAccount() {
-// 	// 后台返回的 contacts_mobile 更新修改为 mobile
-// 	let params = {
-// 		...formData.value,
-// 		mobile: formData.value.contacts_mobile,
-// 		contacts_mobile: undefined,
-// 	};
-// 	// console.log(params);
-// 	try {
-// 		await editBusinessAccount(params);
-// 		ElMessage({
-// 			message: "编辑成功",
-// 			type: "success",
-// 		});
-// 	} catch (error: any) {
-// 		return new Error(error);
-// 	}
-// }
+async function getAccountDetail() {
+  if (route.query.id) {
+    id.value = route.query.id;
+    const res = await getBusinessAccountDetail(id.value);
+
+    try {
+      formItem.value = res.data;
+      console.log(formItem.value, "12312312321");
+    } catch (error: any) {
+      return new Error("error", error);
+    }
+  }
+}
+
+async function updateBusinessAccount() {
+  // 后台返回的 contacts_mobile 更新修改为 mobile
+  let params = {
+    ...formItem.value,
+    mobile: formItem.value.contacts_mobile,
+    contacts_mobile: undefined,
+  };
+  // console.log(params);
+  try {
+    await editBusinessAccount(params);
+    ElMessage({
+      message: "编辑成功",
+      type: "success",
+    });
+  } catch (error: any) {
+    return new Error(error);
+  }
+}
+getAccountDetail();
 </script>

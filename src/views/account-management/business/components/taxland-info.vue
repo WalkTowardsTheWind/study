@@ -1,15 +1,15 @@
 <template>
   <div class="content p-[30px]">
-    <el-form :form="formData" label-width="120">
+    <el-form :form="formItem" label-width="120">
       <el-row class="w-full" :gutter="50">
         <el-col :span="8">
           <el-form-item label="税地名称">
-            <el-input v-model="formData.tax_land_name" readonly />
+            <el-input v-model="formItem.tax_land_name" readonly />
           </el-form-item>
           <el-form-item label="认证规则">
             <el-select
               class="w-full"
-              v-model="formData.auth_type"
+              v-model="formItem.auth_type"
               :disabled="!isEdit"
             >
               <el-option
@@ -21,12 +21,12 @@
             </el-select>
           </el-form-item>
           <el-form-item label="客户税地子账户">
-            <el-input v-model="formData.sub_account_name" readonly />
+            <el-input v-model="formItem.sub_account_name" readonly />
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="客户点位">
-            <el-input v-model="formData.tax_point" :readonly="!isEdit">
+            <el-input v-model="formItem.tax_point" :readonly="!isEdit">
               <template #append>%</template>
             </el-input>
           </el-form-item>
@@ -34,7 +34,7 @@
             <el-select
               class="w-full"
               placeholder="请选择（单选）"
-              v-model="formData.sign_type"
+              v-model="formItem.sign_type"
               :disabled="!isEdit"
             >
               <el-option :value="0" label="无"></el-option>
@@ -44,23 +44,23 @@
             </el-select>
           </el-form-item>
           <el-form-item label="银行账户">
-            <el-input v-model="formData.sub_account_no" readonly />
+            <el-input v-model="formItem.sub_account_no" readonly />
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="签约合同">
-            <MultiUpload v-model="formData.contract_img" v-if="isEdit">
+            <MultiUpload v-model="formItem.contract_img" v-if="isEdit">
               <i-ep-Plus />
             </MultiUpload>
-            <PicturePreview v-else :image-list="formData.contract_img" />
+            <PicturePreview v-else :image-list="formItem.contract_img" />
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
-    <div class="bottom-btn" v-if="isEdit">
-      <el-button @click="$router.go(-1)">取消</el-button>
-      <el-button type="primary" @click="updateBusinessAccount">保存</el-button>
-    </div>
+    <!-- <div class="bottom-btn" v-if="isEdit">
+			<el-button @click="$router.go(-1)">取消</el-button>
+			<el-button type="primary" @click="updateBusinessAccount">保存</el-button>
+		</div> -->
   </div>
 </template>
 
@@ -88,43 +88,62 @@ const props = defineProps({
   id: {
     default: () => 0,
   },
+  childData: {
+    type: Object,
+  },
 });
-const formData = ref({} as any);
+const emit = defineEmits(["update:modelValue"]);
 
-async function getAccountDetail() {
-  try {
-    if (props.id) {
-      const res = await getBusinessAccountDetail(props.id);
-      console.log(res);
+const formItem = ref(props.childData as any);
 
-      formData.value = res.data;
-    }
-  } catch (error: any) {
-    return new Error("error", error);
+watch(
+  () => props.childData,
+  (newValue) => {
+    formItem.value = props.childData;
   }
-}
+);
 
-async function updateBusinessAccount() {
-  // 后台返回的 contacts_mobile 更新修改为 mobile
-  let params = {
-    ...formData.value,
-    mobile: formData.value.contacts_mobile,
-    contacts_mobile: undefined,
-  };
-  // console.log(params);
-  try {
-    await editBusinessAccount(params);
-    ElMessage({
-      message: "编辑成功",
-      type: "success",
-    });
-    router.go(-1);
-  } catch (error: any) {
-    return new Error(error);
+watch(
+  () => formItem.value,
+  (newValue) => {
+    emit("update:modelValue", formItem.value);
   }
-}
+);
 
-getAccountDetail();
+// async function getAccountDetail() {
+// 	try {
+// 		if (props.id) {
+// 			const res = await getBusinessAccountDetail(props.id);
+// 			console.log(res);
+
+// 			formItem.value = res.data;
+// 		}
+// 	} catch (error: any) {
+// 		return new Error("error", error);
+// 	}
+// }
+
+// async function updateBusinessAccount() {
+// 	// 后台返回的 contacts_mobile 更新修改为 mobile
+// 	let params = {
+// 		...formItem.value,
+// 		mobile: formItem.value.contacts_mobile,
+// 		contacts_mobile: undefined,
+// 	};
+// 	// console.log(params);
+// 	try {
+// 		await editBusinessAccount(params);
+// 		ElMessage({
+// 			message: "编辑成功",
+// 			type: "success",
+// 		});
+// 		router.go(-1);
+// 	} catch (error: any) {
+// 		return new Error(error);
+// 	}
+// }
+
+// getAccountDetail();
 </script>
 
 <style scoped lang="scss">

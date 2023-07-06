@@ -156,15 +156,13 @@ const categoryList = ref([
 
 const activeName = ref("1");
 
-const date = ref([] as any);
+const date = ref([]);
 
 const formItem = reactive({
   name: "",
   status: "1",
   // category_id: "",
   tax_land_id: "",
-  start_time: date[0] || "",
-  end_time: date[1] || "",
 });
 
 const pageInfo = reactive({
@@ -215,6 +213,8 @@ function handleSearch() {
   let params = {
     ...pageInfo,
     ...formItem,
+    start_time: date.value[0] || "",
+    end_time: date.value[1] || "",
   };
   getRechargeTaskList(params).then((res) => {
     tableData.length = 0;
@@ -247,7 +247,7 @@ function handleReset() {
   formItem.tax_land_id = "";
   formItem.status = "";
   date.value = [];
-  formItem.category_id = "";
+  // formItem.category_id = "";
   handleSearch();
 }
 

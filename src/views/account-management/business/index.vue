@@ -88,7 +88,7 @@
         </el-dropdown>
       </template>
       <template #calculation_type="scope">
-        <span>{{ ["", "内扣", "外扣"][scope.row.calculation_type] }}</span>
+        <span>{{ ["内扣", "外扣"][scope.row.calculation_type] }}</span>
       </template>
       <template #operation="scope">
         <el-button

@@ -2,88 +2,64 @@
   <div class="p-[30px] relative box">
     <!-- 编辑 -->
     <template v-if="isEdit">
-      <el-form :form="formData" label-width="120px">
+      <el-form :form="formItem" label-width="120px">
         <el-form-item label="营业执照">
-          <MultiUpload v-model="formData.license">
+          <MultiUpload v-model="formItem.license">
             <i-ep-Plus />
           </MultiUpload>
         </el-form-item>
         <el-form-item label="法人身份证">
-          <MultiUpload v-model="formData.idcard_img">
+          <MultiUpload v-model="formItem.idcard_img">
             <i-ep-Plus />
           </MultiUpload>
         </el-form-item>
         <el-form-item label="纳税证明">
-          <MultiUpload v-model="formData.taxpayer_type_img">
+          <MultiUpload v-model="formItem.taxpayer_type_img">
             <i-ep-Plus />
           </MultiUpload>
         </el-form-item>
         <el-form-item label="公司照片">
-          <MultiUpload v-model="formData.header_img">
+          <MultiUpload v-model="formItem.header_img">
             <i-ep-Plus />
           </MultiUpload>
         </el-form-item>
         <el-form-item label="开户许可证">
-          <MultiUpload v-model="formData.permit_img">
+          <MultiUpload v-model="formItem.permit_img">
             <i-ep-Plus />
           </MultiUpload>
         </el-form-item>
         <el-form-item label="企业印章">
-          <MultiUpload v-model="formData.seal">
+          <MultiUpload v-model="formItem.seal">
             <i-ep-Plus />
           </MultiUpload>
         </el-form-item>
-        <div class="bottom-btn">
+        <!-- <div class="bottom-btn">
           <el-button @click="$router.go(-1)">取消</el-button>
           <el-button type="primary" @click="updateBusinessAccount"
             >保存</el-button
           >
-        </div>
+        </div> -->
       </el-form>
     </template>
     <!-- 详情 -->
     <template v-else>
       <el-form-item label="营业执照" label-width="120px">
-        <PicturePreview
-          v-if="formData.license.length"
-          :image-list="formData.license"
-        />
-        <span v-else>--</span>
+        <PicturePreview :image-list="formItem.license" />
       </el-form-item>
       <el-form-item label="法人身份证" label-width="120px">
-        <PicturePreview
-          v-if="formData.idcard_img.length"
-          :image-list="formData.idcard_img"
-        />
-        <span v-else>--</span>
+        <PicturePreview :image-list="formItem.idcard_img" />
       </el-form-item>
       <el-form-item label="纳税证明" label-width="120px">
-        <PicturePreview
-          v-if="formData.taxpayer_type_img.length"
-          :image-list="formData.taxpayer_type_img"
-        />
-        <span v-else>--</span>
+        <PicturePreview :image-list="formItem.taxpayer_type_img" />
       </el-form-item>
       <el-form-item label="公司照片" label-width="120px">
-        <PicturePreview
-          v-if="formData.header_img.length"
-          :image-list="formData.header_img"
-        />
-        <span v-else>--</span>
+        <PicturePreview :image-list="formItem.header_img" />
       </el-form-item>
       <el-form-item label="开户许可证" label-width="120px">
-        <PicturePreview
-          v-if="formData.permit_img.length"
-          :image-list="formData.permit_img"
-        />
-        <span v-else>--</span>
+        <PicturePreview :image-list="formItem.permit_img" />
       </el-form-item>
       <el-form-item label="企业印章" label-width="120px">
-        <PicturePreview
-          v-if="formData.seal.length"
-          :image-list="formData.seal"
-        />
-        <span v-else>--</span>
+        <PicturePreview :image-list="formItem.seal" />
       </el-form-item>
     </template>
   </div>
@@ -103,54 +79,74 @@ const props = defineProps({
   id: {
     default: () => "",
   },
+  childData: {
+    type: Object,
+  },
 });
+const emit = defineEmits(["update:modelValue"]);
 
-const formData = ref({
-  license: [],
-  idcard_img: [],
-  taxpayer_type_img: [],
-  header_img: [],
-  permit_img: [],
-  seal: [],
-} as any);
+const formItem = ref(props.childData as any);
+
+watch(
+  () => props.childData,
+  (newValue) => {
+    formItem.value = props.childData;
+  }
+);
+
+watch(
+  () => formItem.value,
+  (newValue) => {
+    emit("update:modelValue", formItem.value);
+  }
+);
+
+// const formItem = ref({
+// 	license: [],
+// 	idcard_img: [],
+// 	taxpayer_type_img: [],
+// 	header_img: [],
+// 	permit_img: [],
+// 	seal: [],
+// } as any);
 
 /**
  * 更新
  */
-async function updateBusinessAccount() {
-  // console.log(formData.value);
-  // 后台返回的 contacts_mobile 更新修改为 mobile
-  let params = {
-    ...formData.value,
-    mobile: formData.value.contacts_mobile,
-    contacts_mobile: undefined,
-  };
-  try {
-    await editBusinessAccount(params);
-    ElMessage({
-      message: "编辑成功",
-      type: "success",
-    });
-  } catch (error: any) {
-    return new Error(error);
-  }
-}
+// async function updateBusinessAccount() {
+// 	// console.log(formItem.value);
+// 	// 后台返回的 contacts_mobile 更新修改为 mobile
+// 	let params = {
+// 		...formItem.value,
+// 		mobile: formItem.value.contacts_mobile,
+// 		contacts_mobile: undefined,
+// 	};
+// 	try {
+// 		await editBusinessAccount(params);
+// 		ElMessage({
+// 			message: "编辑成功",
+// 			type: "success",
+// 		});
+// 	} catch (error: any) {
+// 		return new Error(error);
+// 	}
+// }
 
-async function getAccountDetail() {
-  if (props.id) {
-    const res = await getBusinessAccountDetail(props.id);
-    console.log(res);
+// async function getAccountDetail() {
+// 	if (props.id) {
+// 		const res = await getBusinessAccountDetail(props.id);
+// 		console.log(res);
 
-    try {
-      formData.value = res.data;
-      // console.log(formData.value);
-    } catch (error: any) {
-      return new Error("error", error);
-    }
-  }
-}
+// 		try {
+// 			formItem.value = res.data;
+// 			// console.log(formItem.value);
+// 		} catch (error: any) {
+// 			return new Error("error", error);
+// 		}
+// 	}
+// }
 
-getAccountDetail();
+// getAccountDetail();
 </script>
 <style scoped lang="scss">
 .box {
