@@ -54,7 +54,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="联系方式">
+                  <el-form-item label="电话">
                     <el-text class="mx-1">{{
                       formItem.task_head_phone
                     }}</el-text>
@@ -119,53 +119,37 @@
           <div class="m-t-[20px]">
             <el-form
               :model="formItem"
-              inline
-              label-width="90px"
+              label-width="100px"
               label-position="right"
             >
-              <el-row>
+              <el-row :gutter="50">
                 <el-col :span="8">
                   <el-form-item label="任务人数">
                     <el-text class="mx-1">{{ formItem.person_count }}</el-text>
                   </el-form-item>
-                </el-col>
-                <el-col :span="8">
                   <el-form-item label="结算人数">
                     <el-text class="mx-1">{{
                       formItem.settlement_person_count
                     }}</el-text>
                   </el-form-item>
-                </el-col>
-
-                <el-col :span="8">
                   <el-form-item label="结算公司">
                     <el-text class="mx-1">{{ formItem.company_name }}</el-text>
                   </el-form-item>
+                  <el-form-item label="打款账户">
+                    <el-text class="mx-1">{{ formItem.bank_account }}</el-text>
+                  </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row>
                 <el-col :span="8">
-                  <el-form-item label="结算金额">
+                  <el-form-item label="结算总额">
                     <el-text class="mx-1">{{
                       formItem.settlement_amount
                     }}</el-text>
                   </el-form-item>
-                </el-col>
-                <el-col :span="8">
                   <el-form-item label="实际打款">
                     <el-text class="mx-1">{{
                       formItem.payment_amount
                     }}</el-text>
                   </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="打款时间">
-                    <el-text class="mx-1">{{ formItem.payment_time }}</el-text>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="8">
                   <el-form-item label="结算状态">
                     <el-text class="mx-1">{{
                       proxy.$enumSet[
@@ -175,17 +159,18 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
+                  <el-form-item label="结算确认时间">
+                    <el-text class="mx-1">{{}}</el-text>
+                  </el-form-item>
+                  <el-form-item label="打款时间">
+                    <el-text class="mx-1">{{ formItem.payment_time }}</el-text>
+                  </el-form-item>
                   <el-form-item label="发票状态">
                     <el-text class="mx-1">{{
                       proxy.$enumSet["settlementCenterEnum.invoiceStatusEnum"][
                         formItem.invoice_status
                       ]
                     }}</el-text>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="打款账户">
-                    <el-text class="mx-1">{{ formItem.bank_account }}</el-text>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -246,7 +231,9 @@
               <el-button link type="primary" @click="handleInspect(scope)"
                 >查看回单</el-button
               >
-              <!-- <el-button link type="primary">详情</el-button> -->
+              <el-button link type="primary" @click="handleDetails(scope)"
+                >详情</el-button
+              >
             </template>
           </zxn-table>
         </div>
@@ -271,11 +258,12 @@
   <InspectDialog v-model:dialogVisible="dialogVisible" :imageList="imageList" />
 </template>
 <script setup lang="ts">
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import InspectDialog from "../components/InspectDialog.vue";
 import { getTaskView } from "@/api/task";
 const { proxy } = getCurrentInstance() as any;
 const route = useRoute();
+const router = useRouter();
 const dialogVisible = ref(false);
 const imageList = ref([]) as any;
 const activeName = ref("1");
@@ -383,6 +371,13 @@ const handleInspect = (scope: any) => {
 
   imageList.value = scope.row.payment_receipt;
 };
+const handleDetails = (scope: any) => {
+  router.push({
+    name: "memberDetails",
+    // query: { activeName: "1", task_id: scope.row.task_id },
+  });
+};
+
 /**
  * 批量选择
  */
@@ -424,7 +419,6 @@ const getTableData = async () => {
       salary,
       condition_desc,
     } = data.taskAttribute;
-    console.log(data.taskAttribute);
 
     const { require_desc } = data.taskAttributeUser;
     const {

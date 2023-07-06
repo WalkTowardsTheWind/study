@@ -17,7 +17,7 @@
       <el-form-item>
         <el-input
           v-model="formItem.keywords"
-          placeholder="请输入结算企业、税地名称"
+          placeholder="请输入结算企业/税地名称"
         >
           <template #prefix>
             <el-icon><i-ep-Search /></el-icon>
@@ -95,6 +95,16 @@
           class="zxn-table-label"
           :style="color ? color[scope.row.status] : {}"
         />
+        <div
+          v-if="scope.row.status == 3"
+          v-text="
+            proxy.$enumSet['settlementCenterEnum.settlementCenterList'][
+              scope.row.status
+            ]
+          "
+          class="zxn-table-label"
+          :style="color ? color[scope.row.status] : {}"
+        />
         <el-tooltip
           v-if="scope.row.status == 4"
           class="box-item"
@@ -119,9 +129,9 @@
         >
       </template>
       <template #operation="scope">
-        <template v-if="[2, 3].includes(scope.row.status)">
+        <template v-if="[1, 2, 4].includes(scope.row.status)">
           <el-button link type="primary" @click="handleThaw(scope)">{{
-            scope.row.status == 2 ? "解冻" : "冻结"
+            scope.row.status == 4 ? "去解冻" : "冻结"
           }}</el-button>
         </template>
         <template v-if="[1].includes(scope.row.status)">
@@ -211,6 +221,7 @@ const color = {
   1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
   2: { color: "#333333", backgroundColor: "#DEDEDE" },
   3: { color: "#F45136", backgroundColor: "#FDE3DF" },
+  4: { color: "#F45136", backgroundColor: "#FDE3DF" },
 };
 const columnList = [
   { label: "结算单号", prop: "settlement_order_no", width: 200 },
@@ -225,8 +236,10 @@ const columnList = [
       0: { color: "#1EE685", backgroundColor: "#DBFBEB" },
       1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
       2: { color: "#36C5F4", backgroundColor: "#DFF6FD" },
+      3: { color: "#F45136", backgroundColor: "#FDE3DF" },
       4: { color: "#333333", backgroundColor: "#DEDEDE" },
     },
+    width: 150,
   },
   { label: "任务数量", prop: "task_count" },
   { label: "结算企业", prop: "company_name" },
@@ -265,7 +278,7 @@ const handleThaw = (scope: any) => {
     message: h(
       "p",
       null,
-      `确定${scope.row.status == 2 ? "解冻" : "冻结"}该任务`
+      `确定${[4].includes(scope.row.status) ? "解冻" : "冻结"}该任务`
     ),
     showCancelButton: true,
     confirmButtonText: "确定",
@@ -279,7 +292,7 @@ const handleThaw = (scope: any) => {
         instance.confirmButtonLoading = true;
         var data = {
           id: scope.row.id,
-          status: scope.row.status == 2 ? "0" : "2",
+          status: [4].includes(scope.row.status) ? "0" : "2",
         };
         await updateEnterpriseSettlementStatus(data);
 

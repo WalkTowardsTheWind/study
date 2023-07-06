@@ -8,7 +8,11 @@
     >
       <template #1>
         <div class="p-[24px] p-l-[53px] p-b-[0]">
-          <div class="top">
+          <div class="tabTop">
+            <div class="box"></div>
+            <span class="title">结算详情</span>
+          </div>
+          <div class="top m-t-[20px]">
             <!-- <span class="title">结算单号</span> -->
             <el-text
               >结算单号&nbsp;&nbsp;{{ formItem.settlement_order_no }}</el-text
