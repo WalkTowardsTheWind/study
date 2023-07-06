@@ -424,7 +424,7 @@ const getTableData = async () => {
         status: item.status,
         tax_land_name: item.tax_land_name,
         merger_name: item.merger_name,
-        tax_cost_point: item.tax_cost_point,
+        tax_cost_point: item.tax_cost_point + "%",
         sign_count: item.sign_count,
         calculation_type:
           proxy.$enumSet["taxLandManagementEnum.calculationType"][
