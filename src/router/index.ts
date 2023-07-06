@@ -279,6 +279,15 @@ export const constantRoutes: RouteRecordRaw[] = [
         meta: { title: "企业", hidden: true },
       },
       {
+        path: "memberDetails",
+        component: () =>
+          import(
+            "@/views/settlementCenter/enterpriseSettlement/memberDetails.vue"
+          ),
+        name: "memberDetails",
+        meta: { title: "成员详情", hidden: true },
+      },
+      {
         path: "channelSettlementA",
         component: () =>
           import(
@@ -318,7 +327,7 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
-  // 帨地
+  // 税地
   {
     path: "/taxLandManagement",
     component: Layout,

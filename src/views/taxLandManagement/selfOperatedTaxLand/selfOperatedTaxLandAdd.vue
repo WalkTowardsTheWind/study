@@ -93,7 +93,7 @@
                     />
                   </el-select>
                 </el-form-item> -->
-                <el-form-item class="mt-25px" label="用工年限">
+                <el-form-item class="mt-25px" label="税地用工年限">
                   <el-col :span="11">
                     <el-form-item>
                       <el-input
@@ -133,7 +133,7 @@
               <div class="w-[33%]">
                 <el-form-item
                   class="mb-[0]"
-                  label="营业执照"
+                  label="税地营业执照"
                   prop="tax_land_license"
                 >
                   <multi-upload

@@ -45,11 +45,14 @@
             <el-input placeholder="请输入" v-model="addForm.credit_code" />
           </el-form-item>
           <el-form-item label="营业执照到期时间">
-            <el-date-picker
-              v-model="addForm.license_end_date"
-              unlink-panels
-              value-format="YYYY-MM-DD"
-            />
+            <div class="w-full">
+              <el-date-picker
+                style="width: 100%"
+                v-model="addForm.license_end_date"
+                unlink-panels
+                value-format="YYYY-MM-DD"
+              />
+            </div>
           </el-form-item>
           <el-form-item label="法人姓名">
             <el-input placeholder="请输入" v-model="addForm.legal_person" />
@@ -194,19 +197,21 @@
             <el-form-item label="渠道点位">
               <el-input placeholder="请输入" v-model="addForm.channel_point" />
             </el-form-item>
-            <el-form-item label="点位计费方式" prop="calculation_type">
-              <el-select
-                class="w-full"
-                v-model="addForm.calculation_type"
-                placeholder="请选择"
-              >
-                <el-option label="内扣" value="0" />
-                <el-option label="外扣" value="1" />
-              </el-select>
-            </el-form-item>
           </template>
+          <el-form-item label="点位计费方式" prop="calculation_type">
+            <el-select
+              class="w-full"
+              v-model="addForm.calculation_type"
+              placeholder="请选择"
+            >
+              <el-option label="内扣" value="0" />
+              <el-option label="外扣" value="1" />
+            </el-select>
+          </el-form-item>
           <el-form-item label="客户点位" prop="tax_point">
-            <el-input placeholder="请输入" v-model="addForm.tax_point" />
+            <el-input placeholder="请输入" v-model="addForm.tax_point">
+              <template #append>%</template>
+            </el-input>
           </el-form-item>
           <el-form-item label="企业邮箱">
             <el-input placeholder="请输入" v-model="addForm.company_email" />
@@ -408,6 +413,7 @@ const isAllComplete = computed(() => {
       !!addForm.sale_head &&
       !!addForm.sale_company &&
       !!addForm.company_source &&
+      !!addForm.calculation_type &&
       !!addForm.tax_point &&
       !!addForm.company_email &&
       !!addForm.consignee &&
@@ -487,75 +493,75 @@ async function submit(formEl: FormInstance | undefined) {
       console.log(addForm);
 
       // 全部填写完成
-      // if (isAllComplete.value) {
-      //   const res = await createBusinessAccount(addForm);
-      //   try {
-      //     if (res.status === 200) {
-      //       ElMessage({
-      //         message: "新建企业账号成功",
-      //         type: "success",
-      //       });
-      //       setTimeout(() => {
-      //         router.go(-1);
-      //       }, 200);
-      //     }
-      //   } catch (error: any) {
-      //     return new Error("error", error);
-      //   }
-      // } else {
-      //   // 弹框激活
-      //   ElMessageBox.confirm(
-      //     "该企业信息暂不完善，是否立即激活企业状态？",
-      //     "警告",
-      //     {
-      //       confirmButtonText: "确定",
-      //       cancelButtonText: "暂不",
-      //       distinguishCancelAndClose: true,
-      //       center: true,
-      //     }
-      //   )
-      //     .then(async () => {
-      //       addForm.is_active = 1;
-      //       const res = await createBusinessAccount(addForm);
-      //       try {
-      //         if (res.status === 200) {
-      //           ElMessage({
-      //             message: "新建企业账号成功",
-      //             type: "success",
-      //           });
-      //           setTimeout(() => {
-      //             router.go(-1);
-      //           }, 200);
-      //         }
-      //       } catch (error: any) {
-      //         return new Error("error", error);
-      //       }
-      //     })
-      //     .catch(async (action) => {
-      //       if (action == "close") {
-      //         ElMessage({
-      //           type: "info",
-      //           message: "取消新建",
-      //         });
-      //       } else {
-      //         addForm.is_active = 0;
-      //         const res = await createBusinessAccount(addForm);
-      //         try {
-      //           if (res.status === 200) {
-      //             ElMessage({
-      //               message: "新建企业账号成功",
-      //               type: "success",
-      //             });
-      //             setTimeout(() => {
-      //               router.go(-1);
-      //             }, 200);
-      //           }
-      //         } catch (error: any) {
-      //           return new Error("error", error);
-      //         }
-      //       }
-      //     });
-      // }
+      if (isAllComplete.value) {
+        const res = await createBusinessAccount(addForm);
+        try {
+          if (res.status === 200) {
+            ElMessage({
+              message: "新建企业账号成功",
+              type: "success",
+            });
+            setTimeout(() => {
+              router.go(-1);
+            }, 200);
+          }
+        } catch (error: any) {
+          return new Error("error", error);
+        }
+      } else {
+        // 弹框激活
+        ElMessageBox.confirm(
+          "该企业信息暂不完善，是否立即激活企业状态？",
+          "警告",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "暂不",
+            distinguishCancelAndClose: true,
+            center: true,
+          }
+        )
+          .then(async () => {
+            addForm.is_active = 1;
+            const res = await createBusinessAccount(addForm);
+            try {
+              if (res.status === 200) {
+                ElMessage({
+                  message: "新建企业账号成功",
+                  type: "success",
+                });
+                setTimeout(() => {
+                  router.go(-1);
+                }, 200);
+              }
+            } catch (error: any) {
+              return new Error("error", error);
+            }
+          })
+          .catch(async (action) => {
+            if (action == "close") {
+              ElMessage({
+                type: "info",
+                message: "取消新建",
+              });
+            } else {
+              addForm.is_active = 0;
+              const res = await createBusinessAccount(addForm);
+              try {
+                if (res.status === 200) {
+                  ElMessage({
+                    message: "新建企业账号成功",
+                    type: "success",
+                  });
+                  setTimeout(() => {
+                    router.go(-1);
+                  }, 200);
+                }
+              } catch (error: any) {
+                return new Error("error", error);
+              }
+            }
+          });
+      }
     } else {
       ElMessage.error({
         message: "当前表单必填项还未填写！",
