@@ -203,7 +203,6 @@ async function updateBusinessAccount() {
     ...formItem.value,
     mobile: formItem.value.contacts_mobile,
     contacts_mobile: undefined,
-    is_active: "",
   };
   console.log(formItem.value);
   console.log(isAllComplete.value);
