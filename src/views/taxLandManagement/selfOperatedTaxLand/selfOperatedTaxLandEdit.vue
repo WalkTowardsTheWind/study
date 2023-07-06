@@ -847,7 +847,7 @@ const getData = async () => {
       certification_rules: StringTransformNumber(certification_rules),
       signing_rules: StringTransformNumber(signing_rules),
       individual_monthly_limit,
-      tax_contract_term,
+      tax_contract_term: tax_contract_term + "",
       incoming_materials,
       tax_reg_type: tax_reg_type + "",
       tax_organ_code,
