@@ -84,37 +84,37 @@ const formItem = ref({} as any);
 
 const isAllComplete = computed(() => {
   if (
-    formItem.company_name &&
-    formItem.credit_code &&
-    formItem.contacts_mobile &&
-    formItem.legal_person_idcard &&
-    formItem.account &&
-    formItem.legal_person &&
-    formItem.category_id &&
-    formItem.license_end_date &&
-    formItem.contacts &&
-    formItem.legal_person_mobile &&
-    formItem.bank &&
-    formItem.taxpayer_type &&
-    formItem.channel_point &&
-    formItem.calculation_type &&
-    formItem.address &&
-    formItem.bank_account &&
-    formItem.company_email &&
-    formItem.company_address &&
-    formItem.consignee &&
-    formItem.company_source &&
-    formItem.consignee_mobile &&
-    formItem.license.length &&
-    formItem.idcard_img.length &&
-    formItem.taxpayer_type_img.length &&
-    formItem.header_img.length &&
-    formItem.permit_img.length &&
-    formItem.seal.length &&
-    formItem.auth_type &&
-    formItem.tax_point &&
-    formItem.sign_type &&
-    formItem.contract_img.length
+    !!formItem.value.company_name &&
+    !!formItem.value.credit_code &&
+    !!formItem.value.contacts_mobile &&
+    !!formItem.value.legal_person_idcard &&
+    !!formItem.value.account &&
+    !!formItem.value.legal_person &&
+    !!formItem.value.category_id &&
+    !!formItem.value.license_end_date &&
+    !!formItem.value.contacts &&
+    !!formItem.value.legal_person_mobile &&
+    !!formItem.value.bank &&
+    !!formItem.value.taxpayer_type &&
+    // formItem.value.channel_point &&
+    // formItem.value.calculation_type &&
+    !!formItem.value.address &&
+    !!formItem.value.bank_account &&
+    !!formItem.value.company_email &&
+    !!formItem.value.company_address &&
+    !!formItem.value.consignee &&
+    // formItem.value.company_source &&
+    !!formItem.value.consignee_mobile &&
+    !!formItem.value.license.length &&
+    !!formItem.value.idcard_img.length &&
+    !!formItem.value.taxpayer_type_img.length &&
+    !!formItem.value.header_img.length &&
+    !!formItem.value.permit_img.length &&
+    !!formItem.value.seal.length &&
+    !!formItem.value.auth_type &&
+    !!formItem.value.tax_point &&
+    !!formItem.value.sign_type &&
+    !!formItem.value.contract_img.length
   ) {
     return true;
   } else {
@@ -189,10 +189,8 @@ async function getAccountDetail() {
   if (route.query.id) {
     id.value = route.query.id;
     const res = await getBusinessAccountDetail(id.value);
-
     try {
       formItem.value = res.data;
-      console.log(formItem.value, "12312312321");
     } catch (error: any) {
       return new Error("error", error);
     }
@@ -207,6 +205,9 @@ async function updateBusinessAccount() {
     contacts_mobile: undefined,
     is_active: "",
   };
+  console.log(formItem.value);
+  console.log(isAllComplete.value);
+
   if (isAllComplete.value) {
     try {
       await editBusinessAccount(params);
