@@ -275,6 +275,7 @@ async function searchClick() {
  */
 function resetSearchForm() {
   searchForm.name = "";
+  searchClick();
 }
 
 /**
