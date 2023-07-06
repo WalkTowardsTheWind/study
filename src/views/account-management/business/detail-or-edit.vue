@@ -82,6 +82,47 @@ const dialogVisible = ref(false);
 
 const formItem = ref({} as any);
 
+const isAllComplete = computed(() => {
+  if (
+    formItem.company_name &&
+    formItem.credit_code &&
+    formItem.contacts_mobile &&
+    formItem.legal_person_idcard &&
+    formItem.account &&
+    formItem.legal_person &&
+    formItem.category_id &&
+    formItem.license_end_date &&
+    formItem.contacts &&
+    formItem.legal_person_mobile &&
+    formItem.bank &&
+    formItem.taxpayer_type &&
+    formItem.channel_point &&
+    formItem.calculation_type &&
+    formItem.address &&
+    formItem.bank_account &&
+    formItem.company_email &&
+    formItem.company_address &&
+    formItem.consignee &&
+    formItem.taxpayer_number &&
+    formItem.company_source &&
+    formItem.consignee_mobile &&
+    formItem.license.length &&
+    formItem.idcard_img.length &&
+    formItem.taxpayer_type_img.length &&
+    formItem.header_img.length &&
+    formItem.permit_img.length &&
+    formItem.seal.length &&
+    formItem.auth_type &&
+    formItem.tax_point &&
+    formItem.sign_type &&
+    formItem.contract_img.length
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
 if (route.query.status === "edit") {
   isEdit.value = true;
 }
@@ -165,16 +206,59 @@ async function updateBusinessAccount() {
     ...formItem.value,
     mobile: formItem.value.contacts_mobile,
     contacts_mobile: undefined,
+    is_active: "",
   };
-  // console.log(params);
-  try {
-    await editBusinessAccount(params);
-    ElMessage({
-      message: "编辑成功",
-      type: "success",
-    });
-  } catch (error: any) {
-    return new Error(error);
+  if (isAllComplete.value) {
+    try {
+      await editBusinessAccount(params);
+      ElMessage({
+        message: "保存成功",
+        type: "success",
+      });
+      router.go(-1);
+    } catch (error: any) {
+      return new Error(error);
+    }
+  } else {
+    ElMessageBox.confirm("该企业信息暂不完善，是否立即激活企业状态？", "警告", {
+      confirmButtonText: "确定",
+      cancelButtonText: "暂不",
+      distinguishCancelAndClose: true,
+      center: true,
+    })
+      .then(async () => {
+        params.is_active = 1;
+        try {
+          await editBusinessAccount(params);
+          ElMessage({
+            message: "保存成功",
+            type: "success",
+          });
+          router.go(-1);
+        } catch (error: any) {
+          return new Error(error);
+        }
+      })
+      .catch(async (action) => {
+        if (action == "close") {
+          ElMessage({
+            type: "info",
+            message: "取消保存",
+          });
+        } else {
+          params.is_active = 0;
+          try {
+            await editBusinessAccount(params);
+            ElMessage({
+              message: "保存成功",
+              type: "success",
+            });
+            router.go(-1);
+          } catch (error: any) {
+            return new Error(error);
+          }
+        }
+      });
   }
 }
 getAccountDetail();

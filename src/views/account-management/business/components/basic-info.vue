@@ -116,8 +116,8 @@
                 v-model="formItem.calculation_type"
                 :disabled="!isEdit"
               >
+                <el-option :value="0" label="内扣"></el-option>
                 <el-option :value="1" label="外扣"></el-option>
-                <el-option :value="2" label="内扣"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="快递地址" label-width="130px">
