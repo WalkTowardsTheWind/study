@@ -19,7 +19,7 @@
       </div>
       <div
         class="zxn-image-item-ellipsis"
-        v-if="ellipsis && index === currentImg.length - 1"
+        v-if="ellipsis && index > 1 && index === currentImg.length - 1"
       >
         + {{ imgList.length - 2 }}
       </div>
