@@ -21,7 +21,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="客户税地子账户">
-            <el-input v-model="formItem.sub_account_name" readonly />
+            <el-input v-model="formItem.tax_bank_name" readonly />
           </el-form-item>
         </el-col>
         <el-col :span="8">

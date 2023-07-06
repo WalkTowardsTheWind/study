@@ -137,6 +137,10 @@ const taskStatus = [
     label: "异常充值 ",
     value: "2",
   },
+  {
+    label: "服务费退回 ",
+    value: "3",
+  },
 ];
 const total_amount = ref();
 
@@ -191,6 +195,10 @@ const columnList = [
       2: {
         color: "#F35135",
         background: "#FDE3DF",
+      },
+      3: {
+        color: "#333",
+        background: "#dedede",
       },
     },
     minWidth: 150,
