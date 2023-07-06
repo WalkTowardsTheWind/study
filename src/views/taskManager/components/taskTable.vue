@@ -152,6 +152,12 @@ const columnList = [
     visible: props.type !== 1,
     minWidth: 140,
   },
+  {
+    label: "状态",
+    type: "enum",
+    slot: "status",
+    minWidth: 100,
+  },
   { label: "任务名称", prop: "task_name", minWidth: 120 },
   { label: "关联企业", prop: "company_name", minWidth: 140 },
   { label: "需求人数", prop: "task_attribute.person_count", type: "deep" },
@@ -161,12 +167,6 @@ const columnList = [
     label: "申请时间",
     minWidth: 180,
     prop: "add_time",
-  },
-  {
-    label: "状态",
-    type: "enum",
-    slot: "status",
-    minWidth: 100,
   },
   {
     label: "备注",
