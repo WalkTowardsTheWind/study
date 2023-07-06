@@ -336,24 +336,24 @@ const color = {
 };
 const columnList = [
   { label: "账户ID", prop: "account" },
-  { label: "状态", slot: "status", width: 100, headerAlign: "left" },
-  // {
-  //   label: "结算状态",
-  //   type: "enum",
-  //   width: 100,
-  //   path: "settlementCenterEnum.settlementCenterEnum",
-  //   prop: "settlement_status",
-  //   // fixed: "left",
-  //   color: {
-  //     0: { color: "#1AB66B", backgroundColor: "#DAF3E7" },
-  //     1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
-  //     2: { color: "#333333", backgroundColor: "#DEDEDE" },
-  //   },
-  // },
+  // { label: "结算状态", slot: "status", width: 100, headerAlign: "left" },
+  {
+    label: "结算状态",
+    type: "enum",
+    width: 100,
+    path: "settlementCenterEnum.settlementCenterEnum",
+    prop: "settlement_status",
+    // fixed: "left",
+    color: {
+      0: { color: "#1AB66B", backgroundColor: "#DAF3E7" },
+      1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
+      2: { color: "#333333", backgroundColor: "#DEDEDE" },
+    },
+  },
   { label: "姓名", prop: "real_name" },
-  { label: "联系方式", prop: "phone" },
+  { label: "联系号码", prop: "phone" },
   { label: "收款银行", prop: "bank" },
-  { label: "银行卡号", prop: "bank_account" },
+  { label: "银行账户", prop: "bank_account" },
   { label: "下发时间", prop: "payment_time" },
   { label: "结算金额", prop: "payment_amount" },
   {
@@ -362,7 +362,7 @@ const columnList = [
     fixed: "right",
     width: 200,
     align: "right",
-    headerAlign: "left",
+    headerAlign: "right",
   },
 ];
 // 操作
