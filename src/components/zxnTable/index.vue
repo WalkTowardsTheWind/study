@@ -4,7 +4,8 @@
       <slot name="tableTop" />
     </div>
     <div v-if="selectedNumber" class="integration-table-selected">
-      已选择 {{ selectedNumber }} 项
+      <span>已选择 {{ selectedNumber }} 项</span>
+      <span v-if="fieldTotal">,共 {{ selectTotal }} {{ totalUnit }}</span>
     </div>
     <el-table
       ref="zxnTable"
@@ -28,7 +29,11 @@
         <el-table-column
           v-if="item.slot"
           v-bind="item"
-          :showOverflowTooltip="true"
+          :showOverflowTooltip="
+            isBoolean(item.showOverflowTooltip)
+              ? item.showOverflowTooltip
+              : true
+          "
         >
           <template #default="scope">
             <slot :name="item.slot" v-bind="scope" />
@@ -91,7 +96,8 @@
 import { PropType } from "vue";
 import { TabsContextKey } from "@/components/constants";
 import type { SortParams } from "./tableType";
-import { isBoolean, isNumber } from "@/utils/is";
+import { isNumber, isBoolean, isFunction } from "@/utils/is";
+import currency from "currency.js";
 
 const tabsContext = inject(TabsContextKey, undefined);
 const { proxy } = getCurrentInstance() as any;
@@ -107,6 +113,9 @@ const props = defineProps({
   defaultExpandAll: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
   tableHeight: { type: Number },
+  bottomGap: { type: Number, default: 0 },
+  fieldTotal: { type: [String, Function] },
+  totalUnit: { type: String, default: "元" },
 });
 const emit = defineEmits([
   "sort-change",
@@ -121,7 +130,18 @@ const zxnTable = ref();
 let selectedNumber = ref(0);
 const handleSelect = (value: any) => {
   selectedNumber.value = value.length;
+  if (props.fieldTotal) {
+    isFunction(props.fieldTotal)
+      ? props.fieldTotal(value)
+      : getSelectTotal(value);
+  }
   emit("selection-change", value);
+};
+const selectTotal = ref(0);
+const getSelectTotal = (selected: any) => {
+  selectTotal.value = selected.reduce((acc: number, cur: any) => {
+    return currency(acc).add(cur[props.fieldTotal]);
+  }, 0);
 };
 const getSelectionRows = () => {
   return zxnTable.value.getSelectionRows();
@@ -161,15 +181,17 @@ const resetHeight = () => {
     const el = zxnTable.value?.$el;
     const { top } = el.getBoundingClientRect();
     const VisibleHeight =
-      window.innerHeight - top - (props.hasPagination ? 68 : 0);
+      window.innerHeight -
+      top -
+      props.bottomGap -
+      (props.hasPagination ? 68 : 0);
     maxHeight.value = VisibleHeight > 500 ? VisibleHeight : 500;
     // zxnTable.value.doLayout()
-  });
+  }, 0);
 };
 const getTable = () => {
   return zxnTable.value;
 };
-
 const handleSwitchChange = (row: any, prop: string) => {
   emit("switch-change", row, prop);
 };
