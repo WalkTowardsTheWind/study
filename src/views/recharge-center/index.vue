@@ -68,6 +68,7 @@
             :table-data="tableData"
             :column-list="columnList"
             hasSelect
+            field-total="amount"
             :page-info="pageInfo"
             @page-change="pageChange"
           >
@@ -160,7 +161,7 @@ const categoryList = ref([
 
 const activeName = ref("1");
 
-const date = ref([]);
+const date = ref("");
 
 const formItem = reactive({
   name: "",
