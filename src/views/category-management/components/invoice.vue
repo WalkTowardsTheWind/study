@@ -191,11 +191,11 @@ function edit(item: any) {
 
   console.log(item);
 
-  if (item.pid == 0) {
-    addForm.value.parent = item.id;
-  } else {
-    addForm.value.parent = item.pid;
-  }
+  // if (item.pid == 0) {
+  //   addForm.value.parent = item.id;
+  // } else {
+  //   addForm.value.parent = item.pid;
+  // }
   addForm.value.name = item.name;
   addForm.value.pid = item.pid;
   addForm.value.id = item.id;

@@ -190,11 +190,11 @@ function edit(item: any) {
   dialogVisible.value = true;
   dialogType.value = "edit";
 
-  if (item.pid == 0) {
-    addForm.value.parent = item.id;
-  } else {
-    addForm.value.parent = item.pid;
-  }
+  // if (item.pid == 0) {
+  // 	addForm.value.parent = item.id;
+  // } else {
+  // 	addForm.value.parent = item.pid;
+  // }
   addForm.value.name = item.name;
   addForm.value.pid = item.pid;
   addForm.value.id = item.id;
@@ -363,6 +363,7 @@ function changeStatus(id: string, status: string) {
         message: "修改成功",
         type: "success",
       });
+      searchClick();
     })
     .catch((err) => {
       return new Error(err);
