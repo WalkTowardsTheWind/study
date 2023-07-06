@@ -1,7 +1,7 @@
 export enum taxLandStatus {
   "待启用",
   "启用中",
-  "下架",
+  "冻结",
   "预警",
 }
 export enum InvoiceType {

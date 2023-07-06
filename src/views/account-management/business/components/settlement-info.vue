@@ -68,7 +68,7 @@ const columnList = [
       },
     },
   },
-  { label: "任务名称", prop: "", minWidth: 200 },
+  { label: "任务名称", prop: "task_name", minWidth: 200 },
 
   // { label: "任务数量", prop: "task_count" },
   // { label: "结算企业", prop: "company_name", width: 200 },

@@ -37,7 +37,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="企业账户ID">
-                    <el-text class="mx-1">{{ formItem.company_id }}</el-text>
+                    <el-text class="mx-1">{{ formItem.account }}</el-text>
                   </el-form-item>
                 </el-col>
 
@@ -149,6 +149,7 @@ const formItem = ref({
   settlement_order_no: "",
   company_name: "",
   company_id: "",
+  account: "",
   tax_land_id: "",
   credit_code: "",
   legal_person: "",
@@ -188,6 +189,7 @@ const getTableData = async () => {
         settlement_order_no,
         company_name,
         company_id,
+        account,
         tax_land_id,
         credit_code,
         legal_person,
@@ -199,6 +201,7 @@ const getTableData = async () => {
         settlement_order_no,
         company_name,
         company_id,
+        account,
         tax_land_id,
         credit_code,
         legal_person,
@@ -229,7 +232,8 @@ const getTableData = async () => {
         task_name: item.task_name,
         task_id: item.id,
         person_count: item.task_attribute.person_count,
-        salary: item.task_attribute.salary,
+        salary:
+          item.task_attribute.salary_min + "-" + item.task_attribute.salary_max,
         add_time: item.add_time,
         task_user: item.task_user,
       };
