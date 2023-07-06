@@ -103,7 +103,6 @@ const isAllComplete = computed(() => {
     formItem.company_email &&
     formItem.company_address &&
     formItem.consignee &&
-    formItem.taxpayer_number &&
     formItem.company_source &&
     formItem.consignee_mobile &&
     formItem.license.length &&

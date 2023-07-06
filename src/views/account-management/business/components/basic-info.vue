@@ -142,12 +142,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="纳税人识别号">
-              <el-input
-                v-model="formItem.taxpayer_number"
-                :readonly="!isEdit"
-              />
-            </el-form-item>
             <el-form-item label="企业来源">
               <el-select
                 class="w-full"
