@@ -203,7 +203,7 @@
                   />
                 </el-form-item>
 
-                <el-form-item class="mt-25px" label="是否有支付接口">
+                <!-- <el-form-item class="mt-25px" label="是否有支付接口">
                   <el-select
                     class="w-[100%]"
                     v-model="formItem.is_payment_api"
@@ -218,7 +218,7 @@
                       :value="item.value"
                     />
                   </el-select>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item
                   class="mt-25px"
                   label="支付方式"
@@ -847,7 +847,7 @@ const getData = async () => {
       certification_rules: StringTransformNumber(certification_rules),
       signing_rules: StringTransformNumber(signing_rules),
       individual_monthly_limit,
-      tax_contract_term,
+      tax_contract_term: tax_contract_term + "",
       incoming_materials,
       tax_reg_type: tax_reg_type + "",
       tax_organ_code,
