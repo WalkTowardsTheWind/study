@@ -111,9 +111,12 @@
         >
       </template>
       <template #operation="scope">
-        <el-button link type="primary" @click="handleUpdateStatus(scope)">{{
-          [0, 2].includes(scope.row.status) ? "上架" : "下架"
-        }}</el-button>
+        <template v-if="[0, 1].includes(scope.row.status)">
+          <el-button link type="primary" @click="handleUpdateStatus(scope)">{{
+            [0].includes(scope.row.status) ? "上架" : "下架"
+          }}</el-button>
+        </template>
+
         <el-button link type="primary" @click="handleDelete(scope)"
           >删除</el-button
         >
@@ -278,7 +281,7 @@ const handleUpdateStatus = (scope: any) => {
     message: h(
       "p",
       null,
-      `确定${[0, 2].includes(scope.row.status) ? "上架" : "下架"}该税地`
+      `确定${[0].includes(scope.row.status) ? "上架" : "下架"}该税地`
     ),
     showCancelButton: true,
     confirmButtonText: "确定",
@@ -292,7 +295,7 @@ const handleUpdateStatus = (scope: any) => {
         instance.confirmButtonLoading = true;
         var data = {
           id: scope.row.id,
-          status: [0, 2].includes(scope.row.status) ? "1" : "2",
+          status: [0].includes(scope.row.status) ? "1" : "0",
         };
         await selfOperatedTaxLandUpdateStatus(data);
 
@@ -305,9 +308,7 @@ const handleUpdateStatus = (scope: any) => {
   }).then(() => {
     ElMessage({
       type: "success",
-      message: `成功${
-        [0, 2].includes(scope.row.status) ? "上架" : "下架"
-      }该税地`,
+      message: `成功${[0].includes(scope.row.status) ? "上架" : "下架"}该税地`,
     });
     getTableData();
   });
