@@ -82,7 +82,7 @@
                     />
                   </el-select>
                 </el-form-item> -->
-                <el-form-item class="mt-25px" label="用工年限">
+                <el-form-item class="mt-25px" label="税地用工年限">
                   <el-col :span="11">
                     <el-form-item>
                       <el-input
@@ -122,7 +122,7 @@
               <div class="w-[33%]">
                 <el-form-item
                   class="mb-[0]"
-                  label="营业执照"
+                  label="税地营业执照"
                   prop="tax_land_license"
                 >
                   <multi-upload
@@ -523,32 +523,32 @@ var optionsSigningRules = ref([
 // 企业注册类型选择框
 // 企业注册类型，NORMAL（组织机构代码）、MERGE（社会信用代码）、REGCODE（工商注册号），默认NORMAL组织机构代码、统一社会信用代码，工商注册号
 
-const optionsTaxReg = computed(() => {
-  console.log(formItem.value.tax_reg_type, optionsTaxRegType.value);
+// const optionsTaxReg = computed(() => {
+//   console.log(formItem.value.tax_reg_type, optionsTaxRegType.value);
 
-  const optionsTaxReg =
-    optionsTaxRegType.value.find(
-      (item) => item.value === formItem.value.tax_reg_type
-    )?.label || "组织机构代码";
+//   const optionsTaxReg =
+//     optionsTaxRegType.value.find(
+//       (item) => item.value === formItem.value.tax_reg_type
+//     )?.label || "组织机构代码";
 
-  return optionsTaxReg;
-});
+//   return optionsTaxReg;
+// });
 
-//
-var optionsTaxRegType = ref([
-  {
-    value: "NORMAL",
-    label: "组织机构代码",
-  },
-  {
-    value: "MERGE",
-    label: "社会信用代码",
-  },
-  {
-    value: "REGCODE",
-    label: "工商注册号",
-  },
-]);
+// //
+// var optionsTaxRegType = ref([
+//   {
+//     value: "NORMAL",
+//     label: "组织机构代码",
+//   },
+//   {
+//     value: "MERGE",
+//     label: "社会信用代码",
+//   },
+//   {
+//     value: "REGCODE",
+//     label: "工商注册号",
+//   },
+// ]);
 //税地
 var optionsTaxLang = ref([]);
 const getTaxLangList = async () => {
