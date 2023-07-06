@@ -204,8 +204,8 @@ async function updateBusinessAccount() {
     mobile: formItem.value.contacts_mobile,
     contacts_mobile: undefined,
   };
-  console.log(formItem.value);
-  console.log(isAllComplete.value);
+  // console.log(formItem.value);
+  // console.log(isAllComplete.value);
 
   if (isAllComplete.value) {
     try {
