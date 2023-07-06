@@ -244,7 +244,7 @@ const columnList = [
   },
   { label: "任务数量", prop: "task_count" },
   { label: "结算企业", prop: "company_name", width: 200 },
-  { label: "税源名称", prop: "tax_land_name", width: 220 },
+  { label: "税地名称", prop: "tax_land_name", width: 220 },
   { label: "结算人数", prop: "total_people" },
   { label: "实际人数", prop: "real_people" },
   { label: "点位", prop: "tax_point" },
