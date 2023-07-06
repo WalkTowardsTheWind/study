@@ -21,8 +21,7 @@ export interface getUserInfo {
  * 获取任务列表
  */
 export interface getTaskList {
-  company_id: string;
-  tax_land_id: string;
+  settlement_id: string;
 }
 /**
  * 修改结算状态

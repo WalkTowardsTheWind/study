@@ -1,11 +1,5 @@
 <template>
   <div class="integration-table">
-    <div v-if="$slots.tableTop" class="integration-table-top">
-      <slot name="tableTop" />
-    </div>
-    <div v-if="selectedNumber" class="integration-table-selected">
-      已选择 {{ selectedNumber }} 项
-    </div>
     <el-table
       :data="tableData"
       style="width: 100%"
@@ -33,12 +27,6 @@
         <el-table-column v-else v-bind="item" />
       </template>
     </el-table>
-    <pagination
-      v-if="hasPagination"
-      :total="_total"
-      :page="_page"
-      @pagination="handlePageChange"
-    />
   </div>
 </template>
 <script setup lang="ts">
