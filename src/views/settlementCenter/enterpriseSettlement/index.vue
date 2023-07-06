@@ -131,7 +131,7 @@
       <template #operation="scope">
         <template v-if="[1, 2, 4].includes(scope.row.status)">
           <el-button link type="primary" @click="handleThaw(scope)">{{
-            scope.row.status == 4 ? "去解冻" : "冻结"
+            scope.row.status == 4 ? "去解冻" : "去冻结"
           }}</el-button>
         </template>
         <template v-if="[1].includes(scope.row.status)">
@@ -157,6 +157,7 @@ import {
   updateEnterpriseSettlementStatus,
   deleteEnterpriseSettlementDoc,
 } from "@/api/settlementCenter/enterpriseSettlement";
+import { businessAccountSetStatus } from "@/api/account/business";
 import { ElMessage } from "element-plus";
 const dialogVisible = ref(false);
 const imageList = ref([]) as any;
@@ -278,7 +279,11 @@ const handleThaw = (scope: any) => {
     message: h(
       "p",
       null,
-      `确定${[4].includes(scope.row.status) ? "解冻" : "冻结"}该任务`
+      `${
+        [4].includes(scope.row.status)
+          ? `是否去账户解封${scope.row.company_name}？`
+          : `注意:该操作将直接封停${scope.row.company_name}！是否执行`
+      }`
     ),
     showCancelButton: true,
     confirmButtonText: "确定",
@@ -290,12 +295,16 @@ const handleThaw = (scope: any) => {
     ) => {
       if (action === "confirm") {
         instance.confirmButtonLoading = true;
-        var data = {
-          id: scope.row.id,
-          status: [4].includes(scope.row.status) ? "0" : "2",
-        };
-        await updateEnterpriseSettlementStatus(data);
-
+        if ([4].includes(scope.row.status)) {
+          router.push({
+            name: "business-account",
+          });
+        } else {
+          await businessAccountSetStatus({
+            id: scope.row.company_id,
+            status: 2,
+          });
+        }
         instance.confirmButtonLoading = false;
         done();
       } else {
@@ -305,7 +314,11 @@ const handleThaw = (scope: any) => {
   }).then(() => {
     ElMessage({
       type: "success",
-      message: `成功${scope.row.status == 2 ? "解冻" : "冻结"}该任务`,
+      message: `${
+        [4].includes(scope.row.status)
+          ? "成功跳转至账户中心"
+          : "成功封停该企业！"
+      }`,
     });
     getTableData();
   });
@@ -387,7 +400,6 @@ const getTableData = async () => {
     pageInfo.total = data.total;
     console.log(data.data.total_settlement_money, "total_settlement_money");
     total_settlement_money.value = data.total_settlement_money;
-    console.log(data.data);
 
     var newData = data.data.map((item: any) => {
       return {
@@ -396,6 +408,7 @@ const getTableData = async () => {
         status: item.status,
         reason: item.reason,
         task_count: item.task_count,
+        company_id: item.company_id,
         company_name: item.company_name,
         tax_land_name: item.tax_land_name,
         total_people: item.total_people,

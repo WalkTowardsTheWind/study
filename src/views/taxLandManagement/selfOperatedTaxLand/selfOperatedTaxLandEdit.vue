@@ -203,7 +203,7 @@
                   />
                 </el-form-item>
 
-                <el-form-item class="mt-25px" label="是否有支付接口">
+                <!-- <el-form-item class="mt-25px" label="是否有支付接口">
                   <el-select
                     class="w-[100%]"
                     v-model="formItem.is_payment_api"
@@ -218,7 +218,7 @@
                       :value="item.value"
                     />
                   </el-select>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item
                   class="mt-25px"
                   label="支付方式"
