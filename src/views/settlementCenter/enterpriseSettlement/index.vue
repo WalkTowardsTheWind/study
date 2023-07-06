@@ -42,7 +42,7 @@
     </zxn-search>
     <zxn-table
       :table-data="tableData"
-      :hasIndex="true"
+      :hasIndex="false"
       :column-list="columnList"
       :page-info="pageInfo"
       @page-change="handlePageChange"
@@ -243,8 +243,8 @@ const columnList = [
     width: 150,
   },
   { label: "任务数量", prop: "task_count" },
-  { label: "结算企业", prop: "company_name" },
-  { label: "税源地", prop: "tax_land_name" },
+  { label: "结算企业", prop: "company_name", width: 200 },
+  { label: "税源名称", prop: "tax_land_name", width: 220 },
   { label: "结算人数", prop: "total_people" },
   { label: "实际人数", prop: "real_people" },
   { label: "点位", prop: "tax_point" },
@@ -253,7 +253,7 @@ const columnList = [
   {
     label: "结算时间",
     prop: "settlement_time",
-    sortable: "custom",
+    // sortable: "custom",
     width: 120,
   },
   // { label: "个人回单", slot: "inspect", headerAlign: "left" },
