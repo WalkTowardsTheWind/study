@@ -265,7 +265,7 @@ getTaxLand();
 getCategory();
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .line {
   margin: 0 2px;
   font-size: 1px;
