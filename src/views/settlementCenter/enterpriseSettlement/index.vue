@@ -48,6 +48,7 @@
       @page-change="handlePageChange"
       hasSelect
       @selection-change="handleSelect"
+      field-total="real_money"
     >
       <!-- <template #tableTop>
         <el-dropdown
