@@ -163,10 +163,10 @@ const formItem = ref({
 const tableData = reactive([] as any);
 const columnList = [
   { label: "任务编号", prop: "task_no", width: 200 },
-  { label: "任务名称", prop: "task_name", width: 120 },
-  { label: "需求人数", prop: "person_count", width: 120 },
-  { label: "预算", prop: "salary", width: 120 },
-  { label: "申请时间", prop: "apply_time", width: 120 },
+  { label: "任务名称", prop: "task_name" },
+  { label: "需求人数", prop: "person_count" },
+  { label: "预算", prop: "salary" },
+  { label: "申请时间", prop: "apply_time" },
   { label: "下载回单", slot: "download" },
   {
     label: "任务详情",
