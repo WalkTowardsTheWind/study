@@ -129,7 +129,7 @@ const tabsList = [
 const handleInspect = (scope: any) => {
   router.push({
     name: "enterpriseSettlementA",
-    query: { activeName: "1", task_id: scope.row.task_id },
+    query: { activeName: "1", task_id: scope.row.id },
   });
 };
 // 查询重置
