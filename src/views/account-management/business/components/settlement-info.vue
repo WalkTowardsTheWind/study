@@ -91,6 +91,7 @@ async function getList() {
       keywords: "",
       ...pageInfo,
     };
+    tableData.length = 0;
     const res = await getBusinessAccountSettlementList(params);
     tableData.push(...res.data.data);
     pageInfo.total = res.data.total;

@@ -2,15 +2,23 @@
   <div class="top">
     <el-card class="top-item">
       <div class="top-item-title">服务费</div>
-      <div class="top-item-money">{{ total_fee_amount }}</div>
+      <div class="top-item-money">
+        <span class="yuan">￥</span>{{ proxy.$moneyFormat(total_fee_amount) }}
+      </div>
     </el-card>
     <el-card class="top-item">
       <div class="top-item-title">企业充值金额</div>
-      <div class="top-item-money">{{ total_payment_amount }}</div>
+      <div class="top-item-money">
+        <span class="yuan">￥</span
+        >{{ proxy.$moneyFormat(total_payment_amount) }}
+      </div>
     </el-card>
     <el-card class="top-item">
       <div class="top-item-title">企业下发金额</div>
-      <div class="top-item-money">{{ total_channel_amount }}</div>
+      <div class="top-item-money">
+        <span class="yuan">￥</span
+        >{{ proxy.$moneyFormat(total_channel_amount) }}
+      </div>
     </el-card>
   </div>
   <div class="time">
@@ -39,6 +47,8 @@
 <script lang="ts" setup>
 import { getFinanceList } from "@/api/money";
 import * as echarts from "echarts";
+
+const { proxy } = getCurrentInstance() as any;
 
 const dateList = [
   { name: "上周", val: "2" },
@@ -171,10 +181,11 @@ get3And1List(3, 3);
 .top {
   display: flex;
   gap: 0 16px;
+  width: 55vw;
   margin: 20px 0 30px;
 
   &-item {
-    width: 272px;
+    flex: 1;
     height: 160px;
     background: #f5f5f5;
     border: none;
