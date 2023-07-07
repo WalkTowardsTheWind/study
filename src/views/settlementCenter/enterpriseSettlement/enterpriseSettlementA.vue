@@ -186,8 +186,9 @@
             :column-list="columnList"
             :page-info="pageInfo"
             @page-change="handlePageChange"
-            hasSelect
+            :hasSelect="false"
             @selection-change="handleSelect"
+            :hasPagination="false"
           >
             <template #status="scope">
               <div
@@ -362,7 +363,7 @@ const columnList = [
   { label: "收款银行", prop: "bank" },
   { label: "银行账户", prop: "bank_account" },
   { label: "下发时间", prop: "settlement_time" },
-  { label: "结算金额", prop: "payment_amount" },
+  { label: "结算金额", prop: "settlement_amount" },
   {
     label: "操作",
     slot: "operation",
@@ -470,7 +471,7 @@ const getTableData = async () => {
         bank: item.bank,
         bank_account: item.bank_account,
         settlement_time: item.settlement_time,
-        payment_amount: item.payment_amount,
+        settlement_amount: item.settlement_amount,
         payment_receipt: item.payment_receipt,
       };
     });
