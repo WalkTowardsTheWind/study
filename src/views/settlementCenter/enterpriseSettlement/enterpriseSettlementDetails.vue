@@ -167,7 +167,7 @@ const columnList = [
   { label: "需求人数", prop: "person_count" },
   { label: "预算", prop: "salary" },
   { label: "申请时间", prop: "apply_time" },
-  { label: "下载回单", slot: "download" },
+  // { label: "下载回单", slot: "download" },
   {
     label: "任务详情",
     slot: "operation",
