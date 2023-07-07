@@ -391,18 +391,14 @@
                       :value="item.value"
                     />
                   </el-select>
-                </el-form-item>
-                <el-form-item
-                  class="mt-25px"
-                  :label="optionsTaxReg"
-                  prop="tax_organ_code"
-                >
+                </el-form-item> -->
+                <el-form-item class="mt-25px" label="社会信用代码">
                   <el-input
                     v-model="formItem.tax_organ_code"
                     placeholder="请输入"
                   >
                   </el-input>
-                </el-form-item> -->
+                </el-form-item>
               </div>
               <div class="w-[33%]">
                 <el-form-item class="mb-[0]" label="个人合同模板">
