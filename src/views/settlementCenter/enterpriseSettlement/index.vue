@@ -136,9 +136,9 @@
           }}</el-button>
         </template>
         <template v-if="[1].includes(scope.row.status)">
-          <el-button link type="primary" @click="handleDownload(scope)"
+          <!-- <el-button link type="primary" @click="handleDownload(scope)"
             >下载</el-button
-          >
+          > -->
         </template>
         <el-button link type="primary" @click="handleDelete(scope)"
           >删除</el-button
