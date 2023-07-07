@@ -48,6 +48,7 @@ export function getUserInfo(data: getUserInfo) {
  */
 export function getTaskList(data: getTaskList) {
   return request({
+    // url: "/adminapi/finance/company/getTaskList",
     url: "/adminapi/finance/company/getTaskList",
     method: "get",
     params: data,

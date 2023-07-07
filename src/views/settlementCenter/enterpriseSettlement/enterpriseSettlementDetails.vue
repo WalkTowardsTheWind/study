@@ -86,8 +86,9 @@
             :column-list="columnList"
             :page-info="pageInfo"
             @page-change="handlePageChange"
-            hasSelect
+            :hasSelect="false"
             @selection-change="handleSelect"
+            :hasPagination="false"
           >
             <template #download="scope">
               <el-button link type="primary" @click="handleDownload(scope)"
@@ -146,6 +147,7 @@ const handlePageChange = (cur: any) => {
 
 //表单信息
 const formItem = ref({
+  id: "",
   settlement_order_no: "",
   company_name: "",
   company_id: "",
@@ -160,13 +162,19 @@ const formItem = ref({
 //
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "任务编号", prop: "task_no", width: 120 },
+  { label: "任务编号", prop: "task_no", width: 200 },
   { label: "任务名称", prop: "task_name", width: 120 },
   { label: "需求人数", prop: "person_count", width: 120 },
   { label: "预算", prop: "salary", width: 120 },
-  { label: "申请时间", prop: "add_time", width: 120 },
-  { label: "下载回单", slot: "download", align: "center " },
-  { label: "任务详情", slot: "operation", align: "center ", fixed: "right" },
+  { label: "申请时间", prop: "apply_time", width: 120 },
+  { label: "下载回单", slot: "download" },
+  {
+    label: "任务详情",
+    slot: "operation",
+    width: 80,
+    headerAlign: "right",
+    fixed: "right",
+  },
 ];
 /**
  * 批量选择
@@ -186,6 +194,7 @@ const getTableData = async () => {
   await getEnterpriseSettlementDetails(ID)
     .then((response) => {
       const {
+        id,
         settlement_order_no,
         company_name,
         company_id,
@@ -198,6 +207,7 @@ const getTableData = async () => {
         company_address,
       } = response.data.info;
       formItem.value = {
+        id,
         settlement_order_no,
         company_name,
         company_id,
@@ -212,8 +222,7 @@ const getTableData = async () => {
     })
     .catch();
   const params = {
-    company_id: formItem.value.company_id,
-    tax_land_id: formItem.value.tax_land_id,
+    settlement_id: formItem.value.id,
   } as any;
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
@@ -222,19 +231,19 @@ const getTableData = async () => {
   try {
     const { data } = await getTaskList(params);
     tableData.length = 0;
-    pageInfo.page = data.list.current_page;
-    pageInfo.total = data.list.total;
+    // pageInfo.page = data.list.current_page;
+    // pageInfo.total = data.list.total;
+    console.log(data, "wewewewewe");
 
-    var newData = data.list.data.map((item: any) => {
+    var newData = data.map((item: any) => {
       return {
         id: item.id,
         task_no: item.task_no,
         task_name: item.task_name,
         task_id: item.id,
-        person_count: item.task_attribute.person_count,
-        salary:
-          item.task_attribute.salary_min + "-" + item.task_attribute.salary_max,
-        add_time: item.add_time,
+        person_count: item.person_count,
+        salary: item.salary_min + "-" + item.salary_max,
+        apply_time: item.apply_time,
         task_user: item.task_user,
       };
     });
