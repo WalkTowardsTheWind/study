@@ -254,8 +254,11 @@
         </div>
       </template>
     </zxn-tabs>
+    <InspectDialog
+      v-model:dialogVisible="dialogVisible"
+      :imageList="imageList"
+    />
   </zxn-plan>
-  <InspectDialog v-model:dialogVisible="dialogVisible" :imageList="imageList" />
 </template>
 <script setup lang="ts">
 import { useRoute, useRouter } from "vue-router";
