@@ -30,3 +30,9 @@ export interface updateStatus {
   id: string;
   status: string;
 }
+/**
+ * 获取任务详情
+ */
+export interface taskId {
+  id: string;
+}

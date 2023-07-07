@@ -17,36 +17,36 @@
               <el-row>
                 <el-col :span="8">
                   <el-form-item label="账户ID">
-                    <el-text class="mx-1">{{ formItem.task_name }}</el-text>
+                    <el-text class="mx-1">{{ formItem.account }}</el-text>
                   </el-form-item>
                   <el-form-item label="证件类型">
-                    <el-text class="mx-1">{{ formItem.task_name }}</el-text>
+                    <el-text class="mx-1">身份证</el-text>
                   </el-form-item>
                   <el-form-item label="开户行">
-                    <el-text class="mx-1">{{ formItem.task_name }}</el-text>
+                    <el-text class="mx-1">{{ formItem.bank }}</el-text>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="姓名">
-                    <el-text class="mx-1">{{ formItem.category_name }}</el-text>
+                    <el-text class="mx-1">{{ formItem.real_name }}</el-text>
                   </el-form-item>
                   <el-form-item label="身份证号">
-                    <el-text class="mx-1">{{ formItem.category_name }}</el-text>
+                    <el-text class="mx-1">{{ formItem.idcard }}</el-text>
                   </el-form-item>
                   <el-form-item label="开户行号">
-                    <el-text class="mx-1">{{ formItem.category_name }}</el-text>
+                    <el-text class="mx-1">{{ formItem.bank_account }}</el-text>
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="8">
                   <el-form-item label="联系方式">
-                    <el-text class="mx-1">{{ formItem.person_count }}</el-text>
+                    <el-text class="mx-1">{{ formItem.phone }}</el-text>
                   </el-form-item>
                   <el-form-item label="地点">
-                    <el-text class="mx-1">{{ formItem.person_count }}</el-text>
+                    <el-text class="mx-1"></el-text>
                   </el-form-item>
                   <el-form-item label="开户地址">
-                    <el-text class="mx-1">{{ formItem.person_count }}</el-text>
+                    <el-text class="mx-1">{{ formItem.address }}</el-text>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -59,22 +59,26 @@
               <el-row>
                 <el-col :span="8">
                   <el-form-item label="任务名称">
-                    <el-text class="mx-1">{{ formItem.person_count }}</el-text>
+                    <el-text class="mx-1">{{ formItem.task_name }}</el-text>
                   </el-form-item>
                   <el-form-item label="结算时间">
-                    <el-text class="mx-1">{{}}</el-text>
+                    <el-text class="mx-1">{{
+                      formItem.settlement_time
+                    }}</el-text>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="任务状态">
                     <el-text class="mx-1">{{
-                      formItem.settlement_amount
+                      proxy.$enumSet["statusEnum.TaskEnum"][formItem.status]
                     }}</el-text>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="结算金额">
-                    <el-text class="mx-1">{{}}</el-text>
+                    <el-text class="mx-1">{{
+                      formItem.settlement_amount
+                    }}</el-text>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -88,7 +92,7 @@
                 <el-col :span="8">
                   <el-form-item label="结算回单">
                     <picture-preview
-                      :imageList="formItem.check_url"
+                      :imageList="formItem.payment_receipt"
                     ></picture-preview>
                   </el-form-item>
                 </el-col>
@@ -101,9 +105,11 @@
   </zxn-plan>
 </template>
 <script setup lang="ts">
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { getUserInfo } from "@/api/settlementCenter/enterpriseSettlement";
 const { proxy } = getCurrentInstance() as any;
 const route = useRoute();
+const router = useRouter();
 const imageList = ref([]) as any;
 const activeName = ref("1");
 const tabsList = [
@@ -126,182 +132,57 @@ const handlePageChange = (cur: any) => {
 };
 //表单信息
 const formItem = ref({
-  task_name: "",
-  category_name: "",
-  person_count: "",
-  open_type: "",
-  open_start_time: "",
-  open_end_time: "",
-  task_head: "",
-  task_head_phone: "",
-  task_date_type: "",
-  task_start_time: "",
-  task_end_time: "",
-  salary: "",
-  request: [],
-  address: "",
-  condition_desc: "",
-  require_desc: "",
-  settlement_person_count: "",
-  company_name: "",
-  settlement_amount: "",
-  payment_amount: "",
-  payment_time: "",
-  status: "",
-  reason: "",
-  invoice_status: "",
+  account: "",
+  bank: "",
+  real_name: "",
+  idcard: "",
   bank_account: "",
-  check_url: [],
+  phone: "",
+  address: "",
+  task_name: "",
+  settlement_time: "",
+  status: "",
+  settlement_amount: "",
+  payment_receipt: [],
 }) as any;
-//
 
-const tableData = reactive([
-  { value: "020" },
-  { value: "020" },
-  { value: "020" },
-]);
-const color = {
-  0: { color: "#1AB66B", backgroundColor: "#DAF3E7" },
-  1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
-  2: { color: "#333333", backgroundColor: "#DEDEDE" },
+const getTableData = async () => {
+  try {
+    const { data } = await getUserInfo({ id: route.query.id });
+
+    const {
+      account,
+      bank,
+      real_nam,
+      idcard,
+      bank_account,
+      phon,
+      address,
+      task_name,
+      settlement_time,
+      status,
+      settlement_amount,
+      payment_receipt,
+    } = data.userInfo;
+    formItem.value = {
+      account,
+      bank,
+      real_nam,
+      idcard,
+      bank_account,
+      phon,
+      address,
+      task_name,
+      settlement_time,
+      status,
+      settlement_amount,
+      payment_receipt,
+    };
+  } catch (error) {
+    console.log(error);
+  }
 };
-const columnList = [
-  { label: "账户ID", prop: "account" },
-  // 雷门绝学
-  // { label: "状态", slot: "status", width: 100, headerAlign: "left" },
-  {
-    label: "结算状态",
-    type: "enum",
-    width: 100,
-    path: "settlementCenterEnum.settlementCenterEnum",
-    prop: "settlement_status",
-    // fixed: "left",
-    color: {
-      0: { color: "#1AB66B", backgroundColor: "#DAF3E7" },
-      1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
-      2: { color: "#333333", backgroundColor: "#DEDEDE" },
-    },
-  },
-  { label: "姓名", prop: "real_name" },
-  { label: "联系方式", prop: "phone" },
-  { label: "收款银行", prop: "bank" },
-  { label: "银行卡号", prop: "bank_account" },
-  { label: "下发时间", prop: "payment_time" },
-  { label: "结算金额", prop: "payment_amount" },
-  {
-    label: "操作",
-    slot: "operation",
-    fixed: "right",
-    width: 200,
-    align: "right",
-    headerAlign: "left",
-  },
-];
-// 操作
-// const handleInspect = (scope: any) => {
-//   dialogVisible.value = true;
-//   imageList.value = scope.row.payment_receipt;
-// };
-/**
- * 批量选择
- */
-//选中的数据
-//返回id数组
-const selectionData = ref([]);
-const handleSelect = (data: any) => {
-  selectionData.value = data.map((item: any) => item.id);
-};
-
-// const getTableData = async () => {
-//   try {
-
-//     // const { data } = await getTaskView(Number(route.query.task_id));
-//     console.log(data);
-
-//     const {
-//       task_name,
-//       category_name,
-//       open_type,
-//       open_start_time,
-//       open_end_time,
-//       task_head,
-//       task_head_phone,
-//       request,
-//       address,
-//       company_name,
-//       status,
-//       reason,
-//       bank_account,
-//       check_url,
-//     } = data;
-//     const {
-//       person_count,
-//       task_date_type,
-//       task_start_time,
-//       task_end_time,
-//       salary,
-//       condition_desc,
-//     } = data.taskAttribute;
-
-//     const { require_desc } = data.taskAttributeUser;
-//     const {
-//       settlement_person_count,
-//       settlement_amount,
-//       payment_amount,
-//       payment_time,
-//       invoice_status,
-//     } = data.finance_settlement_company_task;
-//     formItem.value = {
-//       task_name,
-//       category_name,
-//       person_count,
-//       open_type,
-//       open_start_time,
-//       open_end_time,
-//       task_head,
-//       task_head_phone,
-//       task_date_type,
-//       task_start_time,
-//       task_end_time,
-//       salary,
-//       request,
-//       address,
-//       condition_desc,
-//       require_desc,
-//       settlement_person_count,
-//       company_name,
-//       settlement_amount,
-//       payment_amount,
-//       payment_time,
-//       status,
-//       reason,
-//       invoice_status,
-//       bank_account,
-//       check_url,
-//     };
-//     const newData = data.taskUser.map((item: any) => {
-//       return {
-//         account: item.account,
-//         settlement_status: item.settlement_status,
-
-//         real_name: item.real_name,
-//         phone: item.phone,
-//         bank: item.bank,
-//         bank_account: item.bank_account,
-//         payment_time: item.payment_time,
-//         payment_amount: item.payment_amount,
-
-//         payment_receipt: item.payment_receipt,
-//       };
-//     });
-//     tableData.length = 0;
-
-//     tableData.push(...newData);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-// getTableData();
+getTableData();
 
 onMounted(() => {});
 </script>

@@ -1,5 +1,12 @@
 import request from "@/utils/request";
-import { keywords, getUserInfo, updateStatus, getTaskList } from "./types";
+import { AxiosPromise } from "axios";
+import {
+  keywords,
+  getUserInfo,
+  updateStatus,
+  getTaskList,
+  taskId,
+} from "./types";
 
 /**
  *企业结算列表
@@ -80,8 +87,13 @@ export function deleteEnterpriseSettlementDoc(id: number) {
   });
 }
 /**
- * 删除企业结算单
- *
- * @param data {updateStatus}
- * @returns
+ * 获取任务详情
+ * @param id Number
  */
+export function getTaskDetails(data: taskId): AxiosPromise {
+  return request({
+    url: "/adminapi/finance/company/getTaskInfo",
+    method: "GET",
+    params: data,
+  });
+}

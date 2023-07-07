@@ -527,20 +527,6 @@ var optionsSigningRules = ref([
   },
 ]);
 
-// 企业注册类型选择框
-// 企业注册类型，NORMAL（组织机构代码）、MERGE（社会信用代码）、REGCODE（工商注册号），默认NORMAL组织机构代码、统一社会信用代码，工商注册号
-
-const optionsTaxReg = computed(() => {
-  console.log(formItem.value.tax_reg_type, optionsTaxRegType.value);
-
-  const optionsTaxReg =
-    optionsTaxRegType.value.find(
-      (item) => item.value === formItem.value.tax_reg_type
-    )?.label || "组织机构代码";
-
-  return optionsTaxReg;
-});
-
 //
 var optionsTaxRegType = ref([
   {
