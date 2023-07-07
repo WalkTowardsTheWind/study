@@ -145,7 +145,7 @@ const handleTarget = (index: number) => {
 
     &:hover {
       .zxn-image-item-bottom {
-        bottom: -25% !important;
+        bottom: -27% !important;
       }
     }
   }
