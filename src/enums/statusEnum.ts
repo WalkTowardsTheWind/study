@@ -80,3 +80,8 @@ export enum settlementTypeStatus {
   "月结",
   "完工结",
 }
+
+export enum InvoiceType {
+  "纸质发票" = 1,
+  "电子发票",
+}

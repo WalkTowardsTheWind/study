@@ -2,90 +2,127 @@
   <zxn-plan>
     <zxn-tabs v-model:activeName="activeName" :tabsList="tabsList" has-back>
       <template #info>
-        <div class="pl-36px pr-36px">
+        <div class="pl-36px pr-36px mt-32px">
           <el-form
             class="zxn-view-form"
             label-position="right"
-            label-width="110"
+            label-width="100"
           >
-            <el-row class="mt-47px">
-              <el-col :span="24">
-                <el-form-item label="发票类型">
-                  {{
-                    proxy.$enumSet["statusEnum.invoiceType"][
-                      formItem.invoice_type
-                    ]
-                  }}
+            <el-row :gutter="16">
+              <el-col :span="8">
+                <el-form-item label="开票要求">
+                  <el-input
+                    :model-value="
+                      proxy.$enumSet['statusEnum.invoiceRequire'][
+                        formItem.invoice_require
+                      ]
+                    "
+                    readonly
+                  />
                 </el-form-item>
               </el-col>
             </el-row>
-
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="申请类型">
-                  {{
-                    proxy.$enumSet["statusEnum.invoiceRequire"][
-                      formItem.invoice_require
-                    ]
-                  }}
+            <zxn-title class="mb20px">开票信息</zxn-title>
+            <el-row :gutter="16">
+              <el-col :span="8">
+                <el-form-item label="税源地">
+                  <el-input :model-value="formItem.tax_land_name" readonly />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="纳税人识别号">
+                  <el-input :model-value="formItem.taxpayer_number" readonly />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="发票抬头">
+                  <el-input :model-value="formItem.company_name" readonly />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="企业地址">
+                  <el-input :model-value="formItem.company_address" readonly />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="开户行">
+                  <el-input :model-value="formItem.bank" readonly />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="银行账号">
+                  <el-input :model-value="formItem.bank_account" readonly />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="联系人">
+                  <el-input :model-value="formItem.contacts" readonly />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="联系电话">
+                  <el-input :model-value="formItem.contacts_mobile" readonly />
                 </el-form-item>
               </el-col>
             </el-row>
+            <zxn-title class="mb20px">收件信息</zxn-title>
             <el-row>
-              <el-col :span="24">
-                <el-form-item label="票面种类">
-                  {{
-                    proxy.$enumSet["statusEnum.applyInvoiceType"][
-                      formItem.apply_invoice_type
-                    ]
-                  }}
+              <el-col :span="8">
+                <el-form-item label="收件人">
+                  <el-input :model-value="formItem.consignee" readonly />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="收件人电话">
+                  <el-input :model-value="formItem.consignee_mobile" readonly />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="收件地址">
+                  <el-input :model-value="formItem.address" readonly />
                 </el-form-item>
               </el-col>
             </el-row>
+            <zxn-title class="mb20px">发票信息</zxn-title>
             <el-row>
-              <el-col :span="24">
-                <el-form-item label="纳税人识别号">{{
-                  formItem.taxpayer_number
-                }}</el-form-item>
+              <el-col :span="8">
+                <el-form-item label="发票形式">
+                  <el-input
+                    :model-value="
+                      proxy.$enumSet['statusEnum.InvoiceType'][
+                        formItem.invoice_form
+                      ]
+                    "
+                    readonly
+                  />
+                </el-form-item>
               </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="发票抬头">{{
-                  formItem.company_name
-                }}</el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="开户行">{{ formItem.bank }}</el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="银行卡号">{{
-                  formItem.bank_account
-                }}</el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="税地">{{
-                  formItem.tax_land_name
-                }}</el-form-item>
+              <el-col :span="8">
+                <el-form-item label="规格型号">
+                  <el-input
+                    :model-value="
+                      proxy.$enumSet[
+                        'taxLandManagementEnum.invoice_denomination'
+                      ][formItem.invoice_denomination]
+                    "
+                    readonly
+                  />
+                </el-form-item>
               </el-col>
             </el-row>
           </el-form>
-        </div>
-      </template>
-      <template #list>
-        <div class="p-24px pb-0">
+          <div class="flex justify-between items-center mb20px">
+            <zxn-title> 开票类目 </zxn-title>
+            <div class="table-right-in">
+              <span>预计开票：{{ tableData.length }}张</span>
+              <span>合计金额：¥{{ totalValue }}</span>
+            </div>
+          </div>
           <zxn-table
             :column-list="columnList"
             :table-data="tableData"
             :hasPagination="false"
-          >
-          </zxn-table>
+          />
         </div>
       </template>
     </zxn-tabs>
@@ -98,6 +135,7 @@ import { ElLoading } from "element-plus";
 import type { ComponentInternalInstance } from "vue";
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 import { useRoute } from "vue-router";
+import currency from "currency.js";
 const route = useRoute();
 const activeName: Ref<string> = ref("info");
 type TabsType = {
@@ -107,28 +145,29 @@ type TabsType = {
 const tabsList: TabsType[] = reactive([
   {
     name: "info",
-    label: "开票信息",
-  },
-  {
-    name: "list",
-    label: "任务列表",
+    label: "发票详情",
   },
 ]);
 const columnList = [
-  { label: "任务编号", prop: "task_no" },
-  { label: "任务名称", prop: "task_name" },
-  { label: "行业", prop: "category_id" },
-  { label: "结算金额", prop: "payment_amount" },
+  { label: "开票类目", prop: "name" },
+  // { label: "关联笔数", prop: "task_name" },
+  { label: "开票金额", prop: "settlement_amount" },
 ];
 const formItem = reactive({
-  invoice_type: "",
   invoice_require: "",
-  apply_invoice_type: "",
+  tax_land_name: "",
   taxpayer_number: "",
   company_name: "",
+  company_address: "",
   bank: "",
   bank_account: "",
-  tax_land_name: "",
+  contacts: "",
+  contacts_mobile: "",
+  consignee: "",
+  consignee_mobile: "",
+  address: "",
+  invoice_form: "",
+  invoice_denomination: "",
 });
 const tableData = reactive([]);
 const getView = async () => {
@@ -142,21 +181,49 @@ const getView = async () => {
         ? await getInvoiceCompanyView(id * 1)
         : await getInvoiceChannelView(id * 1);
     loading.close();
-    formItem.invoice_type = data.invoice_type;
     formItem.invoice_require = data.invoice_require;
-    formItem.apply_invoice_type = data.invoice_type;
+    formItem.tax_land_name = data.tax_land_name;
     formItem.taxpayer_number = data.taxpayer_number;
     formItem.company_name = data.company_name;
+    formItem.company_address = data.company_address;
     formItem.bank = data.bank;
     formItem.bank_account = data.bank_account;
-    formItem.tax_land_name = data.tax_land_name;
+    formItem.contacts = data.contacts;
+    formItem.contacts_mobile = data.contacts_mobile;
+    formItem.consignee = data.consignee;
+    formItem.consignee_mobile = data.consignee_mobile;
+    formItem.address = data.address;
+    formItem.invoice_form = data.invoice_form;
+    formItem.invoice_denomination = data.invoice_denomination;
     tableData.length = 0;
-    tableData.push(...(Object.values(data.task_list) as []));
+    tableData.push(...(Object.values(data.category) as []));
+    getTotalNum();
   } catch (err) {
     loading.close();
   }
+};
+const totalValue = ref(0);
+const getTotalNum = () => {
+  totalValue.value = tableData.reduce((total: number, cur: any): number => {
+    return currency(total).add(cur.settlement_amount) as number;
+  }, 0);
 };
 onMounted(() => {
   getView();
 });
 </script>
+<style lang="scss" scoped>
+.table-right-in {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+
+  > span {
+    &:first-child {
+      margin-right: 20px;
+    }
+  }
+}
+</style>
