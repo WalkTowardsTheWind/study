@@ -75,7 +75,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="其他要求">
-              {{ formItem.require_desc }}
+              {{ formItem.condition_desc }}
             </el-form-item>
           </el-col>
         </el-row>
@@ -212,7 +212,7 @@ const formItem = reactive({
   request: "",
   address: "",
   task_desc: "",
-  require_desc: "",
+  condition_desc: "",
   add_time: "",
   check_time: "",
   pass_time: "",
@@ -255,7 +255,7 @@ const getView = async () => {
     formItem.settlement_type = taskAttribute.settlement_type;
     formItem.request = data.request.filter(Boolean).join("/");
     formItem.address = data.address;
-    formItem.require_desc = data.taskAttributeUser?.require_desc || "";
+    formItem.condition_desc = data.taskAttribute?.condition_desc || "";
     formItem.task_desc = data.task_desc;
     formItem.add_time = data.add_time;
     formItem.check_time = data.check_time;
