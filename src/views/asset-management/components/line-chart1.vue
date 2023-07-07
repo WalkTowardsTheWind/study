@@ -57,6 +57,7 @@ const dateList = [
   { name: "本月", val: "3" },
 ];
 const currentDate = ref(3);
+let chart = null;
 
 const total_channel_amount = ref();
 const total_fee_amount = ref();
@@ -73,12 +74,10 @@ function get3And1List(time_type: number, index: number) {
 
     options.value.xAxis.data = res.data?.income.map((item) => item.date_time);
     options.value.series[0].data = res.data?.income.map((item) => item.amount);
-    chart.value?.clear();
-    chart.value?.setOption(options.value);
+    chart?.clear();
+    chart?.setOption(options.value);
   });
 }
-
-const chart = ref({} as any);
 
 const options = ref({
   title: {
@@ -159,9 +158,7 @@ const options = ref({
 onMounted(() => {
   nextTick(() => {
     // 图表初始化
-    chart.value = echarts.init(
-      document.getElementById("main") as HTMLDivElement
-    );
+    chart = echarts.init(document.getElementById("main") as HTMLDivElement);
 
     // 大小自适应
     window.addEventListener("resize", () => {
