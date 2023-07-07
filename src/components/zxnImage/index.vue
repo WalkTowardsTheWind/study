@@ -112,7 +112,7 @@ const handleTarget = (index: number) => {
     &-bottom {
       position: absolute;
       right: 0;
-      bottom: -25%;
+      bottom: -27%;
       left: 0;
       display: flex;
       align-items: center;
