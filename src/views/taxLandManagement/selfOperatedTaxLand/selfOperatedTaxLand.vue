@@ -249,7 +249,12 @@ const columnList = [
   { label: "对接人", prop: "tax_land_head" },
   { label: "税地发票类型", prop: "invoice_type", width: 120 },
   { label: "发票面额", prop: "invoice_denomination", width: 120 },
-  { label: "上架时间", prop: "ground_time", sortable: "custom", width: 120 },
+  {
+    label: "上架时间",
+    prop: "ground_time",
+    //  sortable: "custom",
+    width: 120,
+  },
   {
     label: "行业限制",
     slot: "IndustryRestrictions",
