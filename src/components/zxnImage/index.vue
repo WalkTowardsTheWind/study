@@ -8,6 +8,7 @@
       :key="item"
       @click="handleTarget(index)"
     >
+      {{ currentImg }}
       <el-image
         :style="{ width: `${width}px`, height: `${height}px` }"
         :src="item"
@@ -19,14 +20,19 @@
       </div>
       <div
         class="zxn-image-item-ellipsis"
-        v-if="ellipsis && index > 1 && index === currentImg.length - 1"
+        v-if="
+          ellipsis &&
+          index > 1 &&
+          index === currentImg.length - 1 &&
+          currentImg.length !== imgList.length
+        "
       >
-        + {{ imgList.length - 2 }}
+        + {{ imgList.length - 3 }}
       </div>
     </div>
     <el-image-viewer
       v-if="showViewer"
-      :url-list="currentImg"
+      :url-list="imgList"
       :initial-index="previewIndex"
       z-index="999"
       @close="closeImgViewer"
@@ -48,7 +54,7 @@ const props = defineProps({
 });
 const currentImg = computed(() => {
   const _imgList = isArray(props.imgList) ? props.imgList : [props.imgList];
-  return props.ellipsis ? _imgList.filter((i, r) => r >= 1) : _imgList;
+  return props.ellipsis ? _imgList.filter((i, r) => r <= 2) : _imgList;
 });
 let stopWheelListener: (() => void) | undefined;
 let prevOverflow = "";
