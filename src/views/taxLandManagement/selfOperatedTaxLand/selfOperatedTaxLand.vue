@@ -361,12 +361,7 @@ const handleDelete = (scope: any) => {
     getTableData();
   });
 };
-/**
- * 导出
- */
-const handleF = (scope: any) => {
-  console.log(scope.row.value, "导出");
-};
+
 /**
  * 详情
  */
@@ -407,8 +402,6 @@ const handleD = (command: string | number | object) => {
     console.log("上架");
   } else if (command == 2) {
     console.log("删除");
-  } else if (command == 3) {
-    console.log("导出");
   }
 };
 
