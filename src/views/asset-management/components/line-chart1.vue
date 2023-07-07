@@ -28,7 +28,7 @@
     </div>
     <div class="line_type">
       <div class="income">收入</div>
-      <div class="spend">支出</div>
+      <!-- <div class="spend">支出</div> -->
     </div>
     <div class="date">
       <div
