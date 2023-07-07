@@ -76,7 +76,7 @@
           @click="$router.push({ name: 'business-account-add' })"
           >+ 新建</el-button
         >
-        <el-dropdown class="ml-4" trigger="click">
+        <!-- <el-dropdown class="ml-4" trigger="click">
           <el-button type="primary" plain>批量操作</el-button>
           <template #dropdown>
             <el-dropdown-menu>
@@ -85,7 +85,7 @@
               <el-dropdown-item command="3">导出</el-dropdown-item>
             </el-dropdown-menu>
           </template>
-        </el-dropdown>
+        </el-dropdown> -->
       </template>
       <template #calculation_type="scope">
         <span>{{ ["内扣", "外扣"][scope.row.calculation_type] }}</span>
