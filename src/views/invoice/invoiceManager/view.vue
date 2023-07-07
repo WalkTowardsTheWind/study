@@ -150,7 +150,7 @@ const tabsList: TabsType[] = reactive([
 ]);
 const columnList = [
   { label: "开票类目", prop: "name" },
-  // { label: "关联笔数", prop: "task_name" },
+  { label: "关联笔数", prop: "num" },
   { label: "开票金额", prop: "settlement_amount" },
 ];
 const formItem = reactive({
