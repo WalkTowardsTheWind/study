@@ -4,7 +4,7 @@
       <el-row class="w-full" :gutter="50">
         <el-col :span="8">
           <el-form-item label="税地名称">
-            <el-input v-model="formItem.tax_land_name" readonly />
+            <el-input v-model="formItem.tax_land_name" />
           </el-form-item>
           <el-form-item label="认证规则">
             <el-select
