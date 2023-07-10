@@ -4,7 +4,18 @@
       <el-row class="w-full" :gutter="50">
         <el-col :span="8">
           <el-form-item label="税地名称">
-            <el-input v-model="formItem.tax_land_name" />
+            <el-select
+              class="w-full"
+              placeholder="请选择"
+              v-model="formItem.tax_land_id"
+            >
+              <el-option
+                v-for="(item, index) in taxLandOption"
+                :key="index"
+                :value="item.id"
+                :label="item.tax_land_name"
+              ></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="认证规则">
             <el-select
@@ -65,12 +76,22 @@
 </template>
 
 <script lang="ts" setup>
+import { getLandList } from "@/api/common";
 import {
   getBusinessAccountDetail,
   editBusinessAccount,
 } from "@/api/account/business";
 
 import router from "@/router";
+const taxLandOption = ref([] as any);
+function getTaxLandOption() {
+  console.log(123);
+
+  taxLandOption.value.length = 0;
+  getLandList().then((res) => {
+    taxLandOption.value.push(...res.data);
+  });
+}
 
 const authType = [
   { label: "无", value: 0 },
@@ -100,6 +121,7 @@ watch(
   () => props.childData,
   (newValue) => {
     formItem.value = props.childData;
+    formItem.value.tax_land_id = formItem.value.tax_land_id * 1;
   }
 );
 
@@ -144,6 +166,7 @@ watch(
 // }
 
 // getAccountDetail();
+getTaxLandOption();
 </script>
 
 <style scoped lang="scss">
