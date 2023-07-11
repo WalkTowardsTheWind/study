@@ -76,13 +76,14 @@
         />
       </template>
       <template #salary="{ row }">
-        {{
-          row.task_attribute.salary_type === 1
-            ? $moneyFormat(row.task_attribute.salary)
-            : `${$moneyFormat(row.task_attribute.salary_min)} - ${$moneyFormat(
-                row.task_attribute.salary_max
-              )}`
-        }}
+        <template v-if="row.task_attribute.salary_type === 1">
+          <money-text :modelValue="row.task_attribute.salary" />
+        </template>
+        <template v-else>
+          <money-text :modelValue="row.task_attribute.salary_min" />
+          -
+          <money-text :modelValue="row.task_attribute.salary_max" />
+        </template>
       </template>
       <template #operation="{ row }">
         <template v-if="row.status === 1">
@@ -162,7 +163,7 @@ const columnList = [
   { label: "关联企业", prop: "company_name", minWidth: 140 },
   { label: "需求人数", prop: "task_attribute.person_count", type: "deep" },
   { label: "行业", prop: "category_name", minWidth: 80 },
-  { label: "金额", slot: "salary", minWidth: 180 },
+  { label: "金额", slot: "salary", minWidth: 220 },
   {
     label: "申请时间",
     minWidth: 180,

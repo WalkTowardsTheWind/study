@@ -68,7 +68,7 @@
               />
             </div>
             <div v-if="item.type === 'money'">
-              {{ proxy.$moneyFormat(row[item.prop]) }}
+              <money-text :modelValue="row[item.prop]" />
             </div>
           </template>
         </el-table-column>
