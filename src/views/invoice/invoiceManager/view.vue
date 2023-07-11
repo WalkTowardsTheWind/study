@@ -6,7 +6,7 @@
           <el-form
             class="zxn-view-form"
             label-position="right"
-            label-width="100"
+            label-width="130"
           >
             <el-row :gutter="16">
               <el-col :span="8">
@@ -30,8 +30,8 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="纳税人识别号">
-                  <el-input :model-value="formItem.taxpayer_number" readonly />
+                <el-form-item label="统一社会信用代码">
+                  <el-input :model-value="formItem.credit_code" readonly />
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -157,6 +157,7 @@ const formItem = reactive({
   invoice_require: "",
   tax_land_name: "",
   taxpayer_number: "",
+  credit_code: "",
   company_name: "",
   company_address: "",
   bank: "",
@@ -184,6 +185,7 @@ const getView = async () => {
     formItem.invoice_require = data.invoice_require;
     formItem.tax_land_name = data.tax_land_name;
     formItem.taxpayer_number = data.taxpayer_number;
+    formItem.credit_code = data.credit_code;
     formItem.company_name = data.company_name;
     formItem.company_address = data.company_address;
     formItem.bank = data.bank;
