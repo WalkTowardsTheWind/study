@@ -17,10 +17,14 @@
   >
     <i-ep-plus style="width: 3em; height: 3em" />
   </el-upload>
-
-  <el-dialog v-model="dialogVisible">
-    <img w-full :src="previewImgUrl" alt="Preview Image" />
-  </el-dialog>
+  <el-image-viewer
+    v-if="dialogVisible"
+    :url-list="[previewImgUrl]"
+    :initial-index="0"
+    z-index="999"
+    @close="closeImgViewer"
+    :teleported="true"
+  />
 </template>
 
 <script setup lang="ts">
@@ -32,6 +36,7 @@ import {
   UploadProps,
 } from "element-plus";
 import { uploadFileApi } from "@/api/file";
+import { useEventListener } from "@vueuse/core";
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -141,12 +146,38 @@ function handleBeforeUpload(file: UploadRawFile) {
   return true;
 }
 
+let prevOverflow = "";
+
+let stopWheelListener: (() => void) | undefined;
+
+function wheelHandler(e: WheelEvent) {
+  if (!e.ctrlKey) return;
+
+  if (e.deltaY < 0) {
+    e.preventDefault();
+    return false;
+  } else if (e.deltaY > 0) {
+    e.preventDefault();
+    return false;
+  }
+}
 /**
  * 预览图片
  */
 const previewImg: UploadProps["onPreview"] = (uploadFile) => {
+  stopWheelListener = useEventListener("wheel", wheelHandler, {
+    passive: false,
+  });
+  prevOverflow = document.body.style.overflow;
+  document.body.style.overflow = "hidden";
   previewImgUrl.value = uploadFile.url!;
   dialogVisible.value = true;
+};
+
+const closeImgViewer = () => {
+  stopWheelListener?.();
+  document.body.style.overflow = prevOverflow;
+  dialogVisible.value = false;
 };
 </script>
 <style lang="scss">
