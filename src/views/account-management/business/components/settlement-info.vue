@@ -77,7 +77,7 @@ const columnList = [
   { label: "结算人数", prop: "person_count" },
   // { label: "实际人数", prop: "total_people" },
   // { label: "点位", prop: "tax_point" },
-  { label: "打款金额", prop: "real_money", type: "money" },
+  { label: "打款金额", prop: "total_money", type: "money" },
   // { label: "实际下发", prop: "real_money" },
   // { label: "个人回单", prop: "transfer_certificate" },
   { label: "结算时间", prop: "settlement_time", width: 200 },
