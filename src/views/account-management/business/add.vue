@@ -16,7 +16,10 @@
       <el-row :gutter="30" v-show="activeStep === 0">
         <el-col :span="7">
           <el-form-item label="企业登录名称" prop="account" required>
-            <el-input placeholder="请输入" v-model="addForm.account" />
+            <el-input
+              placeholder="请输入6位以上英文字母和数字组合"
+              v-model="addForm.account"
+            />
           </el-form-item>
           <el-form-item label="密码" prop="pwd" required>
             <el-input placeholder="请输入" v-model="addForm.pwd" />
