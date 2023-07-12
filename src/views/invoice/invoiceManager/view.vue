@@ -122,7 +122,11 @@
             :column-list="columnList"
             :table-data="tableData"
             :hasPagination="false"
-          />
+          >
+            <template #categoryName="{ row }">{{
+              `${row.p_name}/${row.name}`
+            }}</template>
+          </zxn-table>
         </div>
       </template>
     </zxn-tabs>
@@ -149,7 +153,7 @@ const tabsList: TabsType[] = reactive([
   },
 ]);
 const columnList = [
-  { label: "开票类目", prop: "name" },
+  { label: "开票类目", slot: "categoryName" },
   { label: "关联笔数", prop: "num" },
   { label: "开票金额", prop: "settlement_amount" },
 ];
