@@ -251,7 +251,11 @@
                   <el-input v-model="formItem.bank" placeholder="请输入">
                   </el-input>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="开户行账户">
+                <el-form-item
+                  class="mt-25px"
+                  label="开户行账户"
+                  prop="bank_account"
+                >
                   <el-input
                     v-model="formItem.bank_account"
                     placeholder="请输入"
@@ -426,10 +430,10 @@
         <zxn-bottom-btn>
           <div class="but">
             <el-button type="primary" @click="handleSubmit">{{
-              active == stepList.length - 1 ? "完  成" : "下一步"
+              active == stepList.length - 1 ? "完 成" : "下一步"
             }}</el-button>
             <el-button @click="handleClose">{{
-              active == 0 ? "取  消" : "上一步"
+              active == 0 ? "取 消" : "上一步"
             }}</el-button>
           </div>
         </zxn-bottom-btn>
