@@ -1,5 +1,6 @@
 import axios, { InternalAxiosRequestConfig, AxiosResponse } from "axios";
 import { useUserStoreHook } from "@/store/modules/user";
+import { stream } from "fast-glob";
 
 // 创建 axios 实例
 const service = axios.create({
@@ -39,7 +40,14 @@ service.interceptors.response.use(
       });
       return Promise.reject(new Error(msg));
     }
+    const headers = response.headers;
     // 响应数据为二进制流处理(Excel导出)
+    if (headers["content-type"].includes("sheet")) {
+      const fileName = decodeURI(
+        headers["content-disposition"]?.split("filename=")[1]
+      );
+      return { data: response.data, fileName };
+    }
     if (response.data instanceof ArrayBuffer) {
       return response;
     }

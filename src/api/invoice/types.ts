@@ -1,3 +1,5 @@
+import { getInvoiceExcel } from "@/api/invoice/index";
+
 /**
  * 角色查询参数
  */
@@ -24,4 +26,11 @@ export interface uploadQuery {
 export interface invoiceStatus {
   ids: string[];
   status: number;
+}
+
+/**
+ * 角色查询参数
+ */
+export interface invoiceExcel extends PageQuery {
+  ids: number[];
 }

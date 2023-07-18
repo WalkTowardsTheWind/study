@@ -62,9 +62,18 @@
       @page-change="handlePageChange"
     >
       <template #tableTop>
-        <el-button type="primary" plain @click="handleCommand"
-          >批量驳回</el-button
-        >
+        <!--        <el-button type="primary" plain @click="handleCommand"-->
+        <!--          >批量驳回</el-button-->
+        <!--        >-->
+        <el-dropdown trigger="click" @command="handleCommand">
+          <el-button type="primary" plain>批量操作</el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="reject">驳回</el-dropdown-item>
+              <el-dropdown-item command="excel">导出</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </template>
       <template #img="{ row }">
         <zxn-image
@@ -77,7 +86,7 @@
       </template>
       <template #operation="{ row }">
         <template v-if="!row.status">
-          <el-button link type="primary" @click="handleCommand(row.id)"
+          <el-button link type="primary" @click="handleReject(row.id)"
             >驳回</el-button
           >
           <el-button link type="primary" @click="handleUpload(row)"
@@ -101,14 +110,15 @@
 import type { ComponentInternalInstance } from "vue";
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 import { getTreeList } from "@/api/common";
-import { isNumber } from "@/utils/is";
 import {
   getInvoiceInCompany,
   getInvoiceInChannel,
   setStatus,
   channelSetStatus,
+  getInvoiceExcel,
 } from "@/api/invoice";
 import { transformTimeRange } from "@/utils";
+import { downloadByData } from "@/utils/download";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 const router = useRouter();
@@ -235,15 +245,25 @@ const handleView = (cur) => {
   router.push({ name: "invoiceView", query: { id: cur.id, type: props.type } });
 };
 const table = ref();
-const handleCommand = async (id: number) => {
+const handleCommand = (type: string) => {
   const selected = table.value.getSelectionRows();
-  const ids = isNumber(id) ? [id] : selected.map((it) => it.id);
+  const ids = selected.map((it) => it.id);
   if (!ids.length) {
     return ElMessage({
       type: "error",
       message: `请选择数据`,
     });
   }
+  switch (type) {
+    case "reject":
+      handleReject(ids);
+      break;
+    case "excel":
+      handleExcel(ids);
+      break;
+  }
+};
+const handleReject = (ids: number[]) => {
   ElMessageBox.prompt("", "驳回原因", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
@@ -276,6 +296,15 @@ const handleCommand = async (id: number) => {
     });
     getList();
   });
+};
+const handleExcel = async (ids: number[]) => {
+  const params = {
+    ids,
+    page: 1,
+    limit: pageInfo.limit,
+  };
+  const { data, fileName } = await getInvoiceExcel(params);
+  downloadByData(data, "发票列表.xlsx");
 };
 
 const handleUpload = (cur) => {

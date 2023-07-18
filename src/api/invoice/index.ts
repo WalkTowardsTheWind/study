@@ -1,6 +1,11 @@
 import request from "@/utils/request";
 import { AxiosPromise } from "axios";
-import { invoiceQuery, uploadQuery, invoiceStatus } from "./types";
+import {
+  invoiceQuery,
+  uploadQuery,
+  invoiceStatus,
+  invoiceExcel,
+} from "./types";
 
 /**
  * 企业发票列表
@@ -98,5 +103,18 @@ export function setStatus(data: invoiceStatus): AxiosPromise {
     url: `/adminapi/invoice/set_status`,
     method: "PUT",
     data,
+  });
+}
+
+/**
+ * 发票导出
+ */
+
+export function getInvoiceExcel(params: invoiceExcel): AxiosPromise {
+  return request({
+    url: `/adminapi/invoice/get_excel`,
+    method: "GET",
+    params,
+    responseType: "arraybuffer",
   });
 }
