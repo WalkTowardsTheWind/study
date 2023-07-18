@@ -78,8 +78,8 @@
       <template #img="{ row }">
         <zxn-image
           :imgList="row.settlement_confirmation_letter"
-          width="40"
-          height="40"
+          :width="40"
+          :height="40"
           targetClick
           ellipsis
         />
@@ -121,6 +121,7 @@ import { transformTimeRange } from "@/utils";
 import { downloadByData } from "@/utils/download";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
+import { yesOrNo } from "@/enums/common";
 const router = useRouter();
 const props = defineProps({
   type: { type: String, default: "enterprise" },
@@ -190,6 +191,13 @@ const columnList: any[] = reactive([
       3: { color: "#FFFFFF", backgroundColor: "#f9a89a" },
       5: { color: "#356FF3", backgroundColor: "#dfe8fd" },
     },
+    minWidth: 120,
+  },
+  {
+    label: "是否导出",
+    type: "enum",
+    path: "common.yesOrNo",
+    prop: "is_excel",
     minWidth: 120,
   },
   { label: "备注", prop: "reject_reason", minWidth: 180 },
@@ -303,8 +311,9 @@ const handleExcel = async (ids: number[]) => {
     page: 1,
     limit: pageInfo.limit,
   };
-  const { data, fileName } = await getInvoiceExcel(params);
+  const { data } = await getInvoiceExcel(params);
   downloadByData(data, "发票列表.xlsx");
+  await getList();
 };
 
 const handleUpload = (cur) => {

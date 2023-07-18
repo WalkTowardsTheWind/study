@@ -56,7 +56,6 @@ export function downloadByData(
       mime ||
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   });
-  console.log(blob, "22222");
   const blobURL = window.URL.createObjectURL(blob);
   const tempLink = document.createElement("a");
   tempLink.style.display = "none";
