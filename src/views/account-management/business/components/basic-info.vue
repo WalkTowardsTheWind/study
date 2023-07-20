@@ -18,6 +18,7 @@
             <el-form-item label="电话" label-width="130px">
               <el-input
                 v-model="formItem.contacts_mobile"
+                placeholder="请输入手机号或座机号"
                 :readonly="!isEdit"
               />
             </el-form-item>
@@ -75,6 +76,7 @@
             <el-form-item label="法人电话">
               <el-input
                 v-model="formItem.legal_person_mobile"
+                placeholder="请输入手机号或座机号"
                 :readonly="!isEdit"
               />
             </el-form-item>
@@ -156,6 +158,7 @@
               <el-input
                 v-model="formItem.consignee_mobile"
                 :readonly="!isEdit"
+                placeholder="请输入手机号或座机号"
               />
             </el-form-item>
           </el-col>

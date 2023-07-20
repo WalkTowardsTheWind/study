@@ -33,7 +33,7 @@
           <el-form-item label="联系方式" prop="mobile" required>
             <el-input
               maxlength="11"
-              placeholder="请输入"
+              placeholder="请输入手机号或座机号"
               v-model="addForm.mobile"
             />
           </el-form-item>
@@ -68,7 +68,7 @@
           </el-form-item>
           <el-form-item label="法人电话">
             <el-input
-              placeholder="请输入"
+              placeholder="请输入手机号或座机号"
               v-model="addForm.legal_person_mobile"
             />
           </el-form-item>
@@ -223,7 +223,10 @@
             <el-input placeholder="请输入" v-model="addForm.consignee" />
           </el-form-item>
           <el-form-item label="联系号码">
-            <el-input placeholder="请输入" v-model="addForm.consignee_mobile" />
+            <el-input
+              placeholder="请输入手机号或座机号"
+              v-model="addForm.consignee_mobile"
+            />
           </el-form-item>
           <el-form-item label="邮寄地址">
             <el-input placeholder="请输入" v-model="addForm.address" />
