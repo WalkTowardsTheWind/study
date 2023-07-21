@@ -11,6 +11,11 @@ export enum settlementCenterEnum {
   "冻结",
   "异常",
 }
+export enum settlementCenterTaskEnum {
+  "待结算",
+  "已成功",
+  "失败",
+}
 export enum invoiceStatusEnum {
   "未申请",
   "申请中",

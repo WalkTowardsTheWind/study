@@ -194,9 +194,9 @@
               <div
                 v-if="scope.row.status == 0"
                 v-text="
-                  proxy.$enumSet['settlementCenterEnum.settlementCenterEnum'][
-                    scope.row.status
-                  ]
+                  proxy.$enumSet[
+                    'settlementCenterEnum.settlementCenterTaskEnum'
+                  ][scope.row.status]
                 "
                 class="zxn-table-label"
                 :style="color ? color[scope.row.status] : {}"
@@ -204,9 +204,9 @@
               <div
                 v-if="scope.row.status == 1"
                 v-text="
-                  proxy.$enumSet['settlementCenterEnum.settlementCenterEnum'][
-                    scope.row.status
-                  ]
+                  proxy.$enumSet[
+                    'settlementCenterEnum.settlementCenterTaskEnum'
+                  ][scope.row.status]
                 "
                 class="zxn-table-label"
                 :style="color ? color[scope.row.status] : {}"
@@ -220,9 +220,9 @@
                 <template #content> {{ scope.row.reason }}</template>
                 <div
                   v-text="
-                    proxy.$enumSet['settlementCenterEnum.settlementCenterEnum'][
-                      scope.row.status
-                    ]
+                    proxy.$enumSet[
+                      'settlementCenterEnum.settlementCenterTaskEnum'
+                    ][scope.row.status]
                   "
                   class="zxn-table-label"
                   :style="color ? color[scope.row.status] : {}"
@@ -349,7 +349,7 @@ const columnList = [
     label: "结算状态",
     type: "enum",
     width: 100,
-    path: "settlementCenterEnum.settlementCenterEnum",
+    path: "settlementCenterEnum.settlementCenterTaskEnum",
     prop: "settlement_status",
     // fixed: "left",
     color: {
