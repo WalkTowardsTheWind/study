@@ -65,9 +65,12 @@ const total_payment_amount = ref();
 
 function get3And1List(time_type: number, index: number) {
   currentDate.value = index;
-
+  nextTick(() => {
+    chart = null;
+    chart = echarts.init(document.getElementById("main") as HTMLDivElement);
+  });
   getFinanceList({ time_type }).then((res) => {
-    console.log(res);
+    // console.log(res);
     total_channel_amount.value = res.data.total_channel_amount;
     total_fee_amount.value = res.data.total_fee_amount;
     total_payment_amount.value = res.data.total_payment_amount;
@@ -162,7 +165,7 @@ onMounted(() => {
 
     // 大小自适应
     window.addEventListener("resize", () => {
-      chart.resize();
+      chart?.resize();
     });
   });
 });
