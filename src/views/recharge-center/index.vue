@@ -216,7 +216,7 @@ const columnList = [
 
 const toUpload = async (id: string) => {
   const { data } = await getRechargeExcel({ id: id });
-  downloadByData(data, "结算列表.xlsx");
+  downloadByData(data, "充值列表.xlsx");
 
   // await handleSearch();
 };
