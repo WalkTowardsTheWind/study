@@ -152,7 +152,7 @@
                   <el-form-item label="结算状态">
                     <el-text class="mx-1">{{
                       proxy.$enumSet[
-                        "settlementCenterEnum.settlementCenterEnum"
+                        "settlementCenterEnum.settlementCenterList"
                       ][formItem.settlement_status]
                     }}</el-text>
                   </el-form-item>
