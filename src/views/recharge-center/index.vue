@@ -71,18 +71,21 @@
             field-total="amount"
             :page-info="pageInfo"
             @page-change="pageChange"
+            @selection-change="handleSelect"
           >
-            <!-- <template #tableTop>
+            <template #tableTop>
               <el-dropdown class="" trigger="click">
                 <el-button type="primary" plain>批量操作</el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item command="1">删除</el-dropdown-item>
-                    <el-dropdown-item command="2">下载</el-dropdown-item>
+                    <!-- <el-dropdown-item command="1">删除</el-dropdown-item> -->
+                    <el-dropdown-item command="2" @click="toUpload"
+                      >导出</el-dropdown-item
+                    >
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
-            </template> -->
+            </template>
             <template #certificate="scope">
               <zxn-image
                 :imgList="scope.row.certificate"
@@ -211,11 +214,14 @@ const columnList = [
   { label: "充值金额", prop: "amount", type: "money", minWidth: 100 },
   { label: "充值时间", prop: "add_time", width: 200 },
   { label: "充值凭证", slot: "certificate" },
-  { label: "操作", slot: "operation", fixed: "right", width: 100 },
+  // { label: "操作", slot: "operation", fixed: "right", width: 100 },
 ];
 
-const toUpload = async (id: string) => {
-  const { data } = await getRechargeExcel({ id: id });
+const toUpload = async () => {
+  const { data } = await getRechargeExcel({
+    ids: ids.value,
+    limit: pageInfo.limit,
+  });
   downloadByData(data, "充值列表.xlsx");
 
   // await handleSearch();
@@ -254,6 +260,7 @@ function pageChange(current: any) {
   handleSearch();
 }
 
+const ids = ref([]);
 function handleReset() {
   formItem.name = "";
   formItem.tax_land_id = "";
@@ -263,6 +270,14 @@ function handleReset() {
   handleSearch();
 }
 
+function handleSelect(vals: any) {
+  console.log(vals);
+  ids.value =
+    vals.length &&
+    vals.map((item: any) => {
+      return item.recharge_id;
+    });
+}
 handleSearch();
 getTaxLand();
 getCategory();
