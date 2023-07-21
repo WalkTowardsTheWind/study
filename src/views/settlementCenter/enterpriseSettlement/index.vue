@@ -136,9 +136,9 @@
           }}</el-button>
         </template>
         <template v-if="[1].includes(scope.row.status)">
-          <!-- <el-button link type="primary" @click="handleDownload(scope)"
-            >下载</el-button
-          > -->
+          <el-button link type="primary" @click="handleDownload(scope)"
+            >导出</el-button
+          >
         </template>
         <el-button link type="primary" @click="handleDelete(scope)"
           >删除</el-button
@@ -150,11 +150,13 @@
   <InspectDialog v-model:dialogVisible="dialogVisible" :imageList="imageList" />
 </template>
 <script setup lang="ts">
+import { downloadByData } from "@/utils/download";
 import { transformTimeRange } from "@/utils";
 import InspectDialog from "../components/InspectDialog.vue";
 import { useRouter } from "vue-router";
 import {
   getEnterpriseSettlementList,
+  getEnterpriseExcel,
   updateEnterpriseSettlementStatus,
   deleteEnterpriseSettlementDoc,
 } from "@/api/settlementCenter/enterpriseSettlement";
@@ -274,6 +276,7 @@ const handleInspect = (scope: any) => {
 
   imageList.value = scope.row.transfer_certificate;
 };
+
 const handleThaw = (scope: any) => {
   ElMessageBox({
     title: "",
@@ -330,8 +333,11 @@ const handleDetails = (scope: any) => {
     query: { activeName: "1", id: scope.row.id },
   });
 };
-const handleDownload = (scope: any) => {
-  console.log("下载");
+const handleDownload = async (scope: any) => {
+  const { data } = await getEnterpriseExcel({ id: scope.row.id });
+  downloadByData(data, "结算列表.xlsx");
+
+  await getTableData();
 };
 const handleDelete = (scope: any) => {
   ElMessageBox({

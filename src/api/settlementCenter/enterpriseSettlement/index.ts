@@ -6,6 +6,7 @@ import {
   updateStatus,
   getTaskList,
   taskId,
+  getEnterpriseExcel,
 } from "./types";
 
 /**
@@ -95,5 +96,17 @@ export function getTaskDetails(data: taskId): AxiosPromise {
     url: "/adminapi/finance/company/getTaskInfo",
     method: "GET",
     params: data,
+  });
+}
+/**
+ * 获取任务详情
+ * @param id Number
+ */
+export function getEnterpriseExcel(params: getEnterpriseExcel): AxiosPromise {
+  return request({
+    url: "/adminapi/finance/company/get_excel",
+    method: "GET",
+    params,
+    responseType: "arraybuffer",
   });
 }

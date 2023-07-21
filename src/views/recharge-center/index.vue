@@ -96,7 +96,7 @@
                 link
                 type="primary"
                 @click="toUpload(scope.row.recharge_id)"
-                >下载</el-button
+                >导出</el-button
               >
             </template>
           </zxn-table>
@@ -107,9 +107,10 @@
 </template>
 
 <script lang="ts" setup>
+import { downloadByData } from "@/utils/download";
 import { getCategoryList } from "@/api/category";
 import { getLandList } from "@/api/common";
-import { getRechargeTaskList } from "@/api/recharge";
+import { getRechargeTaskList, getRechargeExcel } from "@/api/recharge";
 import router from "@/router";
 
 const { proxy } = getCurrentInstance() as any;
@@ -210,12 +211,14 @@ const columnList = [
   { label: "充值金额", prop: "amount", type: "money", minWidth: 100 },
   { label: "充值时间", prop: "add_time", width: 200 },
   { label: "充值凭证", slot: "certificate" },
-  // { label: "操作", slot: "operation", fixed: "right", width: 100 },
+  { label: "操作", slot: "operation", fixed: "right", width: 100 },
 ];
 
-const toUpload = (id: string) => {
-  console.log(id);
-  // router.push({ name: "recharge-center-detail", query: { id } });
+const toUpload = async (id: string) => {
+  const { data } = await getRechargeExcel({ id: id });
+  downloadByData(data, "结算列表.xlsx");
+
+  // await handleSearch();
 };
 
 function handleSearch() {
