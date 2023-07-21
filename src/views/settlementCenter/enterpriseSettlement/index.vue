@@ -135,11 +135,9 @@
             scope.row.status == 4 ? "去解冻" : "去冻结"
           }}</el-button>
         </template>
-        <template v-if="[1].includes(scope.row.status)">
-          <el-button link type="primary" @click="handleDownload(scope)"
-            >导出</el-button
-          >
-        </template>
+        <el-button link type="primary" @click="handleDownload(scope)"
+          >导出</el-button
+        >
         <el-button link type="primary" @click="handleDelete(scope)"
           >删除</el-button
         >
