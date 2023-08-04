@@ -41,5 +41,5 @@ export interface taskId {
  * 导出结算列表
  */
 export interface getEnterpriseExcel {
-  id: string;
+  ids: number[];
 }
