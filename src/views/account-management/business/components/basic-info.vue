@@ -161,6 +161,13 @@
                 placeholder="请输入手机号或座机号"
               />
             </el-form-item>
+            <el-form-item label="企业来源备注">
+              <el-input
+                v-model="formItem.company_remark"
+                :readonly="!isEdit"
+                placeholder="请输入"
+              />
+            </el-form-item>
           </el-col>
         </el-row>
       </div>
