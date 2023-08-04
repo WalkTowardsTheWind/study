@@ -50,7 +50,7 @@
       @selection-change="handleSelect"
       field-total="real_money"
     >
-      <!-- <template #tableTop>
+      <template #tableTop>
         <el-dropdown
           class="ml-4"
           trigger="click"
@@ -59,12 +59,12 @@
           <el-button type="primary">批量操作</el-button>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="1">解冻</el-dropdown-item>
-              <el-dropdown-item command="2">删除</el-dropdown-item>
+              <el-dropdown-item command="1">导出</el-dropdown-item>
+              <!-- <el-dropdown-item command="2">删除</el-dropdown-item> -->
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-      </template> -->
+      </template>
       <template #status="scope">
         <div
           v-if="scope.row.status == 0"
@@ -176,6 +176,7 @@ const handleReset = () => {
     keywords: "",
     timeData: [],
     status: "",
+    reason: "",
     page: "",
     limit: "",
   };
@@ -332,7 +333,7 @@ const handleDetails = (scope: any) => {
   });
 };
 const handleDownload = async (scope: any) => {
-  const { data } = await getEnterpriseExcel({ id: scope.row.id });
+  const { data } = await getEnterpriseExcel({ ids: [scope.row.id] });
   downloadByData(data, "结算列表.xlsx");
 
   await getTableData();
@@ -374,21 +375,17 @@ const handleDelete = (scope: any) => {
 //选中的数据
 const selectionData = ref([]);
 const handleSelect = (data: any) => {
-  selectionData.value = data;
-  console.log(selectionData.value);
+  selectionData.value = data.map((item: any) => item.id);
 };
 
 /**
  * 批量操作
  */
-const handleBatchOperation = (command: string | number | object) => {
-  var data = selectionData.value.map((item, index) => {
-    return index;
-  });
+const handleBatchOperation = async (command: string | number | object) => {
   if (command == 1) {
-    console.log("删除", data);
-  } else if (command == 2) {
-    console.log("下载");
+    const { data } = await getEnterpriseExcel({ ids: selectionData.value });
+    downloadByData(data, "结算列表.xlsx");
+    await getTableData();
   }
 };
 
@@ -403,7 +400,7 @@ const getTableData = async () => {
 
     pageInfo.page = data.current_page;
     pageInfo.total = data.total;
-    console.log(data.data.total_settlement_money, "total_settlement_money");
+    console.log(data.total_settlement_money, "total_settlement_money");
     total_settlement_money.value = data.total_settlement_money;
 
     var newData = data.data.map((item: any) => {
