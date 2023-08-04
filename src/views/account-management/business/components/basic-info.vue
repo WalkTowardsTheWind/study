@@ -163,7 +163,7 @@
             </el-form-item>
             <el-form-item label="企业来源备注">
               <el-input
-                v-model="formItem.company_remark"
+                v-model="formItem.company_source_remark"
                 :readonly="!isEdit"
                 placeholder="请输入"
               />
