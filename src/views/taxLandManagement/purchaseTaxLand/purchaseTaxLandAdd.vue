@@ -81,6 +81,26 @@
                     placeholder="请输入"
                   />
                 </el-form-item>
+                <!-- <el-form-item
+                  class="mt-25px"
+                  label="计算方式"
+                  prop="calculation_type"
+                >
+                  <el-select
+                    class="w-[100%]"
+                    v-model="formItem.calculation_type"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in proxy.$const[
+                        'taxLandManagementEnum.calculationType'
+                      ]"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </el-form-item> -->
 
                 <el-form-item class="mt-25px" label="税地用工年限">
                   <el-col :span="11">
@@ -115,6 +135,9 @@
                     clearable
                   />
                 </el-form-item>
+                <!-- <el-form-item class="mt-25px" label="网址">
+                  <el-input v-model="formItem.web_url" placeholder="请输入" />
+                </el-form-item> -->
               </div>
               <div class="w-[33%]">
                 <el-form-item
@@ -674,9 +697,11 @@ const formItem = ref({
   tax_land_name: "",
   tax_manufacturer: "",
   tax_cost_point: "",
+  // calculation_type:"",
   min_employment_year: "18",
   max_employment_year: "60",
   tax_land_city_id: "",
+  // web_url:"",
   tax_land_license: [],
   company_qualifications: [],
   // 2
