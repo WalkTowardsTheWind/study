@@ -23,11 +23,7 @@
           >
             <div class="flex" v-show="active == 0">
               <div class="w-[33%]">
-                <el-form-item
-                  class="mt-25px"
-                  label="税地类型"
-                  prop="tax_land_type"
-                >
+                <el-form-item label="税地类型" prop="tax_land_type">
                   <el-select
                     class="w-[100%]"
                     v-model="formItem.tax_land_type"
@@ -160,7 +156,7 @@
           >
             <div class="flex" v-show="active == 1">
               <div class="w-[33%]">
-                <el-form-item class="mt-25px" label="税地发票类型">
+                <el-form-item label="税地发票类型">
                   <el-select
                     class="w-[100%]"
                     v-model="formItem.invoice_type"
@@ -297,11 +293,7 @@
           >
             <div class="flex" v-show="active == 2">
               <div class="w-[33%]">
-                <el-form-item
-                  class="mt-25px"
-                  label="认证规则"
-                  prop="certification_rules"
-                >
+                <el-form-item label="认证规则" prop="certification_rules">
                   <el-select
                     class="w-[100%]"
                     v-model="formItem.certification_rules"
