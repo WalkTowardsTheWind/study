@@ -319,7 +319,7 @@ const handleUpdateStatus = (scope: any) => {
 const handleEdit = (scope: any) => {
   router.push({
     name: "purchaseTaxLandEdit",
-    query: { activeName: "1", id: scope.row.id },
+    query: { id: scope.row.id },
   });
   console.log(scope.row.value, "编辑");
 };
