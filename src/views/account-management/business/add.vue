@@ -217,11 +217,7 @@
               <el-option label="外扣" value="1" />
             </el-select>
           </el-form-item>
-          <el-form-item label="客户点位" prop="tax_point">
-            <el-input placeholder="请输入" v-model="addForm.tax_point">
-              <template #append>%</template>
-            </el-input>
-          </el-form-item>
+
           <el-form-item label="企业邮箱">
             <el-input placeholder="请输入" v-model="addForm.company_email" />
           </el-form-item>
@@ -237,6 +233,8 @@
           <el-form-item label="邮寄地址">
             <el-input placeholder="请输入" v-model="addForm.address" />
           </el-form-item>
+        </el-col>
+        <el-col :span="8">
           <el-form-item label="选择税地" prop="tax_land_id">
             <el-select
               class="w-full"
@@ -251,6 +249,11 @@
                 :label="item.tax_land_name"
               ></el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="客户点位" prop="tax_point">
+            <el-input placeholder="请输入" v-model="addForm.tax_point">
+              <template #append>%</template>
+            </el-input>
           </el-form-item>
           <el-form-item label="认证规则">
             <el-select
@@ -272,17 +275,100 @@
               placeholder="请选择（单选）"
               v-model="addForm.sign_type"
             >
-              <el-option value="1" label="静默签"></el-option>
-              <el-option value="2" label="二维码签约"></el-option>
-              <el-option value="3" label="短信签约"></el-option>
+              <el-option
+                v-for="(item, index) in sign_type"
+                :key="index"
+                :value="item.value"
+                :label="item.label"
+              ></el-option>
             </el-select>
           </el-form-item>
-        </el-col>
-        <el-col :span="8">
           <el-form-item label="上传合同">
             <MultiUpload v-model="addForm.contract_img">
               <i-ep-Plus />
             </MultiUpload>
+          </el-form-item>
+          <!-- 新建税地 -->
+          <template v-for="(tax, index) in addForm.taxLandList" :key="tax.key">
+            <el-form-item
+              label="选择税地"
+              :prop="'taxLandList.' + index + '.tax_land_id'"
+              :rules="{
+                required: true,
+                message: '必填',
+                trigger: 'change',
+              }"
+            >
+              <el-select
+                class="w-full"
+                placeholder="请选择"
+                v-model="tax.tax_land_id"
+                @change="addSelecTaxland(tax, index)"
+              >
+                <el-option
+                  v-for="(item, index) in taxLandOption"
+                  :key="index"
+                  :value="item.id"
+                  :label="item.tax_land_name"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              label="客户点位"
+              :prop="'taxLandList.' + index + '.tax_point'"
+              :rules="{
+                required: true,
+                message: '必填',
+                trigger: 'change',
+              }"
+            >
+              <el-input placeholder="请输入" v-model="tax.tax_point">
+                <template #append>%</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="认证规则">
+              <el-select
+                class="w-full"
+                placeholder="请选择（单选）"
+                v-model="tax.auth_type"
+              >
+                <el-option
+                  v-for="(item, index) in tax.a_t"
+                  :key="index"
+                  :value="item.value"
+                  :label="item.label"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="签约规则">
+              <el-select
+                class="w-full"
+                placeholder="请选择（单选）"
+                v-model="tax.sign_type"
+              >
+                <el-option
+                  v-for="(item, index) in tax.s_t"
+                  :key="index"
+                  :value="item.value"
+                  :label="item.label"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="上传合同">
+              <MultiUpload v-model="tax.contract_img">
+                <i-ep-Plus />
+              </MultiUpload>
+            </el-form-item>
+            <el-form-item>
+              <div class="delTaxLand" @click="delTaxLand(index)">
+                × 删除税地
+              </div>
+            </el-form-item>
+          </template>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item>
+            <div class="addTaxLand" @click="addNewTaxLand">+ 添加税地</div>
           </el-form-item>
         </el-col>
       </el-row>
@@ -316,6 +402,9 @@ import {
 import { getLandList } from "@/api/common";
 import router from "@/router";
 import type { FormInstance, FormRules } from "element-plus";
+import { useStore } from "@/store/modules/taxLand";
+
+const taxLandStore = useStore();
 
 const taxpayerOptions = [
   {
@@ -385,100 +474,94 @@ const addForm = reactive({
   company_source_remark: "",
   calculation_type: "",
   contract_img: [],
+  taxLandList: [],
 } as any);
 
-const authType = [
-  { label: "二要素（姓名、身份证）", value: "1" },
-  { label: "三要素（姓名、手机号、身份证）", value: "2" },
-  { label: "三要素（姓名、身份证、银行卡）", value: "3" },
-  { label: "四要素（姓名、手机号、身份证、银行卡）", value: "4" },
-];
+const isTaxLandListValid = computed(() => {
+  if (addForm.taxLandList.length > 0) {
+    const allElementsValid = addForm.taxLandList.every((item) => {
+      const { tax_land_id, tax_point, auth_type, sign_type, contract_img } =
+        item;
+      return (
+        tax_land_id &&
+        tax_point &&
+        auth_type &&
+        sign_type &&
+        contract_img.length
+      );
+    });
+    if (allElementsValid) {
+      // 数组中所有元素的参数都有值时返回 true
+      return true;
+    } else {
+      // 数组中存在元素的参数缺失值时返回 false
+      return false;
+    }
+  } else {
+    return true;
+  }
+});
 
 const auth_type = ref([] as any);
+const sign_type = ref([] as any);
+
+// 相同参数
+const requiredComputed = computed(() => {
+  return (
+    !!addForm.account &&
+    !!addForm.pwd &&
+    !!addForm.conf_pwd &&
+    !!addForm.contacts &&
+    !!addForm.mobile &&
+    !!addForm.company_name &&
+    !!addForm.credit_code &&
+    !!addForm.license_end_date &&
+    !!addForm.legal_person &&
+    !!addForm.legal_person_idcard &&
+    !!addForm.legal_person_mobile &&
+    !!addForm.category_id &&
+    !!addForm.company_address &&
+    !!addForm.license.length &&
+    !!addForm.idcard_img.length &&
+    !!addForm.seal.length &&
+    !!addForm.bank &&
+    !!addForm.bank_account &&
+    !!addForm.taxpayer_type &&
+    !!addForm.permit_img.length &&
+    !!addForm.taxpayer_type_img.length &&
+    !!addForm.header_img.length &&
+    !!addForm.office_img.length &&
+    !!addForm.company_source &&
+    !!addForm.company_source_remark &&
+    !!addForm.calculation_type &&
+    !!addForm.tax_point &&
+    !!addForm.company_email &&
+    !!addForm.consignee &&
+    !!addForm.consignee_mobile &&
+    !!addForm.address &&
+    !!addForm.auth_type &&
+    !!addForm.sign_type &&
+    !!addForm.tax_land_id &&
+    !!addForm.contract_img.length &&
+    isTaxLandListValid.value
+  );
+});
 
 const isAllComplete = computed(() => {
   if (addForm.company_source == "0") {
     return (
-      !!addForm.account &&
-      !!addForm.pwd &&
-      !!addForm.conf_pwd &&
-      !!addForm.contacts &&
-      !!addForm.mobile &&
-      !!addForm.company_name &&
-      !!addForm.credit_code &&
-      !!addForm.license_end_date &&
-      !!addForm.legal_person &&
-      !!addForm.legal_person_idcard &&
-      !!addForm.legal_person_mobile &&
-      !!addForm.category_id &&
-      !!addForm.company_address &&
-      !!addForm.license.length &&
-      !!addForm.idcard_img.length &&
-      !!addForm.seal.length &&
-      !!addForm.bank &&
-      !!addForm.bank_account &&
-      !!addForm.taxpayer_type &&
-      !!addForm.permit_img.length &&
-      !!addForm.taxpayer_type_img.length &&
-      !!addForm.header_img.length &&
-      !!addForm.office_img.length &&
+      requiredComputed.value &&
       !!addForm.company_source &&
       !!addForm.sale_head &&
-      !!addForm.sale_company &&
-      !!addForm.company_source &&
-      !!addForm.company_source_remark &&
-      !!addForm.calculation_type &&
-      !!addForm.tax_point &&
-      !!addForm.company_email &&
-      !!addForm.consignee &&
-      !!addForm.consignee_mobile &&
-      !!addForm.address &&
-      !!addForm.auth_type &&
-      !!addForm.sign_type &&
-      !!addForm.tax_land_id &&
-      !!addForm.contract_img.length
+      !!addForm.sale_company
     );
   }
   if (addForm.company_source == "1") {
     return (
-      !!addForm.account &&
-      !!addForm.pwd &&
-      !!addForm.conf_pwd &&
-      !!addForm.contacts &&
-      !!addForm.mobile &&
-      !!addForm.company_name &&
-      !!addForm.credit_code &&
-      !!addForm.license_end_date &&
-      !!addForm.legal_person &&
-      !!addForm.legal_person_idcard &&
-      !!addForm.legal_person_mobile &&
-      !!addForm.category_id &&
-      !!addForm.company_address &&
-      !!addForm.license.length &&
-      !!addForm.idcard_img.length &&
-      !!addForm.seal.length &&
-      !!addForm.bank &&
-      !!addForm.bank_account &&
-      !!addForm.taxpayer_type &&
-      !!addForm.permit_img.length &&
-      !!addForm.taxpayer_type_img.length &&
-      !!addForm.header_img.length &&
-      !!addForm.office_img.length &&
+      requiredComputed.value &&
       !!addForm.company_source &&
       !!addForm.channel_type &&
-      !!addForm.channel_point &&
-      !!addForm.company_source_remark &&
-      !!addForm.calculation_type &&
-      !!addForm.parent_channel_id &&
-      !!addForm.tax_point &&
-      !!addForm.company_email &&
-      !!addForm.consignee &&
-      !!addForm.consignee_mobile &&
-      !!addForm.address &&
-      !!addForm.tax_land_id &&
-      !!addForm.auth_type &&
-      !!addForm.sign_type &&
-      !!addForm.contract_img.length
+      !!addForm.channel_point
     );
   }
 });
@@ -501,82 +584,82 @@ const rules = reactive<FormRules>({
  * 提交
  */
 async function submit(formEl: FormInstance | undefined) {
+  console.log(addForm);
   if (!formEl) return;
   await formEl.validate(async (valid, fields) => {
     if (valid) {
       console.log(isAllComplete.value);
-      console.log(addForm);
 
       // 全部填写完成
-      if (isAllComplete.value) {
-        const res = await createBusinessAccount(addForm);
-        try {
-          if (res.status === 200) {
-            ElMessage({
-              message: "新建企业账号成功",
-              type: "success",
-            });
-            setTimeout(() => {
-              router.go(-1);
-            }, 200);
-          }
-        } catch (error: any) {
-          return new Error("error", error);
-        }
-      } else {
-        // 弹框激活
-        ElMessageBox.confirm(
-          "该企业信息暂不完善，是否立即激活企业状态？",
-          "警告",
-          {
-            confirmButtonText: "确定",
-            cancelButtonText: "暂不",
-            distinguishCancelAndClose: true,
-            center: true,
-          }
-        )
-          .then(async () => {
-            addForm.is_active = 1;
-            const res = await createBusinessAccount(addForm);
-            try {
-              if (res.status === 200) {
-                ElMessage({
-                  message: "新建企业账号成功",
-                  type: "success",
-                });
-                setTimeout(() => {
-                  router.go(-1);
-                }, 200);
-              }
-            } catch (error: any) {
-              return new Error("error", error);
-            }
-          })
-          .catch(async (action) => {
-            if (action == "close") {
-              ElMessage({
-                type: "info",
-                message: "取消新建",
-              });
-            } else {
-              addForm.is_active = 0;
-              const res = await createBusinessAccount(addForm);
-              try {
-                if (res.status === 200) {
-                  ElMessage({
-                    message: "新建企业账号成功",
-                    type: "success",
-                  });
-                  setTimeout(() => {
-                    router.go(-1);
-                  }, 200);
-                }
-              } catch (error: any) {
-                return new Error("error", error);
-              }
-            }
-          });
-      }
+      // if (isAllComplete.value) {
+      // 	const res = await createBusinessAccount(addForm);
+      // 	try {
+      // 		if (res.status === 200) {
+      // 			ElMessage({
+      // 				message: "新建企业账号成功",
+      // 				type: "success",
+      // 			});
+      // 			setTimeout(() => {
+      // 				router.go(-1);
+      // 			}, 200);
+      // 		}
+      // 	} catch (error: any) {
+      // 		return new Error("error", error);
+      // 	}
+      // } else {
+      // 	// 弹框激活
+      // 	ElMessageBox.confirm(
+      // 		"该企业信息暂不完善，是否立即激活企业状态？",
+      // 		"警告",
+      // 		{
+      // 			confirmButtonText: "确定",
+      // 			cancelButtonText: "暂不",
+      // 			distinguishCancelAndClose: true,
+      // 			center: true,
+      // 		}
+      // 	)
+      // 		.then(async () => {
+      // 			addForm.is_active = 1;
+      // 			const res = await createBusinessAccount(addForm);
+      // 			try {
+      // 				if (res.status === 200) {
+      // 					ElMessage({
+      // 						message: "新建企业账号成功",
+      // 						type: "success",
+      // 					});
+      // 					setTimeout(() => {
+      // 						router.go(-1);
+      // 					}, 200);
+      // 				}
+      // 			} catch (error: any) {
+      // 				return new Error("error", error);
+      // 			}
+      // 		})
+      // 		.catch(async (action) => {
+      // 			if (action == "close") {
+      // 				ElMessage({
+      // 					type: "info",
+      // 					message: "取消新建",
+      // 				});
+      // 			} else {
+      // 				addForm.is_active = 0;
+      // 				const res = await createBusinessAccount(addForm);
+      // 				try {
+      // 					if (res.status === 200) {
+      // 						ElMessage({
+      // 							message: "新建企业账号成功",
+      // 							type: "success",
+      // 						});
+      // 						setTimeout(() => {
+      // 							router.go(-1);
+      // 						}, 200);
+      // 					}
+      // 				} catch (error: any) {
+      // 					return new Error("error", error);
+      // 				}
+      // 			}
+      // 		});
+      // }
     } else {
       ElMessage.error({
         message: "当前表单必填项还未填写！",
@@ -585,12 +668,15 @@ async function submit(formEl: FormInstance | undefined) {
     }
   });
 }
+
+// 行业选择
 function getCategoryOptions() {
   getCategoryList().then((res) => {
     cateGoryOptions.value = res.data;
   });
 }
 
+// 获取税地列表
 function getTaxLandOption() {
   taxLandOption.value.length = 0;
   getLandList().then((res) => {
@@ -598,20 +684,38 @@ function getTaxLandOption() {
   });
 }
 
-function selecTaxland(id: string) {
+// 选择税地后才有对应规则
+function selecTaxland(tax_land_id: string) {
   addForm.auth_type = "";
-  auth_type.value.length = 0;
-  getTaxlandDetail(id).then((res) => {
-    const arr = res.data.info.certification_rules;
-    arr.forEach((i) => {
-      authType.forEach((j) => {
-        if (i == j.value) {
-          auth_type.value.push(j);
-        }
-      });
-    });
-  });
+  addForm.sign_type = "";
+
+  taxLandStore.updateTaxLandList(tax_land_id);
+
+  auth_type.value = taxLandStore.auth_type;
+  sign_type.value = taxLandStore.sign_type;
 }
+
+function addSelecTaxland(tax: any, index: number) {
+  taxLandStore.updateTaxLandList(tax.tax_land_id);
+  addForm.taxLandList[index].s_t = taxLandStore.sign_type;
+  addForm.taxLandList[index].a_t = taxLandStore.auth_type;
+}
+
+// 添加税地
+const addNewTaxLand = () => {
+  addForm.taxLandList.push({
+    key: Date.now(),
+    tax_land_id: "",
+    tax_point: "",
+    sign_type: "",
+    auth_type: "",
+    contract_img: [],
+  });
+};
+
+const delTaxLand = (index: number) => {
+  addForm.taxLandList.splice(index, 1);
+};
 
 getCategoryOptions();
 getTaxLandOption();
@@ -642,5 +746,25 @@ getTaxLandOption();
 
 :deep(.el-input__wrapper) {
   width: 100% !important;
+}
+
+.addTaxLand {
+  display: flex;
+  align-items: center;
+  gap: 0 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #356ff3;
+}
+
+.delTaxLand {
+  display: flex;
+  align-items: center;
+  gap: 0 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #f35135;
 }
 </style>
