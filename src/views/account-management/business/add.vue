@@ -591,75 +591,75 @@ async function submit(formEl: FormInstance | undefined) {
       console.log(isAllComplete.value);
 
       // 全部填写完成
-      // if (isAllComplete.value) {
-      // 	const res = await createBusinessAccount(addForm);
-      // 	try {
-      // 		if (res.status === 200) {
-      // 			ElMessage({
-      // 				message: "新建企业账号成功",
-      // 				type: "success",
-      // 			});
-      // 			setTimeout(() => {
-      // 				router.go(-1);
-      // 			}, 200);
-      // 		}
-      // 	} catch (error: any) {
-      // 		return new Error("error", error);
-      // 	}
-      // } else {
-      // 	// 弹框激活
-      // 	ElMessageBox.confirm(
-      // 		"该企业信息暂不完善，是否立即激活企业状态？",
-      // 		"警告",
-      // 		{
-      // 			confirmButtonText: "确定",
-      // 			cancelButtonText: "暂不",
-      // 			distinguishCancelAndClose: true,
-      // 			center: true,
-      // 		}
-      // 	)
-      // 		.then(async () => {
-      // 			addForm.is_active = 1;
-      // 			const res = await createBusinessAccount(addForm);
-      // 			try {
-      // 				if (res.status === 200) {
-      // 					ElMessage({
-      // 						message: "新建企业账号成功",
-      // 						type: "success",
-      // 					});
-      // 					setTimeout(() => {
-      // 						router.go(-1);
-      // 					}, 200);
-      // 				}
-      // 			} catch (error: any) {
-      // 				return new Error("error", error);
-      // 			}
-      // 		})
-      // 		.catch(async (action) => {
-      // 			if (action == "close") {
-      // 				ElMessage({
-      // 					type: "info",
-      // 					message: "取消新建",
-      // 				});
-      // 			} else {
-      // 				addForm.is_active = 0;
-      // 				const res = await createBusinessAccount(addForm);
-      // 				try {
-      // 					if (res.status === 200) {
-      // 						ElMessage({
-      // 							message: "新建企业账号成功",
-      // 							type: "success",
-      // 						});
-      // 						setTimeout(() => {
-      // 							router.go(-1);
-      // 						}, 200);
-      // 					}
-      // 				} catch (error: any) {
-      // 					return new Error("error", error);
-      // 				}
-      // 			}
-      // 		});
-      // }
+      if (isAllComplete.value) {
+        const res = await createBusinessAccount(addForm);
+        try {
+          if (res.status === 200) {
+            ElMessage({
+              message: "新建企业账号成功",
+              type: "success",
+            });
+            setTimeout(() => {
+              router.go(-1);
+            }, 200);
+          }
+        } catch (error: any) {
+          return new Error("error", error);
+        }
+      } else {
+        // 弹框激活
+        ElMessageBox.confirm(
+          "该企业信息暂不完善，是否立即激活企业状态？",
+          "警告",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "暂不",
+            distinguishCancelAndClose: true,
+            center: true,
+          }
+        )
+          .then(async () => {
+            addForm.is_active = 1;
+            const res = await createBusinessAccount(addForm);
+            try {
+              if (res.status === 200) {
+                ElMessage({
+                  message: "新建企业账号成功",
+                  type: "success",
+                });
+                setTimeout(() => {
+                  router.go(-1);
+                }, 200);
+              }
+            } catch (error: any) {
+              return new Error("error", error);
+            }
+          })
+          .catch(async (action) => {
+            if (action == "close") {
+              ElMessage({
+                type: "info",
+                message: "取消新建",
+              });
+            } else {
+              addForm.is_active = 0;
+              const res = await createBusinessAccount(addForm);
+              try {
+                if (res.status === 200) {
+                  ElMessage({
+                    message: "新建企业账号成功",
+                    type: "success",
+                  });
+                  setTimeout(() => {
+                    router.go(-1);
+                  }, 200);
+                }
+              } catch (error: any) {
+                return new Error("error", error);
+              }
+            }
+          });
+      }
     } else {
       ElMessage.error({
         message: "当前表单必填项还未填写！",
