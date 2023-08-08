@@ -274,13 +274,22 @@
               </div>
               <div class="w-[33%]">
                 <el-form-item label="核账网址">
-                  <el-input v-model="formItem.audit_web_url" />
+                  <el-input
+                    placeholder="请输入"
+                    v-model="formItem.audit_web_url"
+                  />
                 </el-form-item>
                 <el-form-item label="核账网址账号">
-                  <el-input v-model="formItem.audit_account" />
+                  <el-input
+                    placeholder="请输入"
+                    v-model="formItem.audit_account"
+                  />
                 </el-form-item>
                 <el-form-item label="核账网址密码">
-                  <el-input v-model="formItem.audit_password" />
+                  <el-input
+                    placeholder="请输入"
+                    v-model="formItem.audit_password"
+                  />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="余额计算规则">
                   <el-select
@@ -301,7 +310,7 @@
                 <el-form-item class="mt-25px" label="支付供应商">
                   <el-input
                     v-model="formItem.payment_supplier"
-                    placeholder="Select"
+                    placeholder="请选择"
                   >
                   </el-input>
                 </el-form-item>
