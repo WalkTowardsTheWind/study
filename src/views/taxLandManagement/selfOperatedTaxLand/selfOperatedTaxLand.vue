@@ -86,7 +86,7 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="1">新建自营税地</el-dropdown-item>
-              <!-- <el-dropdown-item command="2">新建采购税地</el-dropdown-item> -->
+              <el-dropdown-item command="2">新建采购税地</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
