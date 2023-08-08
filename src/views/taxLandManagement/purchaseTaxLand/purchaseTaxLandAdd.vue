@@ -89,6 +89,7 @@
                 >
                   <el-select
                     class="w-[100%]"
+                    clearable
                     v-model="formItem.calculation_type"
                     placeholder="请选择"
                   >
@@ -173,6 +174,7 @@
                 <el-form-item label="税地发票类型">
                   <el-select
                     class="w-[100%]"
+                    clearable
                     v-model="formItem.invoice_type"
                     placeholder="请选择"
                   >
@@ -201,6 +203,7 @@
                 <el-form-item class="mt-25px" label="发票面额">
                   <el-select
                     class="w-[100%]"
+                    clearable
                     v-model="formItem.invoice_denomination"
                     placeholder="请选择"
                   >
@@ -224,6 +227,7 @@
                 <!-- <el-form-item class="mt-25px" label="是否有支付接口">
                   <el-select
                     class="w-[100%]"
+                    clearable
                     v-model="formItem.is_payment_api"
                     placeholder="请选择"
                   >
@@ -244,6 +248,7 @@
                 >
                   <el-select
                     class="w-[100%]"
+                    clearable
                     v-model="formItem.payment_type"
                     placeholder="请选择"
                   >
@@ -294,6 +299,7 @@
                 <el-form-item class="mt-25px" label="余额计算规则">
                   <el-select
                     class="w-[100%]"
+                    clearable
                     v-model="formItem.rules"
                     placeholder="请选择"
                   >
@@ -353,6 +359,7 @@
                 <el-form-item label="认证规则" prop="certification_rules">
                   <el-select
                     class="w-[100%]"
+                    clearable
                     v-model="formItem.certification_rules"
                     multiple
                     collapse-tags
@@ -374,6 +381,7 @@
                 >
                   <el-select
                     class="w-[100%]"
+                    clearable
                     v-model="formItem.signing_rules"
                     multiple
                     collapse-tags
@@ -405,6 +413,7 @@
                 >
                   <el-select
                     class="w-[100%]"
+                    clearable
                     v-model="formItem.tax_contract_term"
                     placeholder="请选择"
                   >

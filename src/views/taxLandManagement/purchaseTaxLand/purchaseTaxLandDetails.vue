@@ -20,7 +20,7 @@
                     class="w-[100%] bg"
                     disabled
                     v-model="formItem.tax_land_type"
-                    placeholder="请选择"
+                    placeholder=" "
                   >
                     <el-option
                       v-for="item in proxy.$const[
@@ -145,7 +145,7 @@
                     class="w-[100%]"
                     disabled
                     v-model="formItem.invoice_type"
-                    placeholder="请选择"
+                    placeholder=" "
                   >
                     <el-option
                       v-for="item in proxy.$const[
@@ -175,7 +175,7 @@
                     class="w-[100%]"
                     disabled
                     v-model="formItem.invoice_denomination"
-                    placeholder="请选择"
+                    placeholder=" "
                   >
                     <el-option
                       v-for="item in proxy.$const[
@@ -199,6 +199,7 @@
                     class="w-[100%]"
                     disabled
                     v-model="formItem.payment_type"
+                    placeholder=" "
                   >
                     <el-option
                       v-for="item in proxy.$const[
@@ -241,7 +242,12 @@
                   <el-input readonly v-model="formItem.audit_password" />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="余额计算规则">
-                  <el-select class="w-[100%]" disabled v-model="formItem.rules">
+                  <el-select
+                    class="w-[100%]"
+                    disabled
+                    placeholder=" "
+                    v-model="formItem.rules"
+                  >
                     <el-option
                       v-for="item in proxy.$const[
                         'taxLandManagementEnum.InvoiceType'
@@ -263,7 +269,7 @@
                 >
                   <zxn-money-input
                     v-model="formItem.individual_monthly_limit"
-                    placeholder="请输入"
+                    readonly
                   />
                 </el-form-item>
               </div>
@@ -296,7 +302,7 @@
                     multiple
                     collapse-tags
                     collapse-tags-tooltip
-                    placeholder="请选择"
+                    placeholder=" "
                   >
                     <el-option
                       v-for="item in optionsCertificationRules"
@@ -318,7 +324,7 @@
                     multiple
                     collapse-tags
                     collapse-tags-tooltip
-                    placeholder="请选择"
+                    placeholder=" "
                   >
                     <el-option
                       v-for="item in optionsSigningRules"
@@ -335,7 +341,7 @@
                     class="w-[100%]"
                     disabled
                     v-model="formItem.tax_contract_term"
-                    placeholder="请选择"
+                    placeholder=" "
                   >
                     <el-option
                       v-for="item in proxy.$const[
