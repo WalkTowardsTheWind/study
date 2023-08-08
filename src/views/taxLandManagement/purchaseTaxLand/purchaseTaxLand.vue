@@ -36,16 +36,13 @@
       </el-form-item>
 
       <el-form-item label="税地地区">
-        <el-select v-model="formItem.invoice_denomination" placeholder="全部">
-          <el-option
-            v-for="item in proxy.$const[
-              'taxLandManagementEnum.invoice_denomination'
-            ]"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
+        <el-cascader
+          class="w-[100%]"
+          v-model="formItem.tax_land_city_id"
+          :options="optionsTaxLang"
+          :props="propsTaxLang"
+          clearable
+        />
       </el-form-item>
 
       <el-form-item label="计算方式">
@@ -125,6 +122,7 @@
   />
 </template>
 <script setup lang="ts">
+import { newNumberTransform } from "@/utils";
 import { transformTimeRange } from "@/utils";
 import { useRouter } from "vue-router";
 import {
@@ -132,6 +130,7 @@ import {
   selfOperatedTaxLandDelete,
   selfOperatedTaxLandUpdateStatus,
 } from "@/api/taxLandManagement/selfOperatedTaxLand";
+import { getAreaList } from "@/api/taxLandManagement";
 import { getManufacturer } from "@/api/taxLandManagement/purchaseTaxLand";
 import InspectDialog from "../components/InspectDialog.vue";
 import { ElMessage } from "element-plus";
@@ -151,7 +150,29 @@ const getManufacturerList = async () => {
   optionsManufacturer.value.push(...newData);
 };
 getManufacturerList();
-
+//税地
+var optionsTaxLang = ref([]);
+const getTaxLangList = async () => {
+  try {
+    const { data } = await getAreaList(0);
+    const newData = JSON.parse(
+      JSON.stringify(data)
+        .replace(/"id"/g, '"value"')
+        .replace(/"name"/g, '"label"')
+        .replace(/"cityList"/g, '"children"')
+        .replace(/"taxLandList"/g, '"children"')
+        .replace(/"child"/g, '"children"')
+    );
+    optionsTaxLang.value = newData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+getTaxLangList();
+const propsTaxLang = {
+  // multiple: true,
+  expandTrigger: "hover" as const,
+};
 //行业限制查看
 const dialogVisible = ref(false);
 const title = ref("");
@@ -168,6 +189,7 @@ const handleReset = () => {
     keywords: "",
     status: "",
     tax_manufacturer: "",
+    tax_land_city_id: "",
     tax_land_type: "1",
     timeData: [],
     invoice_type: "",
@@ -210,6 +232,7 @@ const formItem = ref({
   keywords: "",
   status: "",
   tax_manufacturer: "",
+  tax_land_city_id: "",
   tax_land_type: "1",
   timeData: [],
   invoice_type: "",
@@ -410,6 +433,7 @@ const getTableData = async () => {
   const params = transformTimeRange({ ...formItem.value });
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
+  params.tax_land_city_id = newNumberTransform(params.tax_land_city_id);
 
   try {
     const { data } = await getSelfOperatedTaxLandList(params);

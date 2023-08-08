@@ -629,45 +629,20 @@ const validateIndividualMonthlyLimit = (
 };
 const Rules = {
   tax_land_type: [{ required: true, message: "请输入", trigger: "change" }],
-  tax_land_head: [{ required: true, message: "请输入", trigger: "blur" }],
-  head_mobile: [{ required: true, message: "请输入", trigger: "blur" }],
   tax_land_name: [{ required: true, message: "请输入", trigger: "blur" }],
-  tax_cost_point: [{ required: true, message: "请输入", trigger: "blur" }],
-  // calculation_type: [{ required: true, message: "请输入", trigger: "change" }],
   min_employment_year: [
     { required: true, validator: validateMin_employment_year, trigger: "blur" },
   ],
   max_employment_year: [
     { required: true, validator: validateMax_employment_year, trigger: "blur" },
   ],
-  tax_land_city_id: [{ required: true, message: "请输入", trigger: "change" }],
-  web_url: [{ required: true, message: "请输入", trigger: "blur" }],
-
   tax_land_license: [
-    { required: true, message: "请上传图片", trigger: "change" },
-  ],
-  company_qualifications: [
     { required: true, message: "请上传图片", trigger: "change" },
   ],
 };
 const Rules2 = {
-  invoice_type: [{ required: true, message: "请输入", trigger: "change" }],
-  category_id: [{ required: true, message: "请输入", trigger: "change" }],
-  invoice_denomination: [
-    { required: true, message: "请输入", trigger: "change" },
-  ],
-  max_money: [{ required: true, message: "请输入", trigger: "blur" }],
-  is_payment_api: [{ required: true, message: "请输入", trigger: "change" }],
   payment_type: [{ required: true, message: "请输入", trigger: "change" }],
-  bank: [{ required: true, message: "请输入", trigger: "blur" }],
   bank_account: [{ required: true, message: "请输入", trigger: "blur" }],
-  company_code: [{ required: true, message: "请输入", trigger: "blur" }],
-  invoice_sample: [
-    { required: true, message: "请上传图片", trigger: "change" },
-  ],
-  industry_limit: [
-    { required: true, message: "请上传图片", trigger: "change" },
-  ],
 };
 const Rules3 = {
   certification_rules: [
@@ -682,13 +657,6 @@ const Rules3 = {
     },
   ],
   tax_contract_term: [{ required: true, message: "请输入", trigger: "change" }],
-  tax_reg_type: [{ required: true, message: "请选择", trigger: "change" }],
-  tax_organ_code: [{ required: true, message: "请输入", trigger: "blur" }],
-  agreement_url: [{ required: true, message: "请上传图片", trigger: "blur" }],
-  contract_img: [{ required: true, message: "请上传图片", trigger: "blur" }],
-  settlement_confirmation_letter: [
-    { required: true, message: "请上传图片", trigger: "blur" },
-  ],
 };
 const formItem = ref({
   tax_land_type: "1",
