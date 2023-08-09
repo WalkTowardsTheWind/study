@@ -1,77 +1,110 @@
 <template>
   <div class="content p-[30px]">
-    <el-form :form="formItem" label-width="120">
-      <el-row class="w-full" :gutter="50">
-        <el-col :span="8">
-          <el-form-item label="税地名称">
-            <el-select
-              class="w-full"
-              placeholder="请选择"
-              v-model="formItem.tax_land_id"
-            >
-              <el-option
-                v-for="(item, index) in taxLandOption"
-                :key="index"
-                :value="item.id"
-                :label="item.tax_land_name"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="认证规则">
-            <el-select
-              class="w-full"
-              v-model="formItem.auth_type"
-              :disabled="!isEdit"
-            >
-              <el-option
-                v-for="(item, index) in authType"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="客户税地子账户">
-            <el-input v-model="formItem.tax_bank_name" readonly />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="客户点位">
-            <el-input v-model="formItem.tax_point" :readonly="!isEdit">
-              <template #append>%</template>
-            </el-input>
-          </el-form-item>
-          <el-form-item label="签约规则">
-            <el-select
-              class="w-full"
-              placeholder="请选择（单选）"
-              v-model="formItem.sign_type"
-              :disabled="!isEdit"
-            >
-              <el-option :value="0" label="无"></el-option>
-              <el-option :value="1" label="静默签"></el-option>
-              <el-option :value="2" label="二维码签约"></el-option>
-              <el-option :value="3" label="短信签约"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="银行账户">
-            <el-input v-model="formItem.sub_account_no" readonly />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="签约合同">
-            <MultiUpload v-model="formItem.contract_img" v-if="isEdit">
-              <i-ep-Plus />
-            </MultiUpload>
-            <PicturePreview v-else :image-list="formItem.contract_img" />
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
-    <!-- <div class="bottom-btn" v-if="isEdit">
-			<el-button @click="$router.go(-1)">取消</el-button>
-			<el-button type="primary" @click="updateBusinessAccount">保存</el-button>
-		</div> -->
+    <zxn-table
+      :table-data="state.tableData"
+      :column-list="columnList"
+      :hasPagination="false"
+    >
+      <template #tableTop>
+        <el-button
+          type="primary"
+          plain
+          @click="taxLandClick('add')"
+          v-if="isEdit"
+          >+新增税地</el-button
+        >
+      </template>
+      <template #contract_img="scope">
+        <zxn-image
+          :imgList="scope.row.contract_img"
+          width="40"
+          height="40"
+          targetClick
+        />
+      </template>
+      <template #operation="scope" v-if="isEdit">
+        <el-button
+          link
+          type="primary"
+          @click="handleStatus(scope.row.id, scope.row.status)"
+          >{{ scope.row.status == 1 ? "禁用" : "启用" }}</el-button
+        >
+        <el-button link type="primary" @click="taxLandClick('edit', scope.row)"
+          >编辑</el-button
+        >
+      </template>
+    </zxn-table>
+    <!-- 新增 编辑 -->
+    <el-dialog
+      v-model="state.dialogVisible"
+      :title="state.dialogTitle"
+      width="25%"
+      :close-on-click-modal="false"
+    >
+      <el-form
+        ref="formItem"
+        :model="state.formItem"
+        :rules="rules"
+        label-width="auto"
+      >
+        <el-form-item label="税地名称" prop="tax_land_id">
+          <el-select
+            class="w-full"
+            placeholder="请选择"
+            v-model="state.formItem.tax_land_id"
+            @change="selecTaxland"
+          >
+            <el-option
+              v-for="(item, index) in taxLandOption"
+              :key="index"
+              :value="item.id"
+              :label="item.tax_land_name"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="客户点位" prop="tax_point">
+          <el-input placeholder="请输入" v-model="state.formItem.tax_point">
+            <template #append>%</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="认证规则">
+          <el-select class="w-full" v-model="state.formItem.auth_type">
+            <el-option
+              v-for="(item, index) in auth_type"
+              :key="index"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="签约规则">
+          <el-select
+            class="w-full"
+            placeholder="请选择（单选）"
+            v-model="state.formItem.sign_type"
+          >
+            <el-option
+              v-for="(item, index) in sign_type"
+              :key="index"
+              :value="item.value"
+              :label="item.label"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="上传合同">
+          <MultiUpload v-model="state.formItem.contract_img">
+            <i-ep-Plus />
+          </MultiUpload>
+          <!-- <PicturePreview v-else :image-list="formItem.contract_img" /> -->
+        </el-form-item>
+        <div style="display: flex; justify-content: center">
+          <el-button type="primary" @click="taxLandConfirm(formItem)"
+            >确认</el-button
+          >
+          <el-button type="info" @click="cancelClick">取消</el-button>
+        </div>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -80,26 +113,33 @@ import { getLandList } from "@/api/common";
 import {
   getBusinessAccountDetail,
   editBusinessAccount,
+  setTaxLandStatus,
+  editAccountTaxLand,
+  createAccountTaxLand,
 } from "@/api/account/business";
 
 import router from "@/router";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+import { useStore } from "@/store/modules/taxLand";
+import type { FormInstance } from "element-plus";
+
+const formItem = ref<FormInstance>();
+
+const taxLandStore = useStore();
+
+const auth_type = ref([] as any);
+const sign_type = ref([] as any);
+
 const taxLandOption = ref([] as any);
 function getTaxLandOption() {
-  console.log(123);
-
   taxLandOption.value.length = 0;
   getLandList().then((res) => {
     taxLandOption.value.push(...res.data);
   });
 }
-
-const authType = [
-  { label: "无", value: 0 },
-  { label: "二要素（姓名、身份证）", value: 1 },
-  { label: "三要素（姓名、手机号、身份证）", value: 2 },
-  { label: "三要素（姓名、身份证、银行卡）", value: 3 },
-  { label: "四要素（姓名、手机号、身份证、银行卡）", value: 4 },
-];
 
 const props = defineProps({
   isEdit: {
@@ -109,63 +149,199 @@ const props = defineProps({
   id: {
     default: () => 0,
   },
-  childData: {
-    type: Object,
+  taxLandList: {
+    type: Array,
   },
 });
-const emit = defineEmits(["update:modelValue"]);
-
-const formItem = ref(props.childData as any);
 
 watch(
-  () => props.childData,
-  (newValue) => {
-    formItem.value = props.childData;
-    formItem.value.tax_land_id = formItem.value.tax_land_id * 1;
+  () => props.taxLandList,
+  (newVal) => {
+    state.tableData = newVal;
   }
 );
+// const emit = defineEmits(["update:modelValue"]);
 
-watch(
-  () => formItem.value,
-  (newValue) => {
-    emit("update:modelValue", formItem.value);
+// const formItem = ref(props.childData as any);
+
+const state = reactive({
+  tableData: [],
+  dialogTitle: "",
+  dialogVisible: false,
+  dialogType: "",
+  formItem: {
+    id: "",
+    company_id: "",
+    tax_land_id: "",
+    tax_point: "",
+    auth_type: "",
+    sign_type: "",
+    contract_img: [],
+  },
+});
+
+const rules = reactive({
+  tax_point: [{ required: true, message: "必填", trigger: "blur" }],
+  tax_land_id: [{ required: true, message: "必填", trigger: "change" }],
+});
+
+const columnList = [
+  { label: "税地名称", prop: "tax_land_name", minWidth: 250 },
+  {
+    label: "客户点位(%)",
+    prop: "tax_point",
+    minWidth: 120,
+  },
+  { label: "客户税地子账户", prop: "sub_account_name", minWidth: 250 },
+  { label: "银行账户", prop: "bank", minWidth: 250 },
+  {
+    label: "签约合同",
+    prop: "contract_img",
+    slot: "contract_img",
+    minWidth: 150,
+  },
+  {
+    label: "认证规则",
+    prop: "sign_type",
+    type: "enum",
+    path: "accountEnum.signType",
+    minWidth: 150,
+  },
+  {
+    label: "签约规则",
+    prop: "auth_type",
+    type: "enum",
+    path: "accountEnum.authType",
+    minWidth: 350,
+  },
+  {
+    label: "状态",
+    type: "enum",
+    path: "accountEnum.taxLandStatusType",
+    prop: "status",
+    color: {
+      0: {
+        color: "#F35036",
+        background: "#FDE3DF",
+      },
+      1: {
+        color: "#356FF3",
+        background: "#DFE8FD",
+      },
+    },
+  },
+  { label: "操作", slot: "operation", fixed: "right", width: 250 },
+];
+
+// watch(
+// 	() => props.childData,
+// 	(newValue) => {
+// 		formItem.value = props.childData;
+// 		formItem.value.tax_land_id = formItem.value.tax_land_id * 1;
+// 	}
+// );
+
+// watch(
+// 	() => formItem.value,
+// 	(newValue) => {
+// 		emit("update:modelValue", formItem.value);
+// 	}
+// );
+const taxLandClick = (active: string, item) => {
+  formItem.value?.resetFields();
+  state.dialogVisible = true;
+  if (active == "add") {
+    state.dialogTitle = "新增税地";
+    state.dialogType = active;
+    state.formItem.id = "";
+    state.formItem.tax_land_id = "";
+    state.formItem.company_id = "";
+    state.formItem.tax_point = "";
+    state.formItem.sign_type = "";
+    state.formItem.auth_type = "";
+    state.formItem.contract_img = [];
+    state.formItem.company_id = route.query.id;
   }
-);
+  if (active == "edit") {
+    state.dialogTitle = "编辑税地";
+    state.dialogType = active;
+    state.formItem.id = item.id;
+    state.formItem.company_id = item.company_id;
+    state.formItem.tax_land_id = item.tax_land_id;
+    selecTaxland(item.tax_land_id);
+    state.formItem.tax_point = item.tax_point;
+    state.formItem.sign_type = item.sign_type;
+    state.formItem.auth_type = item.auth_type;
+    state.formItem.contract_img = item.contract_img;
+  }
+};
+// 选择税地后才有对应规则
+const selecTaxland = (tax_land_id: string) => {
+  state.formItem.auth_type = "";
+  state.formItem.sign_type = "";
 
-// async function getAccountDetail() {
-// 	try {
-// 		if (props.id) {
-// 			const res = await getBusinessAccountDetail(props.id);
-// 			console.log(res);
+  taxLandStore.updateTaxLandList(tax_land_id);
 
-// 			formItem.value = res.data;
-// 		}
-// 	} catch (error: any) {
-// 		return new Error("error", error);
-// 	}
-// }
+  auth_type.value = taxLandStore.auth_type;
+  sign_type.value = taxLandStore.sign_type;
+};
 
-// async function updateBusinessAccount() {
-// 	// 后台返回的 contacts_mobile 更新修改为 mobile
-// 	let params = {
-// 		...formItem.value,
-// 		mobile: formItem.value.contacts_mobile,
-// 		contacts_mobile: undefined,
-// 	};
-// 	// console.log(params);
-// 	try {
-// 		await editBusinessAccount(params);
-// 		ElMessage({
-// 			message: "编辑成功",
-// 			type: "success",
-// 		});
-// 		router.go(-1);
-// 	} catch (error: any) {
-// 		return new Error(error);
-// 	}
-// }
+// 0 禁用 1 启用
+const handleStatus = (id: string, status: string) => {
+  status == 1 ? (status = 0) : (status = 1);
+  setTaxLandStatus(id, status).then((res) => {
+    ElMessage({
+      message: res.msg,
+      type: "success",
+    });
+  });
+  setTimeout(() => {
+    location.reload();
+  }, 500);
+};
 
-// getAccountDetail();
+const taxLandConfirm = async (formEl: FormInstance) => {
+  if (state.dialogType == "add") {
+    if (!formEl) return;
+    await formEl.validate((valid, fields) => {
+      if (valid) {
+        createAccountTaxLand(state.formItem).then((res) => {
+          ElMessage({
+            message: "新建税地成功",
+            type: "success",
+          });
+          state.dialogVisible = false;
+          setTimeout(() => {
+            location.reload();
+          }, 200);
+        });
+      }
+    });
+  }
+  if (state.dialogType == "edit") {
+    editAccountTaxLand(state.formItem).then((res) => {
+      ElMessage({
+        message: "编辑成功",
+        type: "success",
+      });
+      state.dialogVisible = false;
+      setTimeout(() => {
+        location.reload();
+      }, 200);
+    });
+  }
+};
+const cancelClick = () => {
+  state.dialogVisible = false;
+  state.formItem.id = "";
+  state.formItem.company_id = "";
+  state.formItem.tax_land_id = "";
+  state.formItem.tax_point = "";
+  state.formItem.sign_type = "";
+  state.formItem.auth_type = "";
+  state.formItem.contract_img = [];
+};
+
 getTaxLandOption();
 </script>
 

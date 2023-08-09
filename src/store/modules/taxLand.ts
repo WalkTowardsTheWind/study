@@ -8,15 +8,15 @@ export const useStore = defineStore("taxLand", {
       sign_type: [] as any,
       auth_type: [] as any,
       S_T: [
-        { label: "静默签", value: "1" },
-        { label: "二维码签约", value: "2" },
-        { label: "短信签约", value: "3" },
+        { label: "静默签", value: 1 },
+        { label: "二维码签约", value: 2 },
+        { label: "短信签约", value: 3 },
       ],
       A_T: [
-        { label: "二要素（姓名、身份证）", value: "1" },
-        { label: "三要素（姓名、手机号、身份证）", value: "2" },
-        { label: "三要素（姓名、身份证、银行卡）", value: "3" },
-        { label: "四要素（姓名、手机号、身份证、银行卡）", value: "4" },
+        { label: "二要素（姓名、身份证）", value: 1 },
+        { label: "三要素（姓名、手机号、身份证）", value: 2 },
+        { label: "三要素（姓名、身份证、银行卡）", value: 3 },
+        { label: "四要素（姓名、手机号、身份证、银行卡）", value: 4 },
       ],
     };
   },

@@ -235,64 +235,39 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="选择税地" prop="tax_land_id">
-            <el-select
-              class="w-full"
-              placeholder="请选择"
-              v-model="addForm.tax_land_id"
-              @change="selecTaxland"
-            >
-              <el-option
-                v-for="(item, index) in taxLandOption"
-                :key="index"
-                :value="item.id"
-                :label="item.tax_land_name"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="客户点位" prop="tax_point">
-            <el-input placeholder="请输入" v-model="addForm.tax_point">
-              <template #append>%</template>
-            </el-input>
-          </el-form-item>
-          <el-form-item label="认证规则">
-            <el-select
-              class="w-full"
-              placeholder="请选择（单选）"
-              v-model="addForm.auth_type"
-            >
-              <el-option
-                v-for="(item, index) in auth_type"
-                :key="index"
-                :value="item.value"
-                :label="item.label"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="签约规则">
-            <el-select
-              class="w-full"
-              placeholder="请选择（单选）"
-              v-model="addForm.sign_type"
-            >
-              <el-option
-                v-for="(item, index) in sign_type"
-                :key="index"
-                :value="item.value"
-                :label="item.label"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="上传合同">
-            <MultiUpload v-model="addForm.contract_img">
-              <i-ep-Plus />
-            </MultiUpload>
-          </el-form-item>
+          <!-- <el-form-item label="选择税地" prop="tax_land_id">
+						<el-select class="w-full" placeholder="请选择" v-model="addForm.tax_land_id" @change="selecTaxland">
+							<el-option v-for="(item, index) in taxLandOption" :key="index" :value="item.id"
+								:label="item.tax_land_name"></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="客户点位" prop="tax_point">
+						<el-input placeholder="请输入" v-model="addForm.tax_point">
+							<template #append>%</template>
+						</el-input>
+					</el-form-item>
+					<el-form-item label="认证规则">
+						<el-select class="w-full" placeholder="请选择（单选）" v-model="addForm.auth_type">
+							<el-option v-for="(item, index) in auth_type" :key="index" :value="item.value"
+								:label="item.label"></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="签约规则">
+						<el-select class="w-full" placeholder="请选择（单选）" v-model="addForm.sign_type">
+							<el-option v-for="(item, index) in sign_type" :key="index" :value="item.value"
+								:label="item.label"></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="上传合同">
+						<MultiUpload v-model="addForm.contract_img">
+							<i-ep-Plus />
+						</MultiUpload>
+					</el-form-item> -->
           <!-- 新建税地 -->
-          <template v-for="(tax, index) in addForm.taxLandList" :key="tax.key">
+          <template v-for="(tax, index) in addForm.tax_land_list" :key="tax">
             <el-form-item
               label="选择税地"
-              :prop="'taxLandList.' + index + '.tax_land_id'"
+              :prop="'tax_land_list.' + index + '.tax_land_id'"
               :rules="{
                 required: true,
                 message: '必填',
@@ -315,7 +290,7 @@
             </el-form-item>
             <el-form-item
               label="客户点位"
-              :prop="'taxLandList.' + index + '.tax_point'"
+              :prop="'tax_land_list.' + index + '.tax_point'"
               :rules="{
                 required: true,
                 message: '必填',
@@ -359,7 +334,7 @@
                 <i-ep-Plus />
               </MultiUpload>
             </el-form-item>
-            <el-form-item>
+            <el-form-item v-if="addForm.tax_land_list.length > 1 && index != 0">
               <div class="delTaxLand" @click="delTaxLand(index)">
                 × 删除税地
               </div>
@@ -462,24 +437,27 @@ const addForm = reactive({
   sale_company: "",
   channel_type: "",
   parent_channel_id: "",
-  tax_point: "",
-  auth_type: "", // 认证规则
-  sign_type: "", // 签约规则
   company_email: "",
   consignee: "",
   consignee_mobile: "",
   address: "",
-  tax_land_id: "",
   channel_point: "",
   company_source_remark: "",
   calculation_type: "",
-  contract_img: [],
-  taxLandList: [],
+  tax_land_list: [
+    {
+      tax_land_id: "",
+      tax_point: "",
+      sign_type: "",
+      auth_type: "",
+      contract_img: [],
+    },
+  ],
 } as any);
 
 const isTaxLandListValid = computed(() => {
-  if (addForm.taxLandList.length > 0) {
-    const allElementsValid = addForm.taxLandList.every((item) => {
+  if (addForm.tax_land_list.length > 0) {
+    const allElementsValid = addForm.tax_land_list.every((item) => {
       const { tax_land_id, tax_point, auth_type, sign_type, contract_img } =
         item;
       return (
@@ -534,15 +512,10 @@ const requiredComputed = computed(() => {
     !!addForm.company_source &&
     !!addForm.company_source_remark &&
     !!addForm.calculation_type &&
-    !!addForm.tax_point &&
     !!addForm.company_email &&
     !!addForm.consignee &&
     !!addForm.consignee_mobile &&
     !!addForm.address &&
-    !!addForm.auth_type &&
-    !!addForm.sign_type &&
-    !!addForm.tax_land_id &&
-    !!addForm.contract_img.length &&
     isTaxLandListValid.value
   );
 });
@@ -584,8 +557,8 @@ const rules = reactive<FormRules>({
  * 提交
  */
 async function submit(formEl: FormInstance | undefined) {
-  console.log(addForm);
   if (!formEl) return;
+
   await formEl.validate(async (valid, fields) => {
     if (valid) {
       console.log(isAllComplete.value);
@@ -697,14 +670,28 @@ function selecTaxland(tax_land_id: string) {
 
 function addSelecTaxland(tax: any, index: number) {
   taxLandStore.updateTaxLandList(tax.tax_land_id);
-  addForm.taxLandList[index].s_t = taxLandStore.sign_type;
-  addForm.taxLandList[index].a_t = taxLandStore.auth_type;
+  addForm.tax_land_list[index].s_t = taxLandStore.sign_type;
+  addForm.tax_land_list[index].a_t = taxLandStore.auth_type;
+  // get_sign_auth_type(tax.tax_land_id)
 }
+
+// const getA_T = computed(() => {
+// 	return (index) => {
+
+// 		return
+// 	};
+// })
+
+// const get_sign_auth_type = (tax_land_id) => {
+// 	taxLandStore.updateTaxLandList(tax.tax_land_id);
+// 	const sign_type = taxLandStore.sign_type;
+// 	const auth_type = taxLandStore.auth_type;
+// 	return { sign_type, auth_type }
+// }
 
 // 添加税地
 const addNewTaxLand = () => {
-  addForm.taxLandList.push({
-    key: Date.now(),
+  addForm.tax_land_list.push({
     tax_land_id: "",
     tax_point: "",
     sign_type: "",
@@ -714,7 +701,7 @@ const addNewTaxLand = () => {
 };
 
 const delTaxLand = (index: number) => {
-  addForm.taxLandList.splice(index, 1);
+  addForm.tax_land_list.splice(index, 1);
 };
 
 getCategoryOptions();
