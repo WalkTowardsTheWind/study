@@ -42,25 +42,25 @@
 			<template #status="scope">
 				<div v-if="scope.row.status == 0" v-text="proxy.$enumSet['settlementCenterEnum.settlementCenterList'][
 					scope.row.status
-				]
+					]
 					" class="zxn-table-label" :style="color ? color[scope.row.status] : {}" />
 				<div v-if="scope.row.status == 1" v-text="proxy.$enumSet['settlementCenterEnum.settlementCenterList'][
 					scope.row.status
-				]
+					]
 					" class="zxn-table-label" :style="color ? color[scope.row.status] : {}" />
 				<div v-if="scope.row.status == 2" v-text="proxy.$enumSet['settlementCenterEnum.settlementCenterList'][
 					scope.row.status
-				]
+					]
 					" class="zxn-table-label" :style="color ? color[scope.row.status] : {}" />
 				<div v-if="scope.row.status == 3" v-text="proxy.$enumSet['settlementCenterEnum.settlementCenterList'][
 					scope.row.status
-				]
+					]
 					" class="zxn-table-label" :style="color ? color[scope.row.status] : {}" />
 				<el-tooltip v-if="scope.row.status == 4" class="box-item" effect="dark" placement="top">
 					<template #content> {{ scope.row.reason }}</template>
 					<div v-text="proxy.$enumSet['settlementCenterEnum.settlementCenterList'][
 						scope.row.status
-					]
+						]
 						" class="zxn-table-label" :style="color ? color[scope.row.status] : {}" />
 				</el-tooltip>
 			</template>
@@ -184,8 +184,8 @@ const columnList = [
 	{ label: "结算人数", prop: "total_people" },
 	{ label: "实际人数", prop: "real_people" },
 	{ label: "点位", prop: "tax_point" },
-	{ label: "预计打款金额", prop: "total_money", width: 120 },
-	{ label: "实际打款金额", prop: "real_money", width: 120 },
+	{ label: "打款金额", prop: "total_money" },
+	{ label: "实际下发", prop: "real_money" },
 	{
 		label: "结算时间",
 		prop: "settlement_time",
@@ -251,8 +251,8 @@ const handleThaw = (scope: any) => {
 		ElMessage({
 			type: "success",
 			message: `${[4].includes(scope.row.status)
-				? "成功跳转至账户中心"
-				: "成功封停该企业！"
+					? "成功跳转至账户中心"
+					: "成功封停该企业！"
 				}`,
 		});
 		getTableData();
