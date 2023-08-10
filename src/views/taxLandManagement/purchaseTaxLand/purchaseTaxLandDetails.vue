@@ -246,11 +246,28 @@
                     class="w-[100%]"
                     disabled
                     placeholder=" "
-                    v-model="formItem.rules"
+                    v-model="formItem.balance_type"
                   >
                     <el-option
                       v-for="item in proxy.$const[
-                        'taxLandManagementEnum.InvoiceType'
+                        'taxLandManagementEnum.balanceType'
+                      ]"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </el-form-item>
+                <el-form-item class="mt-25px" label="服务费计算规则">
+                  <el-select
+                    class="w-[100%]"
+                    disabled
+                    placeholder=" "
+                    v-model="formItem.commission_rule"
+                  >
+                    <el-option
+                      v-for="item in proxy.$const[
+                        'taxLandManagementEnum.commissionRule'
                       ]"
                       :key="item.value"
                       :label="item.label"
@@ -541,7 +558,8 @@ const formItem = ref({
   audit_account: "",
   audit_password: "",
   // 余额计算规则
-  rules: "",
+  balance_type: "",
+  commission_rule: "",
   payment_supplier: "",
   individual_monthly_limit: "98000",
   invoice_sample: [],
@@ -583,7 +601,8 @@ const getData = async () => {
       audit_web_url,
       audit_account,
       audit_password,
-      rules,
+      balance_type,
+      commission_rule,
       payment_supplier,
       individual_monthly_limit,
       invoice_sample,
@@ -631,7 +650,8 @@ const getData = async () => {
       audit_account,
       audit_password,
       // 余额计算规则
-      rules,
+      balance_type: balance_type + "",
+      commission_rule: commission_rule + "",
       payment_supplier,
       individual_monthly_limit,
       invoice_sample,

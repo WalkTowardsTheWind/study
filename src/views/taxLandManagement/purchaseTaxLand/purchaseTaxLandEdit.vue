@@ -276,12 +276,29 @@
                   <el-select
                     class="w-[100%]"
                     clearable
-                    v-model="formItem.rules"
+                    v-model="formItem.balance_type"
                     placeholder="请选择"
                   >
                     <el-option
                       v-for="item in proxy.$const[
-                        'taxLandManagementEnum.InvoiceType'
+                        'taxLandManagementEnum.balanceType'
+                      ]"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </el-form-item>
+                <el-form-item class="mt-25px" label="服务费计算规则">
+                  <el-select
+                    class="w-[100%]"
+                    clearable
+                    v-model="formItem.commission_rule"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in proxy.$const[
+                        'taxLandManagementEnum.commissionRule'
                       ]"
                       :key="item.value"
                       :label="item.label"
@@ -447,7 +464,7 @@ import {
 } from "@/utils";
 import { useRouter, useRoute } from "vue-router";
 import {
-  selfOperatedTaxLandAdd,
+  selfOperatedTaxLandEdit,
   selfOperatedTaxLandDetails,
 } from "@/api/taxLandManagement/selfOperatedTaxLand";
 import { getAreaList } from "@/api/taxLandManagement";
@@ -669,7 +686,8 @@ const formItem = ref({
   audit_account: "",
   audit_password: "",
   // 余额计算规则
-  rules: "",
+  balance_type: "",
+  commission_rule: "",
   payment_supplier: "",
   individual_monthly_limit: "98000",
   invoice_sample: [],
@@ -689,6 +707,7 @@ const handleSubmit = () => {
     FormRef2.value.validate((valid2: boolean) => {
       FormRef3.value.validate((valid3: boolean) => {
         if (valid1 && valid2 && valid3) {
+          const ID = Number(route.query.id);
           const params = { ...formItem.value } as any;
           params.tax_land_license = JSON.stringify(params.tax_land_license);
           params.company_qualifications = JSON.stringify(
@@ -708,15 +727,15 @@ const handleSubmit = () => {
           // params.tax_reg_type = newNumberTransform(params.tax_reg_type);
 
           console.log(params);
-          selfOperatedTaxLandAdd(params)
+          selfOperatedTaxLandEdit(ID, params)
             .then(() => {
               ElMessage({
                 type: "success",
-                message: `新建税地成功`,
+                message: `编辑税地成功`,
               });
               router.push({
                 name: "taxLandManagementIndex",
-                query: { activeName: "selfOperated" },
+                query: { activeName: "purchase" },
               });
             })
             .catch((e) => {
@@ -759,7 +778,8 @@ const getData = async () => {
       audit_web_url,
       audit_account,
       audit_password,
-      rules,
+      balance_type,
+      commission_rule,
       payment_supplier,
       individual_monthly_limit,
       invoice_sample,
@@ -807,7 +827,8 @@ const getData = async () => {
       audit_account,
       audit_password,
       // 余额计算规则
-      rules,
+      balance_type: balance_type + "",
+      commission_rule: commission_rule + "",
       payment_supplier,
       individual_monthly_limit,
       invoice_sample,

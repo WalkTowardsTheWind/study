@@ -300,12 +300,29 @@
                   <el-select
                     class="w-[100%]"
                     clearable
-                    v-model="formItem.rules"
+                    v-model="formItem.balance_type"
                     placeholder="请选择"
                   >
                     <el-option
                       v-for="item in proxy.$const[
-                        'taxLandManagementEnum.InvoiceType'
+                        'taxLandManagementEnum.balanceType'
+                      ]"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </el-form-item>
+                <el-form-item class="mt-25px" label="服务费计算规则">
+                  <el-select
+                    class="w-[100%]"
+                    clearable
+                    v-model="formItem.commission_rule"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in proxy.$const[
+                        'taxLandManagementEnum.commissionRule'
                       ]"
                       :key="item.value"
                       :label="item.label"
@@ -704,7 +721,8 @@ const formItem = ref({
   audit_account: "",
   audit_password: "",
   // 余额计算规则
-  rules: "",
+  balance_type: "",
+  commission_rule: "",
   payment_supplier: "",
   individual_monthly_limit: "98000",
   invoice_sample: [],
@@ -762,14 +780,12 @@ const handleSubmit = () => {
             });
             router.push({
               name: "taxLandManagementIndex",
-              query: { activeName: "selfOperated" },
+              query: { activeName: "purchase" },
             });
           })
           .catch((e) => {
             console.log(e);
           });
-
-        console.log(active.value, "完成");
       }
     });
   }

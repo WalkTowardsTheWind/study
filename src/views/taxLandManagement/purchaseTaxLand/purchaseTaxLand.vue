@@ -14,18 +14,18 @@
       </el-form-item>
 
       <el-form-item label="税地状态">
-        <el-select v-model="formItem.status" placeholder="全部">
+        <zxn-select v-model="formItem.status" @change="handleSearch">
           <el-option
             v-for="item in proxy.$const['taxLandManagementEnum.taxLandStatus']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
+        </zxn-select>
       </el-form-item>
 
       <el-form-item label="厂商">
-        <el-select v-model="formItem.tax_manufacturer" placeholder="全部">
+        <el-select v-model="formItem.tax_manufacturer" @change="handleSearch">
           <el-option
             v-for="item in optionsManufacturer"
             :key="item.value"
@@ -46,7 +46,7 @@
       </el-form-item>
 
       <el-form-item label="计算方式">
-        <el-select v-model="formItem.calculation_type" placeholder="全部">
+        <zxn-select v-model="formItem.calculation_type" @change="handleSearch">
           <el-option
             v-for="item in proxy.$const[
               'taxLandManagementEnum.calculationType'
@@ -55,7 +55,7 @@
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
+        </zxn-select>
       </el-form-item>
       <el-form-item prop="date" label="申请日期">
         <zxn-date-range v-model="formItem.timeData" />
@@ -192,8 +192,8 @@ const handleReset = () => {
     tax_land_city_id: "",
     tax_land_type: "1",
     timeData: [],
-    invoice_type: "",
-    invoice_denomination: "",
+    // invoice_type: "",
+    // invoice_denomination: "",
     calculation_type: "",
     page: "",
     limit: "",
@@ -235,8 +235,8 @@ const formItem = ref({
   tax_land_city_id: "",
   tax_land_type: "1",
   timeData: [],
-  invoice_type: "",
-  invoice_denomination: "",
+  // invoice_type: "",
+  // invoice_denomination: "",
   calculation_type: "",
   page: "",
   limit: "",
@@ -476,8 +476,7 @@ const getTableData = async () => {
           ],
       };
     });
-    // tableData.push(...newData);
-    tableData.push({ id: 4 });
+    tableData.push(...newData);
   } catch (error) {
     console.log(error);
   }
