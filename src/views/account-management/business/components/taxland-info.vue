@@ -52,6 +52,7 @@
             class="w-full"
             placeholder="请选择"
             v-model="state.formItem.tax_land_id"
+            :disabled="state.dialogType == 'edit'"
             @change="selecTaxland"
           >
             <el-option

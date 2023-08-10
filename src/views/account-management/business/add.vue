@@ -308,7 +308,7 @@
                 v-model="tax.auth_type"
               >
                 <el-option
-                  v-for="(item, index) in tax.a_t"
+                  v-for="(item, index) in auth_type"
                   :key="index"
                   :value="item.value"
                   :label="item.label"
@@ -322,7 +322,7 @@
                 v-model="tax.sign_type"
               >
                 <el-option
-                  v-for="(item, index) in tax.s_t"
+                  v-for="(item, index) in sign_type"
                   :key="index"
                   :value="item.value"
                   :label="item.label"
@@ -670,8 +670,10 @@ function selecTaxland(tax_land_id: string) {
 
 function addSelecTaxland(tax: any, index: number) {
   taxLandStore.updateTaxLandList(tax.tax_land_id);
-  addForm.tax_land_list[index].s_t = taxLandStore.sign_type;
-  addForm.tax_land_list[index].a_t = taxLandStore.auth_type;
+  auth_type.value = taxLandStore.auth_type;
+  sign_type.value = taxLandStore.sign_type;
+  // addForm.tax_land_list[index].s_t = taxLandStore.sign_type;
+  // addForm.tax_land_list[index].a_t = taxLandStore.auth_type;
   // get_sign_auth_type(tax.tax_land_id)
 }
 
