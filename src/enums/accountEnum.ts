@@ -24,6 +24,11 @@ export enum statusType {
   "启用",
 }
 
+export enum taxLandStatusType {
+  "禁用" = 0,
+  "启用",
+}
+
 export enum taskType {
   "未到账" = 0,
   "已到账",
@@ -47,4 +52,16 @@ export enum taskStaus {
   "已验收",
   "封停",
   "关闭",
+}
+
+export enum signType {
+  "静默签" = 1,
+  "二维码签约",
+  "短信签约",
+}
+export enum authType {
+  "二要素（姓名、身份证）" = 1,
+  "三要素（姓名、手机号、身份证）",
+  "三要素（姓名、身份证、银行卡）",
+  "四要素（姓名、手机号、身份证、银行卡）",
 }
