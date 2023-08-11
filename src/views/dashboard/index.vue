@@ -47,6 +47,7 @@ import NoticeMessage from "./components/NoticeMessage.vue";
 import { workbench } from "@/api/dashboard";
 import { getPercentValue } from "@/utils";
 import { useRouter } from "vue-router";
+import { useRouteParams } from "@/store/modules/routeParams";
 const router = useRouter();
 const statisticsList: any[] = reactive([]);
 const industryEcharts = ref([]);
@@ -95,6 +96,10 @@ const handleView = (item) => {
     开票申请: "invoiceManager",
     异常数据: "Dashboard",
   };
+  if (item.title === "开票申请") {
+    const { pushParams } = useRouteParams();
+    pushParams("invoiceManager", { status: 0 });
+  }
   router.push({ name: routerMap[item.title] });
 };
 onMounted(() => {

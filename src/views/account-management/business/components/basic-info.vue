@@ -173,19 +173,10 @@
       </div>
     </el-form>
   </div>
-  <!-- <zxn-bottom-btn v-if="isEdit">
-		<el-button @click="$router.go(-1)">取消</el-button>
-		<el-button type="primary" @click="updateBusinessAccount">保存</el-button>
-	</zxn-bottom-btn> -->
 </template>
 
 <script lang="ts" setup>
-import {
-  getBusinessAccountDetail,
-  editBusinessAccount,
-  getCategoryList,
-  resetAccountPwd,
-} from "@/api/account/business";
+import { getCategoryList, resetAccountPwd } from "@/api/account/business";
 import { getLandList } from "@/api/common";
 
 import { businessType, taxpayerType } from "@/enums/accountEnum";
