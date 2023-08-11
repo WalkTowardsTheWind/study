@@ -86,7 +86,7 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="1">新建自营税地</el-dropdown-item>
-              <!-- <el-dropdown-item command="2">新建采购税地</el-dropdown-item> -->
+              <el-dropdown-item command="2">新建采购税地</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -124,7 +124,7 @@
           v-if="scope.row.status == 0"
           link
           type="primary"
-          @click="handleB(scope)"
+          @click="handleEdit(scope)"
           >编辑</el-button
         >
 
@@ -321,7 +321,7 @@ const handleUpdateStatus = (scope: any) => {
 /**
  * 编辑
  */
-const handleB = (scope: any) => {
+const handleEdit = (scope: any) => {
   router.push({
     name: "selfOperatedTaxLandEdit",
     query: { activeName: "1", id: scope.row.id },
@@ -380,7 +380,6 @@ const handleDetails = (scope: any) => {
 const selectionData = ref([]);
 const handleSelect = (data: any) => {
   selectionData.value = data.map((item: any) => item.id);
-  console.log(selectionData.value);
 };
 /**
  * 新建

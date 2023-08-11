@@ -46,6 +46,16 @@ export enum paymentType {
   "自动",
   "手动",
 }
+export enum balanceType {
+  "向上取整" = 1,
+  "向下取整",
+  "四舍五入",
+}
+export enum commissionRule {
+  "单笔扣除" = 1,
+  "合计扣除",
+}
+
 // 新建
 
 // taxLandManagementEnum

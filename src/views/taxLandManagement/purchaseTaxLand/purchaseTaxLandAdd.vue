@@ -14,41 +14,84 @@
               v-model:active-step="active"
             ></viewSteps>
           </div>
-          <el-form class="zxn-box" :model="formItem" label-width="120px">
-            <div class="flex" v-show="active == 0">
-              <div class="w-[33%]">
+          <el-form
+            class="zxn-box"
+            :model="formItem"
+            label-width="130px"
+            ref="FormRef"
+            :rules="Rules"
+          >
+            <el-row v-show="active == 0">
+              <el-col :span="8">
+                <el-form-item label="税地类型" prop="tax_land_type">
+                  <el-select
+                    class="w-[100%]"
+                    disabled
+                    v-model="formItem.tax_land_type"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in proxy.$const[
+                        'taxLandManagementEnum.tax_land_type'
+                      ]"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </el-form-item>
                 <el-form-item label="税地负责人">
-                  <el-input v-model="formItem.tax_land_head" />
+                  <el-input
+                    v-model="formItem.tax_land_head"
+                    placeholder="请输入"
+                  />
                 </el-form-item>
                 <el-form-item label="联系方式">
-                  <el-input v-model="formItem.head_mobile" />
+                  <el-input
+                    v-model="formItem.head_mobile"
+                    placeholder="请输入"
+                  />
                 </el-form-item>
-                <el-form-item class="mt-25px" label="税地来源">
+                <el-form-item
+                  class="mt-25px"
+                  label="税地来源"
+                  prop="tax_land_name"
+                >
                   <el-input
                     class="w-[100%]"
                     v-model="formItem.tax_land_name"
-                    placeholder="Select"
+                    placeholder="请输入"
                   >
                   </el-input>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="厂商">
+                <el-form-item
+                  class="mt-25px"
+                  label="厂商"
+                  prop="tax_manufacturer"
+                >
                   <el-input
+                    class="w-[100%]"
                     v-model="formItem.tax_manufacturer"
-                    placeholder="Select"
+                    placeholder="请输入"
                   >
                   </el-input>
-                </el-form-item>
-                <el-form-item class="mt-25px" label="银行账户">
-                  <el-input v-model="formItem.bank_account" />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="成本点位">
-                  <el-input v-model="formItem.tax_cost_point" />
+                  <el-input
+                    v-model="formItem.tax_cost_point"
+                    placeholder="请输入"
+                  />
                 </el-form-item>
-                <el-form-item class="mt-25px" label="计算方式">
+                <!-- <el-form-item
+                  class="mt-25px"
+                  label="计算方式"
+                  prop="calculation_type"
+                >
                   <el-select
                     class="w-[100%]"
+                    clearable
                     v-model="formItem.calculation_type"
-                    placeholder="Select"
+                    placeholder="请选择"
                   >
                     <el-option
                       v-for="item in proxy.$const[
@@ -59,20 +102,32 @@
                       :value="item.value"
                     />
                   </el-select>
+                </el-form-item> -->
+
+                <el-form-item class="mt-25px" label="税地用工年限">
+                  <el-col :span="11">
+                    <el-form-item>
+                      <el-input
+                        type="number"
+                        v-model="formItem.min_employment_year"
+                        placeholder="起始年龄"
+                      />
+                    </el-form-item>
+                  </el-col>
+                  <el-col class="text-center" :span="2">
+                    <span class="text-gray-500">-</span>
+                  </el-col>
+                  <el-col :span="11">
+                    <el-form-item>
+                      <el-input
+                        type="number"
+                        v-model="formItem.max_employment_year"
+                        placeholder="截至年龄"
+                      />
+                    </el-form-item>
+                  </el-col>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="用工年限">
-                  <el-input
-                    style="width: 45%"
-                    v-model="formItem.min_employment_year"
-                    placeholder="起始年龄"
-                  />
-                  <div class="w-[10%] text-center">-</div>
-                  <el-input
-                    style="width: 45%"
-                    v-model="formItem.max_employment_year"
-                    placeholder="截至年龄"
-                  />
-                </el-form-item>
+
                 <el-form-item class="mt-25px" label="税地地区">
                   <el-cascader
                     class="w-[100%]"
@@ -82,12 +137,16 @@
                     clearable
                   />
                 </el-form-item>
-                <el-form-item class="mt-25px" label="网址">
-                  <el-input v-model="formItem.web_url" />
-                </el-form-item>
-              </div>
-              <div class="w-[33%]">
-                <el-form-item class="mb-[0]" label="营业执照">
+                <!-- <el-form-item class="mt-25px" label="网址">
+                  <el-input v-model="formItem.web_url" placeholder="请输入" />
+                </el-form-item> -->
+              </el-col>
+              <el-col :span="8">
+                <el-form-item
+                  class="mb-[0]"
+                  label="税地营业执照"
+                  prop="tax_land_license"
+                >
                   <multi-upload
                     v-model="formItem.tax_land_license"
                     :limit="3"
@@ -99,34 +158,25 @@
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
-              </div>
-            </div>
+              </el-col>
+            </el-row>
+          </el-form>
 
-            <div class="flex" v-show="active == 1">
-              <div class="w-[33%]">
-                <el-form-item label="核账网址">
-                  <el-input v-model="formItem.audit_web_url" />
-                </el-form-item>
-                <el-form-item label="核账网址账号">
-                  <el-input v-model="formItem.audit_account" />
-                </el-form-item>
-                <el-form-item label="核账网址密码">
-                  <el-input v-model="formItem.audit_password" />
-                </el-form-item>
-                <el-form-item class="mt-25px" label="行业类型">
-                  <el-cascader
-                    class="w-[100%]"
-                    v-model="formItem.industry_category_id"
-                    :options="optionsTrade"
-                    :props="propsTrade"
-                    clearable
-                  />
-                </el-form-item>
-                <el-form-item class="mt-25px" label="发票类型">
+          <el-form
+            class="zxn-box"
+            :model="formItem"
+            label-width="130px"
+            ref="FormRef2"
+            :rules="Rules2"
+          >
+            <el-row v-show="active == 1">
+              <el-col :span="8">
+                <el-form-item label="税地发票类型">
                   <el-select
                     class="w-[100%]"
+                    clearable
                     v-model="formItem.invoice_type"
-                    placeholder="Select"
+                    placeholder="请选择"
                   >
                     <el-option
                       v-for="item in proxy.$const[
@@ -138,11 +188,24 @@
                     />
                   </el-select>
                 </el-form-item>
+                <el-form-item class="mt-25px" label="开票类目">
+                  <el-cascader
+                    popper-class="last-cascader"
+                    class="w-[100%]"
+                    v-model="formItem.category_id"
+                    :options="optionsInvoicingCategory"
+                    :props="propsInvoicingCategory"
+                    collapse-tags
+                    collapse-tags-tooltip
+                    clearable
+                  />
+                </el-form-item>
                 <el-form-item class="mt-25px" label="发票面额">
                   <el-select
                     class="w-[100%]"
+                    clearable
                     v-model="formItem.invoice_denomination"
-                    placeholder="Select"
+                    placeholder="请选择"
                   >
                     <el-option
                       v-for="item in proxy.$const[
@@ -155,18 +218,39 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="发票金额上限">
-                  <el-input v-model="formItem.max_money" placeholder="Select">
-                  </el-input>
+                  <zxn-money-input
+                    v-model="formItem.max_money"
+                    placeholder="请输入"
+                  />
                 </el-form-item>
-                <el-form-item class="mt-25px" label="税点">
-                  <el-input v-model="formItem.tax_point" placeholder="Select">
-                  </el-input>
-                </el-form-item>
-                <el-form-item class="mt-25px" label="支付方式">
+
+                <!-- <el-form-item class="mt-25px" label="是否有支付接口">
                   <el-select
                     class="w-[100%]"
+                    clearable
+                    v-model="formItem.is_payment_api"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in proxy.$const[
+                        'taxLandManagementEnum.is_payment_api'
+                      ]"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </el-form-item> -->
+                <el-form-item
+                  class="mt-25px"
+                  label="支付方式"
+                  prop="payment_type"
+                >
+                  <el-select
+                    class="w-[100%]"
+                    clearable
                     v-model="formItem.payment_type"
-                    placeholder="Select"
+                    placeholder="请选择"
                   >
                     <el-option
                       v-for="item in proxy.$const[
@@ -178,15 +262,67 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="是否有支付接口">
+                <el-form-item class="mt-25px" label="开户行">
+                  <el-input v-model="formItem.bank" placeholder="请输入">
+                  </el-input>
+                </el-form-item>
+                <el-form-item
+                  class="mt-25px"
+                  label="开户行账户"
+                  prop="bank_account"
+                >
+                  <el-input
+                    v-model="formItem.bank_account"
+                    placeholder="请输入"
+                  />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="核账网址">
+                  <el-input
+                    placeholder="请输入"
+                    v-model="formItem.audit_web_url"
+                  />
+                </el-form-item>
+                <el-form-item class="mt-25px" label="核账网址账号">
+                  <el-input
+                    placeholder="请输入"
+                    v-model="formItem.audit_account"
+                  />
+                </el-form-item>
+                <el-form-item class="mt-25px" label="核账网址密码">
+                  <el-input
+                    placeholder="请输入"
+                    v-model="formItem.audit_password"
+                  />
+                </el-form-item>
+                <el-form-item class="mt-25px" label="余额计算规则">
                   <el-select
                     class="w-[100%]"
-                    v-model="formItem.is_payment_api"
-                    placeholder="Select"
+                    clearable
+                    v-model="formItem.balance_type"
+                    placeholder="请选择"
                   >
                     <el-option
                       v-for="item in proxy.$const[
-                        'taxLandManagementEnum.is_payment_api'
+                        'taxLandManagementEnum.balanceType'
+                      ]"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </el-form-item>
+                <el-form-item class="mt-25px" label="服务费计算规则">
+                  <el-select
+                    class="w-[100%]"
+                    clearable
+                    v-model="formItem.commission_rule"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in proxy.$const[
+                        'taxLandManagementEnum.commissionRule'
                       ]"
                       :key="item.value"
                       :label="item.label"
@@ -197,61 +333,110 @@
                 <el-form-item class="mt-25px" label="支付供应商">
                   <el-input
                     v-model="formItem.payment_supplier"
-                    placeholder="Select"
+                    placeholder="请选择"
                   >
                   </el-input>
                 </el-form-item>
-              </div>
-              <div class="w-[33%]">
+                <el-form-item
+                  class="mt-25px"
+                  label="单人每月限额"
+                  prop="individual_monthly_limit"
+                >
+                  <zxn-money-input
+                    v-model="formItem.individual_monthly_limit"
+                    placeholder="请输入"
+                  />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
                 <el-form-item class="mb-[0]" label="发票票样">
                   <multi-upload
                     v-model="formItem.invoice_sample"
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
-              </div>
-            </div>
-            <div class="flex" v-show="active == 2">
-              <div class="w-[33%]">
-                <el-form-item class="mt-25px" label="认证形态">
-                  <el-input
-                    v-model="formItem.certification_form"
-                    placeholder="Select"
-                  >
-                  </el-input>
-                </el-form-item>
-                <el-form-item class="mt-25px" label="签约形态">
+                <!-- <el-form-item class="mb-[0]" label="行业限制">
+                  <multi-upload
+                    v-model="formItem.industry_limit"
+                    :limit="3"
+                  ></multi-upload>
+                </el-form-item> -->
+              </el-col>
+            </el-row>
+          </el-form>
+          <el-form
+            class="zxn-box"
+            :model="formItem"
+            label-width="130px"
+            ref="FormRef3"
+            :rules="Rules3"
+          >
+            <el-row v-show="active == 2">
+              <el-col :span="8">
+                <el-form-item label="认证规则" prop="certification_rules">
                   <el-select
                     class="w-[100%]"
-                    v-model="formItem.sign_form"
-                    placeholder="Select"
+                    clearable
+                    v-model="formItem.certification_rules"
+                    multiple
+                    collapse-tags
+                    collapse-tags-tooltip
+                    placeholder="请选择"
                   >
                     <el-option
-                      v-for="item in proxy.$const[
-                        'taxLandManagementEnum.sign_form'
-                      ]"
+                      v-for="item in optionsCertificationRules"
                       :key="item.value"
                       :label="item.label"
                       :value="item.value"
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="行业限制">
-                  <el-input
-                    v-model="formItem.industry_limit"
-                    placeholder="Select"
-                  >
-                  </el-input>
-                </el-form-item>
-                <el-form-item class="mt-25px" label="合同年限">
+                <el-form-item
+                  class="mt-25px"
+                  label="签约规则"
+                  prop="signing_rules"
+                >
                   <el-select
                     class="w-[100%]"
+                    clearable
+                    v-model="formItem.signing_rules"
+                    multiple
+                    collapse-tags
+                    collapse-tags-tooltip
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in optionsSigningRules"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </el-form-item>
+                <!-- <el-form-item
+                  class="mt-25px"
+                  label="单人每月限额"
+                  prop="individual_monthly_limit"
+                >
+                  <zxn-money-input
+                    v-model="formItem.individual_monthly_limit"
+                    placeholder="请输入"
+                  />
+                </el-form-item> -->
+                <el-form-item
+                  class="mt-25px"
+                  label="委托代征年限"
+                  prop="tax_contract_term"
+                >
+                  <el-select
+                    class="w-[100%]"
+                    clearable
                     v-model="formItem.tax_contract_term"
-                    placeholder="Select"
+                    placeholder="请选择"
                   >
                     <el-option
                       v-for="item in proxy.$const[
-                        'contractCenterEnum.contractTerm'
+                        'taxLandManagementEnum.EntrustedCollectionPeriod'
                       ]"
                       :key="item.value"
                       :label="item.label"
@@ -262,20 +447,32 @@
                 <el-form-item class="mt-25px" label="进件资料">
                   <el-input
                     v-model="formItem.incoming_materials"
-                    placeholder="Select"
+                    placeholder="请输入"
                   >
                   </el-input>
                 </el-form-item>
-              </div>
-              <div class="w-[33%]">
-                <el-form-item class="mb-[0]" label="协议">
+              </el-col>
+              <el-col :span="8">
+                <el-form-item class="mb-[0]" label="个人合同模板">
                   <multi-upload
                     v-model="formItem.agreement_url"
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
-              </div>
-            </div>
+                <el-form-item class="mb-[0]" label="企业合同模板">
+                  <multi-upload
+                    v-model="formItem.contract_img"
+                    :limit="3"
+                  ></multi-upload>
+                </el-form-item>
+                <el-form-item class="mb-[0]" label="结算确认函">
+                  <multi-upload
+                    v-model="formItem.settlement_confirmation_letter"
+                    :limit="3"
+                  ></multi-upload>
+                </el-form-item>
+              </el-col>
+            </el-row>
           </el-form>
         </div>
         <zxn-bottom-btn>
@@ -294,10 +491,12 @@
   </zxn-plan>
 </template>
 <script setup lang="ts">
+import { newArrayTransform, newNumberTransform } from "@/utils";
 import { useRouter } from "vue-router";
 import viewSteps from "../components/viewSteps.vue";
 import { selfOperatedTaxLandAdd } from "@/api/taxLandManagement/selfOperatedTaxLand";
 import { getAreaList } from "@/api/taxLandManagement";
+import { getTreeList } from "@/api/common";
 import { getCategoryTreeList } from "@/api/category";
 const { proxy } = getCurrentInstance() as any;
 const router = useRouter();
@@ -319,6 +518,64 @@ const stepList = [
   { desc: "发票厂家信息" },
   { desc: "行业与合同信息" },
 ];
+
+// 类目下拉选择框
+var optionsInvoicingCategory = ref([]);
+const getInvoicingCategoryTradeList = async () => {
+  try {
+    const { data } = await getTreeList({ type: 2 });
+    const newData = JSON.parse(
+      JSON.stringify(data)
+        .replace(/"id"/g, '"value"')
+        .replace(/"name"/g, '"label"')
+        .replace(/"children"/g, '"children"')
+    );
+    optionsInvoicingCategory.value = newData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+getInvoicingCategoryTradeList();
+const propsInvoicingCategory = {
+  multiple: true,
+  expandTrigger: "hover" as const,
+};
+// 认证规则选择框
+var optionsCertificationRules = ref([
+  {
+    value: 1,
+    label: "个税申报二要素（人名，身份证）",
+  },
+  {
+    value: 2,
+    label: "运营商三要素（姓名，手机号，身份证号）",
+  },
+  {
+    value: 3,
+    label: "银行卡三要素（姓名，身份证，银行卡）",
+  },
+  {
+    value: 4,
+    label: "四要素",
+  },
+]);
+
+// 签约规则选择框
+var optionsSigningRules = ref([
+  {
+    value: 1,
+    label: "静默签（下发后默认签约）",
+  },
+  {
+    value: 2,
+    label: "有感签刷脸意愿校验签约",
+  },
+  {
+    value: 3,
+    label: "有感短信校验签约",
+  },
+]);
+
 //行业
 var optionsTrade = ref([]);
 const getTradeList = async () => {
@@ -366,70 +623,171 @@ const propsTaxLang = {
 };
 
 //表单信息
-const formItem = reactive({
+const FormRef = ref(ElForm);
+const FormRef2 = ref(ElForm);
+const FormRef3 = ref(ElForm);
+const validateMin_employment_year = (rule: any, value: any, callback: any) => {
+  if (value === "") {
+    callback(new Error("请输入"));
+  } else if (!/^[0-9]+$/.test(value)) {
+    callback(new Error("请输入正整数"));
+  } else if (value > formItem.value.max_employment_year) {
+    if (!formItem.value.max_employment_year) return;
+    callback(new Error("起始年龄应该小于截至年龄"));
+  } else {
+    callback();
+  }
+};
+const validateMax_employment_year = (rule: any, value: any, callback: any) => {
+  if (value === "") {
+    callback(new Error("请输入"));
+  } else if (!/^[0-9]+$/.test(value)) {
+    callback(new Error("请输入正整数"));
+  } else if (value < formItem.value.min_employment_year) {
+    if (!formItem.value.min_employment_year) return;
+    callback(new Error("起始年龄应该小于截至年龄"));
+  } else {
+    callback();
+  }
+};
+const validateIndividualMonthlyLimit = (
+  rule: any,
+  value: any,
+  callback: any
+) => {
+  if (value === "") {
+    callback(new Error("请输入"));
+  } else if (!/^\d+(\.\d{1,2})?$/.test(value)) {
+    callback(new Error("请输入正确格式，（例如：2，2.2，2.22）"));
+  } else {
+    callback();
+  }
+};
+const Rules = {
+  tax_land_type: [{ required: true, message: "请输入", trigger: "change" }],
+  tax_land_name: [{ required: true, message: "请输入", trigger: "blur" }],
+  min_employment_year: [
+    { required: true, validator: validateMin_employment_year, trigger: "blur" },
+  ],
+  max_employment_year: [
+    { required: true, validator: validateMax_employment_year, trigger: "blur" },
+  ],
+  tax_land_license: [
+    { required: true, message: "请上传图片", trigger: "change" },
+  ],
+};
+const Rules2 = {
+  payment_type: [{ required: true, message: "请输入", trigger: "change" }],
+  bank_account: [{ required: true, message: "请输入", trigger: "blur" }],
+};
+const Rules3 = {
+  certification_rules: [
+    { required: true, message: "请输入", trigger: "change" },
+  ],
+  signing_rules: [{ required: true, message: "请输入", trigger: "change" }],
+  individual_monthly_limit: [
+    {
+      required: true,
+      validator: validateIndividualMonthlyLimit,
+      trigger: "blur",
+    },
+  ],
+  tax_contract_term: [{ required: true, message: "请输入", trigger: "change" }],
+};
+const formItem = ref({
+  tax_land_type: "1",
   tax_land_head: "",
   head_mobile: "",
   tax_land_name: "",
-  tax_land_type: 1,
   tax_manufacturer: "",
-  bank_account: "",
   tax_cost_point: "",
-  calculation_type: "",
-  min_employment_year: "",
-  max_employment_year: "",
-  //税地地区
-  tax_land_city_id: [],
-  web_url: "",
+  // calculation_type:"",
+  min_employment_year: "18",
+  max_employment_year: "60",
+  tax_land_city_id: "",
+  // web_url:"",
   tax_land_license: [],
   company_qualifications: [],
+  // 2
+  invoice_type: "",
+  category_id: [],
+  invoice_denomination: "",
+  max_money: "",
+  // is_payment_api: "",
+  payment_type: "",
+  bank: "",
+  bank_account: "",
   audit_web_url: "",
   audit_account: "",
   audit_password: "",
-  // 行业
-  industry_category_id: [],
-  invoice_type: "",
-  invoice_denomination: "",
-  max_money: "",
-  tax_point: "",
-  payment_type: "",
-  is_payment_api: "",
+  // 余额计算规则
+  balance_type: "",
+  commission_rule: "",
   payment_supplier: "",
+  individual_monthly_limit: "98000",
   invoice_sample: [],
-  certification_form: "",
-  sign_form: "",
-  industry_limit: "",
+  // 行业限制
+  // industry_limit: [],
+  // 3
+  certification_rules: [],
+  signing_rules: [],
   tax_contract_term: "",
   incoming_materials: "",
   agreement_url: [],
+  contract_img: [],
+  settlement_confirmation_letter: [],
 });
 const handleSubmit = () => {
-  active.value++;
-  if (active.value == 3) {
-    const params = { ...formItem } as any;
-    params.tax_land_license = JSON.stringify(params.tax_land_license);
-    params.company_qualifications = JSON.stringify(
-      params.company_qualifications
-    );
-    params.invoice_sample = JSON.stringify(params.invoice_sample);
-    params.agreement_url = JSON.stringify(params.agreement_url);
-    params.tax_land_city_id = params.tax_land_city_id.slice(-1)[0];
-    params.industry_category_id = params.industry_category_id.slice(-1)[0];
-    selfOperatedTaxLandAdd(params)
-      .then(() => {
-        ElMessage({
-          type: "success",
-          message: `新建税地成功`,
-        });
-        router.push({
-          name: "taxLandManagementIndex",
-          query: { activeName: "purchase" },
-        });
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  if (active.value == 0) {
+    FormRef.value.validate((valid: boolean) => {
+      if (valid) {
+        active.value++;
+      }
+    });
+  } else if (active.value == 1) {
+    FormRef2.value.validate((valid: boolean) => {
+      if (valid) {
+        active.value++;
+      }
+    });
+  } else if (active.value == 2) {
+    FormRef3.value.validate((valid: boolean) => {
+      if (valid) {
+        const params = { ...formItem.value } as any;
+        params.tax_land_license = JSON.stringify(params.tax_land_license);
+        params.company_qualifications = JSON.stringify(
+          params.company_qualifications
+        );
+        params.category_id = newArrayTransform(params.category_id);
+        params.invoice_sample = JSON.stringify(params.invoice_sample);
+        params.industry_limit = JSON.stringify(params.industry_limit);
+        // params.certification_rules = flatten(params.certification_rules);
+        // params.signing_rules = flatten(params.signing_rules);
+        params.agreement_url = JSON.stringify(params.agreement_url);
+        params.contract_img = JSON.stringify(params.contract_img);
+        params.settlement_confirmation_letter = JSON.stringify(
+          params.settlement_confirmation_letter
+        );
+        params.tax_land_city_id = newNumberTransform(params.tax_land_city_id);
+        // params.tax_reg_type = newNumberTransform(params.tax_reg_type);
 
-    console.log(active.value, "完成");
+        console.log(params);
+        selfOperatedTaxLandAdd(params)
+          .then(() => {
+            ElMessage({
+              type: "success",
+              message: `新建税地成功`,
+            });
+            router.push({
+              name: "taxLandManagementIndex",
+              query: { activeName: "purchase" },
+            });
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+    });
   }
 };
 const handleClose = () => {
@@ -459,6 +817,16 @@ onMounted(() => {});
     .el-input__wrapper {
       width: 100%;
     }
+  }
+
+  :deep(.el-input.is-disabled .el-input__wrapper) {
+    background-color: #fff;
+  }
+
+  :deep(.el-input.is-disabled .el-input__inner) {
+    color: #333;
+    // cursor: pointer;
+    -webkit-text-fill-color: #333;
   }
 }
 

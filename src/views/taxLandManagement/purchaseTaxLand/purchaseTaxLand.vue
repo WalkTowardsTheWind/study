@@ -14,18 +14,18 @@
       </el-form-item>
 
       <el-form-item label="税地状态">
-        <el-select v-model="formItem.status" placeholder="全部">
+        <zxn-select v-model="formItem.status" @change="handleSearch">
           <el-option
             v-for="item in proxy.$const['taxLandManagementEnum.taxLandStatus']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
+        </zxn-select>
       </el-form-item>
 
       <el-form-item label="厂商">
-        <el-select v-model="formItem.tax_manufacturer" placeholder="全部">
+        <el-select v-model="formItem.tax_manufacturer" @change="handleSearch">
           <el-option
             v-for="item in optionsManufacturer"
             :key="item.value"
@@ -34,32 +34,19 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="发票类型">
-        <el-select v-model="formItem.invoice_type" placeholder="全部">
-          <el-option
-            v-for="item in proxy.$const['taxLandManagementEnum.InvoiceType']"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
 
-      <el-form-item label="发票面额">
-        <el-select v-model="formItem.invoice_denomination" placeholder="全部">
-          <el-option
-            v-for="item in proxy.$const[
-              'taxLandManagementEnum.invoice_denomination'
-            ]"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
+      <el-form-item label="税地地区">
+        <el-cascader
+          class="w-[100%]"
+          v-model="formItem.tax_land_city_id"
+          :options="optionsTaxLang"
+          :props="propsTaxLang"
+          clearable
+        />
       </el-form-item>
 
       <el-form-item label="计算方式">
-        <el-select v-model="formItem.calculation_type" placeholder="全部">
+        <zxn-select v-model="formItem.calculation_type" @change="handleSearch">
           <el-option
             v-for="item in proxy.$const[
               'taxLandManagementEnum.calculationType'
@@ -68,7 +55,7 @@
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
+        </zxn-select>
       </el-form-item>
       <el-form-item prop="date" label="申请日期">
         <zxn-date-range v-model="formItem.timeData" />
@@ -92,7 +79,7 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        <el-dropdown class="ml-4" trigger="click" @command="handleD">
+        <!-- <el-dropdown class="ml-4" trigger="click" @command="handleD">
           <el-button type="primary">批量操作</el-button>
           <template #dropdown>
             <el-dropdown-menu>
@@ -101,23 +88,46 @@
               <el-dropdown-item command="3">导出</el-dropdown-item>
             </el-dropdown-menu>
           </template>
-        </el-dropdown>
+        </el-dropdown> -->
+      </template>
+      <template #IndustryRestrictions="scope">
+        <el-button
+          link
+          type="primary"
+          @click="handleIndustryRestrictions(scope)"
+          >查看</el-button
+        >
       </template>
       <template #operation="scope">
         <el-button link type="primary" @click="handleUpdateStatus(scope)">{{
           [0, 2].includes(scope.row.status) ? "上架" : "下架"
         }}</el-button>
-        <el-button link type="primary" @click="handleB(scope)">编辑</el-button>
+
         <el-button link type="primary" @click="handleDelete(scope)"
           >删除</el-button
         >
-        <el-button link type="primary" @click="handleF(scope)">导出</el-button>
-        <el-button link type="primary" @click="handleG(scope)">详情</el-button>
+        <el-button
+          v-if="scope.row.status == 0"
+          link
+          type="primary"
+          @click="handleEdit(scope)"
+          >编辑</el-button
+        >
+        <!-- <el-button link type="primary" @click="handleF(scope)">导出</el-button> -->
+        <el-button link type="primary" @click="handleDetails(scope)"
+          >详情</el-button
+        >
       </template>
     </zxn-table>
   </div>
+  <InspectDialog
+    v-model:dialogVisible="dialogVisible"
+    :imageList="imageList"
+    :title="title"
+  />
 </template>
 <script setup lang="ts">
+import { newNumberTransform } from "@/utils";
 import { transformTimeRange } from "@/utils";
 import { useRouter } from "vue-router";
 import {
@@ -125,7 +135,9 @@ import {
   selfOperatedTaxLandDelete,
   selfOperatedTaxLandUpdateStatus,
 } from "@/api/taxLandManagement/selfOperatedTaxLand";
+import { getAreaList } from "@/api/taxLandManagement";
 import { getManufacturer } from "@/api/taxLandManagement/purchaseTaxLand";
+import InspectDialog from "../components/InspectDialog.vue";
 import { ElMessage } from "element-plus";
 const router = useRouter();
 const { proxy } = getCurrentInstance() as any;
@@ -143,6 +155,34 @@ const getManufacturerList = async () => {
   optionsManufacturer.value.push(...newData);
 };
 getManufacturerList();
+//税地
+var optionsTaxLang = ref([]);
+const getTaxLangList = async () => {
+  try {
+    const { data } = await getAreaList(0);
+    const newData = JSON.parse(
+      JSON.stringify(data)
+        .replace(/"id"/g, '"value"')
+        .replace(/"name"/g, '"label"')
+        .replace(/"cityList"/g, '"children"')
+        .replace(/"taxLandList"/g, '"children"')
+        .replace(/"child"/g, '"children"')
+    );
+    optionsTaxLang.value = newData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+getTaxLangList();
+const propsTaxLang = {
+  // multiple: true,
+  expandTrigger: "hover" as const,
+};
+//行业限制查看
+const dialogVisible = ref(false);
+const title = ref("");
+const imageList = ref([]);
+//
 // 查询重置
 const pageInfo = reactive({
   page: 1,
@@ -154,10 +194,11 @@ const handleReset = () => {
     keywords: "",
     status: "",
     tax_manufacturer: "",
+    tax_land_city_id: "",
     tax_land_type: "1",
     timeData: [],
-    invoice_type: "",
-    invoice_denomination: "",
+    // invoice_type: "",
+    // invoice_denomination: "",
     calculation_type: "",
     page: "",
     limit: "",
@@ -196,10 +237,11 @@ const formItem = ref({
   keywords: "",
   status: "",
   tax_manufacturer: "",
+  tax_land_city_id: "",
   tax_land_type: "1",
   timeData: [],
-  invoice_type: "",
-  invoice_denomination: "",
+  // invoice_type: "",
+  // invoice_denomination: "",
   calculation_type: "",
   page: "",
   limit: "",
@@ -227,15 +269,22 @@ const columnList = [
   { label: "税地名称", prop: "tax_land_name" },
   { label: "厂商", prop: "tax_manufacturer" },
   { label: "税地地区", prop: "merger_name" },
-  { label: "成本", prop: "tax_cost_point" },
+  { label: "税地成本", prop: "tax_cost_point" },
   { label: "签约数量", prop: "sign_count" },
-  { label: "计算方式", prop: "calculation_type" },
+  { label: "税地类型", prop: "tax_land_type", width: 120 },
+  // { label: "计算方式", prop: "calculation_type" },
   { label: "对接人", prop: "tax_land_head" },
   { label: "税地发票类型", prop: "invoice_type", width: 120 },
+  { label: "发票面额", prop: "invoice_denomination", width: 120 },
   { label: "上架时间", prop: "ground_time", sortable: "custom", width: 120 },
-  { label: "税地类型", prop: "tax_land_type" },
   { label: "支付方式", prop: "payment_type" },
-
+  {
+    label: "行业限制",
+    slot: "IndustryRestrictions",
+    width: 100,
+    align: " center ",
+    headerAlign: "center",
+  },
   {
     label: "操作",
     slot: "operation",
@@ -245,6 +294,12 @@ const columnList = [
     headerAlign: "right",
   },
 ];
+
+const handleIndustryRestrictions = (scope: any) => {
+  dialogVisible.value = true;
+  imageList.value = scope.row.industry_limit;
+  title.value = "行业限制";
+};
 /**
  * 上下架
  */
@@ -254,7 +309,7 @@ const handleUpdateStatus = (scope: any) => {
     message: h(
       "p",
       null,
-      `确定${[0, 2].includes(scope.row.status) ? "上架" : "下架"}该税地`
+      `确定${[0].includes(scope.row.status) ? "上架" : "下架"}该税地`
     ),
     showCancelButton: true,
     confirmButtonText: "确定",
@@ -268,7 +323,7 @@ const handleUpdateStatus = (scope: any) => {
         instance.confirmButtonLoading = true;
         var data = {
           id: scope.row.id,
-          status: [0, 2].includes(scope.row.status) ? "1" : "2",
+          status: [0].includes(scope.row.status) ? "1" : "0",
         };
         await selfOperatedTaxLandUpdateStatus(data);
 
@@ -281,9 +336,7 @@ const handleUpdateStatus = (scope: any) => {
   }).then(() => {
     ElMessage({
       type: "success",
-      message: `成功${
-        [0, 2].includes(scope.row.status) ? "上架" : "下架"
-      }该税地`,
+      message: `成功${[0].includes(scope.row.status) ? "上架" : "下架"}该税地`,
     });
     getTableData();
   });
@@ -291,10 +344,10 @@ const handleUpdateStatus = (scope: any) => {
 /**
  * 编辑
  */
-const handleB = (scope: any) => {
+const handleEdit = (scope: any) => {
   router.push({
     name: "purchaseTaxLandEdit",
-    query: { activeName: "1", id: scope.row.id },
+    query: { id: scope.row.id },
   });
   console.log(scope.row.value, "编辑");
 };
@@ -340,7 +393,7 @@ const handleF = (scope: any) => {
 /**
  * 详情
  */
-const handleG = (scope: any) => {
+const handleDetails = (scope: any) => {
   router.push({
     name: "purchaseTaxLandDetails",
     query: { activeName: "1", id: scope.row.id },
@@ -385,7 +438,7 @@ const getTableData = async () => {
   const params = transformTimeRange({ ...formItem.value });
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
-  console.log(params);
+  params.tax_land_city_id = newNumberTransform(params.tax_land_city_id);
 
   try {
     const { data } = await getSelfOperatedTaxLandList(params);
@@ -403,20 +456,25 @@ const getTableData = async () => {
         merger_name: item.merger_name,
         tax_cost_point: item.tax_cost_point,
         sign_count: item.sign_count,
-        calculation_type:
-          proxy.$enumSet["taxLandManagementEnum.calculationType"][
-            item.calculation_type
+        // calculation_type:
+        //   proxy.$enumSet["taxLandManagementEnum.calculationType"][
+        //     item.calculation_type
+        //   ],
+        tax_land_type:
+          proxy.$enumSet["taxLandManagementEnum.tax_land_type"][
+            item.tax_land_type
           ],
         tax_land_head: item.tax_land_head,
         invoice_type:
           proxy.$enumSet["taxLandManagementEnum.InvoiceType"][
             item.invoice_type
           ],
-        ground_time: item.ground_time,
-        tax_land_type:
-          proxy.$enumSet["taxLandManagementEnum.tax_land_type"][
-            item.tax_land_type
+        invoice_denomination:
+          proxy.$enumSet["taxLandManagementEnum.invoice_denomination"][
+            item.invoice_denomination
           ],
+        ground_time: item.ground_time,
+        industry_limit: item.industry_limit,
         payment_type:
           proxy.$enumSet["taxLandManagementEnum.paymentType"][
             item.payment_type

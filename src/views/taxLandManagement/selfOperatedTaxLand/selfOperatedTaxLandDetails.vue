@@ -8,7 +8,6 @@
             :model="formItem"
             label-width="130px"
             ref="FormRef"
-            :rules="Rules"
           >
             <div class="flex">
               <div class="w-[33%]">
@@ -435,6 +434,7 @@ const formItem = ref({
   category_id: [],
   invoice_denomination: "",
   max_money: "",
+  tax_point: "",
   is_payment_api: "",
   payment_type: "",
   bank: "",
@@ -442,9 +442,9 @@ const formItem = ref({
   invoice_sample: [],
   industry_limit: [],
   certification_rules: [],
-  signingRules: [],
+  signing_rules: [],
   individual_monthly_limit: "",
-  entrustedCollectionPeriod: "",
+  tax_contract_term: "",
   incoming_materials: "",
   agreement_url: [],
   contract_img: [],
@@ -477,7 +477,6 @@ const getData = async () => {
       payment_type,
       bank,
       bank_account,
-      company_code,
       invoice_sample,
       industry_limit,
       certification_rules,
@@ -485,8 +484,6 @@ const getData = async () => {
       individual_monthly_limit,
       tax_contract_term,
       incoming_materials,
-      tax_reg_type,
-      tax_organ_code,
       agreement_url,
       contract_img,
       settlement_confirmation_letter,
@@ -519,7 +516,7 @@ const getData = async () => {
       payment_type: payment_type + "",
       bank,
       bank_account,
-      company_code,
+      // company_code,
       invoice_sample,
       industry_limit,
       certification_rules: StringTransformNumber(certification_rules),
@@ -527,8 +524,8 @@ const getData = async () => {
       individual_monthly_limit,
       tax_contract_term: tax_contract_term + "",
       incoming_materials,
-      tax_reg_type: tax_reg_type + "",
-      tax_organ_code,
+      // tax_reg_type: tax_reg_type + "",
+      // tax_organ_code,
       agreement_url,
       contract_img,
       settlement_confirmation_letter,

@@ -377,7 +377,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         meta: { title: "新建采购税地", hidden: true },
       },
       {
-        path: "selfOperatedTaxLandEdit",
+        path: "purchaseTaxLandEdit",
         component: () =>
           import(
             "@/views/taxLandManagement/purchaseTaxLand/purchaseTaxLandEdit.vue"
@@ -386,7 +386,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         meta: { title: "编辑采购税地", hidden: true },
       },
       {
-        path: "selfOperatedTaxLandDetails",
+        path: "purchaseTaxLandDetails",
         component: () =>
           import(
             "@/views/taxLandManagement/purchaseTaxLand/purchaseTaxLandDetails.vue"

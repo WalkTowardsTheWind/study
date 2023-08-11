@@ -19,6 +19,7 @@
                 >
                   <el-select
                     class="w-[100%]"
+                    disabled
                     v-model="formItem.tax_land_type"
                     placeholder="请选择"
                   >
@@ -874,6 +875,16 @@ onMounted(() => {
     .el-input__wrapper {
       width: 100%;
     }
+  }
+
+  :deep(.el-input.is-disabled .el-input__wrapper) {
+    background-color: #fff;
+  }
+
+  :deep(.el-input.is-disabled .el-input__inner) {
+    color: #333;
+    // cursor: pointer;
+    -webkit-text-fill-color: #333;
   }
 }
 
