@@ -21,8 +21,8 @@
             ref="FormRef"
             :rules="Rules"
           >
-            <div class="flex" v-show="active == 0">
-              <div class="w-[33%]">
+            <el-row v-show="active == 0">
+              <el-col :span="8">
                 <el-form-item label="税地类型" prop="tax_land_type">
                   <el-select
                     class="w-[100%]"
@@ -140,8 +140,8 @@
                 <!-- <el-form-item class="mt-25px" label="网址">
                   <el-input v-model="formItem.web_url" placeholder="请输入" />
                 </el-form-item> -->
-              </div>
-              <div class="w-[33%]">
+              </el-col>
+              <el-col :span="8">
                 <el-form-item
                   class="mb-[0]"
                   label="税地营业执照"
@@ -158,8 +158,8 @@
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
-              </div>
-            </div>
+              </el-col>
+            </el-row>
           </el-form>
 
           <el-form
@@ -169,8 +169,8 @@
             ref="FormRef2"
             :rules="Rules2"
           >
-            <div class="flex" v-show="active == 1">
-              <div class="w-[33%]">
+            <el-row v-show="active == 1">
+              <el-col :span="8">
                 <el-form-item label="税地发票类型">
                   <el-select
                     class="w-[100%]"
@@ -276,21 +276,21 @@
                     placeholder="请输入"
                   />
                 </el-form-item>
-              </div>
-              <div class="w-[33%]">
+              </el-col>
+              <el-col :span="8">
                 <el-form-item label="核账网址">
                   <el-input
                     placeholder="请输入"
                     v-model="formItem.audit_web_url"
                   />
                 </el-form-item>
-                <el-form-item label="核账网址账号">
+                <el-form-item class="mt-25px" label="核账网址账号">
                   <el-input
                     placeholder="请输入"
                     v-model="formItem.audit_account"
                   />
                 </el-form-item>
-                <el-form-item label="核账网址密码">
+                <el-form-item class="mt-25px" label="核账网址密码">
                   <el-input
                     placeholder="请输入"
                     v-model="formItem.audit_password"
@@ -347,8 +347,8 @@
                     placeholder="请输入"
                   />
                 </el-form-item>
-              </div>
-              <div class="w-[33%]">
+              </el-col>
+              <el-col :span="8">
                 <el-form-item class="mb-[0]" label="发票票样">
                   <multi-upload
                     v-model="formItem.invoice_sample"
@@ -361,8 +361,8 @@
                     :limit="3"
                   ></multi-upload>
                 </el-form-item> -->
-              </div>
-            </div>
+              </el-col>
+            </el-row>
           </el-form>
           <el-form
             class="zxn-box"
@@ -371,8 +371,8 @@
             ref="FormRef3"
             :rules="Rules3"
           >
-            <div class="flex" v-show="active == 2">
-              <div class="w-[33%]">
+            <el-row v-show="active == 2">
+              <el-col :span="8">
                 <el-form-item label="认证规则" prop="certification_rules">
                   <el-select
                     class="w-[100%]"
@@ -451,8 +451,8 @@
                   >
                   </el-input>
                 </el-form-item>
-              </div>
-              <div class="w-[33%]">
+              </el-col>
+              <el-col :span="8">
                 <el-form-item class="mb-[0]" label="个人合同模板">
                   <multi-upload
                     v-model="formItem.agreement_url"
@@ -471,8 +471,8 @@
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
-              </div>
-            </div>
+              </el-col>
+            </el-row>
           </el-form>
         </div>
         <zxn-bottom-btn>

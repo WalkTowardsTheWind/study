@@ -102,11 +102,16 @@
         <el-button link type="primary" @click="handleUpdateStatus(scope)">{{
           [0, 2].includes(scope.row.status) ? "上架" : "下架"
         }}</el-button>
-        <el-button link type="primary" @click="handleEdit(scope)"
-          >编辑</el-button
-        >
+
         <el-button link type="primary" @click="handleDelete(scope)"
           >删除</el-button
+        >
+        <el-button
+          v-if="scope.row.status == 0"
+          link
+          type="primary"
+          @click="handleEdit(scope)"
+          >编辑</el-button
         >
         <!-- <el-button link type="primary" @click="handleF(scope)">导出</el-button> -->
         <el-button link type="primary" @click="handleDetails(scope)"

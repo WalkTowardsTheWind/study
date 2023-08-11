@@ -19,8 +19,8 @@
             ref="FormRef"
             :rules="Rules"
           >
-            <div class="flex">
-              <div class="w-[33%]">
+            <el-row>
+              <el-col :span="8">
                 <el-form-item label="税地类型" prop="tax_land_type">
                   <el-select
                     class="w-[100%]"
@@ -38,13 +38,13 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item label="税地负责人">
+                <el-form-item class="mt-25px" label="税地负责人">
                   <el-input
                     v-model="formItem.tax_land_head"
                     placeholder="请输入"
                   />
                 </el-form-item>
-                <el-form-item label="联系方式">
+                <el-form-item class="mt-25px" label="联系方式">
                   <el-input
                     v-model="formItem.head_mobile"
                     placeholder="请输入"
@@ -62,8 +62,8 @@
                   >
                   </el-input>
                 </el-form-item>
-              </div>
-              <div class="w-[33%]">
+              </el-col>
+              <el-col :span="8">
                 <el-form-item label="厂商" prop="tax_manufacturer">
                   <el-input
                     class="w-[100%]"
@@ -112,8 +112,8 @@
                     clearable
                   />
                 </el-form-item>
-              </div>
-              <div class="w-[33%]">
+              </el-col>
+              <el-col :span="8">
                 <el-form-item
                   class="mb-[0]"
                   label="税地营业执照"
@@ -130,8 +130,8 @@
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
-              </div>
-            </div>
+              </el-col>
+            </el-row>
           </el-form>
 
           <el-form
@@ -145,8 +145,8 @@
               <div class="line"></div>
               <div>发票厂家信息</div>
             </div>
-            <div class="flex">
-              <div class="w-[33%]">
+            <el-row>
+              <el-col :span="8">
                 <el-form-item label="税地发票类型">
                   <el-select
                     class="w-[100%]"
@@ -167,7 +167,7 @@
                 <el-form-item class="mt-25px" label="开票类目">
                   <el-cascader
                     popper-class="last-cascader"
-                    class="w-[100%]"
+                    class="w-[100%] h-[32px]"
                     v-model="formItem.category_id"
                     :options="optionsInvoicingCategory"
                     :props="propsInvoicingCategory"
@@ -252,8 +252,8 @@
                     placeholder="请输入"
                   />
                 </el-form-item>
-              </div>
-              <div class="w-[33%]">
+              </el-col>
+              <el-col :span="8">
                 <el-form-item label="核账网址">
                   <el-input
                     placeholder="请输入"
@@ -323,8 +323,8 @@
                     placeholder="请输入"
                   />
                 </el-form-item>
-              </div>
-              <div class="w-[33%]">
+              </el-col>
+              <el-col :span="8">
                 <el-form-item class="mb-[0]" label="发票票样">
                   <multi-upload
                     v-model="formItem.invoice_sample"
@@ -337,8 +337,8 @@
                     :limit="3"
                   ></multi-upload>
                 </el-form-item> -->
-              </div>
-            </div>
+              </el-col>
+            </el-row>
           </el-form>
           <el-form
             class="zxn-box"
@@ -351,8 +351,8 @@
               <div class="line"></div>
               <div>行业与合同信息</div>
             </div>
-            <div class="flex">
-              <div class="w-[33%]">
+            <el-row>
+              <el-col :span="8">
                 <el-form-item label="认证规则" prop="certification_rules">
                   <el-select
                     class="w-[100%]"
@@ -393,8 +393,8 @@
                     />
                   </el-select>
                 </el-form-item>
-              </div>
-              <div class="w-[33%]">
+              </el-col>
+              <el-col :span="8">
                 <el-form-item label="委托代征年限" prop="tax_contract_term">
                   <el-select
                     class="w-[100%]"
@@ -419,8 +419,8 @@
                   >
                   </el-input>
                 </el-form-item>
-              </div>
-              <div class="w-[33%]">
+              </el-col>
+              <el-col :span="8">
                 <el-form-item class="mb-[0]" label="个人合同模板">
                   <multi-upload
                     v-model="formItem.agreement_url"
@@ -439,8 +439,8 @@
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
-              </div>
-            </div>
+              </el-col>
+            </el-row>
           </el-form>
         </div>
         <zxn-bottom-btn>

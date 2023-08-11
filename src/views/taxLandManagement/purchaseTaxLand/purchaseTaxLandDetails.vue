@@ -13,8 +13,8 @@
             <div>税地基本信息</div>
           </div>
           <el-form class="zxn-box" :model="formItem" label-width="130px">
-            <div class="flex">
-              <div class="w-[33%]">
+            <el-row>
+              <el-col :span="8">
                 <el-form-item label="税地类型" prop="tax_land_type">
                   <el-select
                     class="w-[100%] bg"
@@ -59,8 +59,8 @@
                   >
                   </el-input>
                 </el-form-item>
-              </div>
-              <div class="w-[33%]">
+              </el-col>
+              <el-col :span="8">
                 <el-form-item label="厂商" prop="tax_manufacturer">
                   <el-input
                     class="w-[100%]"
@@ -113,8 +113,8 @@
                     clearable
                   />
                 </el-form-item>
-              </div>
-              <div class="w-[33%]">
+              </el-col>
+              <el-col :span="8">
                 <el-form-item
                   class="mb-[0]"
                   label="税地营业执照"
@@ -129,8 +129,8 @@
                     :imageList="formItem.company_qualifications"
                   ></picture-preview>
                 </el-form-item>
-              </div>
-            </div>
+              </el-col>
+            </el-row>
           </el-form>
 
           <el-form class="zxn-box" :model="formItem" label-width="130px">
@@ -138,8 +138,8 @@
               <div class="line"></div>
               <div>发票厂家信息</div>
             </div>
-            <div class="flex">
-              <div class="w-[33%]">
+            <el-row>
+              <el-col :span="8">
                 <el-form-item label="税地发票类型">
                   <el-select
                     class="w-[100%]"
@@ -230,8 +230,8 @@
                     placeholder="请输入"
                   />
                 </el-form-item>
-              </div>
-              <div class="w-[33%]">
+              </el-col>
+              <el-col :span="8">
                 <el-form-item label="核账网址">
                   <el-input readonly v-model="formItem.audit_web_url" />
                 </el-form-item>
@@ -289,8 +289,8 @@
                     readonly
                   />
                 </el-form-item>
-              </div>
-              <div class="w-[33%]">
+              </el-col>
+              <el-col :span="8">
                 <el-form-item class="mb-[0]" label="发票票样">
                   <picture-preview
                     :imageList="formItem.invoice_sample"
@@ -301,16 +301,16 @@
                     :imageList="formItem.industry_limit"
                   ></picture-preview>
                 </el-form-item> -->
-              </div>
-            </div>
+              </el-col>
+            </el-row>
           </el-form>
           <el-form class="zxn-box" :model="formItem" label-width="130px">
             <div class="title">
               <div class="line"></div>
               <div>行业与合同信息</div>
             </div>
-            <div class="flex">
-              <div class="w-[33%]">
+            <el-row>
+              <el-col :span="8">
                 <el-form-item label="认证规则" prop="certification_rules">
                   <el-select
                     class="w-[100%]"
@@ -351,8 +351,8 @@
                     />
                   </el-select>
                 </el-form-item>
-              </div>
-              <div class="w-[33%]">
+              </el-col>
+              <el-col :span="8">
                 <el-form-item label="委托代征年限" prop="tax_contract_term">
                   <el-select
                     class="w-[100%]"
@@ -378,8 +378,8 @@
                   >
                   </el-input>
                 </el-form-item>
-              </div>
-              <div class="w-[33%]">
+              </el-col>
+              <el-col :span="8">
                 <el-form-item class="mb-[0]" label="个人合同模板">
                   <picture-preview
                     :imageList="formItem.agreement_url"
@@ -395,8 +395,8 @@
                     :imageList="formItem.settlement_confirmation_letter"
                   ></picture-preview>
                 </el-form-item>
-              </div>
-            </div>
+              </el-col>
+            </el-row>
           </el-form>
         </div>
       </template>
