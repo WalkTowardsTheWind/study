@@ -229,6 +229,10 @@
                 />
               </el-tooltip>
             </template>
+
+            <template #reason="{ row }">
+              {{ row.settlement_status === 2 ? row.reason : "" }}
+            </template>
             <template #operation="scope">
               <el-button link type="primary" @click="handleInspect(scope)"
                 >查看回单</el-button
@@ -332,11 +336,7 @@ const formItem = ref({
 }) as any;
 //
 
-const tableData = reactive([
-  { value: "020" },
-  { value: "020" },
-  { value: "020" },
-]);
+const tableData = reactive([]);
 const color = {
   0: { color: "#1AB66B", backgroundColor: "#DAF3E7" },
   1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
@@ -364,6 +364,7 @@ const columnList = [
   { label: "银行账户", prop: "bank_account" },
   { label: "下发时间", prop: "settlement_time" },
   { label: "结算金额", prop: "settlement_amount" },
+  { label: "失败原因", slot: "reason", minWidth: 200 },
   {
     label: "操作",
     slot: "operation",
@@ -473,6 +474,7 @@ const getTableData = async () => {
         settlement_time: item.settlement_time,
         settlement_amount: item.settlement_amount,
         payment_receipt: item.payment_receipt,
+        reason: item.reason,
       };
     });
     tableData.length = 0;
