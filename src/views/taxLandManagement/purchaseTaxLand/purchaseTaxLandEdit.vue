@@ -331,12 +331,12 @@
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
-                <!-- <el-form-item class="mb-[0]" label="行业限制">
+                <el-form-item class="mb-[0]" label="行业限制">
                   <multi-upload
                     v-model="formItem.industry_limit"
                     :limit="3"
                   ></multi-upload>
-                </el-form-item> -->
+                </el-form-item>
               </el-col>
             </el-row>
           </el-form>
@@ -692,7 +692,7 @@ const formItem = ref({
   individual_monthly_limit: "98000",
   invoice_sample: [],
   // 行业限制
-  // industry_limit: [],
+  industry_limit: [],
   // 3
   certification_rules: [],
   signing_rules: [],
@@ -783,7 +783,7 @@ const getData = async () => {
       payment_supplier,
       individual_monthly_limit,
       invoice_sample,
-      // industry_limit,
+      industry_limit,
       certification_rules,
       signing_rules,
       tax_contract_term,
@@ -832,7 +832,7 @@ const getData = async () => {
       payment_supplier,
       individual_monthly_limit,
       invoice_sample,
-      // industry_limit,
+      industry_limit,
       certification_rules: StringTransformNumber(certification_rules),
       signing_rules: StringTransformNumber(signing_rules),
 

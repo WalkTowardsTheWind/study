@@ -355,12 +355,12 @@
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
-                <!-- <el-form-item class="mb-[0]" label="行业限制">
+                <el-form-item class="mb-[0]" label="行业限制">
                   <multi-upload
                     v-model="formItem.industry_limit"
                     :limit="3"
                   ></multi-upload>
-                </el-form-item> -->
+                </el-form-item>
               </el-col>
             </el-row>
           </el-form>
@@ -727,7 +727,7 @@ const formItem = ref({
   individual_monthly_limit: "98000",
   invoice_sample: [],
   // 行业限制
-  // industry_limit: [],
+  industry_limit: [],
   // 3
   certification_rules: [],
   signing_rules: [],
@@ -770,8 +770,6 @@ const handleSubmit = () => {
         );
         params.tax_land_city_id = newNumberTransform(params.tax_land_city_id);
         // params.tax_reg_type = newNumberTransform(params.tax_reg_type);
-
-        console.log(params);
         selfOperatedTaxLandAdd(params)
           .then(() => {
             ElMessage({

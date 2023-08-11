@@ -25,14 +25,14 @@
       </el-form-item>
 
       <el-form-item label="厂商">
-        <el-select v-model="formItem.tax_manufacturer" @change="handleSearch">
+        <zxn-select v-model="formItem.tax_manufacturer" @change="handleSearch">
           <el-option
             v-for="item in optionsManufacturer"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
+        </zxn-select>
       </el-form-item>
 
       <el-form-item label="税地地区">
@@ -45,12 +45,10 @@
         />
       </el-form-item>
 
-      <el-form-item label="计算方式">
-        <zxn-select v-model="formItem.calculation_type" @change="handleSearch">
+      <el-form-item label="支付方式">
+        <zxn-select v-model="formItem.payment_type" @change="handleSearch">
           <el-option
-            v-for="item in proxy.$const[
-              'taxLandManagementEnum.calculationType'
-            ]"
+            v-for="item in proxy.$const['taxLandManagementEnum.paymentType']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -196,10 +194,10 @@ const handleReset = () => {
     tax_manufacturer: "",
     tax_land_city_id: "",
     tax_land_type: "1",
+    payment_type: "",
     timeData: [],
     // invoice_type: "",
     // invoice_denomination: "",
-    calculation_type: "",
     page: "",
     limit: "",
   };
@@ -239,10 +237,10 @@ const formItem = ref({
   tax_manufacturer: "",
   tax_land_city_id: "",
   tax_land_type: "1",
+  payment_type: "",
   timeData: [],
   // invoice_type: "",
   // invoice_denomination: "",
-  calculation_type: "",
   page: "",
   limit: "",
 });
@@ -272,7 +270,6 @@ const columnList = [
   { label: "税地成本", prop: "tax_cost_point" },
   { label: "签约数量", prop: "sign_count" },
   { label: "税地类型", prop: "tax_land_type", width: 120 },
-  // { label: "计算方式", prop: "calculation_type" },
   { label: "对接人", prop: "tax_land_head" },
   { label: "税地发票类型", prop: "invoice_type", width: 120 },
   { label: "发票面额", prop: "invoice_denomination", width: 120 },
@@ -456,10 +453,6 @@ const getTableData = async () => {
         merger_name: item.merger_name,
         tax_cost_point: item.tax_cost_point,
         sign_count: item.sign_count,
-        // calculation_type:
-        //   proxy.$enumSet["taxLandManagementEnum.calculationType"][
-        //     item.calculation_type
-        //   ],
         tax_land_type:
           proxy.$enumSet["taxLandManagementEnum.tax_land_type"][
             item.tax_land_type
