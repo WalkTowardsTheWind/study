@@ -22,6 +22,9 @@
           :style="settlementStatusColor[row.settlement_status]"
         />
       </template>
+      <template #reason="{ row }">
+        {{ row.settlement_status === 2 ? row.reason : "" }}
+      </template>
     </zxn-table>
   </div>
 </template>
@@ -48,7 +51,6 @@ const columnList = [
   {
     label: "人员状态",
     slot: "status",
-    prop: "status",
     minWidth: 120,
   },
   { label: "姓名", prop: "real_name", minWidth: 120 },
@@ -56,6 +58,6 @@ const columnList = [
   // { label: "身份证号", prop: "idcard", minWidth: 200 },
   { label: "银行账号", prop: "bank_account", minWidth: 200 },
   { label: "申请时间", prop: "add_time", minWidth: 180 },
-  { label: "失败原因", prop: "reason", minWidth: 200 },
+  { label: "失败原因", slot: "reason", minWidth: 200 },
 ];
 </script>
