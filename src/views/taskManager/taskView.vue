@@ -116,15 +116,7 @@
       </el-form>
     </div>
     <div class="p-24px" v-show="activeName === 'member'">
-      <zxn-table
-        :column-list="columnList"
-        :table-data="tableData"
-        :hasPagination="false"
-      >
-        <template #operation>
-          <el-button link type="primary">详情</el-button>
-        </template>
-      </zxn-table>
+      <member-table :table-data="tableData" />
     </div>
     <div v-show="activeName === 'certificate'" class="pl-36px pr-36px pt-45px">
       <zxn-title>验收凭证</zxn-title>
@@ -149,6 +141,7 @@ import { getTaskView } from "@/api/task";
 import { useRoute } from "vue-router";
 import { isNumber } from "@/utils/is";
 import { ElLoading } from "element-plus";
+import MemberTable from "./components/MemberTable.vue";
 
 const route = useRoute();
 const { proxy } = getCurrentInstance() as any;
