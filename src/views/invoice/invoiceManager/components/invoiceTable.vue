@@ -121,7 +121,8 @@ import { transformTimeRange } from "@/utils";
 import { downloadByData } from "@/utils/download";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-import { yesOrNo } from "@/enums/common";
+import { useRouteParams } from "@/store/modules/routeParams";
+import { isNumber } from "@/utils/is";
 const router = useRouter();
 const props = defineProps({
   type: { type: String, default: "enterprise" },
@@ -325,6 +326,16 @@ const handleLogistics = (cur) => {
 onMounted(() => {
   if (props.type === "enterprise") {
     getIndustryList();
+  }
+});
+onActivated(() => {
+  const { pullParams } = useRouteParams();
+  const searchParams: any = pullParams("invoiceManager");
+  if (searchParams) {
+    formItem.status =
+      isNumber(searchParams.status) || searchParams.status
+        ? searchParams.status + ""
+        : "";
   }
 });
 defineExpose({
