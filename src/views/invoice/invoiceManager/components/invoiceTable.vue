@@ -86,7 +86,7 @@
       </template>
       <template #operation="{ row }">
         <template v-if="!row.status">
-          <el-button link type="primary" @click="handleReject(row.id)"
+          <el-button link type="primary" @click="handleReject([row.id])"
             >驳回</el-button
           >
           <el-button link type="primary" @click="handleUpload(row)"

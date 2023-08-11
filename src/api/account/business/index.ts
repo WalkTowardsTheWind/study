@@ -202,3 +202,29 @@ export function resetAccountPwd(id) {
     method: "post",
   });
 }
+
+// 启用 禁用 税地
+export function setTaxLandStatus(id: string, status: string) {
+  return request({
+    url: `/adminapi/account/company/taxland/set_status/${id}/${status}`,
+    method: "get",
+  });
+}
+
+// 企业账户税地编辑
+export function editAccountTaxLand(data: any) {
+  return request({
+    url: `/adminapi/account/company/taxland/update`,
+    method: "post",
+    data,
+  });
+}
+
+// 企业账户税地新建
+export function createAccountTaxLand(data: any) {
+  return request({
+    url: `/adminapi/account/company/taxland/create`,
+    method: "post",
+    data,
+  });
+}
