@@ -6,7 +6,11 @@
       @on-reset="handleReset"
     >
       <el-form-item>
-        <el-input v-model="formItem.keywords" placeholder="请输入关键字">
+        <el-input
+          v-model="formItem.keywords"
+          placeholder="请输入名称/编号/对接人"
+          clearable
+        >
           <template #prefix>
             <el-icon><i-ep-Search /></el-icon>
           </template>
