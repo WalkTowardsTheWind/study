@@ -464,6 +464,12 @@ export const constantRoutes: RouteRecordRaw[] = [
         name: "account",
         meta: { title: "账号设置", icon: "account" },
       },
+      // {
+      // 	path: "theme",
+      // 	component: () => import("@/views/system/theme/index.vue"),
+      // 	name: "theme",
+      // 	meta: { title: "主题配置", icon: "account" },
+      // },
     ],
   },
 ];

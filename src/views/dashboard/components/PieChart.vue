@@ -1,31 +1,26 @@
 <!-- 饼图 -->
 <template>
   <div class="pie-chart" :style="{ width, height }">
-    <div
-      class="pie-chart-box"
-      :id="id"
-      :class="className"
-      :style="{ height }"
-    />
-    <el-scrollbar ref="scrollbar" class="pie-chart-legend">
-      <div
-        class="pie-chart-legend-item"
-        v-for="(item, index) in chartData"
-        :key="item.name"
-        @mouseenter="handleLegendEnter(item)"
-      >
-        <div class="pie-chart-legend-item-left">
-          <span
-            class="pie-chart-legend-item-icon"
-            :style="{ backgroundColor: color[index] }"
-          />
-          <span class="pie-chart-legend-item-name">{{ item.name }}</span>
-        </div>
-        <span class="pie-chart-legend-item-rate">{{
-          item.rate ? `${item.rate}%` : item.value
-        }}</span>
-      </div>
-    </el-scrollbar>
+    <div :id="id" :class="className" :style="{ height, width }" />
+    <!--    <el-scrollbar ref="scrollbar" class="pie-chart-legend">-->
+    <!--      <div-->
+    <!--        class="pie-chart-legend-item"-->
+    <!--        v-for="(item, index) in chartData"-->
+    <!--        :key="item.name"-->
+    <!--        @mouseenter="handleLegendEnter(item)"-->
+    <!--      >-->
+    <!--        <div class="pie-chart-legend-item-left">-->
+    <!--          <span-->
+    <!--            class="pie-chart-legend-item-icon"-->
+    <!--            :style="{ backgroundColor: color[index] }"-->
+    <!--          />-->
+    <!--          <span class="pie-chart-legend-item-name">{{ item.name }}</span>-->
+    <!--        </div>-->
+    <!--        <span class="pie-chart-legend-item-rate">{{-->
+    <!--          item.rate ? `${item.rate}%` : item.value-->
+    <!--        }}</span>-->
+    <!--      </div>-->
+    <!--    </el-scrollbar>-->
   </div>
 </template>
 
@@ -86,7 +81,7 @@ const chartInit = () => {
         trigger: "item",
       },
       legend: {
-        show: false,
+        show: true,
         orient: "vertical",
         right: 10,
       },
@@ -133,42 +128,5 @@ onMounted(() => {
 </script>
 <style lang="scss" scoped>
 .pie-chart {
-  display: flex;
-
-  &-box {
-    flex: 1 auto;
-  }
-
-  &-legend {
-    display: flex;
-    flex: none;
-    flex-direction: column;
-    justify-content: center;
-    width: 200px;
-    padding-right: 40px;
-
-    &-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 5px;
-      font-size: 14px;
-      font-weight: 500;
-      color: #333;
-      cursor: pointer;
-
-      &-left {
-        display: flex;
-        align-items: center;
-      }
-
-      &-icon {
-        width: 8px;
-        height: 8px;
-        margin-right: 10px;
-        border-radius: 50%;
-      }
-    }
-  }
 }
 </style>
