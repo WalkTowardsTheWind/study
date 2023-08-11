@@ -2,30 +2,12 @@
 <template>
   <div class="pie-chart" :style="{ width, height }">
     <div :id="id" :class="className" :style="{ height, width }" />
-    <!--    <el-scrollbar ref="scrollbar" class="pie-chart-legend">-->
-    <!--      <div-->
-    <!--        class="pie-chart-legend-item"-->
-    <!--        v-for="(item, index) in chartData"-->
-    <!--        :key="item.name"-->
-    <!--        @mouseenter="handleLegendEnter(item)"-->
-    <!--      >-->
-    <!--        <div class="pie-chart-legend-item-left">-->
-    <!--          <span-->
-    <!--            class="pie-chart-legend-item-icon"-->
-    <!--            :style="{ backgroundColor: color[index] }"-->
-    <!--          />-->
-    <!--          <span class="pie-chart-legend-item-name">{{ item.name }}</span>-->
-    <!--        </div>-->
-    <!--        <span class="pie-chart-legend-item-rate">{{-->
-    <!--          item.rate ? `${item.rate}%` : item.value-->
-    <!--        }}</span>-->
-    <!--      </div>-->
-    <!--    </el-scrollbar>-->
   </div>
 </template>
 
 <script setup lang="ts">
 import * as echarts from "echarts";
+import theme from "@/utils/walden.json";
 
 const props = defineProps({
   id: {
@@ -67,13 +49,6 @@ watch(
   { deep: true }
 );
 let chart: echarts.ECharts | null = null;
-const handleLegendEnter = (it) => {
-  chart.dispatchAction({
-    type: "select",
-    seriesIndex: 0,
-    name: it.name,
-  });
-};
 const chartInit = () => {
   nextTick(() => {
     const options = {
@@ -81,30 +56,22 @@ const chartInit = () => {
         trigger: "item",
       },
       legend: {
-        show: true,
         orient: "vertical",
-        right: 10,
+        right: 80,
+        top: "center",
+        icon: "circle",
+        formatter: (name) => {
+          const item = props.chartData?.find((it) => it.name === name);
+          return `${name}:  ${item.rate}%`;
+        },
       },
-      color: props.color?.length
-        ? props.color
-        : [
-            "#5470c6",
-            "#91cc75",
-            "#fac858",
-            "#ee6666",
-            "#73c0de",
-            "#3ba272",
-            "#fc8452",
-            "#9a60b4",
-            "#ea7ccc",
-          ],
       series: [
         {
           type: "pie",
           radius: props.hasRing ? ["40%", "70%"] : ["70%"],
           top: "10px",
           bottom: "10px",
-          // right: "200px",
+          right: "200px",
           avoidLabelOverlap: false,
           label: {
             show: false,
@@ -119,7 +86,10 @@ const chartInit = () => {
   });
 };
 onMounted(() => {
-  chart = echarts.init(document.getElementById(props.id) as HTMLDivElement);
+  chart = echarts.init(
+    document.getElementById(props.id) as HTMLDivElement,
+    theme
+  );
   chartInit();
   window.addEventListener("resize", () => {
     (chart as echarts.ECharts).resize();
