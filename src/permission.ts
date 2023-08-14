@@ -38,9 +38,9 @@ router.beforeEach(async (to, from, next) => {
         try {
           const menuList = userStore.menusList;
           const accessRoutes = permissionStore.generateRoutes(menuList);
-          console.log(accessRoutes, "2222");
           accessRoutes.forEach((route) => {
-            router.addRoute(route);
+            console.log(route, "=========");
+            // router.addRoute(route);
           });
           next({ ...to, replace: true });
         } catch (error) {

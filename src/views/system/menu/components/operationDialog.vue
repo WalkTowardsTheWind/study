@@ -51,9 +51,9 @@
         <el-form-item label="路由name" prop="module">
           <el-input v-model="formItem.module" />
         </el-form-item>
-        <el-form-item label="是否菜单" prop="is_show_path">
+        <el-form-item label="是否菜单" prop="is_header">
           <zxn-button-group
-            v-model="formItem.is_show_path"
+            v-model="formItem.is_header"
             :options="proxy.$const['system.yesOrNo']"
           />
         </el-form-item>
@@ -66,7 +66,7 @@
         <el-form-item
           label="图标"
           prop="icon"
-          v-if="formItem.is_show_path === '1'"
+          v-if="formItem.is_header === '1'"
         >
           <!-- 图标选择器 -->
           <icon-select v-model="formItem.icon" />
@@ -113,7 +113,7 @@ const formItem = reactive({
   path: "",
   icon: "",
   module: "",
-  is_show_path: "1",
+  is_header: "1",
   cache: "0",
   api_url: "",
   methods: "",
@@ -132,11 +132,12 @@ const init = (treeData: any, detail): void => {
       formItem.auth_type = detail.auth_type + "";
       formItem.menu_path = detail.menu_path;
       formItem.path = detail.path;
-      formItem.is_show_path = detail.is_show_path + "";
+      formItem.is_header = detail.is_header + "";
       formItem.cache = detail.cache;
       formItem.api_url = detail.api_url;
       formItem.methods = detail.methods;
       formItem.module = detail.module;
+      formItem.icon = detail.icon;
     }
   });
 };
