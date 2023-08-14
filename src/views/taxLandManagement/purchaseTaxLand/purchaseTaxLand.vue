@@ -453,15 +453,15 @@ const getTableData = async () => {
         tax_land_no: item.tax_land_no,
         status: item.status,
         tax_land_name: item.tax_land_name,
-        tax_manufacturer: item.tax_manufacturer,
-        merger_name: item.merger_name,
-        tax_cost_point: item.tax_cost_point,
+        tax_manufacturer: item.tax_manufacturer || "---",
+        merger_name: item.merger_name || "---",
+        tax_cost_point: item.tax_cost_point + "%",
         sign_count: item.sign_count,
         tax_land_type:
           proxy.$enumSet["taxLandManagementEnum.tax_land_type"][
             item.tax_land_type
           ],
-        tax_land_head: item.tax_land_head,
+        tax_land_head: item.tax_land_head || "---",
         invoice_type:
           proxy.$enumSet["taxLandManagementEnum.InvoiceType"][
             item.invoice_type
@@ -470,7 +470,7 @@ const getTableData = async () => {
           proxy.$enumSet["taxLandManagementEnum.invoice_denomination"][
             item.invoice_denomination
           ],
-        ground_time: item.ground_time,
+        ground_time: item.ground_time || "---",
         industry_limit: item.industry_limit,
         payment_type:
           proxy.$enumSet["taxLandManagementEnum.paymentType"][
