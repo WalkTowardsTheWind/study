@@ -281,10 +281,10 @@ const handleStatus = (id: string, status: string) => {
       message: res.msg,
       type: "success",
     });
+    setTimeout(() => {
+      location.reload();
+    }, 500);
   });
-  setTimeout(() => {
-    location.reload();
-  }, 500);
 };
 
 const taxLandConfirm = async (formEl: FormInstance) => {
