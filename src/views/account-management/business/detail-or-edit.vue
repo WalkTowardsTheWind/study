@@ -85,6 +85,14 @@ onMounted(() => {
     activeName.value = curTab;
   }
 });
+// 监听页面离开事件
+onBeforeUnmount(() => {
+  // 重置 activeName
+  activeName.value = "";
+
+  // 清空 sessionStorage
+  sessionStorage.removeItem("activeName");
+});
 
 const reject_reason = ref("");
 
