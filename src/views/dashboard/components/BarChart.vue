@@ -169,6 +169,7 @@ onMounted(() => {
       align-items: center;
       justify-content: flex-end;
       padding: 24px 24px 0;
+      z-index: 999;
 
       &-quick {
         display: flex;
