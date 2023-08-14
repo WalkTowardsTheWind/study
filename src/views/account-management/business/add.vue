@@ -201,6 +201,12 @@
               <el-input placeholder="请输入" v-model="addForm.channel_point" />
             </el-form-item>
           </template>
+          <el-form-item label="企业来源备注">
+            <el-input
+              placeholder="请输入"
+              v-model="addForm.company_source_remark"
+            />
+          </el-form-item>
           <el-form-item label="点位计费方式" prop="calculation_type">
             <el-select
               class="w-full"
@@ -376,6 +382,7 @@ const addForm = reactive({
   address: "",
   tax_land_id: "",
   channel_point: "",
+  company_source_remark: "",
   calculation_type: "",
   contract_img: [],
 } as any);
@@ -419,6 +426,7 @@ const isAllComplete = computed(() => {
       !!addForm.sale_head &&
       !!addForm.sale_company &&
       !!addForm.company_source &&
+      !!addForm.company_source_remark &&
       !!addForm.calculation_type &&
       !!addForm.tax_point &&
       !!addForm.company_email &&
@@ -459,6 +467,7 @@ const isAllComplete = computed(() => {
       !!addForm.company_source &&
       !!addForm.channel_type &&
       !!addForm.channel_point &&
+      !!addForm.company_source_remark &&
       !!addForm.calculation_type &&
       !!addForm.parent_channel_id &&
       !!addForm.tax_point &&
