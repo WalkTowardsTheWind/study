@@ -253,13 +253,14 @@ const formItem = ref({
 
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "税地编号", prop: "tax_land_no" },
+  { label: "税地编号", prop: "tax_land_no", align: "center" },
   {
     label: "状态",
     type: "enum",
     path: "taxLandManagementEnum.taxLandStatus",
     prop: "status",
     width: 100,
+    align: "center",
     // fixed: "left",
     color: {
       0: { color: "#36C5F4", backgroundColor: "#DFF6FD" },
@@ -268,22 +269,33 @@ const columnList = [
       3: { color: "#F45136", backgroundColor: "#FDE3DF" },
     },
   },
-  { label: "税地名称", prop: "tax_land_name" },
-  { label: "厂商", prop: "tax_manufacturer" },
-  { label: "税地地区", prop: "merger_name" },
-  { label: "税地成本", prop: "tax_cost_point" },
-  { label: "签约数量", prop: "sign_count" },
-  { label: "税地类型", prop: "tax_land_type", width: 120 },
-  { label: "对接人", prop: "tax_land_head" },
-  { label: "税地发票类型", prop: "invoice_type", width: 120 },
-  { label: "发票面额", prop: "invoice_denomination", width: 120 },
-  { label: "上架时间", prop: "ground_time", sortable: "custom", width: 120 },
-  { label: "支付方式", prop: "payment_type" },
+  { label: "税地名称", prop: "tax_land_name", align: "center" },
+  { label: "厂商", prop: "tax_manufacturer", align: "center" },
+  { label: "税地地区", prop: "merger_name", align: "center" },
+  { label: "税地成本", prop: "tax_cost_point", align: "center" },
+  { label: "签约数量", prop: "sign_count", align: "center" },
+  { label: "税地类型", prop: "tax_land_type", width: 120, align: "center" },
+  { label: "对接人", prop: "tax_land_head", align: "center" },
+  { label: "税地发票类型", prop: "invoice_type", width: 120, align: "center" },
+  {
+    label: "发票面额",
+    prop: "invoice_denomination",
+    width: 120,
+    align: "center",
+  },
+  {
+    label: "上架时间",
+    prop: "ground_time",
+    sortable: "custom",
+    width: 120,
+    align: "center",
+  },
+  { label: "支付方式", prop: "payment_type", align: "center" },
   {
     label: "行业限制",
     slot: "IndustryRestrictions",
     width: 100,
-    align: " center ",
+    align: "center",
     headerAlign: "center",
   },
   {
@@ -291,7 +303,7 @@ const columnList = [
     slot: "operation",
     fixed: "right",
     width: 250,
-    align: "right ",
+    align: "right",
     headerAlign: "right",
   },
 ];
@@ -453,15 +465,15 @@ const getTableData = async () => {
         tax_land_no: item.tax_land_no,
         status: item.status,
         tax_land_name: item.tax_land_name,
-        tax_manufacturer: item.tax_manufacturer || "---",
-        merger_name: item.merger_name || "---",
+        tax_manufacturer: item.tax_manufacturer || "—",
+        merger_name: item.merger_name || "—",
         tax_cost_point: item.tax_cost_point + "%",
         sign_count: item.sign_count,
         tax_land_type:
           proxy.$enumSet["taxLandManagementEnum.tax_land_type"][
             item.tax_land_type
           ],
-        tax_land_head: item.tax_land_head || "---",
+        tax_land_head: item.tax_land_head || "—",
         invoice_type:
           proxy.$enumSet["taxLandManagementEnum.InvoiceType"][
             item.invoice_type
@@ -470,7 +482,7 @@ const getTableData = async () => {
           proxy.$enumSet["taxLandManagementEnum.invoice_denomination"][
             item.invoice_denomination
           ],
-        ground_time: item.ground_time || "---",
+        ground_time: item.ground_time || "—",
         industry_limit: item.industry_limit,
         payment_type:
           proxy.$enumSet["taxLandManagementEnum.paymentType"][
