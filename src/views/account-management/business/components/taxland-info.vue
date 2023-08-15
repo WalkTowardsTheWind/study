@@ -4,6 +4,9 @@
       <template #tableTop>
         <el-button type="primary" plain @click="taxLandClick('add')" v-if="isEdit">+新增税地</el-button>
       </template>
+      <template #tax_point="scope">
+        <div>{{ scope.row.tax_point }}%</div>
+      </template>
       <template #contract_img="scope">
         <zxn-image :imgList="scope.row.contract_img" width="40" height="40" targetClick />
       </template>
@@ -137,6 +140,7 @@ const columnList = [
   {
     label: "客户点位",
     prop: "tax_point",
+    slot: 'tax_point',
     minWidth: 120,
   },
   { label: "税地银行", prop: "sub_account_name", minWidth: 250 },
