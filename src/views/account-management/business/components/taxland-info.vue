@@ -184,7 +184,7 @@ const columnList = [
   { label: "操作", slot: "operation", fixed: "right", width: 250 },
 ];
 
-const taxLandClick = (active: string, item) => {
+const taxLandClick = (active: string, item?: any) => {
   formItem.value?.resetFields();
   state.dialogVisible = true;
   if (active == "add") {
@@ -197,7 +197,7 @@ const taxLandClick = (active: string, item) => {
     state.formItem.sign_type = "";
     state.formItem.auth_type = "";
     state.formItem.contract_img = [];
-    state.formItem.company_id = route.query.id;
+    state.formItem.company_id = route.query.id as string;
   }
   if (active == "edit") {
     state.dialogTitle = "编辑税地";
@@ -224,9 +224,9 @@ const selecTaxland = (tax_land_id: string) => {
 };
 
 // 0 禁用 1 启用
-const handleStatus = (id: string, status: string) => {
+const handleStatus = (id: string, status: number | string) => {
   status == 1 ? (status = 0) : (status = 1);
-  setTaxLandStatus(id, status).then((res) => {
+  setTaxLandStatus(id, status).then((res: any) => {
     ElMessage({
       message: res.msg,
       type: "success",
