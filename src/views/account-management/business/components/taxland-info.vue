@@ -1,66 +1,29 @@
 <template>
   <div class="content p-[30px]">
-    <zxn-table
-      :table-data="state.tableData"
-      :column-list="columnList"
-      :hasPagination="false"
-    >
+    <zxn-table :table-data="state.tableData" :column-list="columnList" :hasPagination="false">
       <template #tableTop>
-        <el-button
-          type="primary"
-          plain
-          @click="taxLandClick('add')"
-          v-if="isEdit"
-          >+新增税地</el-button
-        >
+        <el-button type="primary" plain @click="taxLandClick('add')" v-if="isEdit">+新增税地</el-button>
+      </template>
+      <template #tax_point="scope">
+        <div>{{ scope.row.tax_point }}%</div>
       </template>
       <template #contract_img="scope">
-        <zxn-image
-          :imgList="scope.row.contract_img"
-          width="40"
-          height="40"
-          targetClick
-        />
+        <zxn-image :imgList="scope.row.contract_img" width="40" height="40" targetClick />
       </template>
       <template #operation="scope" v-if="isEdit">
-        <el-button
-          link
-          type="primary"
-          @click="handleStatus(scope.row.id, scope.row.status)"
-          >{{ scope.row.status == 1 ? "禁用" : "启用" }}</el-button
-        >
-        <el-button link type="primary" @click="taxLandClick('edit', scope.row)"
-          >编辑</el-button
-        >
+        <el-button link type="primary" @click="handleStatus(scope.row.id, scope.row.status)">{{ scope.row.status == 1 ?
+          "禁用" : "启用" }}</el-button>
+        <el-button link type="primary" @click="taxLandClick('edit', scope.row)">编辑</el-button>
       </template>
     </zxn-table>
     <!-- 新增 编辑 -->
-    <el-dialog
-      v-model="state.dialogVisible"
-      :title="state.dialogTitle"
-      width="25%"
-      :close-on-click-modal="false"
-    >
-      <el-form
-        ref="formItem"
-        :model="state.formItem"
-        :rules="rules"
-        label-width="auto"
-      >
+    <el-dialog v-model="state.dialogVisible" :title="state.dialogTitle" width="25%" :close-on-click-modal="false">
+      <el-form ref="formItem" :model="state.formItem" :rules="rules" label-width="auto">
         <el-form-item label="税地名称" prop="tax_land_id">
-          <el-select
-            class="w-full"
-            placeholder="请选择"
-            v-model="state.formItem.tax_land_id"
-            :disabled="state.dialogType == 'edit'"
-            @change="selecTaxland"
-          >
-            <el-option
-              v-for="(item, index) in taxLandOption"
-              :key="index"
-              :value="item.id"
-              :label="item.tax_land_name"
-            ></el-option>
+          <el-select class="w-full" placeholder="请选择" v-model="state.formItem.tax_land_id"
+            :disabled="state.dialogType == 'edit'" @change="selecTaxland">
+            <el-option v-for="(item, index) in taxLandOption" :key="index" :value="item.id"
+              :label="item.tax_land_name"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="客户点位" prop="tax_point">
@@ -70,26 +33,14 @@
         </el-form-item>
         <el-form-item label="认证规则" prop="auth_type">
           <el-select class="w-full" v-model="state.formItem.auth_type">
-            <el-option
-              v-for="(item, index) in auth_type"
-              :key="index"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
+            <el-option v-for="(item, index) in auth_type" :key="index" :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="签约规则" prop="sign_type">
-          <el-select
-            class="w-full"
-            placeholder="请选择（单选）"
-            v-model="state.formItem.sign_type"
-          >
-            <el-option
-              v-for="(item, index) in sign_type"
-              :key="index"
-              :value="item.value"
-              :label="item.label"
-            ></el-option>
+          <el-select class="w-full" placeholder="请选择（单选）" v-model="state.formItem.sign_type">
+            <el-option v-for="(item, index) in sign_type" :key="index" :value="item.value"
+              :label="item.label"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="上传合同" prop="contract_img">
@@ -99,9 +50,7 @@
           <!-- <PicturePreview v-else :image-list="formItem.contract_img" /> -->
         </el-form-item>
         <div style="display: flex; justify-content: center">
-          <el-button type="primary" @click="taxLandConfirm(formItem)"
-            >确认</el-button
-          >
+          <el-button type="primary" @click="taxLandConfirm(formItem)">确认</el-button>
           <el-button type="info" @click="cancelClick">取消</el-button>
         </div>
       </el-form>
@@ -191,9 +140,10 @@ const columnList = [
   {
     label: "客户点位",
     prop: "tax_point",
+    slot: 'tax_point',
     minWidth: 120,
   },
-  { label: "客户税地子账户", prop: "sub_account_name", minWidth: 250 },
+  { label: "税地银行", prop: "sub_account_name", minWidth: 250 },
   { label: "银行账户", prop: "bank", minWidth: 250 },
   {
     label: "签约合同",
