@@ -25,7 +25,7 @@
         <div class="flex">
           <risk-ring />
           <div class="w-16px"></div>
-          <industry-ring />
+          <industry-ring :chartData="industryEcharts" />
         </div>
         <el-row class="w-100%">
           <bar-chart height="400px" width="100%" />

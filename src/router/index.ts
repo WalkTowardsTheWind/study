@@ -377,7 +377,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         meta: { title: "新建采购税地", hidden: true },
       },
       {
-        path: "selfOperatedTaxLandEdit",
+        path: "purchaseTaxLandEdit",
         component: () =>
           import(
             "@/views/taxLandManagement/purchaseTaxLand/purchaseTaxLandEdit.vue"
@@ -386,7 +386,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         meta: { title: "编辑采购税地", hidden: true },
       },
       {
-        path: "selfOperatedTaxLandDetails",
+        path: "purchaseTaxLandDetails",
         component: () =>
           import(
             "@/views/taxLandManagement/purchaseTaxLand/purchaseTaxLandDetails.vue"
@@ -464,6 +464,12 @@ export const constantRoutes: RouteRecordRaw[] = [
         name: "account",
         meta: { title: "账号设置", icon: "account" },
       },
+      // {
+      //   path: "theme",
+      //   component: () => import("@/views/system/theme/index.vue"),
+      //   name: "theme",
+      //   meta: { title: "主题配置", icon: "account" },
+      // },
     ],
   },
 ];
@@ -487,13 +493,10 @@ export function resetRouter() {
 }
 
 export function refreshSelectedTag() {
-  console.log(router);
   const { currentRoute } = router;
-  router
-    .replace({ path: "/redirect" + currentRoute.value.fullPath })
-    .catch((err) => {
-      console.warn(err);
-    });
+  router.replace("/redirect" + currentRoute.value.fullPath).catch((err) => {
+    console.warn(err);
+  });
 }
 
 export default router;

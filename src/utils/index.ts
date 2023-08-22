@@ -53,7 +53,6 @@ export function transformTimeRange(
     _params.end_time = _params[oldField][1] || "";
   }
   if (isTime) {
-    console.log(_params.end_time);
     _params.start_time = _params.start_time
       ? dateUtil(_params.start_time).unix()
       : "";

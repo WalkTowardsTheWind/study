@@ -5,7 +5,7 @@
 				<BasicInfo :isEdit="isEdit" :id="id" v-model:childData="formItem" />
 			</template>
 			<template #3>
-				<TaxlandInfo :isEdit="isEdit" :id="id" v-model:childData="formItem" />
+				<TaxlandInfo :isEdit="isEdit" :id="id" :taxLandList="formItem.tax_land_list" />
 			</template>
 			<template #2>
 				<PaperInfo :isEdit="isEdit" :id="id" v-model:childData="formItem" />
@@ -20,7 +20,7 @@
 				<SettlementInfo :isEdit="isEdit" :id="id" />
 			</template>
 		</zxn-tabs>
-		<zxn-bottom-btn v-if="isEdit && !['4', '5', '6'].includes(activeName)">
+		<zxn-bottom-btn v-if="isEdit && !['3', '4', '5', '6'].includes(activeName)">
 			<el-button @click="$router.go(-1)">取消</el-button>
 			<el-button type="primary" @click="updateBusinessAccount">保存</el-button>
 		</zxn-bottom-btn>
@@ -71,6 +71,25 @@ const tabsList = [
 
 const activeName = ref("1");
 
+watch(activeName, (newVal) => {
+	sessionStorage.setItem("activeName", newVal);
+});
+
+onMounted(() => {
+	const curTab = sessionStorage.getItem("activeName") || "";
+	if (curTab) {
+		activeName.value = curTab;
+	}
+});
+// 监听页面离开事件
+onBeforeUnmount(() => {
+	// 重置 activeName
+	activeName.value = "";
+
+	// 清空 sessionStorage
+	sessionStorage.removeItem("activeName");
+});
+
 const reject_reason = ref("");
 
 const route = useRoute();
@@ -114,7 +133,8 @@ const isAllComplete = computed(() => {
 		!!formItem.value.auth_type &&
 		!!formItem.value.tax_point &&
 		!!formItem.value.sign_type &&
-		!!formItem.value.contract_img.length
+		!!formItem.value.contract_img.length &&
+		!!formItem.value.company_source_remark
 	) {
 		return true;
 	} else {

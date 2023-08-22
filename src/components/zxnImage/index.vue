@@ -2,21 +2,16 @@
   <div class="zxn-image">
     <div
       class="zxn-image-item"
-      :class="{ 'has-click': targetClick }"
-      :style="{ width: `${width}px`, height: `${height}px` }"
+      :class="{ 'has-click': targetClick, 'mr-[16px]': currentImg.length > 1 }"
+      :style="uploadStyle"
       v-for="(item, index) in currentImg"
       :key="item"
       @click="handleTarget(index)"
     >
-      {{ currentImg }}
-      <el-image
-        :style="{ width: `${width}px`, height: `${height}px` }"
-        :src="item"
-        :fit="fit as 'fill'"
-      />
+      <el-image :style="uploadStyle" :src="item" :fit="fit as 'fill'" />
       <div class="zxn-image-item-bottom">
-        <span @click="handlePreview(index)">预览</span>
-        <span v-if="hasDelete">删除</span>
+        <span @click.stop="handlePreview(index)">预览</span>
+        <span v-if="hasDelete" @click.stop="handleDelete(index)">删除</span>
       </div>
       <div
         class="zxn-image-item-ellipsis"
@@ -43,14 +38,22 @@
 <script setup lang="ts">
 import { useEventListener } from "@vueuse/core";
 import { isArray } from "@/utils/is";
+import { addUnit } from "@/utils";
+import { CSSProperties } from "vue";
 const props = defineProps({
-  imgList: { type: Array, default: () => [] },
+  imgList: { type: [Array, String], default: () => [] },
   width: { type: Number, default: 80 },
   height: { type: Number, default: 80 },
   fit: { type: String, default: "fill" },
   hasDelete: { type: Boolean, default: false },
   targetClick: { type: Boolean, default: false },
   ellipsis: { type: Boolean, default: false },
+});
+const emits = defineEmits(["on-delete"]);
+const uploadStyle = computed<CSSProperties>(() => {
+  const boxWidth = addUnit(props.width);
+  const boxHeight = addUnit(props.height);
+  return { width: boxWidth, height: boxHeight };
 });
 const currentImg = computed(() => {
   const _imgList = isArray(props.imgList) ? props.imgList : [props.imgList];
@@ -91,6 +94,9 @@ const handleTarget = (index: number) => {
     handlePreview(index);
   }
 };
+const handleDelete = (index: number) => {
+  emits("on-delete", index);
+};
 </script>
 <style lang="scss" scoped>
 .zxn-image {
@@ -99,7 +105,6 @@ const handleTarget = (index: number) => {
 
   &-item {
     position: relative;
-    margin-right: 16px;
     overflow: hidden;
     font-size: 0;
     border-radius: 8px;
