@@ -133,7 +133,8 @@ const isAllComplete = computed(() => {
 		!!formItem.value.auth_type &&
 		!!formItem.value.tax_point &&
 		!!formItem.value.sign_type &&
-		!!formItem.value.contract_img.length
+		!!formItem.value.contract_img.length &&
+		!!formItem.value.company_source_remark
 	) {
 		return true;
 	} else {
