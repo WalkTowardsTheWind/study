@@ -197,8 +197,9 @@ const columnList = [
     slot: "tax_point",
     minWidth: 120,
   },
-  { label: "税地银行", prop: "bank", minWidth: 250 },
-  { label: "银行账户", prop: "sub_account_no", minWidth: 250 },
+  { label: "税地银行", prop: "sub_account_name", minWidth: 250 },
+  { label: "银行账户", prop: "bank", minWidth: 250 },
+  { label: "账户余额", prop: "balance", minWidth: 250 },
   {
     label: "签约合同",
     prop: "contract_img",
