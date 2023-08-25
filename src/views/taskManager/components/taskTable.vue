@@ -116,6 +116,7 @@ import { getTaskIndex, removeTask, setTaskStatus } from "@/api/task";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { isArray, isNumber } from "@/utils/is";
+import { useRouteParams } from "@/store/modules/routeParams";
 const router = useRouter();
 
 const props = defineProps({
@@ -338,6 +339,14 @@ const handleView = (row: { id: number }) => {
   router.push({ name: "taskManagerView", query: { id: row.id } });
 };
 onActivated(() => {
+  const { pullParams } = useRouteParams();
+  const searchParams: any = pullParams("taskManagerIndex");
+  if (searchParams) {
+    formItem.status =
+      isNumber(searchParams.status) || searchParams.status
+        ? searchParams.status + ""
+        : "";
+  }
   getTaskList();
 });
 defineExpose({
