@@ -31,10 +31,7 @@
     </card-view>
   </div>
   <div class="time">
-    <div class="title">
-      <div class="line"></div>
-      <div>营收趋势</div>
-    </div>
+    <zxn-title>营收趋势</zxn-title>
     <div class="line_type">
       <div class="income">收入</div>
       <!-- <div class="spend">支出</div> -->
@@ -194,15 +191,6 @@ get3And1List(3, 3);
   gap: 0 16px;
   width: 55vw;
   margin: 20px 0 30px;
-}
-
-.title {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  font-family: sans-serif;
-  font-size: 14px;
-  color: #356ff3;
 }
 
 .time {

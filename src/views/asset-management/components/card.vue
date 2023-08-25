@@ -15,7 +15,7 @@
 <style scoped lang="scss">
 .card {
   box-sizing: border-box;
-  width: 272px;
+  width: 275px;
   height: 160px;
   background: #f5f5f5;
   border-radius: 4px 4px 4px 4px;
