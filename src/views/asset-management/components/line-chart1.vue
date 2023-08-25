@@ -90,22 +90,9 @@ function get3And1List(time_type: number, index: number) {
 }
 
 const options = ref({
-  title: {
-    // text: "Stacked Line",
-  },
   tooltip: {
     trigger: "axis",
   },
-  // legend: {
-  // 	orient: "horizontal", // 垂直方向显示
-  // 	left: "left", // 距离左侧距离
-  // 	data: [
-  // 		{
-  // 			name: "收入",
-  // 		},
-  // 	],
-  // 	selectedMode: false,
-  // },
   grid: {
     left: "0%",
     right: "10%",
