@@ -18,28 +18,6 @@
         </template>
       </zxn-table>
     </div>
-    <div>
-      <div class="title">
-        <div class="line"></div>
-        <div>渠道对账单</div>
-      </div>
-      <zxn-table
-        :table-data="tableData2"
-        :column-list="columnList2"
-        :page-info="pageInfo2"
-      ></zxn-table>
-    </div>
-    <div>
-      <div class="title">
-        <div class="line"></div>
-        <div>渠道管理员数据合计</div>
-      </div>
-      <zxn-table
-        :table-data="tableData3"
-        :column-list="columnList3"
-        :page-info="pageInfo3"
-      ></zxn-table>
-    </div>
   </div>
 
   <!-- 详情 -->

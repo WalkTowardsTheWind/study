@@ -1,25 +1,34 @@
 <template>
   <div class="top">
-    <el-card class="top-item">
-      <div class="top-item-title">服务费</div>
-      <div class="top-item-money">
+    <!-- 服务费 -->
+    <card-view>
+      <template #top>
+        <span>服务费</span>
+      </template>
+      <template #main>
         <span class="yuan">￥</span>{{ proxy.$moneyFormat(total_fee_amount) }}
-      </div>
-    </el-card>
-    <el-card class="top-item">
-      <div class="top-item-title">企业充值金额</div>
-      <div class="top-item-money">
+      </template>
+    </card-view>
+    <!-- 企业充值金额 -->
+    <card-view>
+      <template #top>
+        <span>企业充值金额</span>
+      </template>
+      <template #main>
         <span class="yuan">￥</span
         >{{ proxy.$moneyFormat(total_payment_amount) }}
-      </div>
-    </el-card>
-    <el-card class="top-item">
-      <div class="top-item-title">企业下发金额</div>
-      <div class="top-item-money">
+      </template>
+    </card-view>
+    <!-- 企业下发金额 -->
+    <card-view>
+      <template #top>
+        <span>企业下发金额</span>
+      </template>
+      <template #main>
         <span class="yuan">￥</span
         >{{ proxy.$moneyFormat(total_channel_amount) }}
-      </div>
-    </el-card>
+      </template>
+    </card-view>
   </div>
   <div class="time">
     <div class="title">
@@ -47,6 +56,7 @@
 <script lang="ts" setup>
 import { getFinanceList } from "@/api/money";
 import * as echarts from "echarts";
+import CardView from "./card.vue";
 
 const { proxy } = getCurrentInstance() as any;
 
@@ -174,55 +184,16 @@ get3And1List(3, 3);
 
 <style scoped lang="scss">
 #main {
-  width: 60vw;
+  width: 50vw;
   height: 500px;
 }
 
 .top {
+  box-sizing: border-box;
   display: flex;
   gap: 0 16px;
   width: 55vw;
   margin: 20px 0 30px;
-
-  &-item {
-    flex: 1;
-    height: 160px;
-    background: #f5f5f5;
-    border: none;
-    border-radius: 4px;
-
-    &-title {
-      font-size: 14px;
-      font-weight: 500;
-      color: #333;
-    }
-
-    &-money {
-      margin: 10px 0 20px;
-      font-size: 32px;
-      font-weight: bold;
-      color: #356ff3;
-    }
-
-    &-bi {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 13px;
-      color: #656565;
-
-      .left,
-      .right {
-        display: flex;
-        align-items: center;
-      }
-
-      .per {
-        margin: 0 5px 0 10px;
-        color: #333;
-      }
-    }
-  }
 }
 
 .title {
@@ -238,7 +209,7 @@ get3And1List(3, 3);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 55vw;
+  width: 45vw;
 }
 
 .line {
