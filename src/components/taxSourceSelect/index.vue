@@ -1,6 +1,6 @@
 <template>
   <el-select v-model="value" class="w-[272px]" clearable>
-    <el-option label="全部税地" value="" />
+    <!--    <el-option label="全部税地" value="" />-->
     <el-option
       v-for="item in useUser.sourceList"
       :key="item.value"
