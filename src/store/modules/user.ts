@@ -17,7 +17,7 @@ export const useUserStore = defineStore("user", () => {
   const avatar = ref("");
   const roles = ref<Array<string>>([]); // 用户角色编码集合 → 判断路由权限
   const perms = ref<Array<string>>([]); // 用户权限编码集合 → 判断按钮权限
-  const taxSource = useStorage("taxSource", ""); //  当前税地
+  const taxSource = ref(0); //  当前税地
   const sourceList = ref([]);
   const menusList = useStorage("menusList", []);
 
@@ -77,14 +77,14 @@ export const useUserStore = defineStore("user", () => {
     return new Promise((resolve, reject) => {
       getLandList()
         .then(({ data }) => {
-          sourceList.value = data.map((it: any) => ({
-            label: it.tax_land_name,
-            value: it.id,
-          }));
-          // if (sourceList.value && sourceList.value.length && !taxSource.value) {
-          // 	// @ts-ignore
-          // 	taxSource.value = sourceList.value[0].value
-          // }
+          const { tax_land_list, now_tax_land } = data;
+          if (tax_land_list && tax_land_list.length) {
+            sourceList.value = tax_land_list.map((it: any) => ({
+              label: it.tax_land_name,
+              value: it.id,
+            }));
+            taxSource.value = now_tax_land;
+          }
           resolve();
         })
         .catch((err) => {
