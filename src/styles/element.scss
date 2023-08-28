@@ -83,7 +83,7 @@
 
 .zxn-dialog {
   .el-dialog__header {
-    padding: 38px 0 0 36px;
+    padding: 38px 0 0 var(--el-dialog-padding-primary);
 
     .el-dialog__title {
       font-family: SourceHanSansSC-Medium, SourceHanSansSC, sans-serif;
@@ -101,6 +101,9 @@
         color: #333;
       }
     }
+  }
+  .el-dialog__body {
+    padding: var(--el-dialog-padding-primary);
   }
 
   .el-input-group__append,
@@ -123,4 +126,7 @@
   .el-drawer__footer {
     box-shadow: #00000030 0px -2px 6px 0px;
   }
+}
+.scrollbar-wrapper {
+  overflow-x: hidden;
 }

@@ -145,7 +145,7 @@ function refreshSelectedTag(view: TagView) {
   tagsViewStore.delCachedView(view);
   const { fullPath } = view;
   nextTick(() => {
-    router.replace({ path: "/redirect" + fullPath }).catch((err) => {
+    router.replace("/redirect" + fullPath).catch((err) => {
       console.warn(err);
     });
   });

@@ -376,9 +376,7 @@ const columnList = [
 ];
 // 操作
 const handleInspect = (scope: any) => {
-  dialogVisible.value = true;
-
-  imageList.value = scope.row.payment_receipt;
+  window.open(scope.row.payment_receipt, "_blank");
 };
 const handleDetails = (scope: any) => {
   router.push({

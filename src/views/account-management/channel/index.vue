@@ -70,7 +70,7 @@
     >
       <template #tableTop>
         <el-dropdown trigger="click">
-          <el-button type="primary">+ 新建</el-button>
+          <el-button type="primary" plain>+ 新建</el-button>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item @click="add(0)">个人</el-dropdown-item>

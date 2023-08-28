@@ -1,9 +1,9 @@
 import request from "@/utils/request";
 import {
-  ICheckBusinessAccount,
-  ICreateBusinessAccount,
-  IEditBusinessAccount,
-  IGetBusinessAccountList,
+	ICheckBusinessAccount,
+	ICreateBusinessAccount,
+	IEditBusinessAccount,
+	IGetBusinessAccountList,
 } from "./types";
 
 /**
@@ -12,11 +12,11 @@ import {
  * @returns
  */
 export function getBusinessAccountList(params: IGetBusinessAccountList) {
-  return request({
-    url: "/adminapi/account/company/index",
-    method: "get",
-    params,
-  });
+	return request({
+		url: "/adminapi/account/company/index",
+		method: "get",
+		params,
+	});
 }
 
 /**
@@ -25,11 +25,11 @@ export function getBusinessAccountList(params: IGetBusinessAccountList) {
  * @returns
  */
 export function createBusinessAccount(data: ICreateBusinessAccount) {
-  return request({
-    url: "/adminapi/account/company/create",
-    method: "post",
-    data,
-  });
+	return request({
+		url: "/adminapi/account/company/create",
+		method: "post",
+		data,
+	});
 }
 
 /**
@@ -38,11 +38,11 @@ export function createBusinessAccount(data: ICreateBusinessAccount) {
  * @returns
  */
 export function editBusinessAccount(data: IEditBusinessAccount) {
-  return request({
-    url: "/adminapi/account/company/update",
-    method: "post",
-    data,
-  });
+	return request({
+		url: "/adminapi/account/company/update",
+		method: "post",
+		data,
+	});
 }
 
 /**
@@ -51,10 +51,10 @@ export function editBusinessAccount(data: IEditBusinessAccount) {
  * @returns
  */
 export function getBusinessAccountDetail(id: number) {
-  return request({
-    url: "/adminapi/account/company/read?id=" + id,
-    method: "get",
-  });
+	return request({
+		url: "/adminapi/account/company/read?id=" + id,
+		method: "get",
+	});
 }
 
 /**
@@ -63,11 +63,11 @@ export function getBusinessAccountDetail(id: number) {
  * @returns
  */
 export function checkBusinessAccount(data: ICheckBusinessAccount) {
-  return request({
-    url: "/adminapi/account/company/audit",
-    method: "post",
-    data,
-  });
+	return request({
+		url: "/adminapi/account/company/audit",
+		method: "post",
+		data,
+	});
 }
 
 /**
@@ -76,10 +76,10 @@ export function checkBusinessAccount(data: ICheckBusinessAccount) {
  * @returns
  */
 export function activateBusniessAccount(id: number) {
-  return request({
-    url: "/adminapi/account/company/activate/" + id,
-    method: "get",
-  });
+	return request({
+		url: "/adminapi/account/company/activate/" + id,
+		method: "get",
+	});
 }
 
 /**
@@ -88,10 +88,10 @@ export function activateBusniessAccount(id: number) {
  * @returns
  */
 export function deleteBusinessAccount(id: number) {
-  return request({
-    url: "/adminapi/account/company/" + id,
-    method: "delete",
-  });
+	return request({
+		url: "/adminapi/account/company/" + id,
+		method: "delete",
+	});
 }
 
 /**
@@ -100,10 +100,10 @@ export function deleteBusinessAccount(id: number) {
  * @returns
  */
 export function getCategoryList(params = "0") {
-  return request({
-    url: "/adminapi/category/get_tree_list?type=" + params,
-    method: "get",
-  });
+	return request({
+		url: "/adminapi/category/get_tree_list?type=" + params,
+		method: "get",
+	});
 }
 
 /**
@@ -112,14 +112,14 @@ export function getCategoryList(params = "0") {
  * @returns
  */
 export function businessAccountSetStatus(params: {
-  id: string | number;
-  status: string | number;
+	id: string | number;
+	status: string | number;
 }) {
-  return request({
-    url:
-      "/adminapi/account/company/set_status/" + params.id + "/" + params.status,
-    method: "get",
-  });
+	return request({
+		url:
+			"/adminapi/account/company/set_status/" + params.id + "/" + params.status,
+		method: "get",
+	});
 }
 
 /**
@@ -127,11 +127,11 @@ export function businessAccountSetStatus(params: {
  * @returns
  */
 export function getBusinessAccountContractList(params: any) {
-  return request({
-    url: "/adminapi/contract/contract",
-    method: "get",
-    params,
-  });
+	return request({
+		url: "/adminapi/contract/contract",
+		method: "get",
+		params,
+	});
 }
 
 /**
@@ -139,11 +139,11 @@ export function getBusinessAccountContractList(params: any) {
  * @returns
  */
 export function getBusinessAccountSettlementList(params: any) {
-  return request({
-    url: "/adminapi/finance/company",
-    method: "get",
-    params,
-  });
+	return request({
+		url: "/adminapi/finance/company",
+		method: "get",
+		params,
+	});
 }
 
 /**
@@ -152,11 +152,11 @@ export function getBusinessAccountSettlementList(params: any) {
  * @returns
  */
 export function getBusinessAccountRechargeList(params: any) {
-  return request({
-    url: "/adminapi/finance/company/recharge",
-    method: "get",
-    params,
-  });
+	return request({
+		url: "/adminapi/finance/company/recharge",
+		method: "get",
+		params,
+	});
 }
 
 /**
@@ -165,11 +165,11 @@ export function getBusinessAccountRechargeList(params: any) {
  * @returns
  */
 export function getBusinessAccountTaskList(params: any) {
-  return request({
-    url: "/adminapi/task/task",
-    method: "get",
-    params,
-  });
+	return request({
+		url: "/adminapi/task/task",
+		method: "get",
+		params,
+	});
 }
 
 /**
@@ -178,10 +178,10 @@ export function getBusinessAccountTaskList(params: any) {
  * @returns
  */
 export function getBusinessChannelList(params: any) {
-  return request({
-    url: "/adminapi/account/channel/read/" + params.id + "/" + params.type,
-    method: "get",
-  });
+	return request({
+		url: "/adminapi/account/channel/read/" + params.id + "/" + params.type,
+		method: "get",
+	});
 }
 
 /**
@@ -190,41 +190,41 @@ export function getBusinessChannelList(params: any) {
  * @returns
  */
 export function getTaxlandDetail(params: any) {
-  return request({
-    url: `/adminapi/tax/taxLand/${params}`,
-    method: "get",
-  });
+	return request({
+		url: `/adminapi/tax/taxLand/${params}`,
+		method: "get",
+	});
 }
 
 export function resetAccountPwd(id) {
-  return request({
-    url: `/adminapi/account/company/reset_pwd/${id}`,
-    method: "post",
-  });
+	return request({
+		url: `/adminapi/account/company/reset_pwd/${id}`,
+		method: "post",
+	});
 }
 
 // 启用 禁用 税地
-export function setTaxLandStatus(id: string, status: string) {
-  return request({
-    url: `/adminapi/account/company/taxland/set_status/${id}/${status}`,
-    method: "get",
-  });
+export function setTaxLandStatus(id: string, status: string | number) {
+	return request({
+		url: `/adminapi/account/company/taxland/set_status/${id}/${status}`,
+		method: "get",
+	});
 }
 
 // 企业账户税地编辑
 export function editAccountTaxLand(data: any) {
-  return request({
-    url: `/adminapi/account/company/taxland/update`,
-    method: "post",
-    data,
-  });
+	return request({
+		url: `/adminapi/account/company/taxland/update`,
+		method: "post",
+		data,
+	});
 }
 
 // 企业账户税地新建
 export function createAccountTaxLand(data: any) {
-  return request({
-    url: `/adminapi/account/company/taxland/create`,
-    method: "post",
-    data,
-  });
+	return request({
+		url: `/adminapi/account/company/taxland/create`,
+		method: "post",
+		data,
+	});
 }

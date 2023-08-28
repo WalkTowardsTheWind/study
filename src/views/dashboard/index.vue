@@ -84,7 +84,7 @@ const initData = async () => {
   const numList = data.company_category.map((it) => it.num);
   industryEcharts.value = data.company_category.map((it, index) => ({
     value: it.num,
-    name: it.label,
+    name: it.label || `ssss${index}`,
     rate: getPercentValue(numList, index, 2),
   }));
 };

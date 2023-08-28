@@ -10,7 +10,7 @@
         <el-row :gutter="50">
           <el-col :span="8">
             <el-form-item label="企业名称" align="right" label-width="130px">
-              <el-input v-model="formItem.company_name" :readonly="!isEdit" />
+              <el-input v-model="formItem.company_name" disabled />
             </el-form-item>
             <el-form-item label="统一社会信用代码" label-width="130px">
               <el-input v-model="formItem.credit_code" :readonly="!isEdit" />

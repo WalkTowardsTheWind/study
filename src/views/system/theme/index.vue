@@ -73,7 +73,7 @@ const getList = async () => {
     console.log(e);
   }
 };
-const visible = ref(true);
+const visible = ref(false);
 onMounted(() => {
   getList();
 });

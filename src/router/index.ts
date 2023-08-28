@@ -422,6 +422,19 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
+  {
+    path: "/message",
+    component: Layout,
+    meta: { title: " 消息管理", icon: "message" },
+    children: [
+      {
+        path: "manager",
+        component: () => import("@/views/message/manager/index.vue"),
+        name: "messageManager",
+        meta: { title: "消息中心", icon: "message" },
+      },
+    ],
+  },
   // 系统设置
   {
     path: "/system",
@@ -465,10 +478,10 @@ export const constantRoutes: RouteRecordRaw[] = [
         meta: { title: "账号设置", icon: "account" },
       },
       // {
-      // 	path: "theme",
-      // 	component: () => import("@/views/system/theme/index.vue"),
-      // 	name: "theme",
-      // 	meta: { title: "主题配置", icon: "account" },
+      //   path: "theme",
+      //   component: () => import("@/views/system/theme/index.vue"),
+      //   name: "theme",
+      //   meta: { title: "主题配置", icon: "account" },
       // },
     ],
   },
@@ -493,13 +506,10 @@ export function resetRouter() {
 }
 
 export function refreshSelectedTag() {
-  console.log(router);
   const { currentRoute } = router;
-  router
-    .replace({ path: "/redirect" + currentRoute.value.fullPath })
-    .catch((err) => {
-      console.warn(err);
-    });
+  router.replace("/redirect" + currentRoute.value.fullPath).catch((err) => {
+    console.warn(err);
+  });
 }
 
 export default router;

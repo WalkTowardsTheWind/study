@@ -91,9 +91,12 @@
               <el-row :gutter="50">
                 <el-col :span="8">
                   <el-form-item label="结算回单">
-                    <picture-preview
-                      :imageList="formItem.payment_receipt"
-                    ></picture-preview>
+                    <a
+                      target="_blank"
+                      style="color: #356ff3"
+                      :href="formItem.payment_receipt"
+                      >查看</a
+                    >
                   </el-form-item>
                 </el-col>
               </el-row>

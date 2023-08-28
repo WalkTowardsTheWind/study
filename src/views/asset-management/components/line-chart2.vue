@@ -1,25 +1,26 @@
 <template>
   <div class="top">
-    <el-card class="top-item">
-      <div class="top-item-title">发佣合计</div>
-      <div class="top-item-money">{{ commission_total }}</div>
-    </el-card>
-    <el-card class="top-item">
-      <div class="top-item-title">利润</div>
-      <div class="top-item-money">{{ profit }}</div>
-      <div class="top-item-bi">
-        <span
-          >利率<span class="m-l-[20px]">{{ profit_rate }}</span></span
-        >
-        <img :src="profit > 0 ? jpgTop : jpgBottom" alt="" />
-      </div>
-    </el-card>
+    <!-- 发佣合计 -->
+    <card-view>
+      <template #top>
+        <span>发佣合计</span>
+      </template>
+      <template #main>
+        <span class="yuan">￥</span>{{ proxy.$moneyFormat(commission_total) }}
+      </template>
+    </card-view>
+    <!-- 利润 -->
+    <card-view>
+      <template #top>
+        <span>利润</span>
+      </template>
+      <template #main>
+        <span class="yuan">￥</span>{{ proxy.$moneyFormat(profit) }}
+      </template>
+    </card-view>
   </div>
   <div class="time">
-    <div class="title">
-      <div class="line"></div>
-      <div>发佣统计</div>
-    </div>
+    <zxn-title>发佣统计</zxn-title>
     <div class="date">
       <div
         v-for="(item, index) in dateList"
@@ -35,10 +36,11 @@
 </template>
 
 <script lang="ts" setup>
+import CardView from "./card.vue";
 import * as echarts from "echarts";
-import jpgTop from "@/assets/icons-jpg/top.png";
-import jpgBottom from "@/assets/icons-jpg/bottom.png";
 import { getChannelList } from "@/api/money";
+
+const { proxy } = getCurrentInstance() as any;
 
 const dateList = [
   { name: "上周", val: "2" },
@@ -76,32 +78,15 @@ function get3And1List(time_type: number, index: number) {
 const chart = ref({} as any);
 
 const options = ref({
-  title: {
-    // text: "Stacked Line",
-  },
   tooltip: {
     trigger: "axis",
   },
-  // legend: {
-  // 	orient: "horizontal", // 垂直方向显示
-  // 	left: "left", // 距离左侧距离
-  // 	data: [
-  // 		{
-  // 			name: "支出",
-  // 		},
-  // 	],
-  // 	selectedMode: false,
-  // },
+
   grid: {
     left: "0%",
     right: "10%",
     bottom: "3%",
     containLabel: true,
-  },
-  toolbox: {
-    feature: {
-      saveAsImage: {},
-    },
   },
   xAxis: {
     type: "category",
@@ -151,58 +136,23 @@ get3And1List(3, 3);
 
 <style scoped lang="scss">
 #main2 {
-  width: 90vw;
+  width: 50vw;
   height: 500px;
 }
 
 .top {
+  box-sizing: border-box;
   display: flex;
-  gap: 0 20px;
+  gap: 0 16px;
+  width: 55vw;
   margin: 20px 0 30px;
-
-  &-item {
-    width: 272px;
-    height: 160px;
-    background: #f5f5f5;
-    border: none;
-    border-radius: 4px;
-
-    &-title {
-      font-size: 14px;
-      font-weight: 500;
-      color: #333;
-    }
-
-    &-money {
-      margin: 10px 0 20px;
-      font-size: 32px;
-      font-weight: bold;
-      color: #356ff3;
-    }
-
-    &-bi {
-      display: flex;
-      align-items: center;
-      font-size: 13px;
-      color: #656565;
-    }
-  }
-}
-
-.title {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  font-family: sans-serif;
-  font-size: 14px;
-  color: #356ff3;
 }
 
 .time {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 85%;
+  width: 45vw;
 }
 
 .line {

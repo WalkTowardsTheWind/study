@@ -137,7 +137,8 @@ const isAllComplete = computed(() => {
     !!formItem.value.auth_type &&
     !!formItem.value.tax_point &&
     !!formItem.value.sign_type &&
-    !!formItem.value.contract_img.length
+    !!formItem.value.contract_img.length &&
+    !!formItem.value.company_source_remark
   ) {
     return true;
   } else {
@@ -213,6 +214,8 @@ async function getAccountDetail() {
     id.value = route.query.id;
     const res = await getBusinessAccountDetail(id.value);
     try {
+      console.log(res.data);
+
       formItem.value = res.data;
     } catch (error: any) {
       return new Error("error", error);

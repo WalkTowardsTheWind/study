@@ -31,9 +31,7 @@
               :active-value="0"
               :inactive-value="1"
               inline-prompt
-              style="
-
---el-switch-on-color: #366ff4; --el-switch-off-color: #999"
+              style="--el-switch-on-color: #366ff4; --el-switch-off-color: #999"
               active-text="启用"
               inactive-text="关闭"
               size="large"
@@ -79,18 +77,7 @@
           <el-input v-model="addForm.name" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="上级分类">
-          <!-- <el-select class="w-full" v-model="addForm.parent">
-						<el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
-					</el-select> -->
-          <el-tree-select
-            class="w-full"
-            v-model="addForm.parent"
-            :data="options"
-            :props="treeProps"
-            check-strictly
-            :render-after-expand="false"
-            @change="selectChange"
-          />
+          <tree-select v-model.selecVal="addForm.parent" :options="options" />
         </el-form-item>
       </template>
       <!-- 编辑 -->
@@ -99,18 +86,7 @@
           <el-input v-model="addForm.name" />
         </el-form-item>
         <el-form-item label="上级分类">
-          <!-- <el-select class="w-full" v-model="addForm.parent">
-						<el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
-					</el-select> -->
-          <el-tree-select
-            class="w-full"
-            v-model="addForm.parent"
-            :data="options"
-            :props="treeProps"
-            check-strictly
-            :render-after-expand="false"
-            @change="selectChange"
-          />
+          <tree-select v-model.selecVal="addForm.parent" :options="options" />
         </el-form-item>
       </template>
 
@@ -138,6 +114,8 @@ import {
   updateCategoryStatus,
 } from "@/api/category";
 
+import treeSelect from "./tree-select.vue";
+
 const loading = ref(false);
 const tableData = reactive([] as any);
 const dialogType = ref("");
@@ -150,11 +128,6 @@ const addForm = ref({
   id: "",
 });
 const options = ref([] as any);
-
-const treeProps = {
-  label: "name",
-  value: "id",
-};
 
 const searchForm = reactive({
   name: "",
@@ -189,13 +162,6 @@ function edit(item: any) {
   dialogVisible.value = true;
   dialogType.value = "edit";
 
-  console.log(item);
-
-  // if (item.pid == 0) {
-  //   addForm.value.parent = item.id;
-  // } else {
-  //   addForm.value.parent = item.pid;
-  // }
   addForm.value.name = item.name;
   addForm.value.pid = item.pid;
   addForm.value.id = item.id;
@@ -216,7 +182,7 @@ function getOptions() {
  * 删除
  */
 function del(id: string) {
-  ElMessageBox.confirm("是否删除?", "Warning", {
+  ElMessageBox.confirm("是否删除?", {
     confirmButtonText: "确认",
     cancelButtonText: "取消",
     center: true,
