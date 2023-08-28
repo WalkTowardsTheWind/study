@@ -264,9 +264,9 @@
               label="客户点位"
               :prop="'tax_land_list.' + index + '.tax_point'"
               :rules="{
-                required: true,
-                message: '必填',
                 trigger: 'change',
+                required: true,
+                validator: taxPointValidator,
               }"
             >
               <el-input placeholder="请输入" v-model="tax.tax_point">
@@ -301,7 +301,15 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="上传合同">
+            <el-form-item
+              label="上传合同"
+              :prop="'tax_land_list.' + index + '.contract_img'"
+              :rules="{
+                required: true,
+                message: '必填',
+                trigger: 'change',
+              }"
+            >
               <MultiUpload v-model="tax.contract_img">
                 <i-ep-Plus />
               </MultiUpload>
@@ -351,6 +359,16 @@ import router from "@/router";
 import type { FormInstance, FormRules } from "element-plus";
 import { useStore } from "@/store/modules/taxLand";
 
+const taxPointValidator = (rule, value, callback) => {
+  const decimalRegex = /^\d{1,3}(\.\d{1,2})?$/;
+  if (value === "") {
+    callback(new Error("必填"));
+  } else if (!decimalRegex.test(value) || value > 100) {
+    callback(new Error("请输入最多三位整数和两位小数的数字"));
+  } else {
+    callback();
+  }
+};
 const taxLandStore = useStore();
 
 const taxpayerOptions = [
