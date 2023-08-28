@@ -35,7 +35,7 @@
 		<zxn-table :table-data="tableData" :column-list="columnList" hasSelect :page-info="pageInfo"
 			@page-change="pageChange">
 			<template #tableTop>
-				<el-button type="primary" plain @click="$router.push({ name: 'business-account-add' })">+ 新建</el-button>
+				<el-button type="primary" @click="$router.push({ name: 'business-account-add' })">+ 新建</el-button>
 				<!-- <el-dropdown class="ml-4" trigger="click">
           <el-button type="primary" plain>批量操作</el-button>
           <template #dropdown>

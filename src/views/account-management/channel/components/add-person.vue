@@ -34,7 +34,7 @@
 				<!-- 企业信息 -->
 				<el-row :gutter="50">
 					<el-col :span="8">
-						<el-form-item label="企业名称">
+						<el-form-item label="真实姓名">
 							<el-input placeholder="请输入"></el-input>
 						</el-form-item>
 						<el-form-item label="开户行">
@@ -49,7 +49,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="统一社会信用代码">
+						<el-form-item label="身份证号">
 							<el-input placeholder="请输入"></el-input>
 						</el-form-item>
 						<el-form-item label="银行账号">
@@ -65,25 +65,21 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="合伙人协议">
+						<el-form-item label="上传合伙人业务拓展协议">
 							<MultiUpload />
 						</el-form-item>
-						<el-form-item label="营业执照">
+						<el-form-item label="身份证">
 							<MultiUpload />
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<div class="m-b-[30px] m-t-[50px] relative">
 					<zxn-title>渠道税地信息</zxn-title>
-					<div class="addTax" @click="addTaxLand">+新增税地</div>
+					<div class="addTax">+新增税地</div>
 				</div>
 				<!-- 渠道税地信息 -->
 				<zxn-table :table-data="tableData" :column-list="columnList" :hasPagination="false"></zxn-table>
 			</el-form>
-			<!-- 新增税地 -->
-			<el-dialog :visible="visible">
-				123
-			</el-dialog>
 		</div>
 	</zxn-plan>
 </template>
@@ -92,7 +88,7 @@
 import MultiUpload from "@/components/Upload/MultiUpload.vue";
 
 const activeName = ref("1");
-const tabsList = [{ label: "新建企业渠道", name: "1" }];
+const tabsList = [{ label: "新建个人渠道", name: "1" }];
 const form = reactive({});
 
 const tableData = reactive([]);
@@ -115,12 +111,6 @@ const columnList = [
 	},
 	{ label: "操作", slot: "operation", fixed: "right" },
 ];
-
-const visible = ref(false)
-
-const addTaxLand = () => {
-	visible.value = true
-}
 </script>
 
 <style scoped lang="scss">
