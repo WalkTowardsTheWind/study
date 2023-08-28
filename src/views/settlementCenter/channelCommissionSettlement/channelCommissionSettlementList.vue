@@ -2,7 +2,14 @@
   <div class="p-[24px] p-b-[0]">
     <div class="recharge">
       <div>
-        累计下发<span class="money">{{ total_pay_money }}</span>
+        渠道佣金累计下发
+        <span class="money">{{ proxy.$moneyFormat(total_pay_money) }}</span
+        ><span class="unit">元</span>
+      </div>
+      <div class="p-l-[50px]">
+        渠道佣金待下发
+        <span class="money">{{ proxy.$moneyFormat(total_pay_money) }}</span
+        ><span class="unit">元</span>
       </div>
     </div>
     <zxn-search
@@ -19,16 +26,16 @@
         </el-input>
       </el-form-item>
       <el-form-item label="任务状态">
-        <el-select v-model="formItem.status" placeholder="全部" clearable>
+        <zxn-select v-model="formItem.status" @change="handleSearch">
           <el-option
             v-for="item in proxy.$const[
-              'settlementCenterEnum.settlementCenterEnum'
+              'settlementCenterEnum.channelCommissionSettlementList'
             ]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
+        </zxn-select>
       </el-form-item>
       <el-form-item prop="date" label="申请日期">
         <zxn-date-range v-model="formItem.timeData" />
@@ -42,8 +49,22 @@
       @page-change="handlePageChange"
       hasSelect
       @selection-change="handleSelect"
+      fieldTotal="settlement_order_no"
     >
       <template #tableTop>
+        <el-dropdown
+          class="ml-4"
+          trigger="click"
+          @command="handleBatchOperation"
+        >
+          <el-button type="primary">下载</el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="1">下载1</el-dropdown-item>
+              <el-dropdown-item command="2">下载2</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
         <el-dropdown
           class="ml-4"
           trigger="click"
@@ -59,18 +80,16 @@
         </el-dropdown>
       </template>
       <template #operation="scope">
-        <el-button
-          v-if="scope.row.status == 0"
-          link
-          type="primary"
-          @click="handleThaw(scope)"
+        <el-button link type="primary" @click="handleThaw(scope)"
+          >发送佣金确认单</el-button
+        >
+        <el-button link type="primary" @click="handleThaw(scope)"
+          >发送佣金确认单</el-button
+        >
+        <el-button link type="primary" @click="handleThaw(scope)"
           >下发</el-button
         >
-        <el-button
-          v-if="scope.row.status == 2"
-          link
-          type="primary"
-          @click="handleDelete(scope)"
+        <el-button link type="primary" @click="handleDelete(scope)"
           >编辑</el-button
         >
         <el-button link type="primary" @click="handleDelete(scope)"
@@ -156,7 +175,7 @@ const formItem = ref({
 
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "结算单号", prop: "settlement_order_no" },
+  { label: "发佣单号", prop: "settlement_order_no" },
   {
     label: "状态",
     type: "enum",
@@ -170,16 +189,16 @@ const columnList = [
       3: { color: "#F45136", backgroundColor: "#FDE3DF" },
     },
   },
-  { label: "任务数量", prop: "task_count" },
-  { label: "结算企业", prop: "company_name" },
-  { label: "税源地", prop: "tax_land_name" },
-  { label: "渠道点位", prop: "tax_point" },
-  { label: "渠道", prop: "channel_name" },
+  { label: "渠道名称", prop: "task_count" },
+  { label: "结算金额", prop: "company_name" },
+  { label: "渠道佣金（税后）", prop: "tax_land_name", width: 140 },
+  { label: "创建时间", prop: "tax_point" },
+  { label: "下发时间（打款日）", prop: "channel_name", width: 150 },
   {
     label: "操作",
     slot: "operation",
     fixed: "right",
-    width: 250,
+    width: 450,
     align: "right",
     headerAlign: "right",
   },
@@ -268,19 +287,15 @@ const handleDelete = (scope: any) => {
 //选中的数据
 const selectionData = ref([]);
 const handleSelect = (data: any) => {
-  selectionData.value = data;
-  console.log(selectionData.value);
+  selectionData.value = data.map((item: any) => item.id);
 };
 
 /**
  * 批量操作
  */
 const handleBatchOperation = (command: string | number | object) => {
-  var data = selectionData.value.map((item, index) => {
-    return index;
-  });
   if (command == 1) {
-    console.log("删除", data);
+    console.log("删除");
   } else if (command == 2) {
     console.log("下载");
   }
@@ -332,7 +347,7 @@ defineExpose({
 .recharge {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  // justify-content: space-between;
   height: 56px;
   padding-left: 25px;
   font-size: 14px;

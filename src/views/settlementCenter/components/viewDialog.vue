@@ -1,4 +1,3 @@
-import { LoginData } from '../../../api/auth/types';
 <template>
   <el-dialog
     custom-class="my-dialog"

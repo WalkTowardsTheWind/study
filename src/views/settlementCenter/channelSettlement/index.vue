@@ -22,7 +22,7 @@
         <el-select v-model="formItem.status" placeholder="全部" clearable>
           <el-option
             v-for="item in proxy.$const[
-              'settlementCenterEnum.settlementCenterEnum'
+              'settlementCenterEnum.channelSharingSettlementList'
             ]"
             :key="item.value"
             :label="item.label"

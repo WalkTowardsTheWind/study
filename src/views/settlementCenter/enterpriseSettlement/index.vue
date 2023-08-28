@@ -432,6 +432,9 @@ getTableData();
 onMounted(() => {
   // rou()
 });
+defineExpose({
+  getTableData,
+});
 </script>
 <style lang="scss" scoped>
 .recharge {
