@@ -79,7 +79,7 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        <el-dropdown class="ml-4" trigger="click">
+        <!-- <el-dropdown class="ml-4" trigger="click">
           <el-button type="primary">批量操作</el-button>
           <template #dropdown>
             <el-dropdown-menu>
@@ -87,7 +87,7 @@
               <el-dropdown-item command="2">下载</el-dropdown-item>
             </el-dropdown-menu>
           </template>
-        </el-dropdown>
+        </el-dropdown> -->
       </template>
       <template #operation="scope">
         <el-button
@@ -153,7 +153,7 @@ const levelOptions = [
   { label: "二级", val: "2" },
 ];
 
-const date = ref();
+const date = ref("");
 
 const formItem = reactive({
   name: "",
@@ -220,6 +220,8 @@ function handleSearch() {
   let params = {
     limit: pageInfo.limit,
     page: pageInfo.page,
+    start_time: date.value[0] || "",
+    end_time: date.value[1] || "",
     ...formItem,
   };
 
@@ -331,7 +333,7 @@ function handleReset() {
   formItem.channel_type = "";
   formItem.channel_admin_name = "";
   formItem.level = "";
-  date.value = [];
+  date.value = "";
   handleSearch();
 }
 handleSearch();

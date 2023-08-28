@@ -102,7 +102,7 @@
           <!-- <PicturePreview v-else :image-list="formItem.contract_img" /> -->
         </el-form-item>
         <div style="display: flex; justify-content: center">
-          <el-button type="primary" @click="taxLandConfirm('formItem')"
+          <el-button type="primary" @click="taxLandConfirm(formItem)"
             >确认</el-button
           >
           <el-button type="info" @click="cancelClick">取消</el-button>
