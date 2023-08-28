@@ -78,11 +78,35 @@
 					<div class="addTax" @click="addTaxLand">+新增税地</div>
 				</div>
 				<!-- 渠道税地信息 -->
-				<zxn-table :table-data="tableData" :column-list="columnList" :hasPagination="false"></zxn-table>
+				<zxn-table :table-data="tableData" :column-list="columnList" :hasPagination="false">
+					<template #operation></template>
+				</zxn-table>
 			</el-form>
 			<!-- 新增税地 -->
-			<el-dialog :visible="visible">
-				123
+			<el-dialog v-model="visible" title="新增税地" width="452px" :close-on-click-modal="false" top="20vh">
+				<el-form>
+					<el-row>
+						<el-col :span="22">
+							<el-form-item label="税地名称">
+								<el-select class="w-full" placeholder="请选择"></el-select>
+							</el-form-item>
+							<el-form-item label="渠道点位">
+								<el-input placeholder="请输入">
+									<template #append>%</template>
+								</el-input>
+							</el-form-item>
+							<el-form-item label="扣税点位">
+								<el-input placeholder="请输入">
+									<template #append>%</template>
+								</el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+				</el-form>
+				<div class="bottom-btn">
+					<el-button type="primary">确认</el-button>
+					<el-button>取消</el-button>
+				</div>
 			</el-dialog>
 		</div>
 	</zxn-plan>
@@ -116,6 +140,12 @@ const columnList = [
 	{ label: "操作", slot: "operation", fixed: "right" },
 ];
 
+const rules = reactive({
+	account: [{ required: true, message: "必填", trigger: "blur" }],
+	pwd: [{ required: true, message: "必填", trigger: "blur" }],
+	conf_pwd: [{ required: true, message: "必填", trigger: "blur" }],
+});
+
 const visible = ref(false)
 
 const addTaxLand = () => {
@@ -146,5 +176,11 @@ const addTaxLand = () => {
 
 :deep(.el-input__wrapper) {
 	width: 100% !important;
+}
+
+.bottom-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 </style>
