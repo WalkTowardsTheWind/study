@@ -54,7 +54,6 @@ function getList1() {
     ...pageInfo1,
   };
   getChannelTotalList(params).then((res) => {
-    console.log(res);
     tableData1.push(...res.data.data);
     pageInfo1.total = res.data.total;
   });

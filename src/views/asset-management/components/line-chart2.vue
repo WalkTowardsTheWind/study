@@ -80,10 +80,13 @@ const chart = ref({} as any);
 const options = ref({
   tooltip: {
     trigger: "axis",
+    axisPointer: {
+      type: "shadow",
+    },
   },
 
   grid: {
-    left: "0%",
+    left: "1%",
     right: "10%",
     bottom: "3%",
     containLabel: true,

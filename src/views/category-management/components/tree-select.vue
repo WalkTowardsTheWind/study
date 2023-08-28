@@ -2,6 +2,7 @@
   <el-tree-select
     class="w-full"
     v-model="selectVal"
+    placeholder="请选择"
     :data="options"
     :props="treeProps"
     check-strictly
@@ -14,6 +15,7 @@ defineProps({
   options: {
     type: Array,
     default: () => [],
+    required: true,
   },
 });
 const treeProps = {

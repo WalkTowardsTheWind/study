@@ -92,9 +92,12 @@ function get3And1List(time_type: number, index: number) {
 const options = ref({
   tooltip: {
     trigger: "axis",
+    axisPointer: {
+      type: "shadow",
+    },
   },
   grid: {
-    left: "0%",
+    left: "1%",
     right: "10%",
     bottom: "3%",
     containLabel: true,

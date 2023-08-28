@@ -7,9 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import router from "@/router";
 import LineChart1 from "./line-chart1.vue";
-import { getBusinessList } from "@/api/money";
 
 const pageInfo = reactive({
   page: 1,
