@@ -19,7 +19,6 @@
   height: 160px;
   background: #f5f5f5;
   border-radius: 4px 4px 4px 4px;
-  opacity: 1;
   padding: 26px 20px;
 
   &-top {
