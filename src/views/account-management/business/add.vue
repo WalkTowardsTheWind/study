@@ -158,71 +158,110 @@
 						</el-select>
 					</el-form-item>
 
-					<el-form-item label="企业邮箱">
-						<el-input placeholder="请输入" v-model="addForm.company_email" />
-					</el-form-item>
-					<el-form-item label="发票收件人">
-						<el-input placeholder="请输入" v-model="addForm.consignee" />
-					</el-form-item>
-					<el-form-item label="联系号码">
-						<el-input placeholder="请输入手机号或座机号" v-model="addForm.consignee_mobile" />
-					</el-form-item>
-					<el-form-item label="邮寄地址">
-						<el-input placeholder="请输入" v-model="addForm.address" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="8">
-					<!-- 新建税地 -->
-					<template v-for="(tax, index) in addForm.tax_land_list" :key="tax">
-						<el-form-item label="选择税地" :prop="'tax_land_list.' + index + '.tax_land_id'" :rules="{
-							required: true,
-							message: '必填',
-							trigger: 'change',
-						}">
-							<el-select class="w-full" placeholder="请选择" v-model="tax.tax_land_id" @change="addSelecTaxland(tax, index)">
-								<el-option v-for="(item, index) in taxLandOption" :key="index" :value="item.id"
-									:label="item.tax_land_name"></el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item label="客户点位" :prop="'tax_land_list.' + index + '.tax_point'" :rules="{
-							required: true,
-							message: '必填',
-							trigger: 'change',
-						}">
-							<el-input placeholder="请输入" v-model="tax.tax_point">
-								<template #append>%</template>
-							</el-input>
-						</el-form-item>
-						<el-form-item label="认证规则">
-							<el-select class="w-full" placeholder="请选择（单选）" v-model="tax.auth_type">
-								<el-option v-for="(item, index) in auth_type" :key="index" :value="item.value"
-									:label="item.label"></el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item label="签约规则">
-							<el-select class="w-full" placeholder="请选择（单选）" v-model="tax.sign_type">
-								<el-option v-for="(item, index) in sign_type" :key="index" :value="item.value"
-									:label="item.label"></el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item label="上传合同" :prop="'tax_land_list.' + index + '.contract_img'" :rules="{
-							required: true,
-							message: '必填',
-							trigger: 'change',
-
-						}">
-							<MultiUpload v-model="tax.contract_img">
-								<i-ep-Plus />
-							</MultiUpload>
-						</el-form-item>
-						<el-form-item v-if="addForm.tax_land_list.length > 1 && index != 0">
-							<div class="delTaxLand" @click="delTaxLand(index)">
-								× 删除税地
-							</div>
-						</el-form-item>
-					</template>
-				</el-col>
-				<!-- <el-col :span="8">
+          <el-form-item label="企业邮箱">
+            <el-input placeholder="请输入" v-model="addForm.company_email" />
+          </el-form-item>
+          <el-form-item label="发票收件人">
+            <el-input placeholder="请输入" v-model="addForm.consignee" />
+          </el-form-item>
+          <el-form-item label="联系号码">
+            <el-input
+              placeholder="请输入手机号或座机号"
+              v-model="addForm.consignee_mobile"
+            />
+          </el-form-item>
+          <el-form-item label="邮寄地址">
+            <el-input placeholder="请输入" v-model="addForm.address" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <!-- 新建税地 -->
+          <template v-for="(tax, index) in addForm.tax_land_list" :key="tax">
+            <el-form-item
+              label="选择税地"
+              :prop="'tax_land_list.' + index + '.tax_land_id'"
+              :rules="{
+                required: true,
+                message: '必填',
+                trigger: 'change',
+              }"
+            >
+              <el-select
+                class="w-full"
+                placeholder="请选择"
+                v-model="tax.tax_land_id"
+                @change="addSelecTaxland(tax, index)"
+              >
+                <el-option
+                  v-for="(item, index) in taxLandOption"
+                  :key="index"
+                  :value="item.id"
+                  :label="item.tax_land_name"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              label="客户点位"
+              :prop="'tax_land_list.' + index + '.tax_point'"
+              :rules="{
+                trigger: 'change',
+                required: true,
+                validator: taxPointValidator,
+              }"
+            >
+              <el-input placeholder="请输入" v-model="tax.tax_point">
+                <template #append>%</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="认证规则">
+              <el-select
+                class="w-full"
+                placeholder="请选择（单选）"
+                v-model="tax.auth_type"
+              >
+                <el-option
+                  v-for="(item, index) in auth_type"
+                  :key="index"
+                  :value="item.value"
+                  :label="item.label"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="签约规则">
+              <el-select
+                class="w-full"
+                placeholder="请选择（单选）"
+                v-model="tax.sign_type"
+              >
+                <el-option
+                  v-for="(item, index) in sign_type"
+                  :key="index"
+                  :value="item.value"
+                  :label="item.label"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              label="上传合同"
+              :prop="'tax_land_list.' + index + '.contract_img'"
+              :rules="{
+                required: true,
+                message: '必填',
+                trigger: 'change',
+              }"
+            >
+              <MultiUpload v-model="tax.contract_img">
+                <i-ep-Plus />
+              </MultiUpload>
+            </el-form-item>
+            <el-form-item v-if="addForm.tax_land_list.length > 1 && index != 0">
+              <div class="delTaxLand" @click="delTaxLand(index)">
+                × 删除税地
+              </div>
+            </el-form-item>
+          </template>
+        </el-col>
+        <!-- <el-col :span="8">
           <el-form-item>
             <div class="addTaxLand" @click="addNewTaxLand">+ 添加税地</div>
           </el-form-item>
@@ -249,6 +288,16 @@ import router from "@/router";
 import type { FormInstance, FormRules } from "element-plus";
 import { useStore } from "@/store/modules/taxLand";
 
+const taxPointValidator = (rule, value, callback) => {
+  const decimalRegex = /^\d{1,3}(\.\d{1,2})?$/;
+  if (value === "") {
+    callback(new Error("必填"));
+  } else if (!decimalRegex.test(value) || value > 100) {
+    callback(new Error("请输入最多三位整数和两位小数的数字"));
+  } else {
+    callback();
+  }
+};
 const taxLandStore = useStore();
 
 const taxpayerOptions = [
