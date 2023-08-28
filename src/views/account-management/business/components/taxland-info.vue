@@ -239,15 +239,28 @@ const selecTaxland = (tax_land_id: string) => {
 // 0 禁用 1 启用
 const handleStatus = (id: string, status: number | string) => {
 	status == 1 ? (status = 0) : (status = 1);
-	setTaxLandStatus(id, status).then((res: any) => {
-		ElMessage({
-			message: res.msg,
-			type: "success",
+	ElMessageBox.confirm(`是否${status == 1 ? "禁用" : "启用"}企业账号?`, {
+		confirmButtonText: "确认",
+		cancelButtonText: "取消",
+		center: true,
+	})
+		.then(() => {
+			setTaxLandStatus(id, status).then((res: any) => {
+				ElMessage({
+					message: res.msg,
+					type: "success",
+				});
+				setTimeout(() => {
+					location.reload();
+				}, 500);
+			});
+		})
+		.catch(() => {
+			ElMessage({
+				type: "info",
+				message: "取消操作",
+			});
 		});
-		setTimeout(() => {
-			location.reload();
-		}, 500);
-	});
 };
 
 const taxLandConfirm = async (formEl: FormInstance) => {
