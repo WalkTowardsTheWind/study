@@ -313,11 +313,11 @@
             </el-form-item>
           </template>
         </el-col>
-        <el-col :span="8">
+        <!-- <el-col :span="8">
           <el-form-item>
             <div class="addTaxLand" @click="addNewTaxLand">+ 添加税地</div>
           </el-form-item>
-        </el-col>
+        </el-col> -->
       </el-row>
       <zxn-bottom-btn>
         <el-button type="info" v-if="activeStep === 0" @click="$router.go(-1)"
