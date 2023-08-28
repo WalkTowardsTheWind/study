@@ -314,7 +314,9 @@ const getTableData = async () => {
     tableData.length = 0;
     console.log(newData[0]);
 
-    tableData.push(...newData);
+    // tableData.push(...newData);
+    tableData.push({ settlement_order_no: 1 });
+    console.log(123);
   } catch (error) {
     console.log(error);
   }
