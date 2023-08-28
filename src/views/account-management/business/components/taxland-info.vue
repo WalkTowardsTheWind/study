@@ -87,7 +87,7 @@ const taxLandOption = ref([] as any);
 function getTaxLandOption() {
 	taxLandOption.value.length = 0;
 	getLandList().then((res) => {
-		taxLandOption.value.push(...res.data);
+		taxLandOption.value.push(...res.data.tax_land_list);
 	});
 }
 
