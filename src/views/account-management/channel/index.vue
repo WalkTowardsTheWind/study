@@ -73,9 +73,9 @@
           <el-button type="primary" plain>+ 新建</el-button>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item @click="add(0)">个人</el-dropdown-item>
-              <el-dropdown-item @click="add(1)">企业</el-dropdown-item>
-              <el-dropdown-item @click="add(2)">已注册账户</el-dropdown-item>
+              <el-dropdown-item @click="add(0)">个人渠道</el-dropdown-item>
+              <el-dropdown-item @click="add(1)">企业渠道</el-dropdown-item>
+              <!-- <el-dropdown-item @click="add(2)">已注册账户</el-dropdown-item> -->
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -158,8 +158,6 @@ const date = ref();
 const formItem = reactive({
   name: "",
   channel_type: "2", // 默认2  后面在改
-  start_time: "",
-  end_time: "",
   level: "",
   status: "",
   channel_admin_name: "",
@@ -185,17 +183,16 @@ const columnList = [
       2: { color: "#356FF3", background: "#dfe8fd" },
       3: { color: "#F35036", background: "#fde3df" },
       4: { color: "#333333", background: "#dedede" },
-      width: 80,
     },
+    minWidth: 80,
   },
-  { label: "账户归属", prop: "name" },
-  { label: "联系人", prop: "name" },
-  { label: "联系方式", prop: "mobile" },
-  { label: "渠道等级", prop: "level" },
-  { label: "渠道管理员", prop: "channel_admin_name" },
-  { label: "创建时间", prop: "add_time", width: 220 },
-  // { label: "绑定信息", prop: "name" },
-  { label: "操作", slot: "operation", fixed: "right", width: 250 },
+  { label: "账户归属", prop: "name", minWidth: 200 },
+  { label: "联系人", prop: "name", minWidth: 200 },
+  { label: "联系方式", prop: "mobile", minWidth: 150 },
+  { label: "渠道等级", prop: "level", minWidth: 100 },
+  { label: "渠道管理员", prop: "channel_admin_name", minWidth: 150 },
+  { label: "创建时间", prop: "add_time", minWidth: 220 },
+  { label: "操作", slot: "operation", fixed: "right", width: 200 },
 ];
 
 const add = (type: any) => {
@@ -213,7 +210,6 @@ const toDetail = (status: string, item: any) => {
  * 页面
  */
 function pageChange(current: any) {
-  console.log(current);
   const { page, limit } = current;
   pageInfo.limit = limit;
   pageInfo.page = page;
@@ -222,15 +218,12 @@ function pageChange(current: any) {
 
 function handleSearch() {
   let params = {
-    ...pageInfo,
+    limit: pageInfo.limit,
+    page: pageInfo.page,
     ...formItem,
-    start_time: date[0] || "",
-    end_time: date[1] || "",
   };
 
   getChannelAccountList(params).then((res) => {
-    console.log(res);
-
     tableData.length = 0;
     tableData.push(...res.data.data);
     pageInfo.total = res.data.total;

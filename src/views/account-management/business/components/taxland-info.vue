@@ -102,7 +102,7 @@
           <!-- <PicturePreview v-else :image-list="formItem.contract_img" /> -->
         </el-form-item>
         <div style="display: flex; justify-content: center">
-          <el-button type="primary" @click="taxLandConfirm(formItem)"
+          <el-button type="primary" @click="taxLandConfirm('formItem')"
             >确认</el-button
           >
           <el-button type="info" @click="cancelClick">取消</el-button>
@@ -115,14 +115,11 @@
 <script lang="ts" setup>
 import { getLandList } from "@/api/common";
 import {
-  getBusinessAccountDetail,
-  editBusinessAccount,
   setTaxLandStatus,
   editAccountTaxLand,
   createAccountTaxLand,
 } from "@/api/account/business";
 
-import router from "@/router";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
@@ -166,7 +163,7 @@ watch(
 );
 
 const state = reactive({
-  tableData: [],
+  tableData: [] as any,
   dialogTitle: "",
   dialogVisible: false,
   dialogType: "",
