@@ -363,10 +363,12 @@ const taxPointValidator = (rule, value, callback) => {
   const decimalRegex = /^\d{1,3}(\.\d{1,2})?$/;
   if (value === "") {
     callback(new Error("必填"));
-  } else if (!decimalRegex.test(value) || value > 100) {
+  } else if (!decimalRegex.test(value)) {
     callback(new Error("请输入最多三位整数和两位小数的数字"));
+  } else if (value > 100) {
+    callback(new Error("请输入正确的数字"));
   } else {
-    callback();
+    callback(); // 校验通过时调用，没有传入参数即表示校验成功
   }
 };
 const taxLandStore = useStore();
