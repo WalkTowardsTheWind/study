@@ -1,10 +1,10 @@
 <template>
   <div class="p-[37px]">
     <!-- 企业 -->
-    <template v-if="channel_type == 'business'">
+    <template v-if="channel_type == '1'">
       <el-form label-width="auto">
         <el-row :gutter="50">
-          <el-col :span="8">
+          <el-col :span="7">
             <el-form-item label="渠道类型">
               <el-input />
             </el-form-item>
@@ -27,7 +27,7 @@
               <el-input />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="7">
             <el-form-item label="渠道管理员">
               <el-input />
             </el-form-item>
@@ -35,7 +35,8 @@
               <el-input />
             </el-form-item>
             <el-form-item label="密码">
-              <el-input />
+              <el-input value="********" readonly />
+              <span class="resetPWD">重置密码</span>
             </el-form-item>
             <el-form-item label="联系人">
               <el-input />
@@ -47,7 +48,7 @@
               <el-input />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="10">
             <el-form-item label="合伙人协议">
               <MultiUpload />
             </el-form-item>
@@ -59,10 +60,10 @@
       </el-form>
     </template>
     <!-- 个人 -->
-    <template v-if="channel_type == 'person'">
+    <template v-if="channel_type == '2'">
       <el-form label-width="auto">
         <el-row :gutter="50">
-          <el-col :span="8">
+          <el-col :span="7">
             <el-form-item label="渠道类型">
               <el-input />
             </el-form-item>
@@ -82,7 +83,7 @@
               <el-input />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="7">
             <el-form-item label="渠道管理员">
               <el-input />
             </el-form-item>
@@ -90,7 +91,8 @@
               <el-input />
             </el-form-item>
             <el-form-item label="密码">
-              <el-input />
+              <el-input value="********" readonly />
+              <span class="resetPWD">重置密码</span>
             </el-form-item>
             <el-form-item label="联系号码">
               <el-input />
@@ -102,7 +104,7 @@
               <el-input />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="10">
             <el-form-item label="合伙人协议">
               <MultiUpload />
             </el-form-item>
@@ -120,7 +122,14 @@
 </template>
 
 <script lang="ts" setup>
-const channel_type = ref("person");
+const channel_type = ref("1");
 </script>
 
-<style scoped></style>
+<style scoped>
+.resetPWD {
+  position: absolute;
+  right: 10px;
+  color: #356ff3;
+  cursor: pointer;
+}
+</style>

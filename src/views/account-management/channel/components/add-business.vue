@@ -8,22 +8,23 @@
       <el-form :model="form" label-width="auto">
         <!-- 基本信息 -->
         <el-row :gutter="50">
-          <el-col :span="8">
+          <el-col :span="7">
             <el-form-item label="账号名称">
               <el-input placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="确认密码">
+            <el-form-item label="联系人">
               <el-input placeholder="请输入"></el-input>
             </el-form-item>
+
             <el-form-item label="联系号码">
               <el-input placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="7">
             <el-form-item label="密码">
               <el-input placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="联系人">
+            <el-form-item label="确认密码">
               <el-input placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
@@ -33,7 +34,7 @@
         </div>
         <!-- 企业信息 -->
         <el-row :gutter="50">
-          <el-col :span="8">
+          <el-col :span="7">
             <el-form-item label="企业名称">
               <el-input placeholder="请输入"></el-input>
             </el-form-item>
@@ -47,7 +48,7 @@
               <el-select placeholder="请选择" class="w-full"></el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="7">
             <el-form-item label="统一社会信用代码">
               <el-input placeholder="请输入"></el-input>
             </el-form-item>
@@ -67,7 +68,7 @@
               </div>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="10">
             <el-form-item label="合伙人协议">
               <MultiUpload />
             </el-form-item>
@@ -90,7 +91,12 @@
         </zxn-table>
       </el-form>
       <!-- 新增税地 -->
-      <zxn-dialog v-model:visible="visible" title="新增税地">
+      <zxn-dialog
+        v-model:visible="visible"
+        title="新增税地"
+        @close-dialog="closeDialog"
+        @confirm-dialog="confirmClick"
+      >
         <el-form :model="newForm" :rules="rules">
           <el-row>
             <el-col :span="22">
@@ -110,10 +116,6 @@
             </el-col>
           </el-row>
         </el-form>
-        <div class="flex align-center justify-center">
-          <el-button type="primary" @click="confirmClick">确认</el-button>
-          <el-button @click="closeDialog">取消</el-button>
-        </div>
       </zxn-dialog>
     </div>
   </zxn-plan>
@@ -179,7 +181,7 @@ const addTaxLand = () => {
 .addTax {
   position: absolute;
   top: 5px;
-  right: 60px;
+  right: 0;
   height: 33px;
   line-height: 32px;
   padding: 0 5px;

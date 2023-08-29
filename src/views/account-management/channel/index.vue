@@ -178,7 +178,13 @@ const columnList = [
   { label: "渠道等级", prop: "level", minWidth: 100 },
   { label: "渠道管理员", prop: "channel_admin_name", minWidth: 150 },
   { label: "创建时间", prop: "add_time", minWidth: 220 },
-  { label: "操作", slot: "operation", fixed: "right", minWidth: 300 },
+  {
+    label: "操作",
+    slot: "operation",
+    align: "right",
+    fixed: "right",
+    minWidth: 300,
+  },
 ];
 
 const add = (type: any) => {
@@ -323,16 +329,3 @@ function handleReset() {
 }
 handleSearch();
 </script>
-
-<style lang="scss">
-.searchForm {
-  margin-top: 10px;
-}
-
-.line {
-  margin: 0 2px;
-  font-size: 1px;
-  color: #ccc;
-  border: none !important;
-}
-</style>

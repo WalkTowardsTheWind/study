@@ -8,7 +8,7 @@
       <el-form :model="form" label-width="auto">
         <!-- 基本信息 -->
         <el-row :gutter="50">
-          <el-col :span="8">
+          <el-col :span="7">
             <el-form-item label="账号名称">
               <el-input placeholder="请输入"></el-input>
             </el-form-item>
@@ -19,7 +19,7 @@
               <el-input placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="7">
             <el-form-item label="密码">
               <el-input placeholder="请输入"></el-input>
             </el-form-item>
@@ -33,7 +33,7 @@
         </div>
         <!-- 个人信息 -->
         <el-row :gutter="50">
-          <el-col :span="8">
+          <el-col :span="7">
             <el-form-item label="真实姓名">
               <el-input placeholder="请输入"></el-input>
             </el-form-item>
@@ -47,7 +47,7 @@
               <el-select placeholder="请选择" class="w-full"></el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="7">
             <el-form-item label="身份证号">
               <el-input placeholder="请输入"></el-input>
             </el-form-item>
@@ -67,7 +67,7 @@
               </div>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="10">
             <el-form-item label="上传合伙人业务拓展协议">
               <MultiUpload />
             </el-form-item>
@@ -184,7 +184,7 @@ const confirmClick = () => {};
 .addTax {
   position: absolute;
   top: 5px;
-  right: 60px;
+  right: 0px;
   height: 33px;
   line-height: 32px;
   padding: 0 5px;
@@ -203,11 +203,5 @@ const confirmClick = () => {};
 
 :deep(.el-input__wrapper) {
   width: 100% !important;
-}
-
-.bottom-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 </style>
