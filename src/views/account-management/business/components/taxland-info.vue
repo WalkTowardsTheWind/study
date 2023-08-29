@@ -8,7 +8,10 @@
 				<div>{{ scope.row.tax_point }}%</div>
 			</template>
 			<template #contract_img="scope">
-				<zxn-image :imgList="scope.row.contract_img" :width="40" :height="40" targetClick />
+				<<<<<<< HEAD <zxn-image :imgList="scope.row.contract_img" :width="40" :height="40" targetClick />
+				=======
+				<zxn-image :imgList="scope.row.contract_img" width="40" height="40" targetClick />
+				>>>>>>> dev
 			</template>
 			<template #operation="scope" v-if="isEdit">
 				<el-button link type="primary" @click="handleStatus(scope.row.id, scope.row.status)">{{ scope.row.status == 1 ?
@@ -61,6 +64,11 @@
 <script lang="ts" setup>
 import { getLandList } from "@/api/common";
 import {
+<<<<<<< HEAD
+=======
+	getBusinessAccountDetail,
+	editBusinessAccount,
+>>>>>>> dev
 	setTaxLandStatus,
 	editAccountTaxLand,
 	createAccountTaxLand,
@@ -122,7 +130,11 @@ watch(
 );
 
 const state = reactive({
+<<<<<<< HEAD
 	tableData: [] as any,
+=======
+	tableData: [],
+>>>>>>> dev
 	dialogTitle: "",
 	dialogVisible: false,
 	dialogType: "",
@@ -239,7 +251,7 @@ const selecTaxland = (tax_land_id: string) => {
 // 0 禁用 1 启用
 const handleStatus = (id: string, status: number | string) => {
 	status == 1 ? (status = 0) : (status = 1);
-	ElMessageBox.confirm(`是否${status == 1 ? "禁用" : "启用"}企业账号?`, {
+	ElMessageBox.confirm(`是否${status == 1 ? "启用" : "禁用"}企业账号?`, {
 		confirmButtonText: "确认",
 		cancelButtonText: "取消",
 		center: true,
