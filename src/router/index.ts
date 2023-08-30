@@ -288,15 +288,6 @@ export const constantRoutes: RouteRecordRaw[] = [
         meta: { title: "成员详情", hidden: true },
       },
       {
-        path: "channelSettlementA",
-        component: () =>
-          import(
-            "@/views/settlementCenter/channelSettlement/channelSettlementA.vue"
-          ),
-        name: "channelSettlementA",
-        meta: { title: "渠道佣金介绍", hidden: true },
-      },
-      {
         path: "addChannelCommissionSettlementDoc",
         component: () =>
           import(
@@ -322,15 +313,6 @@ export const constantRoutes: RouteRecordRaw[] = [
           ),
         name: "settlementDocDetails",
         meta: { title: "结算单详情", hidden: true },
-      },
-      {
-        path: "channelSettlementB",
-        component: () =>
-          import(
-            "@/views/settlementCenter/channelSettlement/channelSettlementB.vue"
-          ),
-        name: "channelSettlementB",
-        meta: { title: "任务", hidden: true },
       },
     ],
   },
