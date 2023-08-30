@@ -297,6 +297,33 @@ export const constantRoutes: RouteRecordRaw[] = [
         meta: { title: "渠道佣金介绍", hidden: true },
       },
       {
+        path: "addChannelCommissionSettlementDoc",
+        component: () =>
+          import(
+            "@/views/settlementCenter/channelCommissionSettlement/addChannelCommissionSettlementDoc.vue"
+          ),
+        name: "addChannelCommissionSettlementDoc",
+        meta: { title: "渠道佣金结算单", hidden: true },
+      },
+      {
+        path: "channelCommissionSettlementDetails",
+        component: () =>
+          import(
+            "@/views/settlementCenter/channelCommissionSettlement/channelCommissionSettlementDetails.vue"
+          ),
+        name: "channelCommissionSettlementDetails",
+        meta: { title: "渠道佣金结算详情", hidden: true },
+      },
+      {
+        path: "settlementDocDetails",
+        component: () =>
+          import(
+            "@/views/settlementCenter/channelCommissionSettlement/settlementDocDetails.vue"
+          ),
+        name: "settlementDocDetails",
+        meta: { title: "结算单详情", hidden: true },
+      },
+      {
         path: "channelSettlementB",
         component: () =>
           import(
