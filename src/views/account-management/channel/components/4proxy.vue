@@ -19,7 +19,7 @@
     <el-button type="primary" plain class="mb-[20px]" @click="add"
       >+新增</el-button
     >
-    <zxn-table :table-data="tableData" :column-list="columnList"></zxn-table>
+    <zxn-table :table-data="tableData1" :column-list="columnList1"></zxn-table>
     <zxn-dialog
       v-model:visible="visible"
       title="新增企业"
@@ -47,8 +47,8 @@ const formItem = reactive({});
 const date = ref([]);
 const visible = ref(false);
 
-const tableData = reactive([]);
-const columnList = [
+const tableData1 = reactive([]);
+const columnList1 = [
   { label: "企业名称" },
   { label: "绑定税地名称" },
   { label: "企业点位" },
@@ -56,6 +56,17 @@ const columnList = [
   { label: "企业累计下发金额" },
   { label: "渠道佣金收益（税后）" },
   { label: "扣税点位" },
+  { label: "绑定时间" },
+  { label: "操作" },
+];
+const tableData2 = reactive([]);
+const columnList2 = [
+  { label: "企业名称" },
+  { label: "绑定税地名称" },
+  { label: "企业点位" },
+  { label: "渠道点位" },
+  { label: "企业累计结算金额" },
+  { label: "渠道佣金收益" },
   { label: "绑定时间" },
   { label: "操作" },
 ];

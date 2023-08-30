@@ -191,9 +191,12 @@ const add = (type: any) => {
   router.push({ name: `channel-account-add-${type}` });
 };
 
-const toDetail = () => {
+const toDetail = (type: string, item: any) => {
+  const query =
+    type == "edit" ? { type: "edit", item } : { type: "detail", item };
   router.push({
     name: "channel-account-detail",
+    query,
   });
 };
 

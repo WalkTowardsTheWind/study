@@ -36,7 +36,7 @@
             </el-form-item>
             <el-form-item label="密码">
               <el-input value="********" readonly />
-              <span class="resetPWD">重置密码</span>
+              <span v-if="isEdit" class="resetPWD">重置密码</span>
             </el-form-item>
             <el-form-item label="联系人">
               <el-input />
@@ -92,7 +92,7 @@
             </el-form-item>
             <el-form-item label="密码">
               <el-input value="********" readonly />
-              <span class="resetPWD">重置密码</span>
+              <span v-if="isEdit" class="resetPWD">重置密码</span>
             </el-form-item>
             <el-form-item label="联系号码">
               <el-input />
@@ -118,10 +118,21 @@
         </el-row>
       </el-form>
     </template>
+    <zxn-bottom-btn v-if="isEdit">
+      <el-button type="primary">确认</el-button>
+      <el-button>取消</el-button>
+    </zxn-bottom-btn>
   </div>
 </template>
 
 <script lang="ts" setup>
+const props = defineProps({
+  isEdit: {
+    type: Boolean,
+    default: () => false,
+  },
+});
+
 const channel_type = ref("1");
 </script>
 

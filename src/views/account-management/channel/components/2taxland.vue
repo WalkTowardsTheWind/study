@@ -1,11 +1,14 @@
 <template>
   <div class="p-[37px]">
-    <el-button type="primary" plain class="mb-[20px]" @click="add"
+    <el-button v-if="isEdit" type="primary" plain class="mb-[20px]" @click="add"
       >+新增</el-button
     >
-    <zxn-table :table-data="tableData" :column-list="columnList"></zxn-table>
 
-    <!-- 新增 -->
+    <zxn-table :table-data="tableData" :column-list="columnList">
+      <template #operation v-if="isEdit"></template>
+    </zxn-table>
+
+    <!-- 新增/编辑 -->
     <zxn-dialog
       title="新增税地"
       v-model:visible="visible"
@@ -36,6 +39,14 @@
 </template>
 
 <script lang="ts" setup>
+const props = defineProps({
+  isEdit: {
+    type: Boolean,
+    default: () => false,
+  },
+});
+
+const dialogType = ref("");
 const tableData = reactive([]);
 const columnList = [
   { label: "税地名称" },
@@ -45,7 +56,7 @@ const columnList = [
   { label: "扣税点位" },
   { label: "渠道佣金累计" },
   { label: "绑定时间" },
-  { label: "操作" },
+  { label: "操作", slot: "operation" },
 ];
 
 const visible = ref(false);

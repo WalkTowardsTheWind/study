@@ -2,19 +2,19 @@
   <zxn-plan>
     <zxn-tabs :tabs-list="tabsList" v-model:activeName="activeName">
       <template #0>
-        <BasicView />
+        <BasicView :isEdit="isEdit" />
       </template>
       <template #1>
-        <TaxlandView />
+        <TaxlandView :isEdit="isEdit" />
       </template>
       <template #2>
-        <ChannelView />
+        <ChannelView :isEdit="isEdit" />
       </template>
       <template #3>
-        <ProxyView />
+        <ProxyView :isEdit="isEdit" />
       </template>
       <template #4>
-        <HistoryView />
+        <HistoryView :isEdit="isEdit" />
       </template>
     </zxn-tabs>
   </zxn-plan>
@@ -32,7 +32,7 @@ const route = useRoute();
 
 const isEdit = ref(false);
 
-if (route.query.status === "edit") {
+if (route.query.type === "edit") {
   isEdit.value = true;
 }
 

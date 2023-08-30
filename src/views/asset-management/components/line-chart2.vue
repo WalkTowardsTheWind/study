@@ -1,26 +1,20 @@
 <template>
   <div class="top">
-    <!-- 发佣合计 -->
+    <!-- 渠道结算合计 -->
     <card-view>
       <template #top>
-        <span>发佣合计</span>
+        <span>渠道结算合计</span>
       </template>
       <template #main>
         <span class="yuan">￥</span>{{ proxy.$moneyFormat(commission_total) }}
       </template>
     </card-view>
-    <!-- 利润 -->
-    <card-view>
-      <template #top>
-        <span>利润</span>
-      </template>
-      <template #main>
-        <span class="yuan">￥</span>{{ proxy.$moneyFormat(profit) }}
-      </template>
-    </card-view>
   </div>
   <div class="time">
     <zxn-title>发佣统计</zxn-title>
+    <div class="line_type">
+      <div class="income">渠道支出</div>
+    </div>
     <div class="date">
       <div
         v-for="(item, index) in dateList"
@@ -111,7 +105,7 @@ const options = ref({
       showSymbol: false,
       smooth: true,
       itemStyle: {
-        color: "#366ff4", // 折线颜色
+        color: "#36C5F3", // 折线颜色
         symbol: "circle", // 圆点标记
         symbolSize: 10, // 圆点大小
         lineStyle: {
@@ -158,15 +152,27 @@ get3And1List(3, 3);
   width: 45vw;
 }
 
-.line {
+.line_type {
   display: flex;
-  width: 4px;
-  height: 14px;
-  margin-right: 10px;
-  background: #356ff3;
-  border-radius: 4px;
-}
+  gap: 0 50px;
+  margin-left: 40%;
+  font-size: 14px;
 
+  .income {
+    position: relative;
+
+    &::before {
+      position: absolute;
+      top: 7px;
+      left: -20px;
+      width: 8px;
+      height: 8px;
+      content: "";
+      background-color: #36c5f3;
+      border-radius: 50%;
+    }
+  }
+}
 .date {
   display: flex;
   font-size: 14px;
