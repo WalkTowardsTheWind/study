@@ -330,6 +330,12 @@ export const constantRoutes: RouteRecordRaw[] = [
 				meta: { title: "发票中心", keepAlive: true, icon: "invoice" },
 			},
 			{
+				path: "person",
+				component: () => import("@/views/invoice/personInvoice/index.vue"),
+				name: "personInvoice",
+				meta: { title: "个人发票", keepAlive: true, icon: "invoice" },
+			},
+			{
 				path: "invoiceView",
 				component: () => import("@/views/invoice/invoiceManager/view.vue"),
 				name: "invoiceView",

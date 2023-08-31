@@ -35,7 +35,7 @@
                 v-for="(item, index) in dateList"
                 :key="index"
                 :class="{ active: item.val == currentDate }"
-                @click="chooseDate(item.val, index)"
+                @click="chooseDate(item.val)"
               >
                 {{ item.name }}
               </div>
@@ -74,11 +74,11 @@ const pageInfo1 = reactive({
 const tableData1 = reactive([] as any);
 
 const columnList1 = [
-  { label: "渠道", prop: "channel_name" },
-  { label: "渠道管理员", prop: "amount_before_tax" },
+  { label: "渠道", prop: "" },
+  { label: "渠道管理员", prop: "" },
   {
     label: "渠道累计结算税前",
-    prop: "amount_after_tax",
+    prop: "",
   },
   {
     label: "渠道累计结算税后",

@@ -204,14 +204,31 @@ const rules = reactive({
 const columnList = [
   { label: "税地名称", prop: "tax_land_name", minWidth: 250 },
   {
+    label: "状态",
+    type: "enum",
+    path: "accountEnum.taxLandStatusType",
+    prop: "status",
+    color: {
+      0: {
+        color: "#F35036",
+        background: "#FDE3DF",
+      },
+      1: {
+        color: "#356FF3",
+        background: "#DFE8FD",
+      },
+    },
+    minWidth: 100,
+  },
+  {
     label: "客户点位",
     prop: "tax_point",
     slot: "tax_point",
     minWidth: 120,
   },
   { label: "税地银行", prop: "bank", minWidth: 250 },
-  { label: "银行账户", prop: "sub_account_no", minWidth: 250 },
-  { label: "账户余额", prop: "balance", type: "money", minWidth: 250 },
+  { label: "银行账户", prop: "sub_account_no", minWidth: 200 },
+  { label: "账户余额", prop: "balance", type: "money", minWidth: 200 },
   {
     label: "签约合同",
     prop: "contract_img",
@@ -232,23 +249,14 @@ const columnList = [
     path: "accountEnum.authType",
     minWidth: 350,
   },
+
   {
-    label: "状态",
-    type: "enum",
-    path: "accountEnum.taxLandStatusType",
-    prop: "status",
-    color: {
-      0: {
-        color: "#F35036",
-        background: "#FDE3DF",
-      },
-      1: {
-        color: "#356FF3",
-        background: "#DFE8FD",
-      },
-    },
+    label: "操作",
+    slot: "operation",
+    align: "right",
+    fixed: "right",
+    minWidth: 120,
   },
-  { label: "操作", slot: "operation", fixed: "right", width: 250 },
 ];
 
 const taxLandClick = (active: string, item?: any) => {

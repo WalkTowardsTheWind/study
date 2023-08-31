@@ -169,7 +169,7 @@ const columnList = [
       3: { color: "#F35036", background: "#fde3df" },
       4: { color: "#333333", background: "#dedede" },
     },
-    minWidth: 80,
+    minWidth: 100,
   },
   { label: "渠道类型", prop: "name", minWidth: 200 },
   { label: "渠道名称", prop: "name", minWidth: 200 },
