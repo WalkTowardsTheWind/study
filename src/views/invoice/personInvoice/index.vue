@@ -39,8 +39,14 @@
             >下载发票</el-button
           >
         </template>
-        <template #img="{ row }">
-          <el-button type="primary" link>查看发票</el-button>
+        <template #apply_url="{ row }">
+          <el-button
+            type="primary"
+            link
+            :disabled="!(row.apply_url.length > 0)"
+            @click="checkUrl(row.apply_url)"
+            >查看发票</el-button
+          >
         </template>
       </zxn-table>
     </div>
@@ -68,15 +74,30 @@ const pageInfo = reactive({
 
 const date = ref([]);
 
-const tableData = reactive([]);
+const tableData = reactive([] as any);
 
 const columnList = [
-  { label: "任务人名称" },
-  { label: "开票状态" },
-  { label: "开票金额", type: "money" },
-  { label: "关联任务" },
-  { label: "开票时间" },
-  { label: "操作", slot: "img" },
+  { label: "任务人名称", prop: "real_name" },
+  {
+    label: "开票状态",
+    prop: "apply_status",
+    type: "enum",
+    path: "invoiceEnum.personInvoice",
+    color: {
+      0: {
+        color: "#333",
+        background: "#dedede",
+      },
+      1: {
+        color: "#356FF3",
+        background: "#dfe8fd",
+      },
+    },
+  },
+  { label: "开票金额", type: "money", prop: "settlement_amount" },
+  { label: "关联任务", prop: "task_name" },
+  { label: "开票时间", prop: "apply_time" },
+  { label: "操作", slot: "apply_url", prop: "apply_url" },
 ];
 
 const handleSearch = () => {
@@ -87,7 +108,10 @@ const handleSearch = () => {
     end_time: date.value[1] || "",
   };
   getPersonInvoiceList(params).then((res) => {
-    console.log(res);
+    // console.log(res);
+    tableData.length = 0;
+    pageInfo.total = res.data.total;
+    tableData.push(...res.data.data);
   });
 };
 const handleReset = () => {
@@ -107,6 +131,12 @@ const handlePageChange = (cur) => {
 };
 
 const uploadImg = () => {};
+
+const checkUrl = (url) => {
+  window.open(url, "_blank");
+};
+
+handleSearch();
 </script>
 
 <style scoped></style>
