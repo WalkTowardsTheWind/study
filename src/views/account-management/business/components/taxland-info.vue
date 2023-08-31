@@ -66,6 +66,20 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="第三方账户">
+          <el-input
+            placeholder="请输入"
+            v-model="state.formItem.third_user_name"
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item label="第三方密码">
+          <el-input
+            placeholder="请输入"
+            v-model="state.formItem.third_password"
+          >
+          </el-input>
+        </el-form-item>
         <el-form-item label="客户点位" prop="tax_point">
           <el-input placeholder="请输入" v-model="state.formItem.tax_point">
             <template #append>%</template>
@@ -115,6 +129,8 @@
 <script lang="ts" setup>
 import { getLandList } from "@/api/common";
 import {
+  getBusinessAccountDetail,
+  editBusinessAccount,
   setTaxLandStatus,
   editAccountTaxLand,
   createAccountTaxLand,
@@ -184,6 +200,8 @@ const state = reactive({
     id: "",
     company_id: "",
     tax_land_id: "",
+    third_user_name: "",
+    third_password: "",
     tax_point: "",
     auth_type: "",
     sign_type: "",

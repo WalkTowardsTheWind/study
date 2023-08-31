@@ -200,6 +200,20 @@
                 ></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="第三方账户">
+              <el-input
+                placeholder="请输入"
+                v-model="tax.third_user_name"
+                clearable
+              />
+            </el-form-item>
+            <el-form-item label="第三方密码">
+              <el-input
+                placeholder="请输入"
+                v-model="tax.third_password"
+                clearable
+              />
+            </el-form-item>
             <el-form-item
               label="客户点位"
               :prop="'tax_land_list.' + index + '.tax_point'"
@@ -330,50 +344,52 @@ const cateGoryOptions = ref([] as any);
 const addFormRef = ref<FormInstance>();
 
 const addForm = reactive({
-	account: "",
-	pwd: "",
-	conf_pwd: "",
-	contacts: "",
-	mobile: "",
-	company_name: "",
-	credit_code: "",
-	license_end_date: "",
-	legal_person: "",
-	legal_person_idcard: "",
-	legal_person_mobile: "",
-	category_id: "",
-	company_address: "",
-	license: [],
-	idcard_img: [],
-	seal: [], // 企业印章
-	bank: "",
-	bank_account: "",
-	taxpayer_type: "",
-	permit_img: [],
-	taxpayer_type_img: [],
-	header_img: [],
-	office_img: [],
-	company_source: "0",
-	sale_head: "",
-	sale_company: "",
-	channel_type: "",
-	parent_channel_id: "",
-	company_email: "",
-	consignee: "",
-	consignee_mobile: "",
-	address: "",
-	channel_point: "",
-	company_source_remark: "",
-	calculation_type: "",
-	tax_land_list: [
-		{
-			tax_land_id: "",
-			tax_point: "",
-			sign_type: "",
-			auth_type: "",
-			contract_img: [],
-		},
-	],
+  account: "",
+  pwd: "",
+  conf_pwd: "",
+  contacts: "",
+  mobile: "",
+  company_name: "",
+  credit_code: "",
+  license_end_date: "",
+  legal_person: "",
+  legal_person_idcard: "",
+  legal_person_mobile: "",
+  category_id: "",
+  company_address: "",
+  license: [],
+  idcard_img: [],
+  seal: [], // 企业印章
+  bank: "",
+  bank_account: "",
+  taxpayer_type: "",
+  permit_img: [],
+  taxpayer_type_img: [],
+  header_img: [],
+  office_img: [],
+  company_source: "0",
+  sale_head: "",
+  sale_company: "",
+  channel_type: "",
+  parent_channel_id: "",
+  company_email: "",
+  consignee: "",
+  consignee_mobile: "",
+  address: "",
+  channel_point: "",
+  company_source_remark: "",
+  calculation_type: "",
+  tax_land_list: [
+    {
+      tax_land_id: "",
+      third_user_name: "",
+      third_password: "",
+      tax_point: "",
+      sign_type: "",
+      auth_type: "",
+      contract_img: [],
+    },
+  ],
 } as any);
 
 const isTaxLandListValid = computed(() => {
