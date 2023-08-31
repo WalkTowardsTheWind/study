@@ -2,7 +2,7 @@
   <el-dialog
     custom-class="my-dialog"
     v-model="dialogVisible"
-    width="50%"
+    width="30%"
     :before-close="handleClose"
   >
     <template #header>
@@ -11,86 +11,37 @@
       </div>
     </template>
     <div>
-      <el-form
-        :model="formItem"
-        inline
-        label-width="90px"
-        label-position="left"
-      >
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="结算单号">
-              <el-text class="mx-1">{{ formItem.settlement_order_no }}</el-text>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="结算单状态">
-              <el-text class="mx-1">{{ formItem.status }}</el-text>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="任务企业">
-              <el-text class="mx-1">{{ formItem.company_name }}</el-text>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="结算时间">
-              <el-text class="mx-1">{{ formItem.settlement_time }}</el-text>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="结算金额">
-              <el-text class="mx-1">{{ formItem.real_money }}</el-text>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="渠道点位">
-              <el-text class="mx-1">{{ formItem.cooperate_pointnt }}</el-text>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="收佣渠道">
-              <el-text class="mx-1">{{ formItem.channel_name }}</el-text>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="税前佣金">
-              <el-text class="mx-1">{{ formItem.before_tax }}</el-text>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="税后佣金">
-              <el-text class="mx-1">{{ formItem.after_tax }}</el-text>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="收款银行">
-              <el-text class="mx-1">{{ formItem.bank }}</el-text>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="收款账号">
-              <el-text class="mx-1">{{ formItem.bank_account }}</el-text>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="凭证">
-              <multi-upload v-model="transfer_certificate"></multi-upload>
-            </el-form-item>
-          </el-col>
-        </el-row>
+      <el-form :model="formItem" label-width="90px">
+        <el-form-item label="渠道状态">
+          <el-input v-model="formItem.id" />
+        </el-form-item>
+        <el-form-item label="结算时间">
+          <el-input v-model="formItem.id" />
+        </el-form-item>
+        <el-form-item label="收佣渠道">
+          <el-input v-model="formItem.id" />
+        </el-form-item>
+        <el-form-item label="结算金额">
+          <el-input v-model="formItem.id" />
+        </el-form-item>
+        <el-form-item label="渠道佣金税前">
+          <el-input v-model="formItem.id" />
+        </el-form-item>
+        <el-form-item label="渠道佣金税后">
+          <el-input v-model="formItem.id" />
+        </el-form-item>
+        <el-form-item label="收款银行">
+          <el-input v-model="formItem.id" />
+        </el-form-item>
+        <el-form-item label="收款账户">
+          <el-input v-model="formItem.id" />
+        </el-form-item>
+        <el-form-item label="甲方">
+          <el-input v-model="formItem.id" />
+        </el-form-item>
+        <el-form-item label="乙方">
+          <el-input v-model="formItem.id" />
+        </el-form-item>
       </el-form>
     </div>
     <template #footer>

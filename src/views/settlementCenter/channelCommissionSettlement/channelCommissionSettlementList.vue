@@ -116,6 +116,11 @@
       </template>
     </zxn-table>
   </div>
+  <viewDialog v-model:dialogVisible="dialogVisible" :formItem="formData" />
+  <uploadCredentials
+    v-model:dialogVisible="uploadCredentialsDialogVisible"
+    :formItem="imageData"
+  />
 </template>
 <script setup lang="ts">
 import { transformTimeRange } from "@/utils";
@@ -125,10 +130,17 @@ import {
   deleteChannelSettlementDoc,
   getChannelSettlementDetails,
 } from "@/api/settlementCenter/channelSettlement";
+import viewDialog from "../components/viewDialog.vue";
+import uploadCredentials from "../components/uploadCredentials.vue";
 import { ElMessage } from "element-plus";
 const { proxy } = getCurrentInstance() as any;
 const router = useRouter();
-
+//发佣确认
+const dialogVisible = ref(false);
+const formData = ref([]);
+//下发
+const uploadCredentialsDialogVisible = ref(true);
+const imageData = ref([]);
 // 查询重置
 const pageInfo = reactive({
   page: 1,
