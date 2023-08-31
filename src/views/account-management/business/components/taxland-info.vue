@@ -129,8 +129,6 @@
 <script lang="ts" setup>
 import { getLandList } from "@/api/common";
 import {
-  getBusinessAccountDetail,
-  editBusinessAccount,
   setTaxLandStatus,
   editAccountTaxLand,
   createAccountTaxLand,

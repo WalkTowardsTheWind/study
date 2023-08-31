@@ -17,8 +17,8 @@
         <el-form-item label="状态">
           <el-select placeholder="请选择" v-model="formItem.status">
             <el-option value="" label="全部"></el-option>
-            <el-option value="1" label="成功"></el-option>
-            <el-option value="2" label="失败"></el-option>
+            <el-option value="1" label="已开票"></el-option>
+            <el-option value="0" label="未开票"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="开票时间">
@@ -49,6 +49,7 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
+import { getPersonInvoiceList } from "@/api/invoice/index";
 
 const tabsList = [{ name: "1", label: "个人发票" }];
 const activeName = ref("1");
@@ -81,10 +82,13 @@ const columnList = [
 const handleSearch = () => {
   let params = {
     name: formItem.name,
-    status: formItem.status,
+    apply_status: formItem.status,
     start_time: date.value[0] || "",
     end_time: date.value[1] || "",
   };
+  getPersonInvoiceList(params).then((res) => {
+    console.log(res);
+  });
 };
 const handleReset = () => {
   formItem.name = "";
