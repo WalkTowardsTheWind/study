@@ -260,6 +260,20 @@
                 ></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="第三方账户">
+              <el-input
+                placeholder="请输入"
+                v-model="tax.third_user_name"
+                clearable
+              />
+            </el-form-item>
+            <el-form-item label="第三方密码">
+              <el-input
+                placeholder="请输入"
+                v-model="tax.third_password"
+                clearable
+              />
+            </el-form-item>
             <el-form-item
               label="客户点位"
               :prop="'tax_land_list.' + index + '.tax_point'"
@@ -439,6 +453,8 @@ const addForm = reactive({
   tax_land_list: [
     {
       tax_land_id: "",
+      third_user_name: "",
+      third_password: "",
       tax_point: "",
       sign_type: "",
       auth_type: "",
