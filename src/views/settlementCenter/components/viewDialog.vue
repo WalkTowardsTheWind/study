@@ -59,7 +59,6 @@ const props = defineProps({
   dialogVisible: { type: Boolean, default: false },
   formItem: { type: Array, equired: true, default: () => {} },
 });
-var transfer_certificate = ref([]);
 
 let dialogVisible = computed(() => props.dialogVisible);
 let formItem = computed(() => {
@@ -72,7 +71,6 @@ const handleConfirm = async () => {
     var data = {
       id: formItem.value.id,
       status: "1",
-      transfer_certificate: JSON.stringify(transfer_certificate.value),
     };
     await updateChannelSettlementStatus(data);
     emit("update:dialogVisible", false);

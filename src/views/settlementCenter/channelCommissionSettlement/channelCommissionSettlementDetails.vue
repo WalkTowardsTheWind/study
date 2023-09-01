@@ -50,12 +50,12 @@
                 <el-input v-model="formData.data" placeholder="请输入" />
               </el-form-item>
               <el-form-item label="打款凭证">
-                <el-button link type="primary" @click="handleExport"
+                <el-button link type="primary" @click="handleInspect"
                   >查看</el-button
                 >
               </el-form-item>
               <el-form-item label="佣金确认单">
-                <el-button link type="primary" @click="handleExport"
+                <el-button link type="primary" @click="handleInspect"
                   >查看</el-button
                 >
               </el-form-item>
@@ -92,9 +92,11 @@
 </template>
 <script setup lang="ts">
 import { transformTimeRange } from "@/utils";
+import { downloadByData } from "@/utils/download";
 import { useRouter } from "vue-router";
 import {
   getChannelSettlementList,
+  getChannelSettlementDocExcel,
   deleteChannelSettlementDoc,
   getChannelSettlementDetails,
 } from "@/api/settlementCenter/channelSettlement";
@@ -155,55 +157,13 @@ const pageInfo = reactive({
   total: 0,
   limit: 20,
 });
-const handleReset = () => {
-  formItem.value = {
-    keywords: "",
-    status: "",
-    channelName: "",
-    tax: "",
-    name: "",
-    timeData: [],
-    page: "",
-    limit: "",
-  };
-  handleSearch();
-};
-const handleSearch = () => {
-  console.log("查询");
-  pageInfo.page = 1;
-  getTableData();
-  // 时间选择判断
-  // if (!formItem.value.timeData[0] && !formItem.value.timeData[1]) {
-  //   getTableData();
-  // } else if (formItem.value.timeData[0] && formItem.value.timeData[1]) {
-  //   getTableData();
-  // } else if (!formItem.value.timeData[0] && formItem.value.timeData[1]) {
-  //   ElMessage({
-  //     type: "warning",
-  //     message: `请选择开始时间`,
-  //   });
-  // } else if (formItem.value.timeData[0] && !formItem.value.timeData[1]) {
-  //   ElMessage({
-  //     type: "warning",
-  //     message: `请选择结束时间`,
-  //   });
-  // }
-};
 const handlePageChange = (cur: any) => {
   const { page, limit } = cur;
   pageInfo.page = page;
   pageInfo.limit = limit;
   getTableData();
 };
-// 累计
-var total_pay_money = ref();
 const formItem = ref({
-  keywords: "",
-  status: "",
-  channelName: "",
-  tax: "",
-  name: "",
-  timeData: [],
   page: "",
   limit: "",
 });
@@ -235,9 +195,10 @@ const columnList = [
     headerAlign: "right",
   },
 ];
-
-//导出
-const handleExport = () => {};
+// 查看
+const handleInspect = (scope: any) => {
+  console.log("查看");
+};
 // 详情
 const handleDetails = (scope: any) => {
   router.push({
@@ -257,17 +218,72 @@ const handleSelect = (data: any) => {
 /**
  * 批量操作
  */
+//导出
+const handleExport = () => {
+  if (Object.keys(selectionData.value).length == 0) {
+    ElMessage({
+      type: "error",
+      message: `请选择结算单`,
+    });
+  } else {
+    ElMessageBox({
+      title: "",
+      message: h("p", null, `确定批量导出表格`),
+      showCancelButton: true,
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      beforeClose: async (
+        action: string,
+        instance: { confirmButtonLoading: boolean },
+        done: () => void
+      ) => {
+        if (action === "confirm") {
+          instance.confirmButtonLoading = true;
+          await handleExcel(selectionData.value);
 
+          instance.confirmButtonLoading = false;
+          done();
+        } else {
+          done();
+        }
+      },
+    })
+      .then(() => {
+        ElMessage({
+          type: "success",
+          message: "导出成功",
+        });
+      })
+      .catch((action) => {
+        if (action === "cancel") {
+          ElMessage({
+            type: "warning",
+            message: "取消操作",
+          });
+        } else {
+          ElMessage({
+            type: "error",
+            message: "导出失败",
+          });
+        }
+      });
+  }
+};
+/**
+ * 下载Excel
+ */
+const handleExcel = async (ids: Array<string>) => {
+  const params = {
+    ids,
+    page: 1,
+    limit: pageInfo.limit,
+  };
+  const { data } = await getChannelSettlementDocExcel(params);
+  downloadByData(data, "渠道佣金结算单Excel.xlsx");
+};
 //获取数据
 const getTableData = async () => {
-  const newParams = transformTimeRange(
-    { ...formItem.value },
-    "createTimeData"
-  ) as any;
-  const params = transformTimeRange(
-    { ...newParams.value },
-    "paymentTimeData"
-  ) as any;
+  const params = transformTimeRange({ ...formItem.value }) as any;
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
   console.log(params);

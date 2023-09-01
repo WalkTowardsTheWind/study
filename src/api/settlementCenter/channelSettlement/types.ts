@@ -11,5 +11,11 @@ export interface keywords {
 export interface updateStatus {
   id: string;
   status: string;
-  transfer_certificate: string;
+  transfer_certificate?: string;
+}
+/**
+ * ids参数
+ */
+export interface Excel {
+  ids: Array<string>;
 }

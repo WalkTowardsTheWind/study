@@ -124,9 +124,11 @@
 </template>
 <script setup lang="ts">
 import { transformTimeRange } from "@/utils";
+import { downloadByData } from "@/utils/download";
 import { useRouter } from "vue-router";
 import {
   getChannelSettlementList,
+  getChannelSettlementListExcel,
   deleteChannelSettlementDoc,
   getChannelSettlementDetails,
 } from "@/api/settlementCenter/channelSettlement";
@@ -139,7 +141,7 @@ const router = useRouter();
 const dialogVisible = ref(false);
 const formData = ref([]);
 //下发
-const uploadCredentialsDialogVisible = ref(true);
+const uploadCredentialsDialogVisible = ref(false);
 const imageData = ref([]);
 // 查询重置
 const pageInfo = reactive({
@@ -239,91 +241,91 @@ const handleAdd = () => {
 };
 // 发送佣金确认单
 const handleSend = async (scope: any) => {
-  try {
-    const { data } = await getChannelSettlementDetails(Number(scope.row.id));
+  dialogVisible.value = true;
+  // try {
+  //   const { data } = await getChannelSettlementDetails(Number(scope.row.id));
 
-    const {
-      settlement_order_no,
-      status,
-      company_name,
-      settlement_time,
-      real_money,
-      cooperate_pointnt,
-      channel_name,
-      before_tax,
-      after_tax,
-      bank,
-      bank_account,
-    } = data.info;
-  } catch (error) {
-    console.log(error);
-  }
+  //   const {
+  //     settlement_order_no,
+  //     status,
+  //     company_name,
+  //     settlement_time,
+  //     real_money,
+  //     cooperate_pointnt,
+  //     channel_name,
+  //     before_tax,
+  //     after_tax,
+  //     bank,
+  //     bank_account,
+  //   } = data.info;
+  // } catch (error) {
+  //   console.log(error);
+  // }
 };
 // 撤回
 const handleWithdraw = async (scope: any) => {
-  try {
-    const { data } = await getChannelSettlementDetails(Number(scope.row.id));
-
-    const {
-      settlement_order_no,
-      status,
-      company_name,
-      settlement_time,
-      real_money,
-      cooperate_pointnt,
-      channel_name,
-      before_tax,
-      after_tax,
-      bank,
-      bank_account,
-    } = data.info;
-  } catch (error) {
-    console.log(error);
-  }
+  // try {
+  //   const { data } = await getChannelSettlementDetails(Number(scope.row.id));
+  //   const {
+  //     settlement_order_no,
+  //     status,
+  //     company_name,
+  //     settlement_time,
+  //     real_money,
+  //     cooperate_pointnt,
+  //     channel_name,
+  //     before_tax,
+  //     after_tax,
+  //     bank,
+  //     bank_account,
+  //   } = data.info;
+  // } catch (error) {
+  //   console.log(error);
+  // }
 };
 // 下发
 const handleDistribute = async (scope: any) => {
-  try {
-    const { data } = await getChannelSettlementDetails(Number(scope.row.id));
+  uploadCredentialsDialogVisible.value = true;
+  // try {
+  //   const { data } = await getChannelSettlementDetails(Number(scope.row.id));
 
-    const {
-      settlement_order_no,
-      status,
-      company_name,
-      settlement_time,
-      real_money,
-      cooperate_pointnt,
-      channel_name,
-      before_tax,
-      after_tax,
-      bank,
-      bank_account,
-    } = data.info;
-  } catch (error) {
-    console.log(error);
-  }
+  //   const {
+  //     settlement_order_no,
+  //     status,
+  //     company_name,
+  //     settlement_time,
+  //     real_money,
+  //     cooperate_pointnt,
+  //     channel_name,
+  //     before_tax,
+  //     after_tax,
+  //     bank,
+  //     bank_account,
+  //   } = data.info;
+  // } catch (error) {
+  //   console.log(error);
+  // }
 };
 // 重新生成
 const handleRebuild = async (scope: any) => {
-  try {
-    const { data } = await getChannelSettlementDetails(Number(scope.row.id));
-
-    const {
-      settlement_order_no,
-      status,
-      company_name,
-      settlement_time,
-      real_money,
-      cooperate_pointnt,
-      channel_name,
-      before_tax,
-      after_tax,
-      bank,
-      bank_account,
-    } = data.info;
-  } catch (error) {
-    console.log(error);
-  }
+  // try {
+  //   const { data } = await getChannelSettlementDetails(Number(scope.row.id));
+  //   const {
+  //     settlement_order_no,
+  //     status,
+  //     company_name,
+  //     settlement_time,
+  //     real_money,
+  //     cooperate_pointnt,
+  //     channel_name,
+  //     before_tax,
+  //     after_tax,
+  //     bank,
+  //     bank_account,
+  //   } = data.info;
+  // } catch (error) {
+  //   console.log(error);
+  // }
 };
 // 删除
 const handleDelete = (scope: any) => {
@@ -377,37 +379,69 @@ const handleSelect = (data: any) => {
  * 批量操作
  */
 // 导出
-const handleExport = (scope: any) => {
-  ElMessageBox({
-    title: "",
-    message: h("p", null, `确定删除该任务`),
-    showCancelButton: true,
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    beforeClose: async (
-      action: string,
-      instance: { confirmButtonLoading: boolean },
-      done: () => void
-    ) => {
-      if (action === "confirm") {
-        instance.confirmButtonLoading = true;
-
-        await deleteChannelSettlementDoc(scope.row.id);
-
-        instance.confirmButtonLoading = false;
-        done();
-      } else {
-        done();
-      }
-    },
-  }).then(() => {
+const handleExport = () => {
+  if (Object.keys(selectionData.value).length == 0) {
     ElMessage({
-      type: "success",
-      message: "成功删除该任务",
+      type: "error",
+      message: `请选择结算单`,
     });
-    getTableData();
-  });
+  } else {
+    ElMessageBox({
+      title: "",
+      message: h("p", null, `确定批量导出表格`),
+      showCancelButton: true,
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      beforeClose: async (
+        action: string,
+        instance: { confirmButtonLoading: boolean },
+        done: () => void
+      ) => {
+        if (action === "confirm") {
+          instance.confirmButtonLoading = true;
+          await handleExcel(selectionData.value);
+
+          instance.confirmButtonLoading = false;
+          done();
+        } else {
+          done();
+        }
+      },
+    })
+      .then(() => {
+        ElMessage({
+          type: "success",
+          message: "导出成功",
+        });
+      })
+      .catch((action) => {
+        if (action === "cancel") {
+          ElMessage({
+            type: "warning",
+            message: "取消操作",
+          });
+        } else {
+          ElMessage({
+            type: "error",
+            message: "导出失败",
+          });
+        }
+      });
+  }
 };
+/**
+ * 下载Excel
+ */
+const handleExcel = async (ids: Array<string>) => {
+  const params = {
+    ids,
+    page: 1,
+    limit: pageInfo.limit,
+  };
+  const { data } = await getChannelSettlementListExcel(params);
+  downloadByData(data, "渠道佣金结算列表Excel.xlsx");
+};
+// 拉取数据
 const getTableData = async () => {
   const newParams = transformTimeRange(
     { ...formItem.value },
