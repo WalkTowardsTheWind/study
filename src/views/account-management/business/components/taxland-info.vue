@@ -66,6 +66,20 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="第三方账户">
+          <el-input
+            placeholder="请输入"
+            v-model="state.formItem.third_user_name"
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item label="第三方密码">
+          <el-input
+            placeholder="请输入"
+            v-model="state.formItem.third_password"
+          >
+          </el-input>
+        </el-form-item>
         <el-form-item label="客户点位" prop="tax_point">
           <el-input placeholder="请输入" v-model="state.formItem.tax_point">
             <template #append>%</template>
@@ -127,6 +141,19 @@ const route = useRoute();
 import { useStore } from "@/store/modules/taxLand";
 import type { FormInstance } from "element-plus";
 
+const taxPointValidator = (rule, value, callback) => {
+  const decimalRegex = /^\d{1,3}(\.\d{1,2})?$/;
+  if (value === "") {
+    callback(new Error("必填"));
+  } else if (!decimalRegex.test(value)) {
+    callback(new Error("请输入最多三位整数和两位小数的数字"));
+  } else if (value > 100) {
+    callback(new Error("请输入正确的数字"));
+  } else {
+    callback(); // 校验通过时调用，没有传入参数即表示校验成功
+  }
+};
+
 const formItem = ref<FormInstance>();
 
 const taxLandStore = useStore();
@@ -171,6 +198,8 @@ const state = reactive({
     id: "",
     company_id: "",
     tax_land_id: "",
+    third_user_name: "",
+    third_password: "",
     tax_point: "",
     auth_type: "",
     sign_type: "",
@@ -180,7 +209,9 @@ const state = reactive({
 
 const rules = reactive({
   tax_land_id: [{ required: true, message: "必填", trigger: "change" }],
-  tax_point: [{ required: true, message: "必填", trigger: "blur" }],
+  tax_point: [
+    { required: true, trigger: "change", validator: taxPointValidator },
+  ],
   auth_type: [{ required: true, message: "必填", trigger: "change" }],
   sign_type: [{ required: true, message: "必填", trigger: "change" }],
   contract_img: [{ required: true, message: "必填", trigger: "change" }],
@@ -189,14 +220,31 @@ const rules = reactive({
 const columnList = [
   { label: "税地名称", prop: "tax_land_name", minWidth: 250 },
   {
+    label: "状态",
+    type: "enum",
+    path: "accountEnum.taxLandStatusType",
+    prop: "status",
+    color: {
+      0: {
+        color: "#F35036",
+        background: "#FDE3DF",
+      },
+      1: {
+        color: "#356FF3",
+        background: "#DFE8FD",
+      },
+    },
+    minWidth: 100,
+  },
+  {
     label: "客户点位",
     prop: "tax_point",
     slot: "tax_point",
     minWidth: 120,
   },
   { label: "税地银行", prop: "bank", minWidth: 250 },
-  { label: "银行账户", prop: "sub_account_no", minWidth: 250 },
-  { label: "账户余额", prop: "balance", type: "money", minWidth: 250 },
+  { label: "银行账户", prop: "sub_account_no", minWidth: 200 },
+  { label: "账户余额", prop: "balance", type: "money", minWidth: 200 },
   {
     label: "签约合同",
     prop: "contract_img",
@@ -217,23 +265,14 @@ const columnList = [
     path: "accountEnum.authType",
     minWidth: 350,
   },
+
   {
-    label: "状态",
-    type: "enum",
-    path: "accountEnum.taxLandStatusType",
-    prop: "status",
-    color: {
-      0: {
-        color: "#F35036",
-        background: "#FDE3DF",
-      },
-      1: {
-        color: "#356FF3",
-        background: "#DFE8FD",
-      },
-    },
+    label: "操作",
+    slot: "operation",
+    align: "right",
+    fixed: "right",
+    minWidth: 120,
   },
-  { label: "操作", slot: "operation", fixed: "right", width: 250 },
 ];
 
 const taxLandClick = (active: string, item?: any) => {
@@ -278,15 +317,28 @@ const selecTaxland = (tax_land_id: string) => {
 // 0 禁用 1 启用
 const handleStatus = (id: string, status: number | string) => {
   status == 1 ? (status = 0) : (status = 1);
-  setTaxLandStatus(id, status).then((res: any) => {
-    ElMessage({
-      message: res.msg,
-      type: "success",
+  ElMessageBox.confirm(`是否${status == 1 ? "启用" : "禁用"}企业账号?`, {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    center: true,
+  })
+    .then(() => {
+      setTaxLandStatus(id, status).then((res: any) => {
+        ElMessage({
+          message: res.msg,
+          type: "success",
+        });
+        setTimeout(() => {
+          location.reload();
+        }, 500);
+      });
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "取消操作",
+      });
     });
-    setTimeout(() => {
-      location.reload();
-    }, 500);
-  });
 };
 
 const taxLandConfirm = async (formEl: FormInstance) => {
@@ -308,15 +360,19 @@ const taxLandConfirm = async (formEl: FormInstance) => {
     });
   }
   if (state.dialogType == "edit") {
-    editAccountTaxLand(state.formItem).then((res) => {
-      ElMessage({
-        message: "编辑成功",
-        type: "success",
-      });
-      state.dialogVisible = false;
-      setTimeout(() => {
-        location.reload();
-      }, 200);
+    await formEl.validate((valid, fields) => {
+      if (valid) {
+        editAccountTaxLand(state.formItem).then((res) => {
+          ElMessage({
+            message: "编辑税地成功",
+            type: "success",
+          });
+          state.dialogVisible = false;
+          setTimeout(() => {
+            location.reload();
+          }, 200);
+        });
+      }
     });
   }
 };
