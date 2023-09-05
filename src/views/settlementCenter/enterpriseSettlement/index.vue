@@ -160,6 +160,8 @@ import {
 } from "@/api/settlementCenter/enterpriseSettlement";
 import { businessAccountSetStatus } from "@/api/account/business";
 import { ElMessage } from "element-plus";
+import { useRouteParams } from "@/store/modules/routeParams";
+import { isNumber } from "@/utils/is";
 const dialogVisible = ref(false);
 const imageList = ref([]) as any;
 const { proxy } = getCurrentInstance() as any;
@@ -428,9 +430,16 @@ const getTableData = async () => {
     console.log(error);
   }
 };
-getTableData();
 onMounted(() => {
-  // rou()
+  const { pullParams } = useRouteParams();
+  const searchParams: any = pullParams("settlementCenter");
+  if (searchParams) {
+    formItem.status =
+      isNumber(searchParams.status) || searchParams.status
+        ? searchParams.status + ""
+        : "";
+  }
+  getTableData();
 });
 </script>
 <style lang="scss" scoped>
