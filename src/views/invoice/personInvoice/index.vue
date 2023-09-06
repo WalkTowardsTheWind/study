@@ -15,7 +15,11 @@
           </el-input>
         </el-form-item>
         <el-form-item label="状态">
-          <el-select placeholder="请选择" v-model="formItem.status">
+          <el-select
+            placeholder="请选择"
+            v-model="formItem.status"
+            @change="handleSelectChange"
+          >
             <el-option value="" label="全部"></el-option>
             <el-option value="1" label="已开票"></el-option>
             <el-option value="0" label="未开票"></el-option>
@@ -127,6 +131,11 @@ const handlePageChange = (cur) => {
   const { limit, page } = cur;
   pageInfo.limit = limit;
   pageInfo.page = page;
+  handleSearch();
+};
+
+const handleSelectChange = (val) => {
+  formItem.status = val;
   handleSearch();
 };
 
