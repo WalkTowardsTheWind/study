@@ -18,12 +18,19 @@
         <div>{{ scope.row.tax_point }}%</div>
       </template>
       <template #contract_img="scope">
-        <zxn-image
+        <!-- <zxn-image
           :imgList="scope.row.contract_img"
           :width="40"
           :height="40"
           targetClick
-        />
+        /> -->
+        <el-button
+          v-if="scope.row.contract_img"
+          type="primary"
+          link
+          @click="checkImg(scope.row.contract_img)"
+          >查看</el-button
+        >
       </template>
       <template #operation="scope" v-if="isEdit">
         <el-button
@@ -385,6 +392,10 @@ const cancelClick = () => {
   state.formItem.sign_type = "";
   state.formItem.auth_type = "";
   state.formItem.contract_img = [];
+};
+
+const checkImg = (url) => {
+  window.open(url, "_blank");
 };
 
 getTaxLandOption();
