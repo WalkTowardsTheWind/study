@@ -50,6 +50,7 @@
       :title="state.dialogTitle"
       width="25%"
       :close-on-click-modal="false"
+      @close="cancelClick"
     >
       <el-form
         ref="formItem"
@@ -386,6 +387,8 @@ const taxLandConfirm = async (formEl: FormInstance) => {
 const cancelClick = () => {
   state.dialogVisible = false;
   state.formItem.id = "";
+  state.formItem.third_user_name = "";
+  state.formItem.third_password = "";
   state.formItem.company_id = "";
   state.formItem.tax_land_id = "";
   state.formItem.tax_point = "";
