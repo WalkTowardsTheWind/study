@@ -40,7 +40,7 @@ router.beforeEach(async (to, from, next) => {
           const accessRoutes = permissionStore.generateRoutes(menuList);
           accessRoutes.forEach((route) => {
             console.log(route, "=========");
-            // router.addRoute(route);
+            router.addRoute(route);
           });
           next({ ...to, replace: true });
         } catch (error) {

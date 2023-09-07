@@ -22,7 +22,7 @@ const filterAsyncRoutes = (routes: RouteRecordRaw[]) => {
       title: route.title,
       icon: route.icon,
       hidden: !route.is_header,
-      keepAlive: !route.c_cache,
+      keepAlive: route.c_cache === "1",
     };
     if (route.c_path?.toString() === "Layout") {
       tmpRoute.component = Layout;
@@ -30,6 +30,7 @@ const filterAsyncRoutes = (routes: RouteRecordRaw[]) => {
       const component = modules[`../../views/${route.c_path}.vue`];
       if (component) {
         tmpRoute.component = component;
+        // tmpRoute.name = 'taskManagerIndex';
       } else {
         tmpRoute.component = modules[`../../views/error-page/404.vue`];
       }
@@ -37,6 +38,7 @@ const filterAsyncRoutes = (routes: RouteRecordRaw[]) => {
     if (route.children) {
       tmpRoute.children = filterAsyncRoutes(route.children);
     }
+    console.log(tmpRoute, "tmpRoute");
     asyncRoutes.push(tmpRoute);
   });
   return asyncRoutes;

@@ -72,10 +72,14 @@ const handleMore = () => {
 
 const { pushParams } = useRouteParams();
 const routerName = {
+  1: "recharge-center",
   2: "taskManagerIndex",
+  3: "settlementCenter",
+  4: "invoiceManager",
+  5: "taxLandManagementIndex",
 };
-const handleGoRouter = (item: { type: number; status: number }) => {
-  pushParams(routerName[item.type], { status: item.status });
+const handleGoRouter = (item: { type: number; target_id: number }) => {
+  pushParams(routerName[item.type], { status: item.target_id });
   router.push({ name: routerName[item.type] });
   notifyView(item.id);
 };
