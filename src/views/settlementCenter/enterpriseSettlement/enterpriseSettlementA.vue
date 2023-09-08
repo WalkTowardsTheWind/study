@@ -234,7 +234,11 @@
               {{ row.settlement_status === 2 ? row.reason : "" }}
             </template>
             <template #operation="scope">
-              <el-button link type="primary" @click="handleInspect(scope)"
+              <el-button
+                v-if="scope.row.payment_receipt.length"
+                link
+                type="primary"
+                @click="handleInspect(scope)"
                 >查看回单</el-button
               >
               <el-button link type="primary" @click="handleDetails(scope)"
