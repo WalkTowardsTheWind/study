@@ -126,3 +126,15 @@ export function updateChannelTaxland(data: any) {
 		data
 	});
 }
+
+/**
+ * 渠道税地启用禁用
+ * @param params 
+ * @returns 
+ */
+export function setChannelTaxlandStatus(params: any) {
+	return request({
+		url: `/adminapi/account/channel/taxland/${params.id}/${params.status}`,
+		method: "get",
+	});
+}

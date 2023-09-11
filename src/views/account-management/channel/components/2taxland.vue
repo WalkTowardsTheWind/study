@@ -14,8 +14,16 @@
       <template #channel_point="{ row }"> {{ row.channel_point }}% </template>
       <template #tax_point="{ row }"> {{ row.tax_point }}% </template>
       <template #operation="{ row }" v-if="isEdit">
-        <el-button v-if="row.status == 0" link type="primary">启用</el-button>
-        <el-button v-else link type="primary">禁用</el-button>
+        <el-button
+          v-if="row.status == 0"
+          link
+          type="primary"
+          @click="setStatus(row.id, 1)"
+          >启用</el-button
+        >
+        <el-button v-else link type="primary" @click="setStatus(row.id, 0)"
+          >禁用</el-button
+        >
         <el-button link type="primary" @click="edit(row)">编辑</el-button>
       </template>
     </zxn-table>
@@ -79,6 +87,7 @@
 import {
   addChannelTaxland,
   getChannelAccountTaxland,
+  setChannelTaxlandStatus,
   updateChannelTaxland,
 } from "@/api/account/channel";
 import { getLandList } from "@/api/common";
@@ -249,6 +258,52 @@ const edit = (item) => {
   newForm.tax_point = item.tax_point;
   newForm.id = item.id;
   newForm.remark = item.remark;
+};
+
+const setStatus = (id, status) => {
+  switch (status) {
+    case 0:
+      ElMessageBox.confirm("是否禁用税地？", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        center: true,
+      })
+        .then(() => {
+          setChannelTaxlandStatus({ id, status }).then((res) => {
+            ElMessage.success({
+              message: "禁用成功",
+            });
+            handleSearch();
+          });
+        })
+        .catch(() => {
+          ElMessage.info({
+            message: "取消操作",
+          });
+        });
+      break;
+    case 1:
+      ElMessageBox.confirm("是否启用税地？", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        center: true,
+      })
+        .then(() => {
+          setChannelTaxlandStatus({ id, status }).then((res) => {
+            ElMessage.success({
+              message: "启用成功",
+            });
+            handleSearch();
+          });
+        })
+        .catch(() => {
+          ElMessage.info({
+            message: "取消操作",
+          });
+        });
+
+      break;
+  }
 };
 
 getTaxLandOption();
