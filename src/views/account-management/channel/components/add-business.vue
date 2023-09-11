@@ -5,27 +5,33 @@
       <div class="m-b-[20px]">
         <zxn-title>基本信息</zxn-title>
       </div>
-      <el-form :model="form" label-width="auto">
+      <el-form :model="form" label-width="auto" ref="formRef" :rules="rules">
         <!-- 基本信息 -->
         <el-row :gutter="50">
           <el-col :span="7">
-            <el-form-item label="账号名称">
-              <el-input placeholder="请输入"></el-input>
+            <el-form-item label="账号名称" prop="username">
+              <el-input placeholder="请输入" v-model="form.username"></el-input>
             </el-form-item>
             <el-form-item label="联系人">
-              <el-input placeholder="请输入"></el-input>
+              <el-input placeholder="请输入" v-model="form.contact"></el-input>
             </el-form-item>
 
             <el-form-item label="联系号码">
-              <el-input placeholder="请输入"></el-input>
+              <el-input
+                placeholder="请输入"
+                v-model="form.contact_phone"
+              ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="7">
-            <el-form-item label="密码">
-              <el-input placeholder="请输入"></el-input>
+            <el-form-item label="密码" prop="password">
+              <el-input placeholder="请输入" v-model="form.password"></el-input>
             </el-form-item>
-            <el-form-item label="确认密码">
-              <el-input placeholder="请输入"></el-input>
+            <el-form-item label="确认密码" prop="conf_password">
+              <el-input
+                placeholder="请输入"
+                v-model="form.conf_password"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -35,63 +41,93 @@
         <!-- 企业信息 -->
         <el-row :gutter="50">
           <el-col :span="7">
-            <el-form-item label="企业名称">
-              <el-input placeholder="请输入"></el-input>
+            <el-form-item label="企业名称" prop="company_name">
+              <el-input
+                placeholder="请输入"
+                v-model="form.company_name"
+              ></el-input>
             </el-form-item>
             <el-form-item label="开户行">
-              <el-input placeholder="请输入"></el-input>
+              <el-input placeholder="请输入" v-model="form.bank"></el-input>
             </el-form-item>
-            <el-form-item label="渠道管理员">
-              <el-select placeholder="请选择" class="w-full"></el-select>
+            <el-form-item label="渠道管理员" prop="channel_admin">
+              <el-input
+                placeholder="请输入"
+                class="w-full"
+                v-model="form.channel_admin"
+              ></el-input>
             </el-form-item>
             <el-form-item label="收款方式">
-              <el-select placeholder="请选择" class="w-full"></el-select>
+              <el-select
+                placeholder="请选择"
+                class="w-full"
+                v-model="form.collection_type"
+              >
+                <el-option
+                  v-for="i in collection_type"
+                  :value="i.value"
+                  :label="i.label"
+                ></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="7">
             <el-form-item label="统一社会信用代码">
-              <el-input placeholder="请输入"></el-input>
+              <el-input
+                placeholder="请输入"
+                v-model="form.credit_code"
+              ></el-input>
             </el-form-item>
             <el-form-item label="银行账号">
-              <el-input placeholder="请输入"></el-input>
+              <el-input
+                placeholder="请输入"
+                v-model="form.bank_account"
+              ></el-input>
             </el-form-item>
             <el-form-item label="管理员联系号码">
-              <el-input placeholder="请输入"></el-input>
+              <el-input
+                placeholder="请输入"
+                v-model="form.admin_phone"
+              ></el-input>
             </el-form-item>
             <el-form-item label="渠道佣金结算时间">
-              <div class="w-full">
-                <el-date-picker
-                  style="width: 100%"
-                  unlink-panels
-                  value-format="YYYY-MM-DD"
-                />
-              </div>
+              <el-select
+                placeholder="请选择"
+                class="w-full"
+                v-model="form.settlement_type"
+              >
+                <el-option
+                  v-for="i in settlement_type"
+                  :value="i.value"
+                  :label="i.label"
+                ></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <el-form-item label="合伙人协议">
-              <MultiUpload />
+            <el-form-item label="合伙人协议" prop="agreement_img">
+              <MultiUpload v-model="form.agreement_img" />
             </el-form-item>
             <el-form-item label="营业执照">
-              <MultiUpload />
+              <MultiUpload v-model="form.license_img" />
             </el-form-item>
           </el-col>
         </el-row>
-        <div class="m-b-[30px] m-t-[50px] relative">
-          <zxn-title>渠道税地信息</zxn-title>
-          <div class="addTax" @click="addTaxLand">+新增税地</div>
-        </div>
-        <!-- 渠道税地信息 -->
-        <zxn-table
-          :table-data="tableData"
-          :column-list="columnList"
-          :hasPagination="false"
-        >
-          <template #operation></template>
-        </zxn-table>
       </el-form>
+      <!-- <div class="m-b-[30px] m-t-[50px] relative">
+				<zxn-title>渠道税地信息</zxn-title>
+				<div class="addTax" @click="addTaxLand">+新增税地</div>
+			</div> -->
+      <!-- 渠道税地信息 -->
+      <!-- <zxn-table
+				:table-data="tableData"
+				:column-list="columnList"
+				:hasPagination="false"
+			>
+				<template #operation></template>
+			</zxn-table> -->
       <!-- 新增税地 -->
-      <zxn-dialog
+      <!-- <zxn-dialog
         v-model:visible="visible"
         title="新增税地"
         @close-dialog="closeDialog"
@@ -116,15 +152,42 @@
             </el-col>
           </el-row>
         </el-form>
-      </zxn-dialog>
+      </zxn-dialog> -->
     </div>
+    <zxn-bottom-btn>
+      <el-button type="info" plain @click="$router.go(-1)">取消</el-button>
+      <el-button type="primary" @click="submit(formRef)">保存</el-button>
+    </zxn-bottom-btn>
   </zxn-plan>
 </template>
 
 <script lang="ts" setup>
+import router from "@/router";
+import { settlement_type, collection_type } from "./options";
+import { createCompanyChannelAccount } from "@/api/account/channel";
+
 const activeName = ref("1");
+
 const tabsList = [{ label: "新建企业渠道", name: "1" }];
-const form = reactive({});
+const formRef = ref();
+const form = reactive({
+  username: "", // 用户名
+  contact: "", // 联系人
+  contact_phone: "", // 联系人电话
+  password: "", // 密码
+  conf_password: "", // 确认密码
+
+  company_name: "", // 企业名称
+  bank: "", // 开户行
+  channel_admin: "", // 渠道管理员
+  collection_type: "", // 收款方式
+  credit_code: "", // 统一社会信用代码
+  bank_account: "", // 银行账号
+  admin_phone: "", // 管理员联系号码
+  settlement_type: "", // 渠道佣金结算时间
+  agreement_img: [], // 合伙人协议
+  license_img: [], // 营业执照
+});
 
 const newForm = reactive({
   tax_land_name: "",
@@ -132,10 +195,29 @@ const newForm = reactive({
   point: "",
 });
 
+const validatePassword = (rule, value, callback) => {
+  if (value == "") {
+    callback(new Error("请输入密码"));
+  } else if (value !== form.password) {
+    callback(new Error("两次输入的密码不一致！"));
+  } else {
+    callback();
+  }
+};
+
 const rules = {
-  tax_land_name: [{ required: true, message: "必填" }],
-  channel_point: [{ required: true, message: "必填" }],
-  point: [{ required: true, message: "必填" }],
+  username: [{ required: true, message: "必填", trigger: "blur" }],
+  password: [{ required: true, message: "必填", trigger: "blur" }],
+  conf_password: [
+    { required: true, message: "必填", trigger: "blur" },
+    {
+      validator: validatePassword,
+      trigger: "blur",
+    },
+  ],
+  company_name: [{ required: true, message: "必填", trigger: "blur" }],
+  channel_admin: [{ required: true, message: "必填", trigger: "blur" }],
+  agreement_img: [{ required: true, message: "必填", trigger: "blur" }],
 };
 
 const tableData = reactive([]);
@@ -174,6 +256,24 @@ const closeDialog = () => {
 const confirmClick = () => {};
 const addTaxLand = () => {
   visible.value = true;
+};
+
+const submit = async (formInstance) => {
+  if (!formInstance) return;
+  await formInstance.validate((valid, fields) => {
+    if (valid) {
+      createCompanyChannelAccount(form).then((res) => {
+        ElMessage.success({
+          message: "新建企业渠道成功",
+        });
+        setTimeout(() => {
+          router.back();
+        }, 500);
+      });
+    } else {
+      console.log("error submit!", fields);
+    }
+  });
 };
 </script>
 

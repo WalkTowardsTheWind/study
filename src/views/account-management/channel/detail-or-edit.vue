@@ -2,7 +2,7 @@
   <zxn-plan>
     <zxn-tabs :tabs-list="tabsList" v-model:activeName="activeName">
       <template #0>
-        <BasicView :isEdit="isEdit" />
+        <BasicView :isEdit="isEdit" v-model:childData="formItem" />
       </template>
       <template #1>
         <TaxlandView :isEdit="isEdit" />
@@ -27,13 +27,20 @@ import TaxlandView from "./components/2taxland.vue";
 import ChannelView from "./components/3channel.vue";
 import ProxyView from "./components/4proxy.vue";
 import HistoryView from "./components/5history.vue";
+import { getChannelAccountInfo } from "@/api/account/channel";
 
 const route = useRoute();
 
 const isEdit = ref(false);
+const idv = ref("");
+
+const formItem = ref();
 
 if (route.query.type === "edit") {
   isEdit.value = true;
+}
+if (route.query.id) {
+  idv.value = route.query.id.toString();
 }
 
 const tabsList = [
@@ -44,4 +51,13 @@ const tabsList = [
   { name: 4, label: "历史点位记录" },
 ];
 const activeName = ref(0);
+
+const getDetail = () => {
+  getChannelAccountInfo(idv.value).then((res) => {
+    formItem.value = res.data;
+  });
+};
+onMounted(() => {
+  getDetail();
+});
 </script>
