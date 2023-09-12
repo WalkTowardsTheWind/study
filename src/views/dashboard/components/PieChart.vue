@@ -57,7 +57,7 @@ const chartInit = () => {
       },
       legend: {
         orient: "vertical",
-        right: 80,
+        right: 60,
         top: "center",
         icon: "circle",
         formatter: (name) => {
@@ -70,8 +70,7 @@ const chartInit = () => {
           type: "pie",
           radius: props.hasRing ? ["40%", "70%"] : ["70%"],
           top: "10px",
-          bottom: "10px",
-          right: "200px",
+          right: "60%",
           avoidLabelOverlap: false,
           label: {
             show: false,
