@@ -94,6 +94,7 @@
                     <a
                       target="_blank"
                       style="color: #356ff3"
+                      v-if="formItem.payment_receipt.length"
                       :href="formItem.payment_receipt"
                       >查看</a
                     >
@@ -151,15 +152,14 @@ const formItem = ref({
 
 const getTableData = async () => {
   try {
-    const { data } = await getUserInfo({ id: route.query.id });
-
+    const { data } = await getUserInfo({ id: route.query.id as string });
     const {
       account,
       bank,
-      real_nam,
+      real_name,
       idcard,
       bank_account,
-      phon,
+      phone,
       address,
       task_name,
       settlement_time,
@@ -170,10 +170,10 @@ const getTableData = async () => {
     formItem.value = {
       account,
       bank,
-      real_nam,
+      real_name,
       idcard,
       bank_account,
-      phon,
+      phone,
       address,
       task_name,
       settlement_time,

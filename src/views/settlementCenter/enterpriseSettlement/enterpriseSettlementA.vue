@@ -340,7 +340,7 @@ const formItem = ref({
 }) as any;
 //
 
-const tableData = reactive([]);
+const tableData = reactive([] as any);
 const color = {
   0: { color: "#1AB66B", backgroundColor: "#DAF3E7" },
   1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
@@ -401,7 +401,9 @@ const handleSelect = (data: any) => {
 
 const getTableData = async () => {
   try {
-    const { data } = await getTaskDetails({ id: route.query.task_id });
+    const { data } = await getTaskDetails({
+      id: route.query.task_id as string,
+    });
     console.log(data, "getTaskDetails");
 
     const {
