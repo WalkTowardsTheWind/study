@@ -113,12 +113,10 @@
 </template>
 
 <script lang="ts" setup>
-import { deleteBusinessAccount } from "@/api/account/business";
 import {
   getChannelAccountList,
   setChannelAccountStatus,
 } from "@/api/account/channel";
-import { delPersonalAccount } from "@/api/account/personal";
 import router from "@/router";
 
 const statusOptions = [

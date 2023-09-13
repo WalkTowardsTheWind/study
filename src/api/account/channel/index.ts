@@ -138,3 +138,55 @@ export function setChannelTaxlandStatus(params: any) {
 		method: "get",
 	});
 }
+
+/**
+ * 获取渠道信息卡片页面数据
+ * @param params 
+ * @returns 
+ */
+export function getChannelAccountInfoTopAndBottomList(params: any) {
+	return request({
+		url: `/adminapi/account/channel/level/index`,
+		method: "get",
+		params
+	});
+}
+
+/**
+ * 绑定上下级渠道
+ * @param data 
+ * @returns 
+ */
+export function bindChannel(data: any) {
+	return request({
+		url: `/adminapi/account/channel/level`,
+		method: "post",
+		data
+	});
+}
+
+/**
+ * 获取代理企业信息
+ * @param params 
+ * @returns 
+ */
+export function getChannelProxyCompanyInfo(params: any) {
+	return request({
+		url: `/adminapi/account/channel/company/index`,
+		method: "get",
+		params
+	});
+}
+
+/**
+ * 根据税地选择渠道 渠道信息新增
+ * @param params 
+ * @returns 
+ */
+export function bindChannelByTaxland(params: any) {
+	return request({
+		url: `/adminapi/account/channel/level/bind/index`,
+		method: "get",
+		params
+	});
+}

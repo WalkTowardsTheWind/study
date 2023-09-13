@@ -8,10 +8,10 @@
         <TaxlandView :isEdit="isEdit" />
       </template>
       <template #2>
-        <ChannelView :isEdit="isEdit" />
+        <ChannelView :channel_id="idv" :isEdit="isEdit" />
       </template>
       <template #3>
-        <ProxyView :isEdit="isEdit" />
+        <ProxyView :channel_id="idv" :isEdit="isEdit" />
       </template>
       <template #4>
         <HistoryView :isEdit="isEdit" />
@@ -48,7 +48,7 @@ const tabsList = [
   { name: 1, label: "税地信息" },
   { name: 2, label: "渠道信息" },
   { name: 3, label: "代理企业信息" },
-  { name: 4, label: "历史点位记录" },
+  // { name: 4, label: "历史点位记录" },
 ];
 const activeName = ref(0);
 

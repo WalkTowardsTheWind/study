@@ -58,7 +58,7 @@
             </el-form-item>
             <el-form-item label="密码">
               <el-input value="********" readonly />
-              <span v-if="!isEdit" class="resetPWD">重置密码</span>
+              <span v-if="isEdit" class="resetPWD">重置密码</span>
             </el-form-item>
             <el-form-item label="联系人">
               <el-input v-model="formItem.contact" :readonly="!isEdit" />

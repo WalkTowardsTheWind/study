@@ -6,7 +6,7 @@
       @on-search="handleSearch"
     >
       <el-form-item>
-        <el-input placeholder="请输入">
+        <el-input placeholder="请输入" v-model="formItem.keyword">
           <template #prefix>
             <i-ep-Search />
           </template>
@@ -19,7 +19,12 @@
     <el-button type="primary" plain class="mb-[20px]" @click="add"
       >+新增</el-button
     >
-    <zxn-table :table-data="tableData1" :column-list="columnList1"></zxn-table>
+    <zxn-table
+      :table-data="tableData1"
+      :column-list="columnList1"
+      :page-info="pageInfo"
+      @page-change="pageChange"
+    ></zxn-table>
     <zxn-dialog
       v-model:visible="visible"
       title="新增企业"
@@ -43,7 +48,30 @@
 </template>
 
 <script lang="ts" setup>
-const formItem = reactive({});
+import { getChannelProxyCompanyInfo } from "@/api/account/channel";
+
+const props = defineProps({
+  channel_id: {
+    type: String || Number,
+  },
+});
+
+const formItem = reactive({
+  keyword: "",
+});
+
+const pageInfo = reactive({
+  limit: 20,
+  page: 1,
+  total: 0,
+});
+
+const pageChange = (cur) => {
+  const { limit, page } = cur;
+  pageInfo.limit = limit;
+  pageInfo.page = page;
+  handleSearch();
+};
 const date = ref([]);
 const visible = ref(false);
 
@@ -74,7 +102,19 @@ const columnList2 = [
 const newForm = reactive({});
 const rules = {};
 
-const handleSearch = () => {};
+const handleSearch = () => {
+  let params = {
+    channel_id: props.channel_id,
+    keyword: formItem.keyword,
+    start_time: date.value[0] || "",
+    end_time: date.value[1] || "",
+    page: pageInfo.page,
+    limit: pageInfo.limit,
+  };
+  getChannelProxyCompanyInfo(params).then((res) => {
+    console.log(res);
+  });
+};
 const handleReset = () => {};
 
 const add = () => {
@@ -85,6 +125,8 @@ const handleClose = () => {
   visible.value = false;
 };
 const handleConfirm = () => {};
+
+handleSearch();
 </script>
 
 <style scoped></style>

@@ -21,7 +21,7 @@
           @click="setStatus(row.id, 1)"
           >启用</el-button
         >
-        <el-button v-else link type="primary" @click="setStatus(row.id, 0)"
+        <el-button v-else link type="primary" @click="setStatus(row.id, 2)"
           >禁用</el-button
         >
         <el-button link type="primary" @click="edit(row)">编辑</el-button>
@@ -262,7 +262,7 @@ const edit = (item) => {
 
 const setStatus = (id, status) => {
   switch (status) {
-    case 0:
+    case 2:
       ElMessageBox.confirm("是否禁用税地？", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
