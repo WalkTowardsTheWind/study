@@ -30,7 +30,7 @@ export enum statusType {
 
 export enum taxLandStatusType {
 	"禁用" = 0,
-	"启用",
+	"启用" = 1,
 }
 
 export enum taskType {

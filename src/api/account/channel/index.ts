@@ -1,7 +1,7 @@
+import { tax_land_ } from './../../../enums/taxLandManagementEnum';
 import request from "@/utils/request";
 /**
- * 获取渠道账户列表
- * @param params 
+ * 获取渠道账户列 * * @param params 
  * @returns 
  */
 export function getChannelAccountList(params: any) {
@@ -166,6 +166,18 @@ export function bindChannel(data: any) {
 }
 
 /**
+		渠道信息 渠道上下级编辑
+ * @param data 
+ * @returns 
+ */
+export function editTopAndBottomChannel(data: any) {
+	return request({
+		url: `/adminapi/account/channel/level/update`,
+		method: "post",
+		data
+	});
+}
+/**
  * 获取代理企业信息
  * @param params 
  * @returns 
@@ -188,5 +200,24 @@ export function bindChannelByTaxland(params: any) {
 		url: `/adminapi/account/channel/level/bind/index`,
 		method: "get",
 		params
+	});
+}
+
+/**
+ * 设置上下级渠道状态
+ * @param params 
+ * @returns 
+ */
+export function setStatusChannelTopAndBottom(params: any) {
+	return request({
+		url: `/adminapi/account/channel/level/${params.id}/${params.status}`,
+		method: "get",
+	});
+}
+
+export function getCompanyByTaxland(tax_land_id) {
+	return request({
+		url: `/adminapi/account/channel/company/bind/index/${tax_land_id}`,
+		method: "get",
 	});
 }

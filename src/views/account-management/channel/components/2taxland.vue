@@ -43,9 +43,8 @@
       >
         <el-row>
           <el-col :span="22">
-            <el-form-item label="税地名称" prop="tax_land_name">
+            <el-form-item v-if="addType" label="税地名称" prop="tax_land_id">
               <el-select
-                v-if="addType"
                 class="w-full"
                 placeholder="请选择"
                 v-model="newForm.tax_land_id"
@@ -57,7 +56,9 @@
                   :label="item.tax_land_name"
                 ></el-option>
               </el-select>
-              <el-input v-else v-model="newForm.tax_land_name" readonly />
+            </el-form-item>
+            <el-form-item label="税地名称" v-else>
+              <el-input v-model="newForm.tax_land_name" disabled />
             </el-form-item>
             <el-form-item label="渠道点位" prop="channel_point">
               <el-input placeholder="请输入" v-model="newForm.channel_point">
@@ -93,7 +94,7 @@ import {
 import { getLandList } from "@/api/common";
 import { useRoute } from "vue-router";
 const route = useRoute();
-const props = defineProps({
+defineProps({
   isEdit: {
     type: Boolean,
     default: () => false,
@@ -112,8 +113,6 @@ const pageInfo = reactive({
 if (route.query.id) {
   idv.value = route.query.id.toString();
 }
-
-const dialogType = ref("");
 const tableData = reactive([] as any);
 const columnList = [
   { label: "税地名称", prop: "tax_land_name", minWidth: 150 },
@@ -170,21 +169,21 @@ const newForm = reactive({
 });
 
 const rules = {
-  tax_land_id: [{ required: true, message: "必填" }],
-  channel_point: [{ required: true, message: "必填" }],
-  point: [{ required: true, message: "必填" }],
+  tax_land_id: [{ required: true, message: "必填", trigger: "change" }],
+  channel_point: [{ required: true, message: "必填", trigger: "blur" }],
+  point: [{ required: true, message: "必填", trigger: "blur" }],
 };
 
-const closeDialog = (formInstance) => {
+const closeDialog = (formInstance: any) => {
   visible.value = false;
   formInstance.clearValidate();
 };
 
-const confirmClick = async (formInstance) => {
+const confirmClick = async (formInstance: any) => {
   // 新建
   if (addType.value) {
     if (!formInstance) return;
-    await formInstance.validate((valid, fields) => {
+    await formInstance.validate((valid: any, fields: any) => {
       if (valid) {
         let params = {
           tax_land_id: newForm.tax_land_id,
@@ -192,7 +191,7 @@ const confirmClick = async (formInstance) => {
           tax_point: newForm.tax_point,
           channel_point: newForm.channel_point,
         };
-        addChannelTaxland(params).then((res) => {
+        addChannelTaxland(params).then(() => {
           ElMessage.success({
             message: "新增税地成功",
           });
@@ -211,7 +210,7 @@ const confirmClick = async (formInstance) => {
       channel_point: newForm.channel_point,
       remark: newForm.remark,
     };
-    updateChannelTaxland(params).then((res) => {
+    updateChannelTaxland(params).then(() => {
       ElMessage.success({
         message: "更新税地成功",
       });
@@ -242,14 +241,14 @@ function getTaxLandOption() {
   });
 }
 
-const handlePageChange = (cur) => {
+const handlePageChange = (cur: any) => {
   const { page, limit } = cur;
   pageInfo.page = page;
   pageInfo.limit = limit;
   handleSearch();
 };
 
-const edit = (item) => {
+const edit = (item: any) => {
   newTitle.value = "编辑税地";
   visible.value = true;
   addType.value = false;
@@ -260,7 +259,7 @@ const edit = (item) => {
   newForm.remark = item.remark;
 };
 
-const setStatus = (id, status) => {
+const setStatus = (id: number, status: number) => {
   switch (status) {
     case 2:
       ElMessageBox.confirm("是否禁用税地？", {
@@ -269,7 +268,7 @@ const setStatus = (id, status) => {
         center: true,
       })
         .then(() => {
-          setChannelTaxlandStatus({ id, status }).then((res) => {
+          setChannelTaxlandStatus({ id, status }).then(() => {
             ElMessage.success({
               message: "禁用成功",
             });
@@ -289,7 +288,7 @@ const setStatus = (id, status) => {
         center: true,
       })
         .then(() => {
-          setChannelTaxlandStatus({ id, status }).then((res) => {
+          setChannelTaxlandStatus({ id, status }).then(() => {
             ElMessage.success({
               message: "启用成功",
             });

@@ -8,7 +8,7 @@
           class="add"
           plain
           type="primary"
-          @click="addHigh(newForm1Ref)"
+          @click="add(newFormRef, 'top')"
           >+新增</el-button
         >
       </div>
@@ -19,12 +19,14 @@
         @page-change="pageChange1"
       >
         <template v-if="isEdit" #opera="{ row }">
-          <el-button link type="primary" @click="edit1(row)">编辑</el-button>
+          <el-button link type="primary" @click="edit(row, 'top')"
+            >编辑</el-button
+          >
           <el-button
             v-if="row.status == 1"
             link
             type="primary"
-            @click="setStatus(row.id, 2)"
+            @click="setStatus(row.id, 0)"
             >禁用</el-button
           >
           <el-button v-else link type="primary" @click="setStatus(row.id, 1)"
@@ -33,76 +35,16 @@
           <el-button link type="primary">查看</el-button>
         </template>
       </zxn-table>
-      <zxn-dialog
-        v-model:visible="visible1"
-        title="新增上级渠道"
-        @confirm-dialog="confirmClick1(newForm1Ref)"
-        @close-dialog="closeDialog1(newForm1Ref)"
-      >
-        <el-form
-          :model="newForm1"
-          :rules="rules1"
-          ref="newForm1Ref"
-          label-width="100"
-        >
-          <el-row>
-            <el-col :span="22">
-              <el-form-item label="税地名称" prop="tax_land_id">
-                <el-select
-                  v-if="isAdd"
-                  class="w-full"
-                  placeholder="请选择"
-                  v-model="newForm1.tax_land_id"
-                  @change="handleSelectTaxland1"
-                >
-                  <el-option
-                    v-for="(i, index) in taxlandList"
-                    :key="i.id"
-                    :label="i.tax_land_name"
-                    :value="i.id"
-                  ></el-option>
-                </el-select>
-                <el-input v-else disabled v-model="newForm1.tax_land_name" />
-              </el-form-item>
-              <el-form-item label="上级渠道" prop="bind_channel_id">
-                <el-select
-                  v-if="isAdd"
-                  class="w-full"
-                  placeholder="请选择"
-                  v-model="newForm1.bind_channel_id"
-                >
-                  <el-option
-                    v-for="i in channelList"
-                    :key="i.id"
-                    :label="i.channel_name"
-                    :value="i.id"
-                  ></el-option>
-                </el-select>
-                <el-input v-else disabled v-model="newForm1.channel_name" />
-              </el-form-item>
-
-              <el-form-item label="我的点位" prop="point">
-                <el-input placeholder="请输入" v-model="newForm1.point">
-                  <template #append>%</template>
-                </el-input>
-              </el-form-item>
-              <el-form-item label="说明" v-if="!isAdd">
-                <el-input
-                  placeholder="请输入"
-                  v-model="newForm1.remark"
-                  type="textarea"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-      </zxn-dialog>
     </div>
     <!-- 下级渠道 -->
     <div class="low mt-[50px]">
       <div class="title">
         <zxn-title>下级渠道</zxn-title>
-        <el-button class="add" plain type="primary" @click="addLow(newForm2Ref)"
+        <el-button
+          class="add"
+          plain
+          type="primary"
+          @click="add(newFormRef, 'bottom')"
           >+新增</el-button
         >
       </div>
@@ -113,12 +55,14 @@
         @page-change="pageChange2"
       >
         <template v-if="isEdit" #opera="{ row }">
-          <el-button link type="primary">编辑</el-button>
+          <el-button link type="primary" @click="edit(row, 'bottom')"
+            >编辑</el-button
+          >
           <el-button
             v-if="row.status == 1"
             link
             type="primary"
-            @click="setStatus(row.id, 2)"
+            @click="setStatus(row.id, 0)"
             >禁用</el-button
           >
           <el-button v-else link type="primary" @click="setStatus(row.id, 1)"
@@ -127,27 +71,31 @@
           <el-button link type="primary">查看</el-button>
         </template>
       </zxn-table>
+      <!-- 新增/编辑 弹框 -->
       <zxn-dialog
-        v-model:visible="visible2"
-        title="新增下级渠道"
-        @confirm-dialog="confirmClick2(newForm2Ref)"
-        @close-dialog="closeDialog2(newForm2Ref)"
+        v-model:visible="visible"
+        :title="dialogTitle"
+        @confirm-dialog="confirmClick(newFormRef)"
+        @close-dialog="closeDialog(newFormRef)"
       >
         <el-form
-          :model="newForm2"
-          :rules="rules2"
-          ref="newForm2Ref"
+          :model="newForm"
+          :rules="rules"
+          ref="newFormRef"
           label-width="100"
         >
           <el-row>
             <el-col :span="22">
-              <el-form-item label="税地名称" prop="tax_land_id">
+              <el-form-item
+                v-if="isDialogAdd"
+                label="税地名称"
+                prop="tax_land_id"
+              >
                 <el-select
-                  v-if="isAdd"
                   class="w-full"
                   placeholder="请选择"
-                  v-model="newForm2.tax_land_id"
-                  @change="handleSelectTaxland2"
+                  v-model="newForm.tax_land_id"
+                  @change="handleSelectTaxland"
                 >
                   <el-option
                     v-for="(i, index) in taxlandList"
@@ -156,34 +104,65 @@
                     :value="i.id"
                   ></el-option>
                 </el-select>
-                <el-input v-else disabled v-model="newForm2.tax_land_name" />
               </el-form-item>
-              <el-form-item label="下级渠道" prop="bind_channel_id">
-                <el-select
-                  v-if="isAdd"
-                  class="w-full"
-                  placeholder="请选择"
-                  v-model="newForm2.bind_channel_id"
+              <el-form-item v-else label="税地名称">
+                <el-input disabled v-model="newForm.tax_land_name" />
+              </el-form-item>
+              <template v-if="dialogType == 'top'">
+                <el-form-item
+                  v-if="isDialogAdd"
+                  label="上级渠道"
+                  prop="bind_channel_id"
                 >
-                  <el-option
-                    v-for="i in channelList"
-                    :key="i.id"
-                    :label="i.channel_name"
-                    :value="i.id"
-                  ></el-option>
-                </el-select>
-                <el-input v-else disabled v-model="newForm2.channel_name" />
-              </el-form-item>
-
+                  <el-select
+                    class="w-full"
+                    placeholder="请选择"
+                    v-model="newForm.bind_channel_id"
+                  >
+                    <el-option
+                      v-for="i in channelList"
+                      :key="i.id"
+                      :label="i.channel_name"
+                      :value="i.id"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item v-else label="上级渠道">
+                  <el-input disabled v-model="newForm.channel_name" />
+                </el-form-item>
+              </template>
+              <template v-if="dialogType == 'bottom'">
+                <el-form-item
+                  v-if="isDialogAdd"
+                  label="下级渠道"
+                  prop="bind_channel_id"
+                >
+                  <el-select
+                    class="w-full"
+                    placeholder="请选择"
+                    v-model="newForm.bind_channel_id"
+                  >
+                    <el-option
+                      v-for="i in channelList"
+                      :key="i.id"
+                      :label="i.channel_name"
+                      :value="i.id"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item v-else label="下级渠道">
+                  <el-input disabled v-model="newForm.channel_name" />
+                </el-form-item>
+              </template>
               <el-form-item label="我的点位" prop="point">
-                <el-input placeholder="请输入" v-model="newForm2.point">
+                <el-input placeholder="请输入" v-model="newForm.point">
                   <template #append>%</template>
                 </el-input>
               </el-form-item>
-              <el-form-item label="说明" v-if="!isAdd">
+              <el-form-item label="说明" v-if="!isDialogAdd">
                 <el-input
                   placeholder="请输入"
-                  v-model="newForm2.remark"
+                  v-model="newForm.remark"
                   type="textarea"
                 />
               </el-form-item>
@@ -200,6 +179,8 @@ import {
   bindChannel,
   getChannelAccountInfoTopAndBottomList,
   bindChannelByTaxland,
+  setStatusChannelTopAndBottom,
+  editTopAndBottomChannel,
 } from "@/api/account/channel";
 import useTaxlandList from "@/hooks/useTaxlandList";
 
@@ -212,15 +193,16 @@ const props = defineProps({
   },
 });
 
-const isAdd = ref(false);
+const isDialogAdd = ref(false); // 弹框 新增 / 编辑
+const dialogType = ref("top");
+const dialogTitle = ref("");
 const channelList = reactive([] as any);
 const taxlandList = reactive([] as any);
 
 const tableData1 = reactive([] as any);
 const tableData2 = reactive([] as any);
 
-const visible1 = ref(false);
-const visible2 = ref(false);
+const visible = ref(false);
 
 const columnList1 = [
   { label: "上级渠道", prop: "channel_name" },
@@ -295,19 +277,9 @@ const pageInfo2 = reactive({
   limit: 20,
   total: 0,
 });
-const newForm1Ref = ref();
-const newForm2Ref = ref();
+const newFormRef = ref();
 
-const newForm1 = reactive({
-  id: "", // 编辑传
-  bind_channel_id: "",
-  tax_land_id: "",
-  point: "",
-  remark: "",
-  tax_land_name: "",
-  channel_name: "",
-});
-const newForm2 = reactive({
+const newForm = reactive({
   id: "", // 编辑传
   bind_channel_id: "",
   tax_land_id: "",
@@ -317,94 +289,112 @@ const newForm2 = reactive({
   channel_name: "",
 });
 
-const rules1 = {
-  bind_channel_id: [{ required: true, message: "必填" }],
-  tax_land_id: [{ required: true, message: "必填" }],
-  point: [{ required: true, message: "必填" }],
-};
-const rules2 = {
+const rules = {
   bind_channel_id: [{ required: true, message: "必填" }],
   tax_land_id: [{ required: true, message: "必填" }],
   point: [{ required: true, message: "必填" }],
 };
 
-const pageChange1 = () => {};
-const pageChange2 = () => {};
+const pageChange1 = (cur: { limit: any; page: any }) => {
+  const { limit, page } = cur;
+  pageInfo1.limit = limit;
+  pageInfo1.page = page;
+  getTopLevel();
+};
+const pageChange2 = (cur: { limit: any; page: any }) => {
+  const { limit, page } = cur;
+  pageInfo2.limit = limit;
+  pageInfo2.page = page;
+  getBottomLevel();
+};
 
-const addHigh = async (formInstance) => {
+const add = async (formInstance: any, type: string) => {
   formInstance?.resetFields();
-  isAdd.value = true;
-  taxlandList.length = 0;
-  const arr = await useTaxlandList();
-  taxlandList.push(...arr);
-
-  visible1.value = true;
+  const func = async () => {
+    newForm.bind_channel_id = "";
+    newForm.point = "";
+    newForm.remark = "";
+    isDialogAdd.value = true;
+    taxlandList.length = 0;
+    const arr = await useTaxlandList();
+    taxlandList.push(...arr);
+    visible.value = true;
+  };
+  switch (type) {
+    case "top":
+      dialogTitle.value = "新增上级渠道";
+      dialogType.value = "top";
+      func();
+      break;
+    case "bottom":
+      dialogTitle.value = "新增下级渠道";
+      dialogType.value = "bottom";
+      func();
+      break;
+  }
 };
-const addLow = async (formInstance) => {
-  formInstance?.resetFields();
-  isAdd.value = true;
-  taxlandList.length = 0;
-  const arr = await useTaxlandList();
-  taxlandList.push(...arr);
 
-  visible2.value = true;
-};
-
-const confirmClick1 = async (formInstance) => {
+const confirmClick = (formInstance: any) => {
   if (!formInstance) return;
-  await formInstance.validate((valid, fields) => {
-    if (valid) {
-      let params = {
-        channel_id: props.channel_id,
-        bind_channel_id: newForm1.bind_channel_id,
-        tax_land_id: newForm1.tax_land_id,
-        point: newForm1.point,
-        bind_type: 1, // 绑定类型 1绑定上级渠道 2绑定下级渠道
-      };
-      bindChannel(params).then((res) => {
-        console.log(res);
-        ElMessage.success({
-          message: "新增上级渠道成功",
-        });
-        visible1.value = false;
-        handleSearch();
+  // 新增
+  if (isDialogAdd.value) {
+    let params_add = {
+      channel_id: props.channel_id,
+      bind_channel_id: newForm.bind_channel_id,
+      tax_land_id: newForm.tax_land_id,
+      point: newForm.point,
+      bind_type: 0,
+    };
+    const func = async (func_params: {
+      channel_id: string | undefined;
+      bind_channel_id: string;
+      tax_land_id: string;
+      point: string;
+      bind_type: number;
+    }) => {
+      await formInstance.validate((valid: any, fields: any) => {
+        if (valid) {
+          bindChannel(func_params).then((res) => {
+            ElMessage.success({
+              message: `${dialogTitle.value}成功`,
+            });
+            visible.value = false;
+            handleSearch();
+          });
+        } else {
+          console.log("error submit!", fields);
+        }
       });
-    } else {
-      console.log("error submit!", fields);
+    };
+    switch (dialogType.value) {
+      case "top":
+        params_add.bind_type = 1;
+        func(params_add);
+        break;
+      case "bottom":
+        params_add.bind_type = 2;
+        func(params_add);
+        break;
     }
-  });
-};
-const confirmClick2 = async (formInstance) => {
-  if (!formInstance) return;
-  await formInstance.validate((valid, fields) => {
-    if (valid) {
-      let params = {
-        channel_id: props.channel_id,
-        bind_channel_id: newForm2.bind_channel_id,
-        tax_land_id: newForm2.tax_land_id,
-        point: newForm2.point,
-        bind_type: 2, // 绑定类型 1绑定上级渠道 2绑定下级渠道
-      };
-      bindChannel(params).then((res) => {
-        console.log(res);
-        ElMessage.success({
-          message: "新增下级渠道成功",
-        });
-        visible2.value = false;
-        handleSearch();
+  } else {
+    // 编辑
+    let params_edit = {
+      id: newForm.id,
+      point: newForm.point,
+      remark: newForm.remark,
+    };
+    editTopAndBottomChannel(params_edit).then((res) => {
+      console.log(res);
+      ElMessage.success({
+        message: "更新成功",
       });
-    } else {
-      console.log("error submit!", fields);
-    }
-  });
+      visible.value = false;
+      handleSearch();
+    });
+  }
 };
-
-const closeDialog1 = (formInstance) => {
-  visible1.value = false;
-  formInstance?.clearValidate();
-};
-const closeDialog2 = (formInstance) => {
-  visible2.value = false;
+const closeDialog = (formInstance: any) => {
+  visible.value = false;
   formInstance?.clearValidate();
 };
 
@@ -443,88 +433,109 @@ const handleSearch = () => {
   getBottomLevel();
 };
 
-const handleSelectTaxland1 = (tax_land_id) => {
+const handleSelectTaxland = (tax_land_id: any) => {
   let params = {
     channel_id: props.channel_id,
-    bind_type: 1,
+    bind_type: 0,
     tax_land_id,
   };
-  bindChannelByTaxland(params).then((res) => {
-    // console.log(res);
-    channelList.length = 0;
-    channelList.push(...res.data);
-  });
-};
-const handleSelectTaxland2 = (tax_land_id) => {
-  let params = {
-    channel_id: props.channel_id,
-    bind_type: 2,
-    tax_land_id,
+  const func = (func_params: {
+    channel_id: string | undefined;
+    bind_type: number;
+    tax_land_id: any;
+  }) => {
+    bindChannelByTaxland(func_params).then((res) => {
+      channelList.length = 0;
+      channelList.push(...res.data);
+    });
   };
-  bindChannelByTaxland(params).then((res) => {
-    // console.log(res);
-    channelList.length = 0;
-    channelList.push(...res.data);
-  });
+  switch (dialogType.value) {
+    case "top":
+      params.bind_type = 1;
+      func(params);
+      break;
+    case "bottom":
+      params.bind_type = 2;
+      func(params);
+      break;
+  }
 };
 
-const setStatus = (id, status) => {
+const setStatus = (id: any, status: any) => {
+  const func = () => {
+    setStatusChannelTopAndBottom({ id, status }).then((res) => {
+      ElMessage.success({
+        message: "操作成功",
+      });
+      handleSearch();
+    });
+  };
   switch (status) {
     case 1:
       ElMessageBox.confirm("是否启用用税地？", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         center: true,
-      });
-      // .then(() => {
-      //   setChannelTaxlandStatus({ id, status }).then((res) => {
-      //     ElMessage.success({
-      //       message: "禁用成功",
-      //     });
-      //     handleSearch();
-      //   });
-      // })
-      // .catch(() => {
-      //   ElMessage.info({
-      //     message: "取消操作",
-      //   });
-      // });
+      })
+        .then(() => {
+          func();
+        })
+        .catch(() => {
+          ElMessage.info({
+            message: "取消操作",
+          });
+        });
       break;
-    case 2:
+    case 0:
       ElMessageBox.confirm("是否禁用税地？", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         center: true,
-      });
-      // .then(() => {
-      //   setChannelTaxlandStatus({ id, status }).then((res) => {
-      //     ElMessage.success({
-      //       message: "禁用成功",
-      //     });
-      //     handleSearch();
-      //   });
-      // })
-      // .catch(() => {
-      //   ElMessage.info({
-      //     message: "取消操作",
-      //   });
-      // });
+      })
+        .then(() => {
+          func();
+        })
+        .catch(() => {
+          ElMessage.info({
+            message: "取消操作",
+          });
+        });
       break;
   }
 };
 
-const edit1 = (row) => {
-  isAdd.value = false;
-  visible1.value = true;
-  newForm1.id = row.id;
-  newForm1.tax_land_name = row.tax_land_name;
-  newForm1.channel_name = row.channel_name;
-  newForm1.point = row.point;
-  newForm1.remark = row.remark;
-  console.log(row);
-};
-const edit2 = (row) => {
-  isAdd.value = false;
+const edit = (
+  row: {
+    id: string;
+    tax_land_name: string;
+    channel_name: string;
+    point: string;
+    remark: string;
+  },
+  type: any
+) => {
+  const func = () => {
+    isDialogAdd.value = false;
+    visible.value = true;
+    newForm.id = row.id;
+    newForm.tax_land_name = row.tax_land_name;
+    newForm.channel_name = row.channel_name;
+    newForm.point = row.point;
+    newForm.remark = row.remark;
+  };
+  switch (type) {
+    case "top":
+      dialogTitle.value = "编辑上级渠道";
+      dialogType.value = "top";
+      func();
+      break;
+    case "bottom":
+      dialogTitle.value = "编辑下级渠道";
+      dialogType.value = "bottom";
+
+      func();
+      break;
+  }
 };
 
 handleSearch();

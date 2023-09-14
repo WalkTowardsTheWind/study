@@ -34,11 +34,34 @@
       <el-form :model="newForm" :rules="rules">
         <el-row>
           <el-col :span="22">
-            <el-form-item label="企业名称" prop="tax_land_name">
-              <el-select class="w-full" placeholder="请选择"></el-select>
-            </el-form-item>
             <el-form-item label="税地名称" prop="channel_point">
-              <el-select class="w-full" placeholder="请选择"></el-select>
+              <el-select
+                class="w-full"
+                placeholder="请选择"
+                @change="handleSelect"
+                v-model="newForm.tax_land_id"
+              >
+                <el-option
+                  v-for="i of taxlandList"
+                  :key="i.id"
+                  :value="i.id"
+                  :label="i.tax_land_name"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="企业名称" prop="tax_land_name">
+              <el-select
+                class="w-full"
+                placeholder="请选择"
+                v-model="newForm.company"
+              >
+                <el-option
+                  v-for="i of companyList"
+                  :key="i.id"
+                  :value="i.id"
+                  :label="i.company_name"
+                ></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -48,13 +71,20 @@
 </template>
 
 <script lang="ts" setup>
-import { getChannelProxyCompanyInfo } from "@/api/account/channel";
+import {
+  getChannelProxyCompanyInfo,
+  getCompanyByTaxland,
+} from "@/api/account/channel";
+import useTaxlandList from "@/hooks/useTaxlandList";
 
 const props = defineProps({
   channel_id: {
     type: String || Number,
   },
 });
+
+const taxlandList = ref([] as any);
+const companyList = ref([] as any);
 
 const formItem = reactive({
   keyword: "",
@@ -66,7 +96,7 @@ const pageInfo = reactive({
   total: 0,
 });
 
-const pageChange = (cur) => {
+const pageChange = (cur: any) => {
   const { limit, page } = cur;
   pageInfo.limit = limit;
   pageInfo.page = page;
@@ -99,7 +129,10 @@ const columnList2 = [
   { label: "操作" },
 ];
 
-const newForm = reactive({});
+const newForm = reactive({
+  tax_land_id: "",
+  company: "",
+});
 const rules = {};
 
 const handleSearch = () => {
@@ -117,14 +150,26 @@ const handleSearch = () => {
 };
 const handleReset = () => {};
 
-const add = () => {
+const add = async () => {
   visible.value = true;
+  const arr = await useTaxlandList();
+  taxlandList.value.length = 0;
+  taxlandList.value = arr;
 };
 
 const handleClose = () => {
   visible.value = false;
 };
 const handleConfirm = () => {};
+
+const handleSelect = (tax_land_id: string) => {
+  console.log(tax_land_id);
+  getCompanyByTaxland(tax_land_id).then((res) => {
+    console.log(res);
+    companyList.value.length = 0;
+    companyList.value = res.data;
+  });
+};
 
 handleSearch();
 </script>
