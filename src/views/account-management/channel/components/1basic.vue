@@ -13,7 +13,7 @@
             <el-form-item label="渠道类型">
               <el-select
                 v-model="formItem.channel_type"
-                :disabled="!isEdit"
+                disabled
                 class="w-full"
               >
                 <el-option label="企业" :value="1"></el-option>
@@ -43,6 +43,7 @@
               >
                 <el-option
                   v-for="i in settlement_type"
+                  :key="i.value"
                   :label="i.label"
                   :value="i.value"
                 ></el-option>
@@ -74,6 +75,7 @@
               >
                 <el-option
                   v-for="i in collection_type"
+                  :key="i.value"
                   :label="i.label"
                   :value="i.value"
                 ></el-option>
@@ -112,7 +114,7 @@
             <el-form-item label="渠道类型">
               <el-select
                 v-model="formItem.channel_type"
-                :disabled="!isEdit"
+                disabled
                 class="w-full"
               >
                 <el-option label="企业" :value="1"></el-option>
@@ -139,6 +141,7 @@
               >
                 <el-option
                   v-for="i in collection_type"
+                  :key="i.value"
                   :label="i.label"
                   :value="i.value"
                 ></el-option>
@@ -171,6 +174,7 @@
                 <el-option
                   v-for="i in settlement_type"
                   :label="i.label"
+                  :key="i.value"
                   :value="i.value"
                 ></el-option>
               </el-select>
@@ -209,7 +213,6 @@ import {
   updatePersonChannelAccount,
 } from "@/api/account/channel";
 import { settlement_type, collection_type } from "./options";
-import router from "@/router";
 
 const props = defineProps({
   isEdit: {
@@ -240,7 +243,7 @@ const rules2 = {
 const channel_type = ref("1");
 watch(
   () => props.childData,
-  (newValue) => {
+  () => {
     formItem.value = props.childData;
     channel_type.value = formItem.value.channel_type;
   }
@@ -250,7 +253,7 @@ const updateAccount1 = async (formInstance) => {
   if (!formInstance) return;
   await formInstance.validate((valid, fields) => {
     if (valid) {
-      updateCompanyChannelAccount(formItem.value).then((res) => {
+      updateCompanyChannelAccount(formItem.value).then(() => {
         ElMessage.success({
           message: "保存成功",
         });
@@ -264,7 +267,7 @@ const updateAccount2 = async (formInstance) => {
   if (!formInstance) return;
   await formInstance.validate((valid, fields) => {
     if (valid) {
-      updatePersonChannelAccount(formItem.value).then((res) => {
+      updatePersonChannelAccount(formItem.value).then(() => {
         ElMessage.success({
           message: "保存成功",
         });

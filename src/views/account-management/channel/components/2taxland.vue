@@ -13,18 +13,21 @@
       <template #tax_cost_point="{ row }"> {{ row.tax_cost_point }}% </template>
       <template #channel_point="{ row }"> {{ row.channel_point }}% </template>
       <template #tax_point="{ row }"> {{ row.tax_point }}% </template>
-      <template #operation="{ row }" v-if="isEdit">
-        <el-button
-          v-if="row.status == 0"
-          link
-          type="primary"
-          @click="setStatus(row.id, 1)"
-          >启用</el-button
-        >
-        <el-button v-else link type="primary" @click="setStatus(row.id, 2)"
-          >禁用</el-button
-        >
-        <el-button link type="primary" @click="edit(row)">编辑</el-button>
+      <template #operation="{ row }">
+        <template v-if="isEdit">
+          <el-button
+            v-if="row.status == 0"
+            link
+            type="primary"
+            @click="setStatus(row.id, 1)"
+            >绑定</el-button
+          >
+          <el-button v-else link type="primary" @click="setStatus(row.id, 0)"
+            >解绑</el-button
+          >
+          <el-button link type="primary" @click="edit(row)">编辑</el-button>
+        </template>
+        <el-button link type="primary" @click="check(row.id)">查看</el-button>
       </template>
     </zxn-table>
 
@@ -81,6 +84,20 @@
         </el-row>
       </el-form>
     </zxn-dialog>
+    <!-- 查看 -->
+    <zxn-dialog
+      v-model:visible="checkVisible"
+      title="查看点位"
+      :width="1500"
+      :hasBottomBtn="false"
+      @close-dialog="checkVisible = false"
+    >
+      <zxn-table
+        :table-data="tableData2"
+        :column-list="columnList2"
+        :hasPagination="false"
+      ></zxn-table>
+    </zxn-dialog>
   </div>
 </template>
 
@@ -88,6 +105,7 @@
 import {
   addChannelTaxland,
   getChannelAccountTaxland,
+  getTaxlandInfoLogByChannelAccount,
   setChannelTaxlandStatus,
   updateChannelTaxland,
 } from "@/api/account/channel";
@@ -146,7 +164,20 @@ const columnList = [
   },
 ];
 
+const tableData2 = reactive([] as any);
+const columnList2 = [
+  { label: "税地名称", prop: "tax_land_name" },
+  { label: "修改类型", prop: "type" },
+  { label: "修改说明", prop: "remark" },
+  { label: "成本点位", prop: "tax_cost_point" },
+  { label: "渠道点位", prop: "channel_point" },
+  { label: "扣税点位", prop: "tax_point" },
+  { label: "修改时间", prop: "add_time" },
+  { label: "修改账号", prop: "account" },
+];
+
 const visible = ref(false);
+const checkVisible = ref(false);
 
 const add = () => {
   newTitle.value = "新增税地";
@@ -261,8 +292,8 @@ const edit = (item: any) => {
 
 const setStatus = (id: number, status: number) => {
   switch (status) {
-    case 2:
-      ElMessageBox.confirm("是否禁用税地？", {
+    case 0:
+      ElMessageBox.confirm("是否解绑税地？", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         center: true,
@@ -270,7 +301,7 @@ const setStatus = (id: number, status: number) => {
         .then(() => {
           setChannelTaxlandStatus({ id, status }).then(() => {
             ElMessage.success({
-              message: "禁用成功",
+              message: "操作成功",
             });
             handleSearch();
           });
@@ -282,7 +313,7 @@ const setStatus = (id: number, status: number) => {
         });
       break;
     case 1:
-      ElMessageBox.confirm("是否启用税地？", {
+      ElMessageBox.confirm("是否绑定税地？", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         center: true,
@@ -290,7 +321,7 @@ const setStatus = (id: number, status: number) => {
         .then(() => {
           setChannelTaxlandStatus({ id, status }).then(() => {
             ElMessage.success({
-              message: "启用成功",
+              message: "操作成功",
             });
             handleSearch();
           });
@@ -303,6 +334,15 @@ const setStatus = (id: number, status: number) => {
 
       break;
   }
+};
+
+const check = (id: string) => {
+  getTaxlandInfoLogByChannelAccount(id).then((res) => {
+    console.log(res);
+    tableData2.length = 0;
+    tableData2.push(...res.data);
+    checkVisible.value = true;
+  });
 };
 
 getTaxLandOption();

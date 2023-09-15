@@ -47,7 +47,7 @@ const tabsList = [
   { name: 0, label: "基本信息" },
   { name: 1, label: "税地信息" },
   { name: 2, label: "渠道信息" },
-  { name: 3, label: "代理企业信息" },
+  { name: 3, label: "渠道企业信息" },
   // { name: 4, label: "历史点位记录" },
 ];
 const activeName = ref(0);

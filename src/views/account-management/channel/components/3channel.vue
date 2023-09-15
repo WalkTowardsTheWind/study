@@ -5,6 +5,7 @@
       <div class="title">
         <zxn-title>上级渠道</zxn-title>
         <el-button
+          v-if="isEdit"
           class="add"
           plain
           type="primary"
@@ -18,21 +19,25 @@
         :page-info="pageInfo1"
         @page-change="pageChange1"
       >
-        <template v-if="isEdit" #opera="{ row }">
-          <el-button link type="primary" @click="edit(row, 'top')"
-            >编辑</el-button
+        <template #opera="{ row }">
+          <template v-if="isEdit">
+            <el-button link type="primary" @click="edit(row, 'top')"
+              >编辑</el-button
+            >
+            <el-button
+              v-if="row.status == 1"
+              link
+              type="primary"
+              @click="setStatus(row.id, 0)"
+              >解绑</el-button
+            >
+            <el-button v-else link type="primary" @click="setStatus(row.id, 1)"
+              >绑定</el-button
+            >
+          </template>
+          <el-button link type="primary" @click="check('top', row.id)"
+            >查看</el-button
           >
-          <el-button
-            v-if="row.status == 1"
-            link
-            type="primary"
-            @click="setStatus(row.id, 0)"
-            >禁用</el-button
-          >
-          <el-button v-else link type="primary" @click="setStatus(row.id, 1)"
-            >启用</el-button
-          >
-          <el-button link type="primary">查看</el-button>
         </template>
       </zxn-table>
     </div>
@@ -41,6 +46,7 @@
       <div class="title">
         <zxn-title>下级渠道</zxn-title>
         <el-button
+          v-if="isEdit"
           class="add"
           plain
           type="primary"
@@ -54,21 +60,25 @@
         :page-info="pageInfo2"
         @page-change="pageChange2"
       >
-        <template v-if="isEdit" #opera="{ row }">
-          <el-button link type="primary" @click="edit(row, 'bottom')"
-            >编辑</el-button
+        <template #opera="{ row }">
+          <template v-if="isEdit">
+            <el-button link type="primary" @click="edit(row, 'bottom')"
+              >编辑</el-button
+            >
+            <el-button
+              v-if="row.status == 1"
+              link
+              type="primary"
+              @click="setStatus(row.id, 0)"
+              >解绑</el-button
+            >
+            <el-button v-else link type="primary" @click="setStatus(row.id, 1)"
+              >绑定</el-button
+            >
+          </template>
+          <el-button link type="primary" @click="check('bottom', row.id)"
+            >查看</el-button
           >
-          <el-button
-            v-if="row.status == 1"
-            link
-            type="primary"
-            @click="setStatus(row.id, 0)"
-            >禁用</el-button
-          >
-          <el-button v-else link type="primary" @click="setStatus(row.id, 1)"
-            >启用</el-button
-          >
-          <el-button link type="primary">查看</el-button>
         </template>
       </zxn-table>
       <!-- 新增/编辑 弹框 -->
@@ -98,7 +108,7 @@
                   @change="handleSelectTaxland"
                 >
                   <el-option
-                    v-for="(i, index) in taxlandList"
+                    v-for="i in taxlandList"
                     :key="i.id"
                     :label="i.tax_land_name"
                     :value="i.id"
@@ -170,6 +180,20 @@
           </el-row>
         </el-form>
       </zxn-dialog>
+      <!-- 查看 -->
+      <zxn-dialog
+        v-model:visible="checkVisible"
+        :title="checkTitle"
+        :width="1500"
+        :hasBottomBtn="false"
+        @close-dialog="checkVisible = false"
+      >
+        <zxn-table
+          :table-data="tableData3"
+          :column-list="dialogType == 'top' ? columnList3 : columnList4"
+          :hasPagination="false"
+        ></zxn-table>
+      </zxn-dialog>
     </div>
   </div>
 </template>
@@ -181,6 +205,7 @@ import {
   bindChannelByTaxland,
   setStatusChannelTopAndBottom,
   editTopAndBottomChannel,
+  getChannelInfoLogByChannel,
 } from "@/api/account/channel";
 import useTaxlandList from "@/hooks/useTaxlandList";
 
@@ -192,6 +217,9 @@ const props = defineProps({
     type: Boolean,
   },
 });
+
+const checkVisible = ref(false);
+const checkTitle = ref("");
 
 const isDialogAdd = ref(false); // 弹框 新增 / 编辑
 const dialogType = ref("top");
@@ -308,6 +336,28 @@ const pageChange2 = (cur: { limit: any; page: any }) => {
   getBottomLevel();
 };
 
+const tableData3 = reactive([] as any);
+const columnList3 = [
+  { label: "上级渠道", prop: "channel_name" },
+  { label: "绑定税地名称", prop: "tax_land_name" },
+  { label: "修改类型", prop: "type" },
+  { label: "修改说明", prop: "remark" },
+  { label: "上级点位", prop: "bind_point" },
+  { label: "我的点位", prop: "channel_point" },
+  { label: "修改时间", prop: "add_time" },
+  { label: "修改账号", prop: "account" },
+];
+const columnList4 = [
+  { label: "下级渠道", prop: "channel_name" },
+  { label: "绑定税地名称", prop: "tax_land_name" },
+  { label: "修改类型", prop: "type" },
+  { label: "修改说明", prop: "remark" },
+  { label: "下级点位", prop: "bind_point" },
+  { label: "我的点位", prop: "channel_point" },
+  { label: "修改时间", prop: "add_time" },
+  { label: "修改账号", prop: "account" },
+];
+
 const add = async (formInstance: any, type: string) => {
   formInstance?.resetFields();
   const func = async () => {
@@ -354,7 +404,7 @@ const confirmClick = (formInstance: any) => {
     }) => {
       await formInstance.validate((valid: any, fields: any) => {
         if (valid) {
-          bindChannel(func_params).then((res) => {
+          bindChannel(func_params).then(() => {
             ElMessage.success({
               message: `${dialogTitle.value}成功`,
             });
@@ -463,7 +513,7 @@ const handleSelectTaxland = (tax_land_id: any) => {
 
 const setStatus = (id: any, status: any) => {
   const func = () => {
-    setStatusChannelTopAndBottom({ id, status }).then((res) => {
+    setStatusChannelTopAndBottom({ id, status }).then(() => {
       ElMessage.success({
         message: "操作成功",
       });
@@ -472,7 +522,7 @@ const setStatus = (id: any, status: any) => {
   };
   switch (status) {
     case 1:
-      ElMessageBox.confirm("是否启用用税地？", {
+      ElMessageBox.confirm("是否绑定税地？", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         center: true,
@@ -487,7 +537,7 @@ const setStatus = (id: any, status: any) => {
         });
       break;
     case 0:
-      ElMessageBox.confirm("是否禁用税地？", {
+      ElMessageBox.confirm("是否解绑税地？", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         center: true,
@@ -533,6 +583,29 @@ const edit = (
       dialogTitle.value = "编辑下级渠道";
       dialogType.value = "bottom";
 
+      func();
+      break;
+  }
+};
+
+const check = (type, id) => {
+  const func = () => {
+    getChannelInfoLogByChannel(id).then((res) => {
+      console.log(res);
+      tableData3.length = 0;
+      tableData3.push(...res.data);
+      checkVisible.value = true;
+    });
+  };
+  switch (type) {
+    case "top":
+      dialogType.value = "top";
+      checkTitle.value = "查看上级渠道历史点位";
+      func();
+      break;
+    case "bottom":
+      dialogType.value = "bottom";
+      checkTitle.value = "查看下级渠道历史点位";
       func();
       break;
   }
