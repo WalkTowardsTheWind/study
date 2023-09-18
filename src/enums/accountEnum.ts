@@ -7,7 +7,7 @@ export enum businessType {
 }
 export enum channelType {
   "正常" = 1,
-  "封停",
+  "封停" = 0,
 }
 
 export enum personalType {
