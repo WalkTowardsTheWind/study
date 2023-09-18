@@ -44,22 +44,19 @@ const tabsList = [
   //   label: "其他账户",
   // },
 ];
-// watch(activeName, (newVal) => {
-//   sessionStorage.setItem("activeName", newVal);
-// });
+watch(activeName, (newVal) => {
+  sessionStorage.setItem("activeName", newVal);
+});
 
-// onMounted(() => {
-//   const curTab = sessionStorage.getItem("activeName") || "";
-//   if (curTab) {
-//     activeName.value = curTab;
-//   }
-// });
-// // 监听页面离开事件
-// onBeforeUnmount(() => {
-//   // 重置 activeName
-//   activeName.value = "";
-
-//   // 清空 sessionStorage
-//   sessionStorage.removeItem("activeName");
-// });
+onMounted(() => {
+  const curTab = sessionStorage.getItem("activeName") || "";
+  if (curTab) {
+    activeName.value = curTab;
+  }
+});
+// 监听页面离开事件
+onBeforeUnmount(() => {
+  // 重置 activeName
+  activeName.value = "";
+});
 </script>

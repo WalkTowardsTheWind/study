@@ -95,7 +95,7 @@ const columnList1 = [
   },
   {
     label: "最后结算时间",
-    prop: "add_time",
+    prop: "time",
   },
 ];
 
