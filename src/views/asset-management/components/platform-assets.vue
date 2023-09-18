@@ -8,12 +8,6 @@
 
 <script lang="ts" setup>
 import LineChart1 from "./line-chart1.vue";
-
-const pageInfo = reactive({
-  page: 1,
-  limit: 20,
-  total: 0,
-});
 </script>
 
 <style lang="scss" scoped>

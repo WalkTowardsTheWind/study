@@ -8,18 +8,22 @@
         <zxn-title>渠道数据合计</zxn-title>
       </div>
       <zxn-search @on-search="handleSearch" @on-reset="handleReset">
-        <el-form-item>
-          <el-input placeholder="请输入渠道名称">
+        <el-form-item label="渠道名称">
+          <el-input placeholder="请输入渠道名称" v-model="formItem.name">
             <template #prefix>
               <i-ep-Search />
             </template>
           </el-input>
         </el-form-item>
         <el-form-item label="渠道管理员">
-          <el-select></el-select>
+          <el-input placeholder="请输入渠道管理员" v-model="formItem.admin">
+            <template #prefix>
+              <i-ep-Search />
+            </template>
+          </el-input>
         </el-form-item>
         <el-form-item label="统计日期">
-          <zxn-date-range />
+          <zxn-date-range v-model="date" />
         </el-form-item>
       </zxn-search>
       <zxn-table
@@ -42,9 +46,6 @@
             </div>
           </div>
         </template>
-        <template #operation="scope">
-          <el-button link @click="toDetail(scope.row)">详情</el-button>
-        </template>
       </zxn-table>
     </div>
   </div>
@@ -53,17 +54,23 @@
 <script lang="ts" setup>
 import router from "@/router";
 import LineChart2 from "./line-chart2.vue";
-import { getChannelTotalList } from "@/api/money";
+import { getChannelCommissionList } from "@/api/money";
 
 const dateList = [
-  { name: "今年", val: "2" },
-  { name: "去年", val: "1" },
-  { name: "上周", val: "4" },
-  { name: "本周", val: "5" },
-  { name: "上月", val: "6" },
+  { name: "今年", val: "5" },
+  { name: "去年", val: "6" },
+  { name: "上周", val: "2" },
+  { name: "本周", val: "1" },
+  { name: "上月", val: "4" },
   { name: "本月", val: "3" },
 ];
 const currentDate = ref("3");
+const date = ref([]);
+
+const formItem = reactive({
+  name: "",
+  admin: "",
+});
 
 const pageInfo1 = reactive({
   page: 1,
@@ -74,29 +81,23 @@ const pageInfo1 = reactive({
 const tableData1 = reactive([] as any);
 
 const columnList1 = [
-  { label: "渠道", prop: "" },
-  { label: "渠道管理员", prop: "" },
+  { label: "渠道", prop: "channel_name" },
+  { label: "渠道管理员", prop: "channel_admin" },
   {
     label: "渠道累计结算税前",
-    prop: "",
+    prop: "commission",
+    type: "money",
   },
   {
     label: "渠道累计结算税后",
+    prop: "after_commission",
+    type: "money",
   },
   {
-    label: "统计时间",
+    label: "最后结算时间",
+    prop: "add_time",
   },
 ];
-
-function getList1() {
-  let params = {
-    ...pageInfo1,
-  };
-  getChannelTotalList(params).then((res) => {
-    tableData1.push(...res.data.data);
-    pageInfo1.total = res.data.total;
-  });
-}
 
 function toDetail(item: any) {
   router.push({
@@ -105,13 +106,31 @@ function toDetail(item: any) {
   });
 }
 
-const handleSearch = () => {};
-const handleReset = () => {};
-const chooseDate = (date_val) => {
+const handleReset = () => {
+  formItem.name = "";
+  formItem.admin = "";
+  date.value = [];
+  handleSearch();
+};
+const chooseDate = (date_val: string) => {
   currentDate.value = date_val;
 };
 
-getList1();
+const handleSearch = () => {
+  let params = {
+    time_type: currentDate.value,
+    start_time: date.value[0] || "",
+    end_time: date.value[1] || "",
+    channel_name: formItem.name,
+    channel_admin: formItem.admin,
+  };
+  getChannelCommissionList(params).then((res) => {
+    tableData1.length = 0;
+    tableData1.push(...res.data.data);
+    pageInfo1.total = res.data.total;
+  });
+};
+handleSearch();
 </script>
 
 <style lang="scss" scoped>
