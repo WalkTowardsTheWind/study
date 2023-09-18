@@ -270,3 +270,15 @@ export function getChannelInfoLogByChannel(id: any) {
     method: "get",
   });
 }
+
+/**
+ * 重置渠道账户密码
+ * @param id
+ * @returns
+ */
+export function resetChannelPWD(id: any) {
+  return request({
+    url: `/adminapi/account/channel/reset_pwd/${id}`,
+    method: "get",
+  });
+}

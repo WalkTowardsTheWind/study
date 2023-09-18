@@ -3,7 +3,10 @@ export const settlement_type = [
     label: "周结",
     value: 1,
   },
-  { label: "日结", value: 2 },
+  {
+    label: "月结",
+    value: 2,
+  },
 ];
 
 export const collection_type = [

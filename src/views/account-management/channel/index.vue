@@ -13,7 +13,11 @@
         </el-input>
       </el-form-item>
       <el-form-item label="账户状态">
-        <el-select v-model="formItem.status" placeholder="请选择">
+        <el-select
+          v-model="formItem.status"
+          placeholder="请选择"
+          @change="handleSelect"
+        >
           <el-option
             v-for="item in statusOptions"
             :key="item.val"
@@ -23,7 +27,11 @@
         </el-select>
       </el-form-item>
       <el-form-item label="渠道类型">
-        <el-select v-model="formItem.channel_type" placeholder="请选择">
+        <el-select
+          v-model="formItem.channel_type"
+          placeholder="请选择"
+          @change="handleSelectChannel"
+        >
           <el-option
             v-for="item in channelOptions"
             :key="item.val"
@@ -127,15 +135,15 @@ const statusOptions = [
 
 const channelOptions = [
   { label: "全部", val: "" },
-  { label: "个人", val: "1" },
-  { label: "企业", val: "2" },
+  { label: "个人", val: "2" },
+  { label: "企业", val: "1" },
 ];
 
-const levelOptions = [
-  { label: "全部", val: "" },
-  { label: "一级", val: "1" },
-  { label: "二级", val: "2" },
-];
+// const levelOptions = [
+//   { label: "全部", val: "" },
+//   { label: "一级", val: "1" },
+//   { label: "二级", val: "2" },
+// ];
 
 const date = ref("");
 
@@ -274,5 +282,14 @@ function handleReset() {
   date.value = "";
   handleSearch();
 }
+
+const handleSelect = (val) => {
+  formItem.status = val;
+  handleSearch();
+};
+const handleSelectChannel = (val) => {
+  formItem.channel_type = val;
+  handleSearch();
+};
 handleSearch();
 </script>

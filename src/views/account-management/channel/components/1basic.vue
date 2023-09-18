@@ -35,7 +35,7 @@
             <el-form-item label="银行账号">
               <el-input v-model="formItem.bank_account" :readonly="!isEdit" />
             </el-form-item>
-            <el-form-item label="渠道佣金结算时间">
+            <el-form-item label="渠道佣金结算时间" prop="settlement_type">
               <el-select
                 v-model="formItem.settlement_type"
                 class="w-full"
@@ -59,7 +59,9 @@
             </el-form-item>
             <el-form-item label="密码">
               <el-input value="********" readonly />
-              <span v-if="isEdit" class="resetPWD">重置密码</span>
+              <span v-if="isEdit" class="resetPWD" @click="resetPWD"
+                >重置密码</span
+              >
             </el-form-item>
             <el-form-item label="联系人">
               <el-input v-model="formItem.contact" :readonly="!isEdit" />
@@ -67,7 +69,7 @@
             <el-form-item label="开户行">
               <el-input v-model="formItem.bank" :readonly="!isEdit" />
             </el-form-item>
-            <el-form-item label="收款方式">
+            <el-form-item label="收款方式" prop="collection_type">
               <el-select
                 v-model="formItem.collection_type"
                 class="w-full"
@@ -133,7 +135,7 @@
             <el-form-item label="开户行">
               <el-input v-model="formItem.bank" :readonly="!isEdit" />
             </el-form-item>
-            <el-form-item label="收款方式">
+            <el-form-item label="收款方式" prop="collection_type">
               <el-select
                 v-model="formItem.collection_type"
                 class="w-full"
@@ -157,7 +159,9 @@
             </el-form-item>
             <el-form-item label="密码">
               <el-input value="********" readonly />
-              <span v-if="!isEdit" class="resetPWD">重置密码</span>
+              <span v-if="isEdit" class="resetPWD" @click="resetPWD"
+                >重置密码</span
+              >
             </el-form-item>
             <el-form-item label="联系号码">
               <el-input v-model="formItem.contact_phone" :readonly="!isEdit" />
@@ -165,7 +169,7 @@
             <el-form-item label="银行账号">
               <el-input v-model="formItem.bank_account" :readonly="!isEdit" />
             </el-form-item>
-            <el-form-item label="渠道佣金结算时间">
+            <el-form-item label="渠道佣金结算时间" prop="settlement_type">
               <el-select
                 v-model="formItem.settlement_type"
                 class="w-full"
@@ -209,6 +213,7 @@
 
 <script lang="ts" setup>
 import {
+  resetChannelPWD,
   updateCompanyChannelAccount,
   updatePersonChannelAccount,
 } from "@/api/account/channel";
@@ -227,18 +232,22 @@ const formItem = ref({} as any);
 const formRef1 = ref();
 const formRef2 = ref();
 
+const commonRules = {
+  channel_admin: [{ required: true, message: "必填", trigger: "blur" }],
+  collection_type: [{ required: true, message: "必填", trigger: "change" }],
+  settlement_type: [{ required: true, message: "必填", trigger: "change" }],
+  agreement_img: [{ required: true, message: "必填", trigger: "change" }],
+};
 const rules1 = {
   username: [{ required: true, message: "必填", trigger: "blur" }],
   company_name: [{ required: true, message: "必填", trigger: "blur" }],
-  channel_admin: [{ required: true, message: "必填", trigger: "blur" }],
-  agreement_img: [{ required: true, message: "必填", trigger: "change" }],
+  ...commonRules,
 };
 
 const rules2 = {
   username: [{ required: true, message: "必填", trigger: "blur" }],
   realname: [{ required: true, message: "必填", trigger: "blur" }],
-  channel_admin: [{ required: true, message: "必填", trigger: "blur" }],
-  agreement_img: [{ required: true, message: "必填", trigger: "change" }],
+  ...commonRules,
 };
 const channel_type = ref("1");
 watch(
@@ -276,6 +285,26 @@ const updateAccount2 = async (formInstance) => {
       console.log("error submit!", fields);
     }
   });
+};
+
+const resetPWD = () => {
+  ElMessageBox.confirm("是否重置密码", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    center: true,
+  })
+    .then(() => {
+      resetChannelPWD(formItem.value.id).then(() => {
+        ElMessage.success({
+          message: "操作成功",
+        });
+      });
+    })
+    .catch(() => {
+      ElMessage.info({
+        message: "取消操作",
+      });
+    });
 };
 </script>
 
