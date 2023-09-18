@@ -7,9 +7,9 @@
       <!-- <template #2>
         <PersonalView />
       </template> -->
-      <template #3>
+      <!-- <template #3>
         <ChannelView />
-      </template>
+      </template> -->
       <!-- <template #4>
         <PlatformView />
       </template> -->
@@ -20,7 +20,7 @@
 <script lang="ts" setup>
 import BussinessView from "./business/index.vue";
 // import PersonalView from "./personal/index.vue";
-import ChannelView from "./channel/index.vue";
+// import ChannelView from "./channel/index.vue";
 // import PlatformView from "./platform/index.vue";
 import { ref } from "vue";
 
@@ -44,19 +44,19 @@ const tabsList = [
   //   label: "其他账户",
   // },
 ];
-watch(activeName, (newVal) => {
-  sessionStorage.setItem("activeName", newVal);
-});
+// watch(activeName, (newVal) => {
+//   sessionStorage.setItem("activeName", newVal);
+// });
 
-onMounted(() => {
-  const curTab = sessionStorage.getItem("activeName") || "";
-  if (curTab) {
-    activeName.value = curTab;
-  }
-});
-// 监听页面离开事件
-onBeforeUnmount(() => {
-  // 重置 activeName
-  activeName.value = "";
-});
+// onMounted(() => {
+//   const curTab = sessionStorage.getItem("activeName") || "";
+//   if (curTab) {
+//     activeName.value = curTab;
+//   }
+// });
+// // 监听页面离开事件
+// onBeforeUnmount(() => {
+//   // 重置 activeName
+//   activeName.value = "";
+// });
 </script>
