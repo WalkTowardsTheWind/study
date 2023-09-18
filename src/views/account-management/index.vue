@@ -4,24 +4,24 @@
       <template #1>
         <BussinessView />
       </template>
-      <template #2>
+      <!-- <template #2>
         <PersonalView />
-      </template>
+      </template> -->
       <template #3>
         <ChannelView />
       </template>
-      <template #4>
+      <!-- <template #4>
         <PlatformView />
-      </template>
+      </template> -->
     </zxn-tabs>
   </zxn-plan>
 </template>
 
 <script lang="ts" setup>
 import BussinessView from "./business/index.vue";
-import PersonalView from "./personal/index.vue";
+// import PersonalView from "./personal/index.vue";
 import ChannelView from "./channel/index.vue";
-import PlatformView from "./platform/index.vue";
+// import PlatformView from "./platform/index.vue";
 import { ref } from "vue";
 
 const activeName = ref("1");

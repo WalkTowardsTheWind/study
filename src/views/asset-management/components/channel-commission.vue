@@ -1,5 +1,5 @@
 <template>
-  <div class="p-x-[48px]">
+  <div class="p-x-[36px]">
     <div class="line-chart">
       <LineChart2 />
     </div>
@@ -99,13 +99,6 @@ const columnList1 = [
   },
 ];
 
-function toDetail(item: any) {
-  router.push({
-    name: "recharge-detail",
-    query: { id: item.id, name: item.company_name },
-  });
-}
-
 const handleReset = () => {
   formItem.name = "";
   formItem.admin = "";
@@ -114,6 +107,7 @@ const handleReset = () => {
 };
 const chooseDate = (date_val: string) => {
   currentDate.value = date_val;
+  handleSearch();
 };
 
 const handleSearch = () => {

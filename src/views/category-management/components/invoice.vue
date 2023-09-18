@@ -225,12 +225,14 @@ function resetForm() {
  * 查询
  */
 async function searchClick() {
+  loading.value = true;
   tableData.length = 0;
   const res = await getCategoryList({
     name: searchForm.name,
     type: searchForm.type,
   });
   tableData.push(...res.data);
+  loading.value = false;
 }
 
 /**

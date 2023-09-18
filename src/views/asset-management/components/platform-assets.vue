@@ -1,5 +1,5 @@
 <template>
-  <div class="p-x-[48px]">
+  <div class="p-x-[36px]">
     <div class="line-chart">
       <LineChart1 />
     </div>
