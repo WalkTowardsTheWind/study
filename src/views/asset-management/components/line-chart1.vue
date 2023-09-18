@@ -64,7 +64,7 @@ const dateList = [
   { name: "本月", val: "3" },
 ];
 const currentDate = ref(3);
-let chart = null;
+let chart: echarts.ECharts | null = null;
 
 const total_channel_amount = ref();
 const total_fee_amount = ref();
@@ -129,22 +129,6 @@ const options = ref({
       smooth: true,
       itemStyle: {
         color: "#366ff4", // 折线颜色
-        symbol: "circle", // 圆点标记
-        symbolSize: 10, // 圆点大小
-        lineStyle: {
-          width: 1, // 折线宽度
-        },
-      },
-    },
-    {
-      name: "支出",
-      type: "line",
-      stack: "total",
-      data: [], // 数据
-      showSymbol: false,
-      smooth: true,
-      itemStyle: {
-        color: "#35C5F3", // 折线颜色
         symbol: "circle", // 圆点标记
         symbolSize: 10, // 圆点大小
         lineStyle: {

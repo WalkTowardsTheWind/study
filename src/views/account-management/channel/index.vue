@@ -13,7 +13,11 @@
         </el-input>
       </el-form-item>
       <el-form-item label="账户状态">
-        <el-select v-model="formItem.status" placeholder="请选择">
+        <el-select
+          v-model="formItem.status"
+          placeholder="请选择"
+          @change="handleSelect"
+        >
           <el-option
             v-for="item in statusOptions"
             :key="item.val"
@@ -23,7 +27,11 @@
         </el-select>
       </el-form-item>
       <el-form-item label="渠道类型">
-        <el-select v-model="formItem.channel_type" placeholder="请选择">
+        <el-select
+          v-model="formItem.channel_type"
+          placeholder="请选择"
+          @change="handleSelectChannel"
+        >
           <el-option
             v-for="item in channelOptions"
             :key="item.val"
@@ -42,7 +50,7 @@
           </template>
         </el-input>
       </el-form-item>
-      <el-form-item label="渠道等级">
+      <!-- <el-form-item label="渠道等级">
         <el-select v-model="formItem.level" placeholder="请选择">
           <el-option
             v-for="item in levelOptions"
@@ -51,7 +59,7 @@
             :value="item.val"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item prop="date" label="创建日期" label-width="">
         <zxn-date-range v-model="date" />
       </el-form-item>
@@ -90,11 +98,11 @@
           v-if="scope.row.status == 1"
           link
           type="primary"
-          @click="stop(scope.row.id, 2)"
+          @click="stop(scope.row.id, 0)"
           >封停</el-button
         >
         <el-button
-          v-if="scope.row.status == 2"
+          v-if="scope.row.status == 0"
           link
           type="primary"
           @click="stop(scope.row.id, 1)"
@@ -113,41 +121,36 @@
 </template>
 
 <script lang="ts" setup>
-import { deleteBusinessAccount } from "@/api/account/business";
 import {
   getChannelAccountList,
   setChannelAccountStatus,
 } from "@/api/account/channel";
-import { delPersonalAccount } from "@/api/account/personal";
 import router from "@/router";
 
 const statusOptions = [
   { label: "全部", val: "" },
-  { label: "申请中", val: "0" },
-  { label: "未认证", val: "1" },
-  { label: "正常", val: "2" },
-  { label: "预警", val: "3" },
-  { label: "封停", val: "4" },
+  { label: "正常", val: "1" },
+  { label: "封停", val: "0" },
 ];
 
 const channelOptions = [
   { label: "全部", val: "" },
-  { label: "个人", val: "1" },
-  { label: "企业", val: "2" },
+  { label: "个人", val: "2" },
+  { label: "企业", val: "1" },
 ];
 
-const levelOptions = [
-  { label: "全部", val: "" },
-  { label: "一级", val: "1" },
-  { label: "二级", val: "2" },
-];
+// const levelOptions = [
+//   { label: "全部", val: "" },
+//   { label: "一级", val: "1" },
+//   { label: "二级", val: "2" },
+// ];
 
 const date = ref("");
 
 const formItem = reactive({
   name: "",
   channel_type: "", // 默认空  后面在改
-  level: "",
+  // level: "",
   status: "",
   channel_admin_name: "",
 });
@@ -167,8 +170,8 @@ const columnList = [
     path: "accountEnum.channelType",
     prop: "status",
     color: {
-      1: { color: "#1DE585", background: "#dbfbeb" },
-      2: { color: "#333333", background: "#dedede" },
+      0: { color: "#333333", background: "#dedede" },
+      1: { color: "#356FF3", background: "#dfe8fd" },
     },
     minWidth: 150,
   },
@@ -222,7 +225,7 @@ function handleSearch() {
     channel_admin_name: formItem.channel_admin_name,
     start_time: date.value[0] || "",
     end_time: date.value[1] || "",
-    level: formItem.level,
+    // level: formItem.level,
     status: formItem.status,
     limit: pageInfo.limit,
     page: pageInfo.page,
@@ -252,7 +255,7 @@ function stop(id: number, status: number) {
       });
     });
   }
-  if (status === 2) {
+  if (status === 0) {
     // 封停
     ElMessageBox.confirm("是否封停账号?", {
       confirmButtonText: "确认",
@@ -275,9 +278,18 @@ function handleReset() {
   formItem.status = "";
   formItem.channel_type = "";
   formItem.channel_admin_name = "";
-  formItem.level = "";
+  // formItem.level = "";
   date.value = "";
   handleSearch();
 }
+
+const handleSelect = (val) => {
+  formItem.status = val;
+  handleSearch();
+};
+const handleSelectChannel = (val) => {
+  formItem.channel_type = val;
+  handleSearch();
+};
 handleSearch();
 </script>
