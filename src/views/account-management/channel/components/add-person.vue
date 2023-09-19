@@ -54,7 +54,7 @@
                 v-model="form.channel_admin"
               ></el-input>
             </el-form-item>
-            <el-form-item label="收款方式">
+            <el-form-item label="收款方式" prop="collection_type">
               <el-select
                 placeholder="请选择"
                 class="w-full"
@@ -63,6 +63,7 @@
                 <el-option
                   v-for="i in collection_type"
                   :value="i.value"
+                  :key="i.value"
                   :label="i.label"
                 ></el-option>
               </el-select>
@@ -88,7 +89,7 @@
                 v-model="form.admin_phone"
               ></el-input>
             </el-form-item>
-            <el-form-item label="渠道佣金结算时间">
+            <el-form-item label="渠道佣金结算时间" prop="settlement_type">
               <el-select
                 placeholder="请选择"
                 class="w-full"
@@ -96,6 +97,7 @@
               >
                 <el-option
                   v-for="i in settlement_type"
+                  :key="i.value"
                   :value="i.value"
                   :label="i.label"
                 ></el-option>
@@ -112,46 +114,6 @@
           </el-col>
         </el-row>
       </el-form>
-
-      <!-- <div class="m-b-[30px] m-t-[50px] relative">
-				<zxn-title>渠道税地信息</zxn-title>
-				<div class="addTax" @click="addTaxLand">+新增税地</div>
-			</div> -->
-      <!-- 渠道税地信息 -->
-      <!-- <zxn-table
-        :table-data="tableData"
-        :column-list="columnList"
-        :hasPagination="false"
-      >
-        <template #operation></template>
-      </zxn-table> -->
-      <!-- 新增税地 -->
-      <!-- <zxn-dialog
-        v-model:visible="visible"
-        title="新增税地"
-        @close-dialog="closeDialog"
-        @confirm-dialog="confirmClick"
-      >
-        <el-form :model="newForm" :rules="rules">
-          <el-row>
-            <el-col :span="22">
-              <el-form-item label="税地名称" prop="tax_land_name">
-                <el-select class="w-full" placeholder="请选择"></el-select>
-              </el-form-item>
-              <el-form-item label="渠道点位" prop="channel_point">
-                <el-input placeholder="请输入">
-                  <template #append>%</template>
-                </el-input>
-              </el-form-item>
-              <el-form-item label="扣税点位" prop="point">
-                <el-input placeholder="请输入">
-                  <template #append>%</template>
-                </el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-      </zxn-dialog> -->
     </div>
     <zxn-bottom-btn>
       <el-button type="info" plain @click="$router.go(-1)">取消</el-button>
@@ -187,12 +149,6 @@ const form = reactive({
   idcard_img: [], // 身份证
 });
 
-const newForm = reactive({
-  tax_land_name: "",
-  channel_point: "",
-  point: "",
-});
-
 const validatePassword = (rule, value, callback) => {
   if (value == "") {
     callback(new Error("请输入密码"));
@@ -215,47 +171,16 @@ const rules = {
   ],
   realname: [{ required: true, message: "必填", trigger: "blur" }],
   channel_admin: [{ required: true, message: "必填", trigger: "blur" }],
+  settlement_type: [{ required: true, message: "必填", trigger: "blur" }],
+  collection_type: [{ required: true, message: "必填", trigger: "blur" }],
   agreement_img: [{ required: true, message: "必填", trigger: "blur" }],
 };
-
-const tableData = reactive([]);
-const columnList = [
-  {
-    label: "税地名称",
-    prop: "",
-  },
-  {
-    label: "成本点位",
-    prop: "",
-  },
-  {
-    label: "渠道点位",
-    prop: "",
-  },
-  {
-    label: "扣税点位",
-    prop: "",
-  },
-  { label: "操作", slot: "operation", fixed: "right" },
-];
-
-const visible = ref(false);
-
-const closeDialog = () => {
-  visible.value = false;
-};
-
-const addTaxLand = () => {
-  visible.value = true;
-};
-
-const confirmClick = () => {};
 
 const submit = async (formInstance) => {
   if (!formInstance) return;
   await formInstance.validate((valid, fields) => {
     if (valid) {
-      createPersonChannelAccount(form).then((res) => {
+      createPersonChannelAccount(form).then(() => {
         ElMessage.success({
           message: "新建个人渠道成功",
         });

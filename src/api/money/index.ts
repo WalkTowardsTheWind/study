@@ -34,9 +34,14 @@ export function getChannelList(params: any) {
   });
 }
 
-export function getChannelTotalList(params: any) {
+/**
+ * 渠道佣金统计列表
+ * @param params
+ * @returns
+ */
+export function getChannelCommissionList(params: any) {
   return request({
-    url: "/adminapi/finance/channel/settlement",
+    url: "/adminapi/finance/channel/commissionList",
     method: "get",
     params,
   });

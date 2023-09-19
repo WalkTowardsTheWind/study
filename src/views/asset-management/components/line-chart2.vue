@@ -48,9 +48,12 @@ const commission_total = ref();
 const profit = ref();
 const profit_rate = ref();
 
-function get3And1List(time_type: number, index: number) {
+function get3And1List(time_type: number | string, index: number) {
   currentDate.value = index;
-
+  nextTick(() => {
+    chart = null;
+    chart = echarts.init(document.getElementById("main2") as HTMLDivElement);
+  });
   getChannelList({ time_type }).then((res) => {
     commission_total.value = res.data.commission_total;
     profit.value = res.data.profit;
@@ -59,17 +62,17 @@ function get3And1List(time_type: number, index: number) {
     // console.log(res.data.commission_list);
 
     options.value.xAxis.data = res.data?.commission_list.map(
-      (item) => item.date_time
+      (item: any) => item.date_time
     );
     options.value.series[0].data = res.data?.commission_list.map(
-      (item) => item.commission
+      (item: any) => item.commission
     );
-    chart.value?.clear();
-    chart.value?.setOption(options.value);
+    chart?.clear();
+    chart?.setOption(options.value);
   });
 }
 
-const chart = ref({} as any);
+let chart: echarts.ECharts | null = null;
 
 const options = ref({
   tooltip: {
@@ -78,12 +81,17 @@ const options = ref({
       type: "shadow",
     },
   },
-
   grid: {
     left: "1%",
     right: "10%",
     bottom: "3%",
     containLabel: true,
+  },
+  toolbox: {
+    show: false,
+    feature: {
+      saveAsImage: {},
+    },
   },
   xAxis: {
     type: "category",
@@ -117,14 +125,14 @@ const options = ref({
 });
 
 onMounted(() => {
-  // 图表初始化
-  chart.value = echarts.init(
-    document.getElementById("main2") as HTMLDivElement
-  );
+  nextTick(() => {
+    // 图表初始化
+    chart = echarts.init(document.getElementById("main2") as HTMLDivElement);
 
-  // 大小自适应
-  window.addEventListener("resize", () => {
-    chart.resize();
+    // 大小自适应
+    window.addEventListener("resize", () => {
+      chart?.resize();
+    });
   });
 });
 
