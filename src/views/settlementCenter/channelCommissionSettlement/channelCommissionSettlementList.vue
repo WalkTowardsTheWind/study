@@ -131,7 +131,7 @@ import {
   getChannelSettlementListExcel,
   deleteChannelSettlementDoc,
   getChannelSettlementDetails,
-} from "@/api/settlementCenter/channelSettlement";
+} from "@/api/settlementCenter/channelCommissionSettlement";
 import viewDialog from "../components/viewDialog.vue";
 import uploadCredentials from "../components/uploadCredentials.vue";
 import { ElMessage } from "element-plus";
@@ -453,37 +453,31 @@ const getTableData = async () => {
   ) as any;
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
-  console.log(params);
 
   try {
-    // const { data } = await getChannelSettlementList(params);
+    const { data } = await getChannelSettlementList(params);
 
-    // pageInfo.page = data.current_page;
-    // pageInfo.total = data.total;
-    // console.log(data, "=======>");
-    // total_pay_money.value = data.total_pay_money;
+    pageInfo.page = data.current_page;
+    pageInfo.total = data.total;
+    console.log(data, "=======>");
+    total_pay_money.value = data.total_pay_money;
 
-    // var newData = data.data.map((item: any) => {
-    //   return {
-    //     id: item.id,
-    //     settlement_order_no: item.settlement_order_no,
-    //     status: item.status,
-    //     task_count: item.task_count,
-    //     company_name: item.company_name,
-    //     tax_land_name: item.tax_land_name,
-    //     tax_point: item.tax_point,
-    //     channel_name: item.channel_name,
-    //   };
-    // });
+    var newData = data.data.map((item: any) => {
+      return {
+        id: item.id,
+        settlement_order_no: item.settlement_order_no,
+        status: item.status,
+        task_count: item.task_count,
+        company_name: item.company_name,
+        tax_land_name: item.tax_land_name,
+        tax_point: item.tax_point,
+        channel_name: item.channel_name,
+      };
+    });
     tableData.length = 0;
     // console.log(newData[0]);
 
-    // tableData.push(...newData);
-    tableData.push({ settlement_order_no: 1, status: 0 });
-    tableData.push({ settlement_order_no: 2, status: 1 });
-    tableData.push({ settlement_order_no: 3, status: 2 });
-    tableData.push({ settlement_order_no: 4, status: 3 });
-    tableData.push({ settlement_order_no: 5, status: 0 });
+    tableData.push(...newData);
   } catch (error) {
     console.log(error);
   }

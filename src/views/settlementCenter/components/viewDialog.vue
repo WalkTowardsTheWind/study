@@ -53,7 +53,7 @@
   </el-dialog>
 </template>
 <script setup lang="ts">
-import { updateChannelSettlementStatus } from "@/api/settlementCenter/channelSettlement";
+import { updateChannelSettlementStatus } from "@/api/settlementCenter/channelCommissionSettlement";
 const emit = defineEmits(["update:dialogVisible", "up-Table"]);
 const props = defineProps({
   dialogVisible: { type: Boolean, default: false },

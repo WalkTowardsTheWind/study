@@ -3,6 +3,11 @@
  */
 export interface keywords {
   keywords: string;
+  start_time: string;
+  end_time: string;
+  status: string;
+  page: string;
+  limit: string;
 }
 
 /**
@@ -11,7 +16,7 @@ export interface keywords {
 export interface updateStatus {
   id: string;
   status: string;
-  transfer_certificate?: string;
+  transfer_certificate?: Array<string>;
 }
 /**
  * ids参数
