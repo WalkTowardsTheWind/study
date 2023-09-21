@@ -59,24 +59,27 @@ const handleRouter = (item: any) => {
     display: flex;
     flex-wrap: wrap;
     min-height: 120px;
-    padding: 36px;
+    padding: 12px 36px;
     margin-top: 16px;
     background: #fff;
     border-radius: 4px;
 
     &-item {
-      box-sizing: border-box;
-      width: 25%;
-      padding-right: 8px;
+      width: calc((100% - 32px) / 4);
+      height: 26px;
+      line-height: 26px;
+      margin-right: 8px;
       margin-top: 4px;
-      overflow: hidden;
       font-size: 14px;
       font-weight: 500;
       color: #333;
+      text-align: center;
       text-overflow: ellipsis;
       white-space: nowrap;
       cursor: pointer;
-
+      border: 1px solid #efefef;
+      box-sizing: border-box;
+      overflow: hidden;
       &:hover {
         color: #356ff3;
       }
