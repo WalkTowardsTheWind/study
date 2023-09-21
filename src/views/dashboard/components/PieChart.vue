@@ -62,7 +62,9 @@ const chartInit = () => {
         icon: "circle",
         formatter: (name) => {
           const item = props.chartData?.find((it) => it.name === name);
-          return `${name}:  ${item.rate}%`;
+          return `${name.length > 4 ? name.substring(0, 4) + "..." : name} :  ${
+            item.rate
+          }%`;
         },
       },
       series: [
