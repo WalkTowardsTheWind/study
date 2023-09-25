@@ -528,7 +528,7 @@ const setStatus = (id: any, status: any) => {
   };
   switch (status) {
     case 1:
-      ElMessageBox.confirm("是否绑定税地？", {
+      ElMessageBox.confirm("是否绑定渠道？", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         center: true,
@@ -543,7 +543,7 @@ const setStatus = (id: any, status: any) => {
         });
       break;
     case 0:
-      ElMessageBox.confirm("是否解绑税地？", {
+      ElMessageBox.confirm("是否解绑渠道？", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         center: true,
