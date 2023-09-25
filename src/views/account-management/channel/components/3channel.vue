@@ -495,14 +495,11 @@ const handleSelectTaxland = (tax_land_id: any) => {
     bind_type: 0,
     tax_land_id,
   };
-  const func = (func_params: {
-    channel_id: string | undefined;
-    bind_type: number;
-    tax_land_id: any;
-  }) => {
+  const func = (func_params: any) => {
     bindChannelByTaxland(func_params).then((res) => {
       channelList.length = 0;
       channelList.push(...res.data);
+      newForm.bind_channel_id = "";
     });
   };
   switch (dialogType.value) {
