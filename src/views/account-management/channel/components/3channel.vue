@@ -21,9 +21,9 @@
       >
         <template #opera="{ row }">
           <template v-if="isEdit">
-            <el-button link type="primary" @click="edit(row, 'top')"
+            <!-- <el-button link type="primary" @click="edit(row, 'top')"
               >编辑</el-button
-            >
+            > -->
             <el-button
               v-if="row.status == 1"
               link
@@ -62,7 +62,11 @@
       >
         <template #opera="{ row }">
           <template v-if="isEdit">
-            <el-button link type="primary" @click="edit(row, 'bottom')"
+            <el-button
+              :disabled="row.status == 0"
+              link
+              type="primary"
+              @click="edit(row, 'bottom')"
               >编辑</el-button
             >
             <el-button
@@ -164,7 +168,7 @@
                   <el-input disabled v-model="newForm.channel_name" />
                 </el-form-item>
               </template>
-              <el-form-item label="我的点位" prop="point">
+              <el-form-item v-if="!isDialogAdd" label="我的点位" prop="point">
                 <el-input placeholder="请输入" v-model="newForm.point">
                   <template #append>%</template>
                 </el-input>
@@ -398,14 +402,13 @@ const confirmClick = (formInstance: any) => {
       channel_id: props.channel_id,
       bind_channel_id: newForm.bind_channel_id,
       tax_land_id: newForm.tax_land_id,
-      point: newForm.point,
+      // point: newForm.point,
       bind_type: 0,
     };
     const func = async (func_params: {
       channel_id: string | undefined;
       bind_channel_id: string;
       tax_land_id: string;
-      point: string;
       bind_type: number;
     }) => {
       await formInstance.validate((valid: any, fields: any) => {
@@ -462,7 +465,7 @@ const getTopLevel = () => {
     channel_id: props.channel_id,
   };
   getChannelAccountInfoTopAndBottomList(params).then((res) => {
-    console.log(res, 111111111111);
+    // console.log(res, 111111111111);
     tableData1.length = 0;
     tableData1.push(...res.data.data);
     pageInfo1.total = res.data.total;
@@ -476,7 +479,7 @@ const getBottomLevel = () => {
     channel_id: props.channel_id,
   };
   getChannelAccountInfoTopAndBottomList(params).then((res) => {
-    console.log(res, 2222222222222);
+    // console.log(res, 2222222222222);
 
     tableData2.length = 0;
     tableData2.push(...res.data.data);
