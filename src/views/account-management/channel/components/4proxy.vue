@@ -174,8 +174,8 @@ const newForm = reactive({
   company_id: "",
 });
 const rules = {
-  tax_land_id: [{ required: true, message: "必填", trigger: "change" }],
-  company_id: [{ required: true, message: "必填", trigger: "change" }],
+  company_id: [{ required: true, message: "必填", trigger: "blur" }],
+  tax_land_id: [{ required: true, message: "必填", trigger: "blur" }],
 };
 
 const handleSearch = () => {
@@ -243,6 +243,7 @@ const handleSelect = (company_id: string) => {
   element.tax_land_list
     ? (taxlandList.value = element.tax_land_list)
     : (taxlandList.value = []);
+  newForm.tax_land_id = "";
 };
 
 const setStatus = (id: any, status: any) => {

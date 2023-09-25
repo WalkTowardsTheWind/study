@@ -206,6 +206,7 @@ import {
   setStatusChannelTopAndBottom,
   editTopAndBottomChannel,
   getChannelInfoLogByChannel,
+  getChannelAccountTaxland,
 } from "@/api/account/channel";
 import useTaxlandList from "@/hooks/useTaxlandList";
 
@@ -368,8 +369,11 @@ const add = async (formInstance: any, type: string) => {
     newForm.remark = "";
     isDialogAdd.value = true;
     taxlandList.length = 0;
-    const arr = await useTaxlandList();
-    taxlandList.push(...arr);
+    const { data } = await getChannelAccountTaxland({
+      channel_id: props.channel_id,
+      limit: 1000,
+    });
+    taxlandList.push(...data.data);
     visible.value = true;
   };
   switch (type) {
