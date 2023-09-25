@@ -111,6 +111,7 @@ import {
 } from "@/api/account/channel";
 import { getLandList } from "@/api/common";
 import { useRoute } from "vue-router";
+import { pointValidationRule } from "./options";
 const route = useRoute();
 defineProps({
   isEdit: {
@@ -201,8 +202,8 @@ const newForm = reactive({
 
 const rules = {
   tax_land_id: [{ required: true, message: "必填", trigger: "change" }],
-  channel_point: [{ required: true, message: "必填", trigger: "blur" }],
-  point: [{ required: true, message: "必填", trigger: "blur" }],
+  channel_point: pointValidationRule,
+  tax_point: pointValidationRule,
 };
 
 const closeDialog = (formInstance: any) => {

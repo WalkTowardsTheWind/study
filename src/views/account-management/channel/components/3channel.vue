@@ -209,6 +209,8 @@ import {
 } from "@/api/account/channel";
 import useTaxlandList from "@/hooks/useTaxlandList";
 
+import { pointValidationRule } from "./options";
+
 const props = defineProps({
   channel_id: {
     type: String || Number,
@@ -318,9 +320,9 @@ const newForm = reactive({
 });
 
 const rules = {
-  bind_channel_id: [{ required: true, message: "必填" }],
-  tax_land_id: [{ required: true, message: "必填" }],
-  point: [{ required: true, message: "必填" }],
+  bind_channel_id: [{ required: true, message: "必填", trigger: "blur" }],
+  tax_land_id: [{ required: true, message: "必填", trigger: "blur" }],
+  point: pointValidationRule,
 };
 
 const pageChange1 = (cur: { limit: any; page: any }) => {
