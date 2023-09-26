@@ -37,3 +37,18 @@ export enum channelSettlementStatus {
   "已下发",
   "驳回",
 }
+// 渠道结算详情
+export enum settleTaskType {
+  "待申请",
+  "申请中",
+  "驳回",
+  "报名中",
+  "已验收",
+  "封停",
+  "关闭",
+}
+export enum settlePerson {
+  "结算中",
+  "结算成功",
+  "结算失败",
+}

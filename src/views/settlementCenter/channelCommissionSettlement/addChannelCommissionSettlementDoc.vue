@@ -43,7 +43,7 @@
                 />
               </zxn-select>
             </el-form-item>
-            <!-- <el-form-item label="渠道名称">
+            <el-form-item label="渠道名称">
               <zxn-select v-model="formItem.channelName" @change="handleSearch">
                 <el-option
                   v-for="item in proxy.$const[
@@ -54,7 +54,7 @@
                   :value="item.value"
                 />
               </zxn-select>
-            </el-form-item> -->
+            </el-form-item>
             <!-- <el-form-item label="所属税地">
               <zxn-select v-model="formItem.tax" @change="handleSearch">
                 <el-option
@@ -113,7 +113,7 @@ import { transformTimeRanges } from "@/utils";
 import { useRouter, useRoute } from "vue-router";
 import {
   getAddChannelSettlementDocList,
-  // addChannelSettlementDoc,
+  addChannelSettlementDoc,
 } from "@/api/settlementCenter/channelCommissionSettlement";
 const { proxy } = getCurrentInstance() as any;
 const router = useRouter();
@@ -136,6 +136,7 @@ const handleReset = () => {
   formItem.value = {
     keywords: "",
     settlement_type: "",
+    channelName: "",
     status: "",
     timeData: [],
     page: "",
@@ -175,6 +176,7 @@ var total_pay_money = ref();
 const formItem = ref({
   keywords: "",
   settlement_type: "",
+  channelName: "",
   status: "",
   timeData: [],
   page: "",
@@ -217,10 +219,34 @@ const columnList = [
   },
 ];
 //取消
-const handleClose = () => {};
+const handleClose = () => {
+  router.push({
+    name: "channelCommissionSettlementList",
+    query: { activeName: "channelCommission" },
+  });
+};
 //保存
-const handleSave = () => {
+const handleSave = async () => {
   console.log(selectionData.value);
+  const params = {
+    ids: selectionData.value,
+    status: 0,
+  };
+
+  addChannelSettlementDoc(params)
+    .then(() => {
+      ElMessage({
+        type: "success",
+        message: `新建渠道佣金结算单成功`,
+      });
+      router.push({
+        name: "channelCommissionSettlementList",
+        query: { activeName: "channelCommission" },
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 //发送
 const handleSend = () => {};
@@ -242,7 +268,7 @@ const toggleRowSelection = () => {
   const tableEl = table.value.getTable();
   tableEl.clearSelection();
   checkStatusData.value.forEach((it) => {
-    const _row = tableData.find((row) => {
+    const _row = tableData.find((row: any) => {
       return row.id === it;
     });
     tableEl.toggleRowSelection(_row, true);

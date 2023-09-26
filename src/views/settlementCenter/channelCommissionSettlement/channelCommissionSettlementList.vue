@@ -81,7 +81,7 @@
           link
           type="primary"
           @click="handleSend(scope)"
-          v-if="[1].includes(scope.row.status)"
+          v-if="[0].includes(scope.row.status)"
           >发送佣金确认单</el-button
         >
         <el-button
@@ -95,31 +95,35 @@
           link
           type="primary"
           @click="handleDistribute(scope)"
-          v-if="[0].includes(scope.row.status)"
+          v-if="[2].includes(scope.row.status)"
           >下发</el-button
         >
         <el-button
           link
           type="primary"
           @click="handleRebuild(scope)"
-          v-if="[3].includes(scope.row.status)"
+          v-if="[4].includes(scope.row.status)"
           >重新生成</el-button
         >
         <el-button
           link
           type="primary"
           @click="handleDelete(scope)"
-          v-if="[3].includes(scope.row.status)"
+          v-if="[4].includes(scope.row.status)"
           >删除</el-button
         >
         <el-button link @click="handleDetails(scope)">详情</el-button>
       </template>
     </zxn-table>
   </div>
-  <viewDialog v-model:dialogVisible="dialogVisible" :formItem="formData" />
+  <viewDialog
+    v-model:dialogVisible="dialogVisible"
+    :formItem="formData"
+    @up-Table="getTableData"
+  />
   <uploadCredentials
     v-model:dialogVisible="uploadCredentialsDialogVisible"
-    :formItem="imageData"
+    :id="id"
   />
 </template>
 <script setup lang="ts">
@@ -128,15 +132,13 @@ import { downloadByData } from "@/utils/download";
 import { useRouter } from "vue-router";
 import {
   getChannelSettlementList,
-  getChannelSettlementDetails,
   updateChannelSettlementStatus,
   deleteChannelSettlementDoc,
+  getDocDetails,
 } from "@/api/settlementCenter/channelCommissionSettlement";
 import viewDialog from "../components/viewDialog.vue";
 import uploadCredentials from "../components/uploadCredentials.vue";
 import { ElMessage } from "element-plus";
-import configAutoPlugin from "../../../../build/vite/plugin/autoImportPlugin";
-import { isBoolean } from "@/utils/is";
 const { proxy } = getCurrentInstance() as any;
 const router = useRouter();
 //发佣确认
@@ -144,7 +146,8 @@ const dialogVisible = ref(false);
 const formData = ref([]);
 //下发
 const uploadCredentialsDialogVisible = ref(false);
-const imageData = ref([]);
+const id = ref();
+// const imageData = ref([]);
 // 查询重置
 const pageInfo = reactive({
   page: 1,
@@ -244,92 +247,58 @@ const handleAdd = () => {
 };
 // 发送佣金确认单
 const handleSend = async (scope: any) => {
-  dialogVisible.value = true;
-  // try {
-  //   const { data } = await getChannelSettlementDetails(Number(scope.row.id));
+  try {
+    const { data } = await getDocDetails(scope.row.id);
+    console.log(data);
 
-  //   const {
-  //     channel_order_no,
-  //     status,
-  //     company_name,
-  //     settlement_time,
-  //     real_money,
-  //     cooperate_pointnt,
-  //     channel_name,
-  //     before_tax,
-  //     after_tax,
-  //     bank,
-  //     bank_account,
-  //   } = data.info;
-  // } catch (error) {
-  //   console.log(error);
-  // }
+    formData.value = data;
+    dialogVisible.value = true;
+  } catch (error) {
+    console.log(error);
+  }
 };
 // 撤回
 const handleWithdraw = async (scope: any) => {
-  // try {
-  //   const { data } = await getChannelSettlementDetails(Number(scope.row.id));
-  //   const {
-  //     channel_order_no,
-  //     status,
-  //     company_name,
-  //     settlement_time,
-  //     real_money,
-  //     cooperate_pointnt,
-  //     channel_name,
-  //     before_tax,
-  //     after_tax,
-  //     bank,
-  //     bank_account,
-  //   } = data.info;
-  // } catch (error) {
-  //   console.log(error);
-  // }
+  ElMessageBox({
+    title: "",
+    message: h("p", null, `确定撤回?`),
+    showCancelButton: true,
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    beforeClose: async (
+      action: string,
+      instance: { confirmButtonLoading: boolean },
+      done: () => void
+    ) => {
+      if (action === "confirm") {
+        instance.confirmButtonLoading = true;
+        var data = {
+          id: scope.row.id,
+          status: "0",
+        };
+        await updateChannelSettlementStatus(data);
+
+        instance.confirmButtonLoading = false;
+        done();
+      } else {
+        done();
+      }
+    },
+  }).then(() => {
+    ElMessage({
+      type: "success",
+      message: `成功撤回`,
+    });
+    getTableData();
+  });
 };
 // 下发
 const handleDistribute = async (scope: any) => {
   uploadCredentialsDialogVisible.value = true;
-  // try {
-  //   const { data } = await getChannelSettlementDetails(Number(scope.row.id));
-
-  //   const {
-  //     channel_order_no,
-  //     status,
-  //     company_name,
-  //     settlement_time,
-  //     real_money,
-  //     cooperate_pointnt,
-  //     channel_name,
-  //     before_tax,
-  //     after_tax,
-  //     bank,
-  //     bank_account,
-  //   } = data.info;
-  // } catch (error) {
-  //   console.log(error);
-  // }
+  id.value = scope.row.id;
 };
 // 重新生成
-const handleRebuild = async (scope: any) => {
-  // try {
-  //   const { data } = await getChannelSettlementDetails(Number(scope.row.id));
-  //   const {
-  //     channel_order_no,
-  //     status,
-  //     company_name,
-  //     settlement_time,
-  //     real_money,
-  //     cooperate_pointnt,
-  //     channel_name,
-  //     before_tax,
-  //     after_tax,
-  //     bank,
-  //     bank_account,
-  //   } = data.info;
-  // } catch (error) {
-  //   console.log(error);
-  // }
-};
+const handleRebuild = async (scope: any) => {};
 // 删除
 const handleDelete = (scope: any) => {
   ElMessageBox({

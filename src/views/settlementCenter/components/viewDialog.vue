@@ -11,36 +11,40 @@
       </div>
     </template>
     <div>
-      <el-form :model="formItem" label-width="90px">
+      <el-form :model="formItem" label-width="110px">
         <el-form-item label="渠道状态">
-          <el-input v-model="formItem.id" />
+          {{
+            proxy.$enumSet[
+              "settlementCenterEnum.channelCommissionSettlementList"
+            ][formItem.status]
+          }}
         </el-form-item>
         <el-form-item label="结算时间">
-          <el-input v-model="formItem.id" />
+          <el-input v-model="formItem.settlement_time" />
         </el-form-item>
         <el-form-item label="收佣渠道">
-          <el-input v-model="formItem.id" />
+          <el-input v-model="formItem.channel_name" />
         </el-form-item>
         <el-form-item label="结算金额">
-          <el-input v-model="formItem.id" />
+          <el-input v-model="formItem.settlement_amount" />
         </el-form-item>
         <el-form-item label="渠道佣金税前">
-          <el-input v-model="formItem.id" />
+          <el-input v-model="formItem.commission" />
         </el-form-item>
         <el-form-item label="渠道佣金税后">
-          <el-input v-model="formItem.id" />
+          <el-input v-model="formItem.after_commission" />
         </el-form-item>
         <el-form-item label="收款银行">
-          <el-input v-model="formItem.id" />
+          <el-input v-model="formItem.bank_account" />
         </el-form-item>
         <el-form-item label="收款账户">
-          <el-input v-model="formItem.id" />
+          <el-input v-model="formItem.bank" />
         </el-form-item>
         <el-form-item label="甲方">
-          <el-input v-model="formItem.id" />
+          <el-input v-model="formItem.party_a" />
         </el-form-item>
         <el-form-item label="乙方">
-          <el-input v-model="formItem.id" />
+          <el-input v-model="formItem.party_b" />
         </el-form-item>
       </el-form>
     </div>
@@ -54,6 +58,7 @@
 </template>
 <script setup lang="ts">
 import { updateChannelSettlementStatus } from "@/api/settlementCenter/channelCommissionSettlement";
+const { proxy } = getCurrentInstance() as any;
 const emit = defineEmits(["update:dialogVisible", "up-Table"]);
 const props = defineProps({
   dialogVisible: { type: Boolean, default: false },
@@ -62,8 +67,6 @@ const props = defineProps({
 
 let dialogVisible = computed(() => props.dialogVisible);
 let formItem = computed(() => {
-  console.log(props.formItem);
-
   return props.formItem;
 }) as any;
 const handleConfirm = async () => {

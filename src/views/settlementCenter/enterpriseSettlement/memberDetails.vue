@@ -151,7 +151,7 @@ const formItem = ref({
 
 const getTableData = async () => {
   try {
-    const { data } = await getUserInfo({ id: route.query.id });
+    const { data } = await getUserInfo({ id: route.query.id + "" });
 
     const {
       account,

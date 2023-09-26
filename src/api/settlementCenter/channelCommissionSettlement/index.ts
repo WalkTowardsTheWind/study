@@ -5,6 +5,7 @@ import {
   updateStatus,
   company_settlement_id,
   ids,
+  idsStatus,
 } from "./types";
 
 /**
@@ -43,6 +44,19 @@ export function getChannelSettlementList(data: keywords) {
 export function getChannelSettlementDetails(id: number) {
   return request({
     url: `/adminapi/finance/channel/${id}`,
+    method: "get",
+  });
+}
+
+/**
+ * 发送佣金确认单信息
+ *
+ * @param data
+ * @returns
+ */
+export function getDocDetails(id: number) {
+  return request({
+    url: `/adminapi/finance/channel/getConfirm/${id}`,
     method: "get",
   });
 }
@@ -90,9 +104,9 @@ export function getChannelSettlementDocDetails(data: company_settlement_id) {
  * @param data {updateStatus}
  * @returns
  */
-export function addChannelSettlementDoc(data: ids) {
+export function addChannelSettlementDoc(data: idsStatus) {
   return request({
-    url: "/adminapi/finance/settlement",
+    url: "/adminapi/finance/channel",
     method: "post",
     params: data,
   });

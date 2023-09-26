@@ -11,9 +11,9 @@
       </div>
     </template>
     <div>
-      <el-form :model="imageList" label-width="100px">
+      <el-form :model="image" label-width="100px">
         <el-form-item label="上传多张图片">
-          <multi-upload v-model="imageList"></multi-upload>
+          <multi-upload v-model="image.imageList"></multi-upload>
         </el-form-item>
       </el-form>
     </div>
@@ -26,15 +26,35 @@
   </el-dialog>
 </template>
 <script setup lang="ts">
-const emit = defineEmits(["update:dialogVisible"]);
+import { updateChannelSettlementStatus } from "@/api/settlementCenter/channelCommissionSettlement";
+const emit = defineEmits(["update:dialogVisible", "up-Table"]);
 const props = defineProps({
   dialogVisible: { type: Boolean, default: false },
-  imageList: { type: Array<string>, equired: true, default: () => [] },
+  id: { type: String, equired: true },
 });
 
 let dialogVisible = computed(() => props.dialogVisible);
-let imageList = computed(() => props.imageList);
-const handleConfirm = () => {
+let id = computed(() => props.id);
+let image = ref({
+  imageList: [],
+});
+const handleConfirm = async () => {
+  try {
+    var data = {
+      id: id.value + "",
+      status: "3",
+      transfer_certificate: JSON.stringify(image.value.imageList),
+    };
+    await updateChannelSettlementStatus(data);
+    emit("update:dialogVisible", false);
+    ElMessage({
+      type: "success",
+      message: "成功下发该任务",
+    });
+    emit("up-Table");
+  } catch (error) {
+    console.log(error);
+  }
   emit("update:dialogVisible", false);
 };
 const HandleClose = () => {

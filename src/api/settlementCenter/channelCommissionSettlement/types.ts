@@ -29,7 +29,7 @@ export interface addkeywords {
 export interface updateStatus {
   id: string;
   status: string;
-  transfer_certificate?: Array<string>;
+  transfer_certificate?: string;
 }
 /**
  * 获取渠道结算单详情
@@ -42,4 +42,11 @@ export interface company_settlement_id {
  */
 export interface ids {
   ids: Array<string>;
+}
+/**
+ * 新建保存渠道结算单
+ */
+export interface idsStatus {
+  ids: Array<string>;
+  status: number;
 }
