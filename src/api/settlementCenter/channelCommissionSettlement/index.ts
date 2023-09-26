@@ -1,5 +1,11 @@
 import request from "@/utils/request";
-import { keywords, updateStatus, Excel } from "./types";
+import {
+  keywords,
+  addkeywords,
+  updateStatus,
+  company_settlement_id,
+  ids,
+} from "./types";
 
 /**
  *渠道结算列表
@@ -14,21 +20,22 @@ export function getChannelSettlementList(data: keywords) {
     params: data,
   });
 }
-/**
- *下载渠道结算列表Excel
- *
- */
-export function getChannelSettlementListExcel(params: Excel) {
-  return request({
-    url: `/adminapi/invoice/get_invoice_list_excel`,
-    method: "GET",
-    params,
-    responseType: "arraybuffer",
-  });
-}
+
+// /**
+//  *下载渠道结算列表Excel
+//  *
+//  */
+// export function getChannelSettlementListExcel(params: ids) {
+//   return request({
+//     url: `/adminapi/invoice/get_invoice_list_excel`,
+//     method: "GET",
+//     params,
+//     responseType: "arraybuffer",
+//   });
+// }
 
 /**
- * 查看渠道结算详情
+ * 渠道结算详情
  *
  * @param data
  * @returns
@@ -40,15 +47,54 @@ export function getChannelSettlementDetails(id: number) {
   });
 }
 
+// /**
+//  *下载渠道结算单Excel
+//  */
+// export function getChannelSettlementDocExcel(params: ids) {
+//   return request({
+//     url: `/adminapi/invoice/get_invoice_list_excel`,
+//     method: "GET",
+//     params,
+//     responseType: "arraybuffer",
+//   });
+// }
 /**
- *下载渠道结算单Excel
+ *获取新建渠道结算单列表
+ *
+ * @param data {keywords}
+ * @returns
  */
-export function getChannelSettlementDocExcel(params: Excel) {
+export function getAddChannelSettlementDocList(data: addkeywords) {
   return request({
-    url: `/adminapi/invoice/get_invoice_list_excel`,
-    method: "GET",
-    params,
-    responseType: "arraybuffer",
+    url: "/adminapi/finance/channel/create",
+    method: "get",
+    params: data,
+  });
+}
+/**
+ * 获取渠道结算单详情
+ *
+ * @param data
+ * @returns
+ */
+export function getChannelSettlementDocDetails(data: company_settlement_id) {
+  return request({
+    url: "/adminapi/finance/channel/getCommissionInfo",
+    method: "get",
+    params: data,
+  });
+}
+/**
+ * 新建保存渠道结算单
+ *
+ * @param data {updateStatus}
+ * @returns
+ */
+export function addChannelSettlementDoc(data: ids) {
+  return request({
+    url: "/adminapi/finance/settlement",
+    method: "post",
+    params: data,
   });
 }
 /**
@@ -65,7 +111,7 @@ export function updateChannelSettlementStatus(data: updateStatus) {
   });
 }
 /**
- * 删除渠道结算单
+ * 删除渠道结算
  *
  * @param data {updateStatus}
  * @returns

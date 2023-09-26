@@ -6,18 +6,21 @@
           <el-form class="zxn-box" :model="formData" label-width="130px">
             <div class="head">
               <el-form-item label="结算单号">
-                <el-input v-model="formData.data" placeholder="请输入" />
+                <el-input
+                  v-model="formData.channel_order_no"
+                  placeholder="请输入"
+                />
               </el-form-item>
               <el-form-item label="结算状态">
                 <el-select
                   class="w-[100%]"
                   disabled
-                  v-model="formData.data"
+                  v-model="formData.status"
                   placeholder="请选择"
                 >
                   <el-option
                     v-for="item in proxy.$const[
-                      'taxLandManagementEnum.tax_land_type'
+                      'settlementCenterEnum.channelCommissionSettlementList'
                     ]"
                     :key="item.value"
                     :label="item.label"
@@ -26,28 +29,46 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="渠道">
-                <el-input v-model="formData.data" placeholder="请输入" />
+                <el-input
+                  v-model="formData.channel_name"
+                  placeholder="请输入"
+                />
               </el-form-item>
               <el-form-item label="企业结算总额">
-                <el-input v-model="formData.data" placeholder="请输入" />
+                <el-input
+                  v-model="formData.settlement_amount"
+                  placeholder="请输入"
+                />
               </el-form-item>
               <el-form-item label="渠道结算税前">
-                <el-input v-model="formData.data" placeholder="请输入" />
+                <el-input v-model="formData.commission" placeholder="请输入" />
               </el-form-item>
               <el-form-item label="渠道结算税后">
-                <el-input v-model="formData.data" placeholder="请输入" />
+                <el-input
+                  v-model="formData.after_commission"
+                  placeholder="请输入"
+                />
               </el-form-item>
               <el-form-item v-if="0" label="所属供应商">
-                <el-input v-model="formData.data" placeholder="请输入" />
+                <el-input
+                  v-model="formData.tax_land_name"
+                  placeholder="请输入"
+                />
               </el-form-item>
               <el-form-item label="创建时间">
-                <el-input v-model="formData.data" placeholder="请输入" />
+                <el-input v-model="formData.add_time" placeholder="请输入" />
               </el-form-item>
               <el-form-item label="确认时间">
-                <el-input v-model="formData.data" placeholder="请输入" />
+                <el-input
+                  v-model="formData.confirm_time"
+                  placeholder="请输入"
+                />
               </el-form-item>
               <el-form-item label="打款时间">
-                <el-input v-model="formData.data" placeholder="请输入" />
+                <el-input
+                  v-model="formData.settlement_time"
+                  placeholder="请输入"
+                />
               </el-form-item>
               <el-form-item label="打款凭证">
                 <el-button link type="primary" @click="handleInspect"
@@ -93,16 +114,12 @@
 <script setup lang="ts">
 import { transformTimeRange } from "@/utils";
 import { downloadByData } from "@/utils/download";
-import { useRouter } from "vue-router";
-import {
-  getChannelSettlementList,
-  getChannelSettlementDocExcel,
-  deleteChannelSettlementDoc,
-  getChannelSettlementDetails,
-} from "@/api/settlementCenter/channelSettlement";
+import { useRouter, useRoute } from "vue-router";
+import { getChannelSettlementDetails } from "@/api/settlementCenter/channelCommissionSettlement";
 import { ElMessage } from "element-plus";
 const { proxy } = getCurrentInstance() as any;
 const router = useRouter();
+const route = useRoute();
 const activeName = ref("channelCommissionSettlementDetails");
 const tabsList = reactive([
   {
@@ -110,45 +127,20 @@ const tabsList = reactive([
     label: "结算详情",
   },
 ]);
-//   //获取厂商列表
-//   const optionsManufacturer = ref([] as any);
-//   const getManufacturerList = async () => {
-//   const { data } = await getManufacturer();
-//   console.log(data);
-//   const newData = data.map((item: any) => {
-//       return {
-//       label: item,
-//       value: item,
-//       };
-//   });
-//   optionsManufacturer.value.push(...newData);
-//   };
-//   getManufacturerList();
-//   //所属税地
-//     var optionsTaxLang = ref([]);
-//     const getTaxLangList = async () => {
-//     try {
-//         const { data } = await getAreaList(0);
-//         const newData = JSON.parse(
-//         JSON.stringify(data)
-//             .replace(/"id"/g, '"value"')
-//             .replace(/"name"/g, '"label"')
-//             .replace(/"cityList"/g, '"children"')
-//             .replace(/"taxLandList"/g, '"children"')
-//             .replace(/"child"/g, '"children"')
-//         );
-//         optionsTaxLang.value = newData;
-//     } catch (error) {
-//         console.log(error);
-//     }
-//     };
-//     getTaxLangList();
-//     const propsTaxLang = {
-//     // multiple: true,
-//     expandTrigger: "hover" as const,
-//     };
+
 const formData = ref({
-  data: "1",
+  channel_order_no: "",
+  status: "",
+  channel_name: "",
+  settlement_amount: "",
+  commission: "",
+  after_commission: "",
+  tax_land_name: "",
+  add_time: "",
+  confirm_time: "",
+  settlement_time: "",
+  transfer_certificate: "",
+  confirm_receipt: "",
 });
 
 // 查询重置
@@ -170,23 +162,23 @@ const formItem = ref({
 
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "企业名称", prop: "settlement_order_no" },
-  { label: "结算类型", prop: "task" },
-  { label: "发票类型", prop: "taskewe" },
-  { label: "成本点位", prop: "task_count" },
-  { label: "企业点位", prop: "company_name" },
-  { label: "渠道点位", prop: "company_name" },
-  { label: "渠道名称", prop: "company_name" },
-  { label: "渠道管理员", prop: "tax_land_name", width: 100 },
+  { label: "企业名称", prop: "company_name" },
+  { label: "结算类型", prop: "settlement_type" },
+  { label: "发票类型", prop: "invoice_type" },
+  { label: "成本点位", prop: "cost_tax_point" },
+  { label: "企业点位", prop: "tax_point" },
+  { label: "渠道点位", prop: "channel_point" },
+  { label: "渠道名称", prop: "channel_name" },
+  { label: "渠道管理员", prop: "channel_admin", width: 100 },
   { label: "所属税地", prop: "tax_land_name", width: 150 },
-  { label: "打款金额", prop: "tax_land_name" },
-  { label: "下发金额", prop: "tax_land_name" },
-  { label: "服务费", prop: "tax_land_name" },
-  { label: "成本费用", prop: "tax_land_name" },
-  { label: "供应商结算", prop: "tax_land_name", width: 100 },
-  { label: "渠道结算税前", prop: "tax_land_name", width: 110 },
-  { label: "渠道结算税后", prop: "tax_land_name", width: 110 },
-  { label: "结算时间", prop: "tax_point" },
+  { label: "打款金额", prop: "payment_amount" },
+  { label: "下发金额", prop: "settlement_amount" },
+  { label: "服务费", prop: "commission" },
+  { label: "成本费用", prop: "cost_amount" },
+  { label: "供应商结算", prop: "supplier_amount", width: 100 },
+  { label: "渠道结算税前", prop: "channel_amount", width: 110 },
+  { label: "渠道结算税后", prop: "after_channel_amount", width: 110 },
+  { label: "结算时间", prop: "settlement_time" },
   {
     label: "操作",
     slot: "operation",
@@ -273,50 +265,55 @@ const handleExport = () => {
  * 下载Excel
  */
 const handleExcel = async (ids: Array<string>) => {
-  const params = {
-    ids,
-    page: 1,
-    limit: pageInfo.limit,
-  };
-  const { data } = await getChannelSettlementDocExcel(params);
-  downloadByData(data, "渠道佣金结算单Excel.xlsx");
+  // const params = {
+  //   ids,
+  //   page: 1,
+  //   limit: pageInfo.limit,
+  // };
+  // const { data } = await getChannelSettlementDocExcel(params);
+  // downloadByData(data, "渠道佣金结算单Excel.xlsx");
 };
 //获取数据
 const getTableData = async () => {
   const params = transformTimeRange({ ...formItem.value }) as any;
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
-  console.log(params);
+  console.log(params, route.query.id);
 
   try {
-    // const { data } = await getChannelSettlementList(params);
+    const { data } = await getChannelSettlementDetails(Number(route.query.id));
 
-    // pageInfo.page = data.current_page;
-    // pageInfo.total = data.total;
-    // console.log(data, "=======>");
-    // total_pay_money.value = data.total_pay_money;
+    pageInfo.page = data.current_page ?? "1";
+    pageInfo.total = data.total ?? data.list.length + "";
+    formData.value = data;
+    formData.value.status = data.status + "";
 
-    // var newData = data.data.map((item: any) => {
-    //   return {
-    //     id: item.id,
-    //     settlement_order_no: item.settlement_order_no,
-    //     status: item.status,
-    //     task_count: item.task_count,
-    //     company_name: item.company_name,
-    //     tax_land_name: item.tax_land_name,
-    //     tax_point: item.tax_point,
-    //     channel_name: item.channel_name,
-    //   };
-    // });
+    var newData = data.list.map((item: any) => {
+      return {
+        id: item.id,
+        company_name: item.company_name,
+        settlement_type: item.settlement_type,
+        invoice_type: item.invoice_type,
+        cost_tax_point: item.cost_tax_point,
+        tax_point: item.tax_point,
+        channel_point: item.channel_point,
+        channel_name: item.channel_name,
+        channel_admin: item.channel_admin,
+        tax_land_name: item.tax_land_name,
+        payment_amount: item.payment_amount,
+        settlement_amount: item.settlement_amount,
+        commission: item.commission,
+        cost_amount: item.cost_amount,
+        supplier_amount: item.supplier_amount,
+        channel_amount: item.channel_amount,
+        after_channel_amount: item.after_channel_amount,
+        settlement_time: item.settlement_time,
+        company_settlement_id: item.company_settlement_id,
+      };
+    });
     tableData.length = 0;
-    // console.log(newData[0]);
 
-    // tableData.push(...newData);
-    tableData.push({ settlement_order_no: 1, status: 0 });
-    tableData.push({ settlement_order_no: 2, status: 1 });
-    tableData.push({ settlement_order_no: 3, status: 2 });
-    tableData.push({ settlement_order_no: 4, status: 3 });
-    tableData.push({ settlement_order_no: 5, status: 4 });
+    tableData.push(...newData);
   } catch (error) {
     console.log(error);
   }

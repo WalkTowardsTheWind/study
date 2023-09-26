@@ -23,6 +23,7 @@
         v-if="hasSelect"
         type="selection"
         :selectable="selectable"
+        :reserve-selection="true"
       />
       <el-table-column v-if="hasIndex" type="index" label="序号" width="65" />
       <template v-for="(item, index) in tableColumnList" :key="index">
@@ -106,6 +107,7 @@ const props = defineProps({
   hasIndex: { type: Boolean as PropType<boolean>, default: true },
   tableData: { type: Array, default: () => [] },
   columnList: { type: Array, default: () => [] },
+  checkStatusData: { type: Array, default: () => [] },
   hasPagination: { type: Boolean, default: true },
   pageInfo: { type: Object, default: () => ({}) },
   selectable: { type: Function },
@@ -146,6 +148,12 @@ const getSelectTotal = (selected: any) => {
 const getSelectionRows = () => {
   return zxnTable.value.getSelectionRows();
 };
+const toggleRowSelection = () => {
+  props.checkStatusData.forEach((item) => {
+    zxnTable.value.toggleRowSelection(item, true);
+  });
+};
+
 let _total = ref(0);
 let _page = ref(1);
 let _limit = ref(20);
@@ -207,6 +215,7 @@ defineExpose({
   resetHeight,
   getSelectionRows,
   getTable,
+  toggleRowSelection,
 });
 </script>
 <style lang="scss" scoped>

@@ -65,6 +65,31 @@ export function transformTimeRange(
   delete _params[oldField];
   return _params;
 }
+export function transformTimeRanges(
+  params: any,
+  oldField = "timeData",
+  start_name = "start_time",
+  end_name = "end_time",
+  isTime = false
+) {
+  const _params = JSON.parse(JSON.stringify(params));
+  if (_params[oldField] && _params[oldField].length) {
+    _params[start_name] = _params[oldField][0] || "";
+    _params[end_name] = _params[oldField][1] || "";
+  }
+  if (isTime) {
+    _params[start_name] = _params[start_name]
+      ? dateUtil(_params[start_name]).unix()
+      : "";
+    _params[end_name] = _params[end_name]
+      ? dateUtil(_params[end_name])
+          .add(24 * 60 - 1, "minute")
+          .unix()
+      : "";
+  }
+  delete _params[oldField];
+  return _params;
+}
 
 export function getPercentValue(arrList, index, precision) {
   if (!arrList[index]) {

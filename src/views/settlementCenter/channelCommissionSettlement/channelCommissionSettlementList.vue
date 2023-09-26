@@ -44,9 +44,9 @@
         </zxn-select>
       </el-form-item>
       <el-form-item label="收入类型">
-        <zxn-select v-model="formItem.incomeType" @change="handleSearch">
+        <zxn-select v-model="formItem.settlement_type" @change="handleSearch">
           <el-option
-            v-for="item in proxy.$const['settlementCenterEnum.incomeType']"
+            v-for="item in proxy.$const['settlementCenterEnum.settlement_type']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -68,34 +68,34 @@
       @page-change="handlePageChange"
       hasSelect
       @selection-change="handleSelect"
-      fieldTotal="settlement_order_no"
+      fieldTotal="channel_order_no"
     >
       <template #tableTop>
         <el-button type="primary" @click="handleAdd">新建佣金结算单</el-button>
-        <el-button class="ml-4" type="primary" plain @click="handleExport"
+        <!-- <el-button class="ml-4" type="primary" plain @click="handleExport"
           >导出EXCEL</el-button
-        >
+        > -->
       </template>
       <template #operation="scope">
         <el-button
           link
           type="primary"
           @click="handleSend(scope)"
-          v-if="[0].includes(scope.row.status)"
+          v-if="[1].includes(scope.row.status)"
           >发送佣金确认单</el-button
         >
         <el-button
           link
           type="primary"
           @click="handleWithdraw(scope)"
-          v-if="[0].includes(scope.row.status)"
+          v-if="[1].includes(scope.row.status)"
           >撤回</el-button
         >
         <el-button
           link
           type="primary"
           @click="handleDistribute(scope)"
-          v-if="[1].includes(scope.row.status)"
+          v-if="[0].includes(scope.row.status)"
           >下发</el-button
         >
         <el-button
@@ -123,18 +123,20 @@
   />
 </template>
 <script setup lang="ts">
-import { transformTimeRange } from "@/utils";
+import { transformTimeRanges } from "@/utils";
 import { downloadByData } from "@/utils/download";
 import { useRouter } from "vue-router";
 import {
   getChannelSettlementList,
-  getChannelSettlementListExcel,
-  deleteChannelSettlementDoc,
   getChannelSettlementDetails,
+  updateChannelSettlementStatus,
+  deleteChannelSettlementDoc,
 } from "@/api/settlementCenter/channelCommissionSettlement";
 import viewDialog from "../components/viewDialog.vue";
 import uploadCredentials from "../components/uploadCredentials.vue";
 import { ElMessage } from "element-plus";
+import configAutoPlugin from "../../../../build/vite/plugin/autoImportPlugin";
+import { isBoolean } from "@/utils/is";
 const { proxy } = getCurrentInstance() as any;
 const router = useRouter();
 //发佣确认
@@ -153,7 +155,7 @@ const handleReset = () => {
   formItem.value = {
     keywords: "",
     status: "",
-    incomeType: "",
+    settlement_type: "",
     createTimeData: [],
     paymentTimeData: [],
     page: "",
@@ -193,7 +195,7 @@ var total_pay_money = ref();
 const formItem = ref({
   keywords: "",
   status: "",
-  incomeType: "",
+  settlement_type: "",
   createTimeData: [],
   paymentTimeData: [],
   page: "",
@@ -202,28 +204,29 @@ const formItem = ref({
 
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "发佣单号", prop: "settlement_order_no" },
+  { label: "发佣单号", prop: "channel_order_no" },
   {
     label: "状态",
     type: "enum",
-    path: "settlementCenterEnum.channelSharingSettlementList",
+    path: "settlementCenterEnum.channelCommissionSettlementList",
     prop: "status",
     // fixed: "left",
     color: {
       0: { color: "#1EE685", backgroundColor: "#DBFBEB" },
-      1: { color: "#36C5F4", backgroundColor: "#DFF6FD" },
-      2: { color: "#366FF4", backgroundColor: "#DFE8FD" },
-      3: { color: "#F45136", backgroundColor: "#FDE3DF" },
+      1: { color: "#FFFFFF", backgroundColor: "#9AB7F9" },
+      2: { color: "#36C5F4", backgroundColor: "#DFF6FD" },
+      3: { color: "#366FF4", backgroundColor: "#DFE8FD" },
+      4: { color: "#F45136", backgroundColor: "#FDE3DF" },
     },
     width: 100,
   },
-  { label: "收入类型", prop: "task" },
-  { label: "渠道名称", prop: "task_count" },
-  { label: "结算金额", prop: "company_name" },
-  { label: "渠道佣金（税后）", prop: "tax_land_name", width: 140 },
-  { label: "创建时间", prop: "tax_point" },
-  { label: "下发时间（打款日）", prop: "channel_name", width: 150 },
-  { label: "驳回原因", prop: "channel_name" },
+  { label: "收入类型", prop: "settlement_type" },
+  { label: "渠道名称", prop: "channel_name" },
+  { label: "结算金额", prop: "settlement_amount" },
+  { label: "渠道佣金（税后）", prop: "after_commission", width: 140 },
+  { label: "创建时间", prop: "add_time" },
+  { label: "下发时间（打款日）", prop: "settlement_time", width: 150 },
+  { label: "驳回原因", prop: "reason" },
   {
     label: "操作",
     slot: "operation",
@@ -246,7 +249,7 @@ const handleSend = async (scope: any) => {
   //   const { data } = await getChannelSettlementDetails(Number(scope.row.id));
 
   //   const {
-  //     settlement_order_no,
+  //     channel_order_no,
   //     status,
   //     company_name,
   //     settlement_time,
@@ -267,7 +270,7 @@ const handleWithdraw = async (scope: any) => {
   // try {
   //   const { data } = await getChannelSettlementDetails(Number(scope.row.id));
   //   const {
-  //     settlement_order_no,
+  //     channel_order_no,
   //     status,
   //     company_name,
   //     settlement_time,
@@ -290,7 +293,7 @@ const handleDistribute = async (scope: any) => {
   //   const { data } = await getChannelSettlementDetails(Number(scope.row.id));
 
   //   const {
-  //     settlement_order_no,
+  //     channel_order_no,
   //     status,
   //     company_name,
   //     settlement_time,
@@ -311,7 +314,7 @@ const handleRebuild = async (scope: any) => {
   // try {
   //   const { data } = await getChannelSettlementDetails(Number(scope.row.id));
   //   const {
-  //     settlement_order_no,
+  //     channel_order_no,
   //     status,
   //     company_name,
   //     settlement_time,
@@ -374,89 +377,90 @@ const selectionData = ref([]);
 const handleSelect = (data: any) => {
   selectionData.value = data.map((item: any) => item.id);
 };
-
 /**
  * 批量操作
  */
 // 导出
-const handleExport = () => {
-  if (Object.keys(selectionData.value).length == 0) {
-    ElMessage({
-      type: "error",
-      message: `请选择结算单`,
-    });
-  } else {
-    ElMessageBox({
-      title: "",
-      message: h("p", null, `确定批量导出表格`),
-      showCancelButton: true,
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      beforeClose: async (
-        action: string,
-        instance: { confirmButtonLoading: boolean },
-        done: () => void
-      ) => {
-        if (action === "confirm") {
-          instance.confirmButtonLoading = true;
-          await handleExcel(selectionData.value);
+// const handleExport = () => {
+//   if (Object.keys(selectionData.value).length == 0) {
+//     ElMessage({
+//       type: "error",
+//       message: `请选择结算单`,
+//     });
+//   } else {
+//     ElMessageBox({
+//       title: "",
+//       message: h("p", null, `确定批量导出表格`),
+//       showCancelButton: true,
+//       confirmButtonText: "确定",
+//       cancelButtonText: "取消",
+//       beforeClose: async (
+//         action: string,
+//         instance: { confirmButtonLoading: boolean },
+//         done: () => void
+//       ) => {
+//         if (action === "confirm") {
+//           instance.confirmButtonLoading = true;
+//           await handleExcel(selectionData.value);
 
-          instance.confirmButtonLoading = false;
-          done();
-        } else {
-          done();
-        }
-      },
-    })
-      .then(() => {
-        ElMessage({
-          type: "success",
-          message: "导出成功",
-        });
-      })
-      .catch((action) => {
-        if (action === "cancel") {
-          ElMessage({
-            type: "warning",
-            message: "取消操作",
-          });
-        } else {
-          ElMessage({
-            type: "error",
-            message: "导出失败",
-          });
-        }
-      });
-  }
-};
+//           instance.confirmButtonLoading = false;
+//           done();
+//         } else {
+//           done();
+//         }
+//       },
+//     })
+//       .then(() => {
+//         ElMessage({
+//           type: "success",
+//           message: "导出成功",
+//         });
+//       })
+//       .catch((action) => {
+//         if (action === "cancel") {
+//           ElMessage({
+//             type: "warning",
+//             message: "取消操作",
+//           });
+//         } else {
+//           ElMessage({
+//             type: "error",
+//             message: "导出失败",
+//           });
+//         }
+//       });
+//   }
+// };
 /**
  * 下载Excel
  */
-const handleExcel = async (ids: Array<string>) => {
-  const params = {
-    ids,
-    page: 1,
-    limit: pageInfo.limit,
-  };
-  const { data } = await getChannelSettlementListExcel(params);
-  downloadByData(data, "渠道佣金结算列表Excel.xlsx");
-};
+// const handleExcel = async (ids: Array<string>) => {
+//   const params = {
+//     ids,
+//     page: 1,
+//     limit: pageInfo.limit,
+//   };
+//   const { data } = await getChannelSettlementListExcel(params);
+//   downloadByData(data, "渠道佣金结算列表Excel.xlsx");
+// };
 // 拉取数据
 const getTableData = async () => {
-  const newParams = transformTimeRange(
+  const newParams = transformTimeRanges(
     { ...formItem.value },
     "createTimeData"
   ) as any;
-  const params = transformTimeRange(
-    { ...newParams.value },
-    "paymentTimeData"
+  const params = transformTimeRanges(
+    { ...newParams },
+    "paymentTimeData",
+    "settlement_time_start",
+    "settlement_time_end"
   ) as any;
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
+  console.log(params, "====223333332");
 
   try {
     const { data } = await getChannelSettlementList(params);
-
     pageInfo.page = data.current_page;
     pageInfo.total = data.total;
     console.log(data, "=======>");
@@ -465,18 +469,21 @@ const getTableData = async () => {
     var newData = data.data.map((item: any) => {
       return {
         id: item.id,
-        settlement_order_no: item.settlement_order_no,
+        channel_order_no: item.channel_order_no,
         status: item.status,
-        task_count: item.task_count,
-        company_name: item.company_name,
-        tax_land_name: item.tax_land_name,
-        tax_point: item.tax_point,
+        settlement_type:
+          proxy.$enumSet["settlementCenterEnum.settlement_type"][
+            item.settlement_type
+          ],
         channel_name: item.channel_name,
+        settlement_amount: item.settlement_amount,
+        after_commission: item.after_commission,
+        add_time: item.add_time,
+        settlement_time: item.settlement_time,
+        reason: item.reason,
       };
     });
     tableData.length = 0;
-    // console.log(newData[0]);
-
     tableData.push(...newData);
   } catch (error) {
     console.log(error);

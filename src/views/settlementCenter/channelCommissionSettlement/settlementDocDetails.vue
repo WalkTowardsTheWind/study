@@ -19,15 +19,12 @@
 </template>
 <script setup lang="ts">
 import { transformTimeRange } from "@/utils";
-import { useRouter } from "vue-router";
-import {
-  getChannelSettlementList,
-  deleteChannelSettlementDoc,
-  getChannelSettlementDetails,
-} from "@/api/settlementCenter/channelSettlement";
+import { useRouter, useRoute } from "vue-router";
+import { getChannelSettlementDocDetails } from "@/api/settlementCenter/channelCommissionSettlement";
 import { ElMessage } from "element-plus";
 const { proxy } = getCurrentInstance() as any;
 const router = useRouter();
+const route = useRoute();
 const activeName = ref("settlementDocDetails");
 const tabsList = reactive([
   {
@@ -74,8 +71,8 @@ const columnList = [
     prop: "status",
     // fixed: "left",
     color: {
-      0: { color: "#FFFFFF", backgroundColor: "#96AEF6" },
-      1: { color: "#1EE685", backgroundColor: "#DBFBEB" },
+      0: { color: "#1EE685", backgroundColor: "#DBFBEB" },
+      1: { color: "#FFFFFF", backgroundColor: "#9AB7F9" },
       2: { color: "#36C5F4", backgroundColor: "#DFF6FD" },
       3: { color: "#366FF4", backgroundColor: "#DFE8FD" },
       4: { color: "#F45136", backgroundColor: "#FDE3DF" },
@@ -98,47 +95,33 @@ const handleSelect = (data: any) => {
 
 //获取数据
 const getTableData = async () => {
-  const newParams = transformTimeRange(
-    { ...formItem.value },
-    "createTimeData"
-  ) as any;
-  const params = transformTimeRange(
-    { ...newParams.value },
-    "paymentTimeData"
-  ) as any;
+  const params = transformTimeRange({ ...formItem.value }) as any;
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
-  console.log(params);
+  console.log(params, route.query.id, 777);
 
   try {
-    // const { data } = await getChannelSettlementList(params);
+    const { data } = await getChannelSettlementDocDetails({
+      company_settlement_id: route.query.id as string,
+    });
 
-    // pageInfo.page = data.current_page;
-    // pageInfo.total = data.total;
-    // console.log(data, "=======>");
-    // total_pay_money.value = data.total_pay_money;
-
-    // var newData = data.data.map((item: any) => {
-    //   return {
-    //     id: item.id,
-    //     settlement_order_no: item.settlement_order_no,
-    //     status: item.status,
-    //     task_count: item.task_count,
-    //     company_name: item.company_name,
-    //     tax_land_name: item.tax_land_name,
-    //     tax_point: item.tax_point,
-    //     channel_name: item.channel_name,
-    //   };
-    // });
+    pageInfo.page = data.current_page ?? "1";
+    pageInfo.total = data.total ?? data.length + "";
+    console.log(data, "=======>");
+    var newData = data.data.map((item: any) => {
+      return {
+        id: item.id,
+        settlement_order_no: item.settlement_order_no,
+        status: item.status,
+        task_count: item.task_count,
+        company_name: item.company_name,
+        tax_land_name: item.tax_land_name,
+        tax_point: item.tax_point,
+        channel_name: item.channel_name,
+      };
+    });
     tableData.length = 0;
-    // console.log(newData[0]);
-
-    // tableData.push(...newData);
-    tableData.push({ settlement_order_no: 1, status: 0 });
-    tableData.push({ settlement_order_no: 2, status: 1 });
-    tableData.push({ settlement_order_no: 3, status: 2 });
-    tableData.push({ settlement_order_no: 4, status: 3 });
-    tableData.push({ settlement_order_no: 5, status: 4 });
+    tableData.push(...newData);
   } catch (error) {
     console.log(error);
   }
