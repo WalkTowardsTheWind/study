@@ -96,7 +96,6 @@
             hasSelect
             @selection-change="handleSelect"
             rowKey="id"
-            :checkStatusData="checkStatusData"
           >
           </zxn-table>
         </div>
@@ -240,10 +239,18 @@ const handleSelect = (data: any) => {
 const checkStatusData = ref([1, 2]);
 const table = ref();
 const toggleRowSelection = () => {
-  console.log(table.value, "=========www");
-  if (route.query.id ?? 1) {
-    table.value.toggleRowSelection();
-  }
+  const tableEl = table.value.getTable();
+  tableEl.clearSelection();
+  checkStatusData.value.forEach((it) => {
+    const _row = tableData.find((row) => {
+      return row.id === it;
+    });
+    tableEl.toggleRowSelection(_row, true);
+  });
+
+  // if (route.query.id ?? 1) {
+  //   table.value.toggleRowSelection();
+  // }
 };
 
 /**

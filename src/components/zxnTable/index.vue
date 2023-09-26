@@ -107,11 +107,10 @@ const props = defineProps({
   hasIndex: { type: Boolean as PropType<boolean>, default: true },
   tableData: { type: Array, default: () => [] },
   columnList: { type: Array, default: () => [] },
-  checkStatusData: { type: Array, default: () => [] },
   hasPagination: { type: Boolean, default: true },
   pageInfo: { type: Object, default: () => ({}) },
   selectable: { type: Function },
-  rowKey: { type: String },
+  rowKey: { type: String, default: "id" },
   defaultExpandAll: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
   tableHeight: { type: Number },
@@ -147,11 +146,6 @@ const getSelectTotal = (selected: any) => {
 };
 const getSelectionRows = () => {
   return zxnTable.value.getSelectionRows();
-};
-const toggleRowSelection = () => {
-  props.checkStatusData.forEach((item) => {
-    zxnTable.value.toggleRowSelection(item, true);
-  });
 };
 
 let _total = ref(0);
@@ -215,7 +209,6 @@ defineExpose({
   resetHeight,
   getSelectionRows,
   getTable,
-  toggleRowSelection,
 });
 </script>
 <style lang="scss" scoped>
