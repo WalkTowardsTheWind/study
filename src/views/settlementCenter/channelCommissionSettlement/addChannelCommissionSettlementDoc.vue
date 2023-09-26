@@ -114,6 +114,7 @@ import { useRouter, useRoute } from "vue-router";
 import {
   getAddChannelSettlementDocList,
   addChannelSettlementDoc,
+  rebuild,
 } from "@/api/settlementCenter/channelCommissionSettlement";
 const { proxy } = getCurrentInstance() as any;
 const router = useRouter();
@@ -227,7 +228,14 @@ const handleClose = () => {
 };
 //保存
 const handleSave = async () => {
-  console.log(selectionData.value);
+  if (selectionData.value.length === 0) {
+    ElMessage({
+      type: "warning",
+      message: `请选择任务`,
+    });
+
+    return;
+  }
   const params = {
     ids: selectionData.value,
     status: 0,
@@ -240,7 +248,7 @@ const handleSave = async () => {
         message: `新建渠道佣金结算单成功`,
       });
       router.push({
-        name: "channelCommissionSettlementList",
+        name: "settlementCenter",
         query: { activeName: "channelCommission" },
       });
     })
@@ -259,6 +267,19 @@ const handleSelect = (data: any) => {
   selectionData.value = data.map((item: any) => item.id);
 };
 /**
+ * 获取勾选id
+ */
+//
+const getCheckStatusData = () => {
+  rebuild({ id: route.query.id + "" })
+    .then((res) => {
+      checkStatusData.value = res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+/**
  * 批量
  */
 //选中的数据
@@ -273,10 +294,6 @@ const toggleRowSelection = () => {
     });
     tableEl.toggleRowSelection(_row, true);
   });
-
-  // if (route.query.id ?? 1) {
-  //   table.value.toggleRowSelection();
-  // }
 };
 
 /**
@@ -324,14 +341,20 @@ const getTableData = async () => {
     tableData.length = 0;
 
     tableData.push(...newData);
-    toggleRowSelection();
+    if (route.query.id) {
+      toggleRowSelection();
+    }
   } catch (error) {
     console.log(error);
   }
 };
 
+const get = async () => {
+  await getCheckStatusData();
+  await getTableData();
+};
 onMounted(() => {
-  getTableData();
+  get();
 });
 </script>
 <style lang="scss" scoped>

@@ -6,6 +6,7 @@ import {
   company_settlement_id,
   ids,
   idsStatus,
+  id,
 } from "./types";
 
 /**
@@ -49,7 +50,7 @@ export function getChannelSettlementDetails(id: number) {
 }
 
 /**
- * 发送佣金确认单信息
+ * 获取发送佣金确认单信息
  *
  * @param data
  * @returns
@@ -60,7 +61,19 @@ export function getDocDetails(id: number) {
     method: "get",
   });
 }
-
+/**
+ * 重新生成结算单
+ *
+ * @param data {updateStatus}
+ * @returns
+ */
+export function rebuild(data: id) {
+  return request({
+    url: "/adminapi/finance/channel/regeneration",
+    method: "post",
+    params: data,
+  });
+}
 // /**
 //  *下载渠道结算单Excel
 //  */

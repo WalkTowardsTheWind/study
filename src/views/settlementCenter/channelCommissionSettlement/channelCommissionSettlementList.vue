@@ -298,7 +298,12 @@ const handleDistribute = async (scope: any) => {
   id.value = scope.row.id;
 };
 // 重新生成
-const handleRebuild = async (scope: any) => {};
+const handleRebuild = async (scope: any) => {
+  router.push({
+    name: "addChannelCommissionSettlementDoc",
+    query: { id: scope.row.id },
+  });
+};
 // 删除
 const handleDelete = (scope: any) => {
   ElMessageBox({
