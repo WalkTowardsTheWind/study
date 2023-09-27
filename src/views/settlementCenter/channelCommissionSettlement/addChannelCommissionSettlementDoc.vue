@@ -47,12 +47,9 @@
               <el-select
                 v-model="formItem.channel_id"
                 filterable
-                remote
+                clearable
                 placeholder="请选择渠道"
-                remote-show-suffix
-                :remote-method="getChannel"
-                :loading="channelLoading"
-                @change="handleSearch"
+                @change="getCompany"
               >
                 <el-option
                   v-for="item in optionsChannel"
@@ -64,14 +61,13 @@
             </el-form-item>
             <el-form-item label="企业名称">
               <el-select
+                ref="companySelect"
                 v-model="formItem.company_id"
                 filterable
-                remote
+                clearable
                 placeholder="请选择企业"
-                remote-show-suffix
-                :remote-method="remoteMethod"
-                :loading="companyLoading"
                 @change="handleSearch"
+                @focus="handleIsSelect"
               >
                 <el-option
                   v-for="item in optionsCompany"
@@ -136,46 +132,33 @@ interface ListItem {
   label: string;
 }
 const optionsChannel = ref<ListItem[]>([]);
-const channelLoading = ref(false);
-const getChannel = async (query: string) => {
-  if (query) {
-    channelLoading.value = true;
-    const { data } = (await getChannelList()) as any;
-    const newData = data.map((item: any) => {
-      return {
-        label: item.channel_name,
-        value: item.id,
-      };
-    });
-    optionsChannel.value = [];
-    optionsChannel.value.push(...newData);
-    channelLoading.value = false;
-  } else {
-    optionsChannel.value = [];
-  }
+const getChannel = async () => {
+  const { data } = await getChannelList();
+  const newData = data.map((item: any) => {
+    return {
+      label: item.channel_name,
+      value: item.id,
+    };
+  });
+  optionsChannel.value = [];
+  optionsChannel.value.push(...newData);
 };
 //获取企业列表
+const companySelect = ref();
 const optionsCompany = ref<ListItem[]>([]);
-const companyLoading = ref(false);
-const remoteMethod = async (query: string) => {
-  if (query) {
-    let params = {
-      channel_id: formItem.value.channel_id,
+const getCompany = async () => {
+  let params = {
+    channel_id: formItem.value.channel_id,
+  };
+  const { data } = await getCompanyList(params);
+  const newData = data.map((item: any) => {
+    return {
+      label: item.company_name,
+      value: item.id,
     };
-    companyLoading.value = true;
-    const { data } = (await getCompanyList(params)) as any;
-    const newData = data.map((item: any) => {
-      return {
-        label: item.company_name,
-        value: item.id,
-      };
-    });
-    optionsCompany.value = [];
-    optionsCompany.value.push(...newData);
-    companyLoading.value = false;
-  } else {
-    optionsCompany.value = [];
-  }
+  });
+  optionsCompany.value = [];
+  optionsCompany.value.push(...newData);
 };
 // 查询重置
 const pageInfo = reactive({
@@ -195,6 +178,16 @@ const handleReset = () => {
     limit: "",
   };
   handleSearch();
+};
+const handleIsSelect = () => {
+  if (!formItem.value.channel_id) {
+    companySelect.value.blur();
+    ElMessage({
+      type: "warning",
+      message: `请先选择渠道名称`,
+    });
+  }
+  return;
 };
 const handleSearch = () => {
   console.log("查询");
@@ -356,8 +349,8 @@ const getCheckStatusData = async () => {
     checkStatusData.value = data.ids;
     formItem.value.channel_id = data.channel_id;
     formItem.value.company_id = data.company_id;
-    const optionsChannel = (await getChannelList()) as any;
-    const newData = optionsChannel.data.map((item: any) => {
+    const options = await getChannelList();
+    const newData = options.data.map((item: any) => {
       return {
         label: item.channel_name,
         value: item.id,
@@ -369,9 +362,8 @@ const getCheckStatusData = async () => {
     let params = {
       channel_id: formItem.value.channel_id,
     };
-    companyLoading.value = true;
-    const optionsCompany = (await getCompanyList(params)) as any;
-    const newData2 = optionsCompany.data.map((item: any) => {
+    const Company = await getCompanyList(params);
+    const newData2 = Company.data.map((item: any) => {
       return {
         label: item.company_name,
         value: item.id,
@@ -463,6 +455,8 @@ const getTableData = async () => {
 const get = async () => {
   if (route.query.id) {
     await getCheckStatusData();
+  } else {
+    await getChannel();
   }
   await getTableData();
 };
