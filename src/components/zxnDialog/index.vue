@@ -3,7 +3,7 @@
     <el-dialog
       :model-value="visible"
       :title="title"
-      :width="`${width}px`"
+      :width="`${width}`"
       :close-on-click-modal="false"
       :top="`${top}vh`"
       @close="handleClose"
@@ -32,7 +32,7 @@ defineProps({
   },
   width: {
     type: Number,
-    default: () => 452,
+    default: () => 452 + "px",
   },
   top: {
     type: Number,

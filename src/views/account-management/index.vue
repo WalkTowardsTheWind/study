@@ -1,6 +1,10 @@
 <template>
   <zxn-plan>
-    <zxn-tabs v-model:activeName="activeName" :tabsList="tabsList">
+    <zxn-tabs
+      v-model:activeName="activeName"
+      :tabsList="tabsList"
+      @tab-change="handleChange"
+    >
       <template #1>
         <BussinessView />
       </template>
@@ -44,19 +48,12 @@ const tabsList = [
   //   label: "其他账户",
   // },
 ];
-// watch(activeName, (newVal) => {
-//   sessionStorage.setItem("activeName", newVal);
-// });
 
-// onMounted(() => {
-//   const curTab = sessionStorage.getItem("activeName") || "";
-//   if (curTab) {
-//     activeName.value = curTab;
-//   }
-// });
-// // 监听页面离开事件
-// onBeforeUnmount(() => {
-//   // 重置 activeName
-//   activeName.value = "";
-// });
+const handleChange = (activeName: string) => {
+  sessionStorage.setItem("account", activeName);
+};
+
+onMounted(() => {
+  activeName.value = sessionStorage.getItem("account") || "1";
+});
 </script>
