@@ -52,32 +52,32 @@
       >
         <el-row>
           <el-col :span="22">
+            <el-form-item label="税地名称" prop="tax_land_id">
+              <el-select
+                class="w-full"
+                placeholder="请选择"
+                v-model="newForm.tax_land_id"
+                @change="handleSelect"
+              >
+                <el-option
+                  v-for="i of taxlandList"
+                  :key="i.tax_land_id"
+                  :value="i.tax_land_id"
+                  :label="i.tax_land_name"
+                ></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="企业名称" prop="company_id">
               <el-select
                 class="w-full"
                 placeholder="请选择"
                 v-model="newForm.company_id"
-                @change="handleSelect"
               >
                 <el-option
                   v-for="i of companyList"
                   :key="i.id"
                   :value="i.id"
                   :label="i.company_name"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="税地名称" prop="tax_land_id">
-              <el-select
-                class="w-full"
-                placeholder="请选择"
-                v-model="newForm.tax_land_id"
-              >
-                <el-option
-                  v-for="i of taxlandList"
-                  :key="i.id"
-                  :value="i.id"
-                  :label="i.tax_land_name"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -202,11 +202,11 @@ const handleReset = () => {
 
 const add = async () => {
   visible.value = true;
-  getCompanyByTaxland().then((res) => {
-    console.log(res);
-    companyList.value.length = 0;
+  getCompanyByTaxland({ channel_id: props.channel_id }).then((res) => {
+    // console.log(res);
     taxlandList.value.length = 0;
-    companyList.value.push(...res.data);
+
+    taxlandList.value.push(...res.data);
   });
 };
 
@@ -237,13 +237,15 @@ const handleConfirm = async (formInstance: any) => {
   });
 };
 
-const handleSelect = (company_id: string) => {
-  // console.log(company_id);
-  const element = companyList.value.find((i) => i.id == company_id);
-  element.tax_land_list
-    ? (taxlandList.value = element.tax_land_list)
-    : (taxlandList.value = []);
-  newForm.tax_land_id = "";
+const handleSelect = (tax_land_id: string) => {
+  const element = taxlandList.value.find((i) => i.tax_land_id == tax_land_id);
+  companyList.value.length = 0;
+  companyList.value = element.company_list;
+  newForm.company_id = "";
+  // element.company_list
+  //   ? (companyList.value = element.company_list)
+  //   : (companyList.value = []);
+  // newForm.company_id = "";
 };
 
 const setStatus = (id: any, status: any) => {

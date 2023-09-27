@@ -218,10 +218,11 @@ export function setStatusChannelTopAndBottom(params: any) {
  * 代理企业信息 根据企业选择税地
  * @returns
  */
-export function getCompanyByTaxland() {
+export function getCompanyByTaxland(params) {
   return request({
     url: `/adminapi/account/channel/company/bind/index`,
     method: "get",
+    params,
   });
 }
 
