@@ -113,9 +113,9 @@
                 >
                   <el-option
                     v-for="i in taxlandList"
-                    :key="i.id"
+                    :key="i.tax_land_id"
                     :label="i.tax_land_name"
-                    :value="i.id"
+                    :value="i.tax_land_id"
                   ></el-option>
                 </el-select>
               </el-form-item>
