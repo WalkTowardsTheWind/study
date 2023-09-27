@@ -98,7 +98,7 @@
       </el-form>
       <zxn-bottom-btn v-if="isEdit">
         <el-button type="info" plain @click="$router.go(-1)">取消</el-button>
-        <el-button type="primary" @click="updateAccount1(formRef1)"
+        <el-button type="primary" @click="debouncedF1(formRef1)"
           >保存</el-button
         >
       </zxn-bottom-btn>
@@ -203,7 +203,7 @@
       </el-form>
       <zxn-bottom-btn v-if="isEdit">
         <el-button type="info" plain @click="$router.go(-1)">取消</el-button>
-        <el-button type="primary" @click="updateAccount2(formRef2)"
+        <el-button type="primary" @click="debouncedF2(formRef2)"
           >保存</el-button
         >
       </zxn-bottom-btn>
@@ -218,7 +218,7 @@ import {
   updatePersonChannelAccount,
 } from "@/api/account/channel";
 import { settlement_type, collection_type } from "./options";
-
+import { useDebounceFn } from "@vueuse/core";
 const props = defineProps({
   isEdit: {
     type: Boolean,
@@ -257,6 +257,15 @@ watch(
     channel_type.value = formItem.value.channel_type;
   }
 );
+
+const debouncedF1 = useDebounceFn((formInstance) => {
+  // do something
+  updateAccount1(formInstance);
+}, 1000);
+const debouncedF2 = useDebounceFn((formInstance) => {
+  // do something
+  updateAccount2(formInstance);
+}, 1000);
 
 const updateAccount1 = async (formInstance) => {
   if (!formInstance) return;

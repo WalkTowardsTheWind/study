@@ -168,7 +168,7 @@
                   <el-input disabled v-model="newForm.channel_name" />
                 </el-form-item>
               </template>
-              <el-form-item v-if="!isDialogAdd" label="我的点位" prop="point">
+              <el-form-item v-if="!isDialogAdd" label="下级点位" prop="point">
                 <el-input placeholder="请输入" v-model="newForm.point">
                   <template #append>%</template>
                 </el-input>
@@ -188,7 +188,7 @@
       <zxn-dialog
         v-model:visible="checkVisible"
         :title="checkTitle"
-        :width="1500"
+        width="80vw"
         :hasBottomBtn="false"
         @close-dialog="checkVisible = false"
       >

@@ -119,7 +119,7 @@
     </div>
     <zxn-bottom-btn>
       <el-button type="info" plain @click="$router.go(-1)">取消</el-button>
-      <el-button type="primary" @click="submit(formRef)">保存</el-button>
+      <el-button type="primary" @click="debouncedFn(formRef)">保存</el-button>
     </zxn-bottom-btn>
   </zxn-plan>
 </template>
@@ -128,7 +128,7 @@
 import router from "@/router";
 import { settlement_type, collection_type } from "./options";
 import { createCompanyChannelAccount } from "@/api/account/channel";
-
+import { useDebounceFn } from "@vueuse/core";
 const activeName = ref("1");
 
 const tabsList = [{ label: "新建企业渠道", name: "1" }];
@@ -178,6 +178,11 @@ const rules = {
   collection_type: [{ required: true, message: "必填", trigger: "blur" }],
   agreement_img: [{ required: true, message: "必填", trigger: "blur" }],
 };
+
+const debouncedFn = useDebounceFn((formInstance) => {
+  // do something
+  submit(formInstance);
+}, 1000);
 
 const submit = async (formInstance) => {
   if (!formInstance) return;
