@@ -464,7 +464,6 @@ const getTableData = async () => {
     console.log(error);
   }
 };
-getTableData();
 onMounted(() => {
   // rou()
 });

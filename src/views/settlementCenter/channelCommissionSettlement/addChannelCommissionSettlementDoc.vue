@@ -350,20 +350,44 @@ const handleSelect = (data: any) => {
  * 获取勾选id
  */
 //
-const getCheckStatusData = () => {
-  rebuild({ id: route.query.id + "" })
-    .then((res) => {
-      checkStatusData.value = res.data;
-    })
-    .catch((err) => {
-      console.log(err);
+const getCheckStatusData = async () => {
+  try {
+    const { data } = await rebuild({ id: route.query.id + "" });
+    checkStatusData.value = data.ids;
+    formItem.value.channel_id = data.channel_id;
+    formItem.value.company_id = data.company_id;
+    const optionsChannel = (await getChannelList()) as any;
+    const newData = optionsChannel.data.map((item: any) => {
+      return {
+        label: item.channel_name,
+        value: item.id,
+      };
     });
+    optionsChannel.value = [];
+    optionsChannel.value.push(...newData);
+    //
+    let params = {
+      channel_id: formItem.value.channel_id,
+    };
+    companyLoading.value = true;
+    const optionsCompany = (await getCompanyList(params)) as any;
+    const newData2 = optionsCompany.data.map((item: any) => {
+      return {
+        label: item.company_name,
+        value: item.id,
+      };
+    });
+    optionsCompany.value = [];
+    optionsCompany.value.push(...newData2);
+  } catch (error) {
+    console.log(error);
+  }
 };
 /**
  * 批量
  */
 //选中的数据
-const checkStatusData = ref([1, 2]);
+const checkStatusData = ref([]);
 const table = ref();
 const toggleRowSelection = () => {
   const tableEl = table.value.getTable();
@@ -382,13 +406,6 @@ const toggleRowSelection = () => {
 
 //获取数据
 const getTableData = async () => {
-  console.log(
-    formItem.value.channel_id,
-    999999,
-    formItem.value.company_id,
-    "!formItem.value.company_id&&!formItem.value.channel_id"
-  );
-
   if (!(formItem.value.channel_id && formItem.value.company_id)) {
     ElMessage({
       type: "warning",
@@ -444,10 +461,14 @@ const getTableData = async () => {
 };
 
 const get = async () => {
-  await getCheckStatusData();
+  if (route.query.id) {
+    await getCheckStatusData();
+  }
   await getTableData();
 };
-onMounted(() => {});
+onMounted(() => {
+  get();
+});
 </script>
 <style lang="scss" scoped>
 // 蓝色标题样式

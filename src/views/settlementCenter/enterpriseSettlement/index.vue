@@ -439,7 +439,6 @@ onMounted(() => {
         ? searchParams.status + ""
         : "";
   }
-  getTableData();
 });
 defineExpose({
   getTableData,
