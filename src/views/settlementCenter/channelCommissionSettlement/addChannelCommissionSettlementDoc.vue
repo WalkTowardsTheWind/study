@@ -44,41 +44,43 @@
               </zxn-select>
             </el-form-item>
             <el-form-item label="渠道名称">
-              <zxn-select v-model="formItem.channelName" @change="handleSearch">
+              <el-select
+                v-model="formItem.channel_id"
+                filterable
+                remote
+                placeholder="请选择渠道"
+                remote-show-suffix
+                :remote-method="getChannel"
+                :loading="channelLoading"
+                @change="handleSearch"
+              >
                 <el-option
-                  v-for="item in proxy.$const[
-                    'settlementCenterEnum.incomeType'
-                  ]"
+                  v-for="item in optionsChannel"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
                 />
-              </zxn-select>
+              </el-select>
             </el-form-item>
-            <!-- <el-form-item label="所属税地">
-              <zxn-select v-model="formItem.tax" @change="handleSearch">
+            <el-form-item label="企业名称">
+              <el-select
+                v-model="formItem.company_id"
+                filterable
+                remote
+                placeholder="请选择企业"
+                remote-show-suffix
+                :remote-method="remoteMethod"
+                :loading="companyLoading"
+                @change="handleSearch"
+              >
                 <el-option
-                  v-for="item in proxy.$const[
-                    'settlementCenterEnum.incomeType'
-                  ]"
+                  v-for="item in optionsCompany"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
                 />
-              </zxn-select>
-            </el-form-item> -->
-            <!-- <el-form-item label="渠道管理员">
-              <zxn-select v-model="formItem.name" @change="handleSearch">
-                <el-option
-                  v-for="item in proxy.$const[
-                    'settlementCenterEnum.incomeType'
-                  ]"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </zxn-select>
-            </el-form-item> -->
+              </el-select>
+            </el-form-item>
             <el-form-item prop="date" label="结算时间">
               <zxn-date-range v-model="formItem.timeData" />
             </el-form-item>
@@ -112,6 +114,8 @@
 import { transformTimeRanges } from "@/utils";
 import { useRouter, useRoute } from "vue-router";
 import {
+  getChannelList,
+  getCompanyList,
   getAddChannelSettlementDocList,
   addChannelSettlementDoc,
   rebuild,
@@ -126,7 +130,53 @@ const tabsList = reactive([
     label: "新建渠道佣金结算单",
   },
 ]);
-
+//获取渠道列表
+interface ListItem {
+  value: string;
+  label: string;
+}
+const optionsChannel = ref<ListItem[]>([]);
+const channelLoading = ref(false);
+const getChannel = async (query: string) => {
+  if (query) {
+    channelLoading.value = true;
+    const { data } = (await getChannelList()) as any;
+    const newData = data.map((item: any) => {
+      return {
+        label: item.channel_name,
+        value: item.id,
+      };
+    });
+    optionsChannel.value = [];
+    optionsChannel.value.push(...newData);
+    channelLoading.value = false;
+  } else {
+    optionsChannel.value = [];
+  }
+};
+//获取企业列表
+const optionsCompany = ref<ListItem[]>([]);
+const companyLoading = ref(false);
+const remoteMethod = async (query: string) => {
+  if (query) {
+    let params = {
+      channel_id: formItem.value.channel_id,
+    };
+    companyLoading.value = true;
+    const { data } = (await getCompanyList(params)) as any;
+    const newData = data.map((item: any) => {
+      return {
+        label: item.company_name,
+        value: item.id,
+      };
+    });
+    optionsCompany.value = [];
+    optionsCompany.value.push(...newData);
+    companyLoading.value = false;
+  } else {
+    optionsCompany.value = [];
+  }
+};
 // 查询重置
 const pageInfo = reactive({
   page: 1,
@@ -137,7 +187,8 @@ const handleReset = () => {
   formItem.value = {
     keywords: "",
     settlement_type: "",
-    channelName: "",
+    company_id: "",
+    channel_id: "",
     status: "",
     timeData: [],
     page: "",
@@ -148,7 +199,7 @@ const handleReset = () => {
 const handleSearch = () => {
   console.log("查询");
   pageInfo.page = 1;
-  getTableData();
+  get();
   // 时间选择判断
   // if (!formItem.value.timeData[0] && !formItem.value.timeData[1]) {
   //   getTableData();
@@ -177,7 +228,8 @@ var total_pay_money = ref();
 const formItem = ref({
   keywords: "",
   settlement_type: "",
-  channelName: "",
+  company_id: "",
+  channel_id: "",
   status: "",
   timeData: [],
   page: "",
@@ -227,7 +279,7 @@ const handleClose = () => {
   });
 };
 //保存
-const handleSave = async () => {
+const handleSave = () => {
   if (selectionData.value.length === 0) {
     ElMessage({
       type: "warning",
@@ -257,7 +309,35 @@ const handleSave = async () => {
     });
 };
 //发送
-const handleSend = () => {};
+const handleSend = () => {
+  if (selectionData.value.length === 0) {
+    ElMessage({
+      type: "warning",
+      message: `请选择任务`,
+    });
+
+    return;
+  }
+  const params = {
+    ids: selectionData.value,
+    status: 1,
+  };
+
+  addChannelSettlementDoc(params)
+    .then(() => {
+      ElMessage({
+        type: "success",
+        message: `新建渠道佣金结算单成功`,
+      });
+      router.push({
+        name: "settlementCenter",
+        query: { activeName: "channelCommission" },
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 /**
  * 批量
  */
@@ -302,6 +382,20 @@ const toggleRowSelection = () => {
 
 //获取数据
 const getTableData = async () => {
+  console.log(
+    formItem.value.channel_id,
+    999999,
+    formItem.value.company_id,
+    "!formItem.value.company_id&&!formItem.value.channel_id"
+  );
+
+  if (!(formItem.value.channel_id && formItem.value.company_id)) {
+    ElMessage({
+      type: "warning",
+      message: `请先选择渠道和企业`,
+    });
+    return;
+  }
   const params = transformTimeRanges({ ...formItem.value }) as any;
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
@@ -353,9 +447,7 @@ const get = async () => {
   await getCheckStatusData();
   await getTableData();
 };
-onMounted(() => {
-  get();
-});
+onMounted(() => {});
 </script>
 <style lang="scss" scoped>
 // 蓝色标题样式

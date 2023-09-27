@@ -56,3 +56,9 @@ export interface idsStatus {
 export interface id {
   id: string;
 }
+/**
+ * 渠道结算列表
+ */
+export interface Company {
+  channel_id: string;
+}

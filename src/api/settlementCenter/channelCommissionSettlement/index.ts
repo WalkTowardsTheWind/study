@@ -1,4 +1,5 @@
 import request from "@/utils/request";
+import { AxiosPromise } from "axios";
 import {
   keywords,
   addkeywords,
@@ -7,6 +8,7 @@ import {
   ids,
   idsStatus,
   id,
+  Company,
 } from "./types";
 
 /**
@@ -147,5 +149,25 @@ export function deleteChannelSettlementDoc(id: number) {
   return request({
     url: `/adminapi/finance/channel/${id}`,
     method: "delete",
+  });
+}
+
+/**
+ * 获取渠道列表
+ */
+export function getChannelList(): AxiosPromise {
+  return request({
+    url: "/adminapi/finance/channel/getChannel",
+    method: "GET",
+  });
+}
+/**
+ * 获取企业列表
+ */
+export function getCompanyList(data: Company): AxiosPromise {
+  return request({
+    url: "/adminapi/finance/channel/getCompany",
+    method: "GET",
+    params: data,
   });
 }

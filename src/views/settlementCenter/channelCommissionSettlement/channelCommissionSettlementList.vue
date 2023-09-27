@@ -5,7 +5,7 @@
         <div class="title">渠道佣金累计下发</div>
         <div>
           <span class="logo">￥</span>
-          <span class="money">{{ proxy.$moneyFormat(total_pay_money) }}</span>
+          <span class="money">{{ proxy.$moneyFormat(total_money) }}</span>
           <!-- <span class="unit">元</span> -->
         </div>
       </div>
@@ -13,7 +13,7 @@
         <div class="title">渠道佣金待下发</div>
         <div>
           <span class="logo">￥</span>
-          <span class="money">{{ proxy.$moneyFormat(total_pay_money) }}</span>
+          <span class="money">{{ proxy.$moneyFormat(not_total_money) }}</span>
           <!-- <span class="unit">元</span> -->
         </div>
       </div>
@@ -124,6 +124,7 @@
   <uploadCredentials
     v-model:dialogVisible="uploadCredentialsDialogVisible"
     :id="id"
+    @up-Table="getTableData"
   />
 </template>
 <script setup lang="ts">
@@ -194,7 +195,8 @@ const handlePageChange = (cur: any) => {
   getTableData();
 };
 // 累计
-var total_pay_money = ref();
+var total_money = ref();
+var not_total_money = ref();
 const formItem = ref({
   keywords: "",
   status: "",
@@ -431,14 +433,13 @@ const getTableData = async () => {
   ) as any;
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
-  console.log(params, "====223333332");
 
   try {
     const { data } = await getChannelSettlementList(params);
     pageInfo.page = data.current_page;
     pageInfo.total = data.total;
-    console.log(data, "=======>");
-    total_pay_money.value = data.total_pay_money;
+    total_money.value = data.total_money ?? "-";
+    not_total_money.value = data.not_total_money ?? "-";
 
     var newData = data.data.map((item: any) => {
       return {
