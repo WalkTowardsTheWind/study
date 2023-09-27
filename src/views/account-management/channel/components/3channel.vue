@@ -113,9 +113,9 @@
                 >
                   <el-option
                     v-for="i in taxlandList"
-                    :key="i.id"
+                    :key="i.tax_land_id"
                     :label="i.tax_land_name"
-                    :value="i.id"
+                    :value="i.tax_land_id"
                   ></el-option>
                 </el-select>
               </el-form-item>
@@ -560,23 +560,14 @@ const setStatus = (id: any, status: any) => {
   }
 };
 
-const edit = (
-  row: {
-    id: string;
-    tax_land_name: string;
-    channel_name: string;
-    point: string;
-    remark: string;
-  },
-  type: any
-) => {
+const edit = (row: any, type: any) => {
   const func = () => {
     isDialogAdd.value = false;
     visible.value = true;
     newForm.id = row.id;
     newForm.tax_land_name = row.tax_land_name;
     newForm.channel_name = row.channel_name;
-    newForm.point = row.point;
+    newForm.point = row.bind_point;
     newForm.remark = row.remark;
   };
   switch (type) {
