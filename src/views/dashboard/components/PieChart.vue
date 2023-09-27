@@ -57,12 +57,14 @@ const chartInit = () => {
       },
       legend: {
         orient: "vertical",
-        right: 80,
+        right: 60,
         top: "center",
         icon: "circle",
         formatter: (name) => {
           const item = props.chartData?.find((it) => it.name === name);
-          return `${name}:  ${item.rate}%`;
+          return `${name.length > 4 ? name.substring(0, 4) + "..." : name} :  ${
+            item.rate
+          }%`;
         },
       },
       series: [
@@ -70,8 +72,7 @@ const chartInit = () => {
           type: "pie",
           radius: props.hasRing ? ["40%", "70%"] : ["70%"],
           top: "10px",
-          bottom: "10px",
-          right: "200px",
+          right: "60%",
           avoidLabelOverlap: false,
           label: {
             show: false,

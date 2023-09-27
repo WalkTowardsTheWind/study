@@ -118,3 +118,14 @@ export function getInvoiceExcel(params: invoiceExcel): AxiosPromise {
     responseType: "arraybuffer",
   });
 }
+
+/**
+ * 个人发票列表
+ */
+export function getPersonInvoiceList(params: any): AxiosPromise {
+  return request({
+    url: `/adminapi/invoice/person_list`,
+    method: "GET",
+    params,
+  });
+}

@@ -84,10 +84,26 @@ export const constantRoutes: RouteRecordRaw[] = [
           hidden: true,
         },
       },
+      // 新建个人渠道
       {
-        path: "channel-account-add",
-        component: () => import("@/views/account-management/channel/add.vue"),
-        name: "channel-account-add",
+        path: "channel-account-add-person",
+        component: () =>
+          import(
+            "@/views/account-management/channel/components/add-person.vue"
+          ),
+        name: "channel-account-add-person",
+        meta: {
+          hidden: true,
+        },
+      },
+      // 新建企业渠道
+      {
+        path: "channel-account-add-business",
+        component: () =>
+          import(
+            "@/views/account-management/channel/components/add-business.vue"
+          ),
+        name: "channel-account-add-business",
         meta: {
           hidden: true,
         },
@@ -328,6 +344,12 @@ export const constantRoutes: RouteRecordRaw[] = [
         name: "invoiceManager",
         meta: { title: "发票中心", keepAlive: true, icon: "invoice" },
       },
+      // {
+      //   path: "person",
+      //   component: () => import("@/views/invoice/personInvoice/index.vue"),
+      //   name: "personInvoice",
+      //   meta: { title: "个人发票", keepAlive: true, icon: "invoice" },
+      // },
       {
         path: "invoiceView",
         component: () => import("@/views/invoice/invoiceManager/view.vue"),
@@ -431,19 +453,19 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
-  {
-    path: "/message",
-    component: Layout,
-    meta: { title: " 消息管理", icon: "message" },
-    children: [
-      {
-        path: "manager",
-        component: () => import("@/views/message/manager/index.vue"),
-        name: "messageManager",
-        meta: { title: "消息中心", icon: "message" },
-      },
-    ],
-  },
+  //   {
+  //     path: "/message",
+  //     component: Layout,
+  //     meta: { title: " 消息管理", icon: "message" },
+  //     children: [
+  //       {
+  //         path: "manager",
+  //         component: () => import("@/views/message/manager/index.vue"),
+  //         name: "messageManager",
+  //         meta: { title: "消息中心", icon: "message" },
+  //       },
+  //     ],
+  //   },
   // 系统设置
   {
     path: "/system",

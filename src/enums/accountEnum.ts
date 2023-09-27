@@ -5,6 +5,10 @@ export enum businessType {
   "预警",
   "封停",
 }
+export enum channelType {
+  "正常" = 1,
+  "封停" = 0,
+}
 
 export enum personalType {
   "申请中" = 0,
@@ -25,8 +29,8 @@ export enum statusType {
 }
 
 export enum taxLandStatusType {
-  "禁用" = 0,
-  "启用",
+  "已解绑" = 0,
+  "已绑定" = 1,
 }
 
 export enum taskType {

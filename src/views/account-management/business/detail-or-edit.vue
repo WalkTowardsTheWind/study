@@ -89,9 +89,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   // 重置 activeName
   activeName.value = "";
-
-  // 清空 sessionStorage
-  sessionStorage.removeItem("activeName");
 });
 
 const reject_reason = ref("");
@@ -119,26 +116,19 @@ const isAllComplete = computed(() => {
     !!formItem.value.legal_person_mobile &&
     !!formItem.value.bank &&
     !!formItem.value.taxpayer_type &&
-    // formItem.value.channel_point &&
-    // formItem.value.calculation_type &&
     !!formItem.value.address &&
     !!formItem.value.bank_account &&
     !!formItem.value.company_email &&
     !!formItem.value.company_address &&
     !!formItem.value.consignee &&
-    // formItem.value.company_source &&
     !!formItem.value.consignee_mobile &&
+    !!formItem.value.company_source_remark &&
     !!formItem.value.license.length &&
     !!formItem.value.idcard_img.length &&
     !!formItem.value.taxpayer_type_img.length &&
     !!formItem.value.header_img.length &&
     !!formItem.value.permit_img.length &&
-    !!formItem.value.seal.length &&
-    !!formItem.value.auth_type &&
-    !!formItem.value.tax_point &&
-    !!formItem.value.sign_type &&
-    !!formItem.value.contract_img.length &&
-    !!formItem.value.company_source_remark
+    !!formItem.value.seal.length
   ) {
     return true;
   } else {

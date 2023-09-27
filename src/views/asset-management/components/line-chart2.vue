@@ -1,26 +1,20 @@
 <template>
   <div class="top">
-    <!-- 发佣合计 -->
+    <!-- 渠道结算合计 -->
     <card-view>
       <template #top>
-        <span>发佣合计</span>
+        <span>渠道结算合计</span>
       </template>
       <template #main>
         <span class="yuan">￥</span>{{ proxy.$moneyFormat(commission_total) }}
       </template>
     </card-view>
-    <!-- 利润 -->
-    <card-view>
-      <template #top>
-        <span>利润</span>
-      </template>
-      <template #main>
-        <span class="yuan">￥</span>{{ proxy.$moneyFormat(profit) }}
-      </template>
-    </card-view>
   </div>
   <div class="time">
     <zxn-title>发佣统计</zxn-title>
+    <div class="line_type">
+      <div class="income">渠道支出</div>
+    </div>
     <div class="date">
       <div
         v-for="(item, index) in dateList"
@@ -54,9 +48,12 @@ const commission_total = ref();
 const profit = ref();
 const profit_rate = ref();
 
-function get3And1List(time_type: number, index: number) {
+function get3And1List(time_type: number | string, index: number) {
   currentDate.value = index;
-
+  nextTick(() => {
+    chart = null;
+    chart = echarts.init(document.getElementById("main2") as HTMLDivElement);
+  });
   getChannelList({ time_type }).then((res) => {
     commission_total.value = res.data.commission_total;
     profit.value = res.data.profit;
@@ -65,28 +62,36 @@ function get3And1List(time_type: number, index: number) {
     // console.log(res.data.commission_list);
 
     options.value.xAxis.data = res.data?.commission_list.map(
-      (item) => item.date_time
+      (item: any) => item.date_time
     );
     options.value.series[0].data = res.data?.commission_list.map(
-      (item) => item.commission
+      (item: any) => item.commission
     );
-    chart.value?.clear();
-    chart.value?.setOption(options.value);
+    chart?.clear();
+    chart?.setOption(options.value);
   });
 }
 
-const chart = ref({} as any);
+let chart: echarts.ECharts | null = null;
 
 const options = ref({
   tooltip: {
     trigger: "axis",
+    axisPointer: {
+      type: "shadow",
+    },
   },
-
   grid: {
-    left: "0%",
+    left: "1%",
     right: "10%",
     bottom: "3%",
     containLabel: true,
+  },
+  toolbox: {
+    show: false,
+    feature: {
+      saveAsImage: {},
+    },
   },
   xAxis: {
     type: "category",
@@ -108,7 +113,7 @@ const options = ref({
       showSymbol: false,
       smooth: true,
       itemStyle: {
-        color: "#366ff4", // 折线颜色
+        color: "#36C5F3", // 折线颜色
         symbol: "circle", // 圆点标记
         symbolSize: 10, // 圆点大小
         lineStyle: {
@@ -120,14 +125,14 @@ const options = ref({
 });
 
 onMounted(() => {
-  // 图表初始化
-  chart.value = echarts.init(
-    document.getElementById("main2") as HTMLDivElement
-  );
+  nextTick(() => {
+    // 图表初始化
+    chart = echarts.init(document.getElementById("main2") as HTMLDivElement);
 
-  // 大小自适应
-  window.addEventListener("resize", () => {
-    chart.resize();
+    // 大小自适应
+    window.addEventListener("resize", () => {
+      chart?.resize();
+    });
   });
 });
 
@@ -155,15 +160,27 @@ get3And1List(3, 3);
   width: 45vw;
 }
 
-.line {
+.line_type {
   display: flex;
-  width: 4px;
-  height: 14px;
-  margin-right: 10px;
-  background: #356ff3;
-  border-radius: 4px;
-}
+  gap: 0 50px;
+  margin-left: 40%;
+  font-size: 14px;
 
+  .income {
+    position: relative;
+
+    &::before {
+      position: absolute;
+      top: 7px;
+      left: -20px;
+      width: 8px;
+      height: 8px;
+      content: "";
+      background-color: #36c5f3;
+      border-radius: 50%;
+    }
+  }
+}
 .date {
   display: flex;
   font-size: 14px;

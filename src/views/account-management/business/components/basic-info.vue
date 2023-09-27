@@ -37,6 +37,7 @@
               <el-input v-model="formItem.legal_person" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="行业">
+              <!-- <tree-select v-model.selecVal="formItem.category_id" :options="cateGoryOptions" /> -->
               <el-select
                 class="w-full"
                 placeholder="请选择"
@@ -177,10 +178,10 @@
 
 <script lang="ts" setup>
 import { getCategoryList, resetAccountPwd } from "@/api/account/business";
-import { getLandList } from "@/api/common";
 
 import { businessType, taxpayerType } from "@/enums/accountEnum";
 import router from "@/router";
+import TreeSelect from "@/views/category-management/components/tree-select.vue";
 
 const cateGoryOptions = ref([] as any);
 
@@ -218,43 +219,8 @@ watch(
   }
 );
 
-const formData = ref({} as any);
 const taxLandOption = ref([] as any);
 
-const taxlandList = ref([] as any);
-
-// async function updateBusinessAccount() {
-// 	// 后台返回的 contacts_mobile 更新修改为 mobile
-// 	let params = {
-// 		...formData.value,
-// 		mobile: formData.value.contacts_mobile,
-// 		contacts_mobile: undefined,
-// 	};
-// 	// console.log(params);
-// 	try {
-// 		await editBusinessAccount(params);
-// 		ElMessage({
-// 			message: "编辑成功",
-// 			type: "success",
-// 		});
-// 		router.go(-1);
-// 	} catch (error: any) {
-// 		return new Error(error);
-// 	}
-// }
-
-// async function getAccountDetail() {
-// 	if (props.id) {
-// 		const res = await getBusinessAccountDetail(props.id);
-// 		console.log(res);
-
-// 		try {
-// 			formData.value = res.data;
-// 		} catch (error: any) {
-// 			return new Error("error", error);
-// 		}
-// 	}
-// }
 function resetPWD() {
   ElMessageBox.confirm("是否重置密码?", {
     confirmButtonText: "确认",
@@ -282,19 +248,7 @@ function getCategoryOptions() {
     cateGoryOptions.value = res.data;
   });
 }
-function getTaxLandOption() {
-  taxLandOption.value.length = 0;
-  getLandList().then((res) => {
-    taxLandOption.value.push(...res.data);
-  });
-}
 
-// function del(index) {
-// 	taxlandList.value.splice(index, 1);
-// }
-
-// getAccountDetail();
-getTaxLandOption();
 getCategoryOptions();
 </script>
 

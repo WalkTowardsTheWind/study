@@ -4,31 +4,38 @@
       <span class="notice-message-header-title">系统通知</span>
       <span class="notice-message-header-more" @click="handleMore">更多></span>
     </div>
-    <div :style="{ height: `${boxHeight}px` }">
-      <el-scrollbar ref="scrollbar" wrap-class="scrollbar-wrapper">
-        <TransitionGroup name="message-list" v-infinite-scroll="load" tag="div">
-          <div
-            class="notice-message-item"
-            v-for="item in tableData"
-            :key="item.id"
-          >
-            <div class="notice-message-item-type">
-              <div class="notice-message-item-type-icon"></div>
-              <div class="notice-message-item-type-text text-ellipsis">
-                {{ item.title }}
-              </div>
-            </div>
-            <div class="notice-message-item-content text-ellipsis-3">
-              {{ item.content }}
-            </div>
-            <div class="notice-message-item-btn">
-              <el-button plain type="primary" @click="handleGoRouter(item)"
-                >立刻处理</el-button
-              >
-            </div>
-          </div>
-        </TransitionGroup>
-      </el-scrollbar>
+    <div
+      :style="{
+        height: `${boxHeight}px`,
+        background: '#fff',
+        position: 'relative',
+      }"
+    >
+      <!--      <el-scrollbar ref="scrollbar" wrap-class="scrollbar-wrapper">-->
+      <!--        <TransitionGroup name="message-list" v-infinite-scroll="load" tag="div">-->
+      <!--          <div-->
+      <!--            class="notice-message-item"-->
+      <!--            v-for="item in tableData"-->
+      <!--            :key="item.id"-->
+      <!--          >-->
+      <!--            <div class="notice-message-item-type">-->
+      <!--              <div class="notice-message-item-type-icon"></div>-->
+      <!--              <div class="notice-message-item-type-text text-ellipsis">-->
+      <!--                {{ item.title }}-->
+      <!--              </div>-->
+      <!--            </div>-->
+      <!--            <div class="notice-message-item-content text-ellipsis-3">-->
+      <!--              {{ item.content }}-->
+      <!--            </div>-->
+      <!--            <div class="notice-message-item-btn">-->
+      <!--              <el-button plain type="primary" @click="handleGoRouter(item)"-->
+      <!--                >立刻处理</el-button-->
+      <!--              >-->
+      <!--            </div>-->
+      <!--          </div>-->
+      <!--        </TransitionGroup>-->
+      <!--      </el-scrollbar>-->
+      <empty-box />
     </div>
   </div>
 </template>
@@ -72,10 +79,14 @@ const handleMore = () => {
 
 const { pushParams } = useRouteParams();
 const routerName = {
+  1: "recharge-center",
   2: "taskManagerIndex",
+  3: "settlementCenter",
+  4: "invoiceManager",
+  5: "taxLandManagementIndex",
 };
-const handleGoRouter = (item: { type: number; status: number }) => {
-  pushParams(routerName[item.type], { status: item.status });
+const handleGoRouter = (item: { type: number; target_id: number }) => {
+  pushParams(routerName[item.type], { status: item.target_id });
   router.push({ name: routerName[item.type] });
   notifyView(item.id);
 };
