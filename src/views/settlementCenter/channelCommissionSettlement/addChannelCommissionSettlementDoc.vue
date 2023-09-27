@@ -274,7 +274,7 @@ const columnList = [
 //取消
 const handleClose = () => {
   router.push({
-    name: "channelCommissionSettlementList",
+    name: "settlementCenter",
     query: { activeName: "channelCommission" },
   });
 };
