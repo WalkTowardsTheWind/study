@@ -75,8 +75,8 @@
               >
                 <el-option
                   v-for="i of companyList"
-                  :key="i.id"
-                  :value="i.id"
+                  :key="i.company_id"
+                  :value="i.company_id"
                   :label="i.company_name"
                 ></el-option>
               </el-select>
@@ -241,6 +241,8 @@ const handleSelect = (tax_land_id: string) => {
   const element = taxlandList.value.find((i) => i.tax_land_id == tax_land_id);
   companyList.value.length = 0;
   companyList.value = element.company_list;
+  console.log(companyList.value);
+
   newForm.company_id = "";
   // element.company_list
   //   ? (companyList.value = element.company_list)
