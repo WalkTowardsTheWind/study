@@ -19,7 +19,7 @@
             ][formItem.status]
           }}
         </el-form-item>
-        <el-form-item label="结算时间">
+        <el-form-item v-if="formItem.settlement_time" label="结算时间">
           <el-input readonly v-model="formItem.settlement_time" />
         </el-form-item>
         <el-form-item label="收佣渠道">
