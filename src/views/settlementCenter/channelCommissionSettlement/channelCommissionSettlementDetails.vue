@@ -49,7 +49,10 @@
                   placeholder="请输入"
                 />
               </el-form-item>
-              <el-form-item v-if="0" label="所属供应商">
+              <el-form-item
+                v-if="!['3'].includes(formData.status)"
+                label="所属供应商"
+              >
                 <el-input
                   v-model="formData.tax_land_name"
                   placeholder="请输入"
@@ -58,25 +61,37 @@
               <el-form-item label="创建时间">
                 <el-input v-model="formData.add_time" placeholder="请输入" />
               </el-form-item>
-              <el-form-item label="确认时间">
+              <el-form-item
+                v-if="['2', '3'].includes(formData.status)"
+                label="确认时间"
+              >
                 <el-input
                   v-model="formData.confirm_time"
                   placeholder="请输入"
                 />
               </el-form-item>
-              <el-form-item label="打款时间">
+              <el-form-item
+                v-if="['3'].includes(formData.status)"
+                label="打款时间"
+              >
                 <el-input
                   v-model="formData.settlement_time"
                   placeholder="请输入"
                 />
               </el-form-item>
-              <el-form-item label="打款凭证">
+              <el-form-item
+                v-if="['3'].includes(formData.status)"
+                label="打款凭证"
+              >
                 <el-button link type="primary" @click="handleInspect"
                   >查看</el-button
                 >
               </el-form-item>
-              <el-form-item label="佣金确认单">
-                <el-button link type="primary" @click="handleInspect"
+              <el-form-item
+                v-if="!['0'].includes(formData.status)"
+                label="佣金确认单"
+              >
+                <el-button link type="primary" @click="handleInspectDoc"
                   >查看</el-button
                 >
               </el-form-item>
@@ -110,16 +125,30 @@
       </template>
     </zxn-tabs>
   </zxn-plan>
+  <viewDialog
+    v-model:dialogVisible="dialogVisible"
+    :formItem="docData"
+    :viewType="1"
+    @up-Table="getTableData"
+  />
 </template>
 <script setup lang="ts">
 import { transformTimeRange } from "@/utils";
 import { downloadByData } from "@/utils/download";
 import { useRouter, useRoute } from "vue-router";
-import { getChannelSettlementDetails } from "@/api/settlementCenter/channelCommissionSettlement";
+import {
+  getChannelSettlementDetails,
+  getDocDetails,
+} from "@/api/settlementCenter/channelCommissionSettlement";
+import viewDialog from "../components/viewDialog.vue";
 import { ElMessage } from "element-plus";
 const { proxy } = getCurrentInstance() as any;
 const router = useRouter();
 const route = useRoute();
+//发佣确认
+const dialogVisible = ref(false);
+const docData = ref([]);
+//
 const activeName = ref("channelCommissionSettlementDetails");
 const tabsList = reactive([
   {
@@ -129,6 +158,7 @@ const tabsList = reactive([
 ]);
 
 const formData = ref({
+  id: "",
   channel_order_no: "",
   status: "",
   channel_name: "",
@@ -187,9 +217,19 @@ const columnList = [
     headerAlign: "right",
   },
 ];
+// 发送佣金确认单
+const handleInspectDoc = async () => {
+  try {
+    const { data } = await getDocDetails(Number(formData.value.id));
+    docData.value = data;
+    dialogVisible.value = true;
+  } catch (error) {
+    console.log(error);
+  }
+};
 // 查看
-const handleInspect = (scope: any) => {
-  console.log("查看");
+const handleInspect = (data: any) => {
+  console.log("查看", data);
 };
 // 详情
 const handleDetails = (scope: any) => {
@@ -282,7 +322,6 @@ const getTableData = async () => {
 
   try {
     const { data } = await getChannelSettlementDetails(Number(route.query.id));
-
     pageInfo.page = data.current_page ?? "1";
     pageInfo.total = data.total ?? data.list.length + "";
     formData.value = data;

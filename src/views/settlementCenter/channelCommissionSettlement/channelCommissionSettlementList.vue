@@ -251,8 +251,6 @@ const handleAdd = () => {
 const handleSend = async (scope: any) => {
   try {
     const { data } = await getDocDetails(scope.row.id);
-    console.log(data);
-
     formData.value = data;
     dialogVisible.value = true;
   } catch (error) {

@@ -63,27 +63,33 @@ const emit = defineEmits(["update:dialogVisible", "up-Table"]);
 const props = defineProps({
   dialogVisible: { type: Boolean, default: false },
   formItem: { type: Array, equired: true, default: () => {} },
+  viewType: { type: Number, default: 0 },
 });
 
 let dialogVisible = computed(() => props.dialogVisible);
 let formItem = computed(() => {
   return props.formItem;
 }) as any;
+let viewType = computed(() => props.viewType);
 const handleConfirm = async () => {
-  try {
-    var data = {
-      id: formItem.value.id,
-      status: "1",
-    };
-    await updateChannelSettlementStatus(data);
+  if (viewType.value === 0) {
+    try {
+      var data = {
+        id: formItem.value.id,
+        status: "1",
+      };
+      await updateChannelSettlementStatus(data);
+      emit("update:dialogVisible", false);
+      ElMessage({
+        type: "success",
+        message: "成功下发该任务",
+      });
+      emit("up-Table");
+    } catch (error) {
+      console.log(error);
+    }
+  } else if (viewType.value === 1) {
     emit("update:dialogVisible", false);
-    ElMessage({
-      type: "success",
-      message: "成功下发该任务",
-    });
-    emit("up-Table");
-  } catch (error) {
-    console.log(error);
   }
 };
 const HandleClose = () => {
