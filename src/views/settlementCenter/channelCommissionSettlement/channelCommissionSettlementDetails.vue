@@ -228,8 +228,8 @@ const handleInspectDoc = async () => {
   }
 };
 // 查看
-const handleInspect = (data: any) => {
-  console.log("查看", data);
+const handleInspect = () => {
+  window.open(formData.value.transfer_certificate[0], "_blank");
 };
 // 详情
 const handleDetails = (scope: any) => {
