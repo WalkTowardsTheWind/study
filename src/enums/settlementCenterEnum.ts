@@ -36,6 +36,7 @@ export enum channelSettlementStatus {
   "待下发",
   "已下发",
   "驳回",
+  "未结算",
 }
 // 渠道结算详情
 export enum settleTaskType {
@@ -51,4 +52,9 @@ export enum settlePerson {
   "结算中",
   "结算成功",
   "结算失败",
+}
+export enum InvoiceType {
+  "普通发票",
+  "6%增值税发票",
+  "普通发票/6%增值税发票",
 }

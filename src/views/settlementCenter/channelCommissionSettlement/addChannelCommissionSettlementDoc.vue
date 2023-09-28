@@ -17,7 +17,7 @@
               </el-input>
             </el-form-item>
             <el-form-item label="结算状态">
-              <zxn-select v-model="formItem.status" @change="handleSearch">
+              <el-select v-model="formItem.status" @change="handleSearch">
                 <el-option
                   v-for="item in proxy.$const[
                     'settlementCenterEnum.channelSettlementStatus'
@@ -26,10 +26,10 @@
                   :label="item.label"
                   :value="item.value"
                 />
-              </zxn-select>
+              </el-select>
             </el-form-item>
             <el-form-item label="结算类型">
-              <zxn-select
+              <el-select
                 v-model="formItem.settlement_type"
                 @change="handleSearch"
               >
@@ -41,7 +41,7 @@
                   :label="item.label"
                   :value="item.value"
                 />
-              </zxn-select>
+              </el-select>
             </el-form-item>
             <el-form-item label="渠道名称">
               <el-select
@@ -94,6 +94,7 @@
             hasSelect
             @selection-change="handleSelect"
             rowKey="id"
+            :selectable="selectable"
           >
           </zxn-table>
         </div>
@@ -105,6 +106,11 @@
       </template>
     </zxn-tabs>
   </zxn-plan>
+  <viewDialog
+    v-model:dialogVisible="dialogVisible"
+    :formItem="formData"
+    @up-Table="up"
+  />
 </template>
 <script setup lang="ts">
 import { transformTimeRanges } from "@/utils";
@@ -114,8 +120,10 @@ import {
   getCompanyList,
   getAddChannelSettlementDocList,
   addChannelSettlementDoc,
+  getDocDetails,
   rebuild,
 } from "@/api/settlementCenter/channelCommissionSettlement";
+import viewDialog from "../components/viewDialog.vue";
 const { proxy } = getCurrentInstance() as any;
 const router = useRouter();
 const route = useRoute();
@@ -149,6 +157,7 @@ const optionsCompany = ref<ListItem[]>([]);
 const getCompany = async () => {
   let params = {
     channel_id: formItem.value.channel_id,
+    settlement_type: formItem.value.settlement_type,
   };
   const { data } = await getCompanyList(params);
   const newData = data.map((item: any) => {
@@ -169,10 +178,10 @@ const pageInfo = reactive({
 const handleReset = () => {
   formItem.value = {
     keywords: "",
-    settlement_type: "",
+    settlement_type: "1",
     company_id: "",
     channel_id: "",
-    status: "",
+    status: "5",
     timeData: [],
     page: "",
     limit: "",
@@ -220,10 +229,10 @@ const handlePageChange = (cur: any) => {
 var total_pay_money = ref();
 const formItem = ref({
   keywords: "",
-  settlement_type: "",
+  settlement_type: "1",
   company_id: "",
   channel_id: "",
-  status: "",
+  status: "5",
   timeData: [],
   page: "",
   limit: "",
@@ -233,7 +242,7 @@ const tableData = reactive([] as any);
 const columnList = [
   { label: "企业名称", prop: "company_name" },
   { label: "结算类型", prop: "settlement_type" },
-  { label: "发票类型", prop: "invoice_type" },
+  { label: "发票类型", prop: "invoice_type", width: 180 },
   { label: "成本点位", prop: "cost_tax_point" },
   { label: "企业点位", prop: "tax_point" },
   { label: "渠道点位", prop: "channel_point" },
@@ -244,7 +253,7 @@ const columnList = [
   { label: "下发金额", prop: "settlement_amount" },
   { label: "服务费", prop: "commission" },
   { label: "成本费用", prop: "cost_amount" },
-  { label: "供应商结算", prop: "supplier_amount", width: 100 },
+  // { label: "供应商结算", prop: "supplier_amount", width: 100 },
   { label: "渠道结算税前", prop: "channel_amount", width: 110 },
   { label: "渠道结算税后", prop: "after_channel_amount", width: 110 },
   { label: "结算时间", prop: "settlement_time" },
@@ -264,6 +273,12 @@ const columnList = [
     width: 120,
   },
 ];
+// 是否勾选
+const selectable = (row: any) => {
+  console.log(row);
+
+  return row.channel_settlement_id === 0;
+};
 //取消
 const handleClose = () => {
   router.push({
@@ -301,6 +316,9 @@ const handleSave = () => {
       console.log(error);
     });
 };
+//发佣确认
+const dialogVisible = ref(false);
+const formData = ref([]);
 //发送
 const handleSend = () => {
   if (selectionData.value.length === 0) {
@@ -317,19 +335,32 @@ const handleSend = () => {
   };
 
   addChannelSettlementDoc(params)
-    .then(() => {
+    .then((res) => {
       ElMessage({
         type: "success",
         message: `新建渠道佣金结算单成功`,
       });
-      router.push({
-        name: "settlementCenter",
-        query: { activeName: "channelCommission" },
-      });
+      getDocDetails(res.data.id)
+        .then((res) => {
+          console.log(111111, dialogVisible.value);
+
+          formData.value = res.data;
+          dialogVisible.value = true;
+          console.log(222222, formData.value, dialogVisible.value);
+        })
+        .catch((error: any) => {
+          console.log(error);
+        });
     })
     .catch((error) => {
       console.log(error);
     });
+};
+const up = () => {
+  router.push({
+    name: "settlementCenter",
+    query: { activeName: "channelCommission" },
+  });
 };
 /**
  * 批量
@@ -422,8 +453,12 @@ const getTableData = async () => {
       return {
         id: item.id,
         company_name: item.company_name,
-        settlement_type: item.settlement_type,
-        invoice_type: item.invoice_type,
+        settlement_type:
+          proxy.$enumSet["settlementCenterEnum.settlement_type"][
+            item.settlement_type
+          ],
+        invoice_type:
+          proxy.$enumSet["settlementCenterEnum.InvoiceType"][item.invoice_type],
         cost_tax_point: item.cost_tax_point,
         tax_point: item.tax_point,
         channel_point: item.channel_point,
@@ -439,6 +474,7 @@ const getTableData = async () => {
         after_channel_amount: item.after_channel_amount,
         settlement_time: item.settlement_time,
         status: item.status,
+        channel_settlement_id: item.channel_settlement_id,
       };
     });
     tableData.length = 0;

@@ -205,7 +205,7 @@ const columnList = [
   { label: "下发金额", prop: "settlement_amount" },
   { label: "服务费", prop: "commission" },
   { label: "成本费用", prop: "cost_amount" },
-  { label: "供应商结算", prop: "supplier_amount", width: 100 },
+  // { label: "供应商结算", prop: "supplier_amount", width: 100 },
   { label: "渠道结算税前", prop: "channel_amount", width: 110 },
   { label: "渠道结算税后", prop: "after_channel_amount", width: 110 },
   { label: "结算时间", prop: "settlement_time" },
