@@ -98,19 +98,22 @@
           >
           </zxn-table>
         </div>
-        <zxn-bottom-btn>
+        <!-- <zxn-bottom-btn> -->
+        <div class="bottom-btn">
           <el-button color="#ACACAC" @click="handleClose" plain>取消</el-button>
           <el-button type="primary" @click="handleSave">保存</el-button>
           <el-button type="primary" @click="handleSend" plain>发送</el-button>
-        </zxn-bottom-btn>
+        </div>
+
+        <!-- </zxn-bottom-btn> -->
       </template>
     </zxn-tabs>
+    <viewDialog
+      v-model:dialogVisible="dialogVisible"
+      :formItem="formData"
+      @up-Table="up"
+    />
   </zxn-plan>
-  <viewDialog
-    v-model:dialogVisible="dialogVisible"
-    :formItem="formData"
-    @up-Table="up"
-  />
 </template>
 <script setup lang="ts">
 import { transformTimeRanges } from "@/utils";
@@ -521,5 +524,10 @@ onMounted(() => {
   margin-right: 10px;
   background: #356ff3;
   border-radius: 4px;
+}
+.bottom-btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 </style>

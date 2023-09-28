@@ -139,13 +139,13 @@
         </div>
       </template>
     </zxn-tabs>
+    <viewDialog
+      v-model:dialogVisible="dialogVisible"
+      :formItem="docData"
+      :viewType="1"
+      @up-Table="getTableData"
+    />
   </zxn-plan>
-  <viewDialog
-    v-model:dialogVisible="dialogVisible"
-    :formItem="docData"
-    :viewType="1"
-    @up-Table="getTableData"
-  />
 </template>
 <script setup lang="ts">
 import { transformTimeRange } from "@/utils";
