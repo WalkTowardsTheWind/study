@@ -74,7 +74,7 @@ let viewType = computed(() => props.viewType);
 const handleConfirm = async () => {
   if (viewType.value === 0) {
     try {
-      var data = {
+      let data = {
         id: formItem.value.id,
         status: "1",
       };
@@ -82,7 +82,7 @@ const handleConfirm = async () => {
       emit("update:dialogVisible", false);
       ElMessage({
         type: "success",
-        message: "成功下发该任务",
+        message: "成功发送结算单",
       });
       emit("up-Table");
     } catch (error) {
@@ -90,6 +90,18 @@ const handleConfirm = async () => {
     }
   } else if (viewType.value === 1) {
     emit("update:dialogVisible", false);
+  } else if (viewType.value === 2) {
+    try {
+      let data = {
+        id: formItem.value.id,
+        status: "1",
+      };
+      await updateChannelSettlementStatus(data);
+      emit("update:dialogVisible", false);
+      emit("up-Table");
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
 const HandleClose = () => {

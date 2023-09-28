@@ -9,6 +9,7 @@ import {
   idsStatus,
   id,
   Company,
+  SendDoc,
 } from "./types";
 
 /**
@@ -61,6 +62,19 @@ export function getDocDetails(id: number) {
   return request({
     url: `/adminapi/finance/channel/getConfirm/${id}`,
     method: "get",
+  });
+}
+/**
+ * 新建的获取发送佣金确认单信息
+ *
+ * @param data
+ * @returns
+ */
+export function getSendDocDetails(data: SendDoc) {
+  return request({
+    url: "/adminapi/finance/channel/getConfirm/getSend",
+    method: "get",
+    params: data,
   });
 }
 /**

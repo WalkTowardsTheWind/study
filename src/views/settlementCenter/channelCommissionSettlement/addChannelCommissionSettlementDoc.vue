@@ -111,6 +111,7 @@
     <viewDialog
       v-model:dialogVisible="dialogVisible"
       :formItem="formData"
+      :viewType="2"
       @up-Table="up"
     />
   </zxn-plan>
@@ -123,7 +124,7 @@ import {
   getCompanyList,
   getAddChannelSettlementDocList,
   addChannelSettlementDoc,
-  getDocDetails,
+  getSendDocDetails,
   rebuild,
 } from "@/api/settlementCenter/channelCommissionSettlement";
 import viewDialog from "../components/viewDialog.vue";
@@ -308,7 +309,7 @@ const handleSave = () => {
     .then(() => {
       ElMessage({
         type: "success",
-        message: `新建渠道佣金结算单成功`,
+        message: `新建渠道佣金结算单保存成功`,
       });
       router.push({
         name: "settlementCenter",
@@ -332,38 +333,34 @@ const handleSend = () => {
 
     return;
   }
-  const params = {
-    ids: selectionData.value,
-    status: 1,
-  };
-
-  addChannelSettlementDoc(params)
-    .then((res) => {
-      ElMessage({
-        type: "success",
-        message: `新建渠道佣金结算单成功`,
-      });
-      getDocDetails(res.data.id)
-        .then((res) => {
-          console.log(111111, dialogVisible.value);
-
-          formData.value = res.data;
-          dialogVisible.value = true;
-          console.log(222222, formData.value, dialogVisible.value);
-        })
-        .catch((error: any) => {
-          console.log(error);
-        });
+  getSendDocDetails({ ids: selectionData.value })
+    .then((res: any) => {
+      formData.value = res.data;
+      dialogVisible.value = true;
     })
-    .catch((error) => {
+    .catch((error: any) => {
       console.log(error);
     });
 };
 const up = () => {
-  router.push({
-    name: "settlementCenter",
-    query: { activeName: "channelCommission" },
-  });
+  const params = {
+    ids: selectionData.value,
+    status: 1,
+  };
+  addChannelSettlementDoc(params)
+    .then(() => {
+      ElMessage({
+        type: "success",
+        message: `新建渠道佣金结算单发送成功`,
+      });
+      router.push({
+        name: "settlementCenter",
+        query: { activeName: "channelCommission" },
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 /**
  * 批量

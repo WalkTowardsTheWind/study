@@ -62,3 +62,9 @@ export interface id {
 export interface Company {
   channel_id: string;
 }
+/**
+ * 渠道结算列表
+ */
+export interface SendDoc {
+  ids: Array<string>;
+}
