@@ -41,10 +41,10 @@
           <el-input v-model="formItem.bank" />
         </el-form-item>
         <el-form-item label="甲方">
-          <el-input v-model="formItem.party_a" />
+          <el-input value="武汉中新能科技有限公司" />
         </el-form-item>
         <el-form-item label="乙方">
-          <el-input v-model="formItem.party_b" />
+          <el-input v-model="formItem.channel_name" />
         </el-form-item>
       </el-form>
     </div>
