@@ -20,31 +20,31 @@
           }}
         </el-form-item>
         <el-form-item label="结算时间">
-          <el-input v-model="formItem.settlement_time" />
+          <el-input readonly v-model="formItem.settlement_time" />
         </el-form-item>
         <el-form-item label="收佣渠道">
-          <el-input v-model="formItem.channel_name" />
+          <el-input readonly v-model="formItem.channel_name" />
         </el-form-item>
         <el-form-item label="结算金额">
-          <el-input v-model="formItem.settlement_amount" />
+          <el-input readonly v-model="formItem.settlement_amount" />
         </el-form-item>
         <el-form-item label="渠道佣金税前">
-          <el-input v-model="formItem.commission" />
+          <el-input readonly v-model="formItem.commission" />
         </el-form-item>
         <el-form-item label="渠道佣金税后">
-          <el-input v-model="formItem.after_commission" />
+          <el-input readonly v-model="formItem.after_commission" />
         </el-form-item>
         <el-form-item label="收款银行">
-          <el-input v-model="formItem.bank_account" />
+          <el-input readonly v-model="formItem.bank_account" />
         </el-form-item>
         <el-form-item label="收款账户">
-          <el-input v-model="formItem.bank" />
+          <el-input readonly v-model="formItem.bank" />
         </el-form-item>
         <el-form-item label="甲方">
-          <el-input value="武汉中新能科技有限公司" />
+          <el-input readonly value="武汉中新能科技有限公司" />
         </el-form-item>
         <el-form-item label="乙方">
-          <el-input v-model="formItem.channel_name" />
+          <el-input readonly v-model="formItem.channel_name" />
         </el-form-item>
       </el-form>
     </div>

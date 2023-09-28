@@ -7,6 +7,7 @@
             <div class="head">
               <el-form-item label="结算单号">
                 <el-input
+                  readonly
                   v-model="formData.channel_order_no"
                   placeholder="请输入"
                 />
@@ -30,21 +31,28 @@
               </el-form-item>
               <el-form-item label="渠道">
                 <el-input
+                  readonly
                   v-model="formData.channel_name"
                   placeholder="请输入"
                 />
               </el-form-item>
               <el-form-item label="企业结算总额">
                 <el-input
+                  readonly
                   v-model="formData.settlement_amount"
                   placeholder="请输入"
                 />
               </el-form-item>
               <el-form-item label="渠道结算税前">
-                <el-input v-model="formData.commission" placeholder="请输入" />
+                <el-input
+                  readonly
+                  v-model="formData.commission"
+                  placeholder="请输入"
+                />
               </el-form-item>
               <el-form-item label="渠道结算税后">
                 <el-input
+                  readonly
                   v-model="formData.after_commission"
                   placeholder="请输入"
                 />
@@ -54,18 +62,24 @@
                 label="所属供应商"
               >
                 <el-input
+                  readonly
                   v-model="formData.tax_land_name"
                   placeholder="请输入"
                 />
               </el-form-item>
               <el-form-item label="创建时间">
-                <el-input v-model="formData.add_time" placeholder="请输入" />
+                <el-input
+                  readonly
+                  v-model="formData.add_time"
+                  placeholder="请输入"
+                />
               </el-form-item>
               <el-form-item
                 v-if="['2', '3'].includes(formData.status)"
                 label="确认时间"
               >
                 <el-input
+                  readonly
                   v-model="formData.confirm_time"
                   placeholder="请输入"
                 />
@@ -75,6 +89,7 @@
                 label="打款时间"
               >
                 <el-input
+                  readonly
                   v-model="formData.settlement_time"
                   placeholder="请输入"
                 />
