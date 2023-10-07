@@ -96,7 +96,6 @@ const handleConfirm = async () => {
         id: formItem.value.id,
         status: "1",
       };
-      await updateChannelSettlementStatus(data);
       emit("update:dialogVisible", false);
       emit("up-Table");
     } catch (error) {

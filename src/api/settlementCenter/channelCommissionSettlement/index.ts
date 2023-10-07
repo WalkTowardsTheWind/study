@@ -72,7 +72,7 @@ export function getDocDetails(id: number) {
  */
 export function getSendDocDetails(data: SendDoc) {
   return request({
-    url: "/adminapi/finance/channel/getConfirm/getSend",
+    url: "/adminapi/finance/channel/getSend",
     method: "get",
     params: data,
   });
