@@ -23,7 +23,6 @@
         v-if="hasSelect"
         type="selection"
         :selectable="selectable"
-        :reserve-selection="true"
       />
       <el-table-column v-if="hasIndex" type="index" label="序号" width="65" />
       <template v-for="(item, index) in tableColumnList" :key="index">
@@ -160,6 +159,13 @@ watch(
     });
   },
   { immediate: true, deep: true }
+);
+watch(
+  () => props.tableData,
+  () => {
+    zxnTable.value.clearSelection();
+  },
+  { deep: true }
 );
 watchEffect(() => {
   const { total, page, limit } = props.pageInfo;

@@ -31,6 +31,7 @@
           placeholder="请选择"
           :options="industryList"
           :props="{ label: 'name', value: 'id' }"
+          clearable
         />
       </el-form-item>
       <el-form-item prop="timeData" label="申请日期">
@@ -201,7 +202,7 @@ const handlePageChange = (cur) => {
 const loading = ref(false);
 const getTaskList = async () => {
   const params = transformTimeRange({ ...formItem });
-  params.category_id = params.category_id.pop();
+  params.category_id = params.category_id && params.category_id.pop();
   params.task_type = props.type;
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
