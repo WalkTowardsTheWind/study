@@ -68,7 +68,7 @@
       @page-change="handlePageChange"
       hasSelect
       @selection-change="handleSelect"
-      fieldTotal="channel_order_no"
+      fieldTotal="settlement_amount"
     >
       <template #tableTop>
         <el-button type="primary" @click="handleAdd">新建佣金结算单</el-button>
