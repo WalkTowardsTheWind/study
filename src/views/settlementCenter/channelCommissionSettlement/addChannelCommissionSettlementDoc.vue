@@ -125,7 +125,6 @@ import {
   getAddChannelSettlementDocList,
   addChannelSettlementDoc,
   getSendDocDetails,
-  rebuild,
 } from "@/api/settlementCenter/channelCommissionSettlement";
 import viewDialog from "../components/viewDialog.vue";
 const { proxy } = getCurrentInstance() as any;
@@ -376,32 +375,15 @@ const handleSelect = (data: any) => {
 //
 const getCheckStatusData = async () => {
   try {
-    const { data } = await rebuild({ id: route.query.id + "" });
-    checkStatusData.value = data.ids;
+    const data = JSON.parse(route.query.params as string);
+    checkStatusData.value = data.checkStatusData;
     formItem.value.channel_id = data.channel_id;
     formItem.value.company_id = data.company_id;
-    const options = await getChannelList();
-    const newData = options.data.map((item: any) => {
-      return {
-        label: item.channel_name,
-        value: item.id,
-      };
-    });
-    optionsChannel.value = [];
-    optionsChannel.value.push(...newData);
-    //
-    let params = {
-      channel_id: formItem.value.channel_id,
-    };
-    const Company = await getCompanyList(params);
-    const newData2 = Company.data.map((item: any) => {
-      return {
-        label: item.company_name,
-        value: item.id,
-      };
-    });
-    optionsCompany.value = [];
-    optionsCompany.value.push(...newData2);
+    formItem.value.settlement_type = data.settlement_type + "";
+    console.log(checkStatusData.value, "checkStatusData.value");
+
+    getChannel();
+    getCompany();
   } catch (error) {
     console.log(error);
   }
@@ -480,7 +462,7 @@ const getTableData = async () => {
     tableData.length = 0;
 
     tableData.push(...newData);
-    if (route.query.id) {
+    if (route.query.params) {
       toggleRowSelection();
     }
   } catch (error) {
@@ -489,7 +471,7 @@ const getTableData = async () => {
 };
 
 const get = async () => {
-  if (route.query.id) {
+  if (route.query.params) {
     await getCheckStatusData();
   } else {
     await getChannel();

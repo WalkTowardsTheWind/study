@@ -115,17 +115,17 @@
         <el-button link @click="handleDetails(scope)">详情</el-button>
       </template>
     </zxn-table>
+    <viewDialog
+      v-model:dialogVisible="dialogVisible"
+      :formItem="formData"
+      @up-Table="getTableData"
+    />
+    <uploadCredentials
+      v-model:dialogVisible="uploadCredentialsDialogVisible"
+      :id="id"
+      @up-Table="getTableData"
+    />
   </div>
-  <viewDialog
-    v-model:dialogVisible="dialogVisible"
-    :formItem="formData"
-    @up-Table="getTableData"
-  />
-  <uploadCredentials
-    v-model:dialogVisible="uploadCredentialsDialogVisible"
-    :id="id"
-    @up-Table="getTableData"
-  />
 </template>
 <script setup lang="ts">
 import { transformTimeRanges } from "@/utils";
@@ -136,6 +136,7 @@ import {
   updateChannelSettlementStatus,
   deleteChannelSettlementDoc,
   getDocDetails,
+  rebuild,
 } from "@/api/settlementCenter/channelCommissionSettlement";
 import viewDialog from "../components/viewDialog.vue";
 import uploadCredentials from "../components/uploadCredentials.vue";
@@ -298,10 +299,42 @@ const handleDistribute = async (scope: any) => {
   id.value = scope.row.id;
 };
 // 重新生成
+const params = ref({
+  checkStatusData: [],
+  channel_id: "",
+  company_id: "",
+  settlement_type: "",
+});
 const handleRebuild = async (scope: any) => {
-  router.push({
-    name: "addChannelCommissionSettlementDoc",
-    query: { id: scope.row.id },
+  ElMessageBox({
+    title: "",
+    message: h("p", null, `重新生成操作将删除当前发佣单，是否继续？`),
+    showCancelButton: true,
+    confirmButtonText: "是",
+    cancelButtonText: "否",
+    beforeClose: async (
+      action: string,
+      instance: { confirmButtonLoading: boolean },
+      done: () => void
+    ) => {
+      if (action === "confirm") {
+        instance.confirmButtonLoading = true;
+        const { data } = await rebuild({ id: scope.row.id + "" });
+        params.value.checkStatusData = data.ids;
+        params.value.channel_id = data.channel_id;
+        params.value.company_id = data.company_id;
+        params.value.settlement_type = data.settlement_type;
+        instance.confirmButtonLoading = false;
+        done();
+      } else {
+        done();
+      }
+    },
+  }).then(() => {
+    router.push({
+      name: "addChannelCommissionSettlementDoc",
+      query: { params: JSON.stringify(params.value) },
+    });
   });
 };
 // 删除
