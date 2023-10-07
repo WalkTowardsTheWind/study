@@ -2,51 +2,73 @@
   <el-dialog
     custom-class="my-dialog"
     v-model="dialogVisible"
-    width="30%"
+    width="800px"
     :before-close="handleClose"
   >
-    <template #header>
-      <div class="my-header">
-        <h4>发佣确认</h4>
+    <div class="enterprise-dialog-box">
+      <div class="enterprise-dialog-box-title">发佣确认</div>
+      <div class="enterprise-dialog-box-tip">
+        <div>甲方&nbsp;&nbsp;武汉中新能科技有限公司</div>
+        <div>乙方&nbsp;&nbsp;{{ formItem.channel_name }}</div>
       </div>
-    </template>
-    <div>
-      <el-form :model="formItem" label-width="110px">
-        <el-form-item label="渠道状态">
-          {{
-            proxy.$enumSet[
-              "settlementCenterEnum.channelCommissionSettlementList"
-            ][formItem.status]
-          }}
-        </el-form-item>
-        <el-form-item v-if="formItem.settlement_time" label="结算时间">
-          <el-input readonly v-model="formItem.settlement_time" />
-        </el-form-item>
-        <el-form-item label="收佣渠道">
-          <el-input readonly v-model="formItem.channel_name" />
-        </el-form-item>
-        <el-form-item label="结算金额">
-          <el-input readonly v-model="formItem.settlement_amount" />
-        </el-form-item>
-        <el-form-item label="渠道佣金税前">
-          <el-input readonly v-model="formItem.commission" />
-        </el-form-item>
-        <el-form-item label="渠道佣金税后">
-          <el-input readonly v-model="formItem.after_commission" />
-        </el-form-item>
-        <el-form-item label="收款银行">
-          <el-input readonly v-model="formItem.bank_account" />
-        </el-form-item>
-        <el-form-item label="收款账户">
-          <el-input readonly v-model="formItem.bank" />
-        </el-form-item>
-        <el-form-item label="甲方">
-          <el-input readonly value="武汉中新能科技有限公司" />
-        </el-form-item>
-        <el-form-item label="乙方">
-          <el-input readonly v-model="formItem.channel_name" />
-        </el-form-item>
-      </el-form>
+      <table class="enterprise-dialog-box-content" cellspacing="0" border="0">
+        <tr>
+          <td>收佣渠道</td>
+          <td>{{ formItem.channel_name }}</td>
+        </tr>
+        <tr>
+          <td>收款银行</td>
+          <td>{{ formItem.bank }}</td>
+        </tr>
+        <tr>
+          <td>收款账户</td>
+          <td>{{ formItem.bank_account }}</td>
+        </tr>
+        <!--        <tr>-->
+        <!--          <td>渠道状态</td>-->
+        <!--          <td>收佣渠道</td>-->
+        <!--        </tr>-->
+        <tr v-if="formItem.settlement_time">
+          <td>确认时间时间</td>
+          <td>{{ formatToDateTime(formItem.settlement_time) }}</td>
+        </tr>
+        <tr>
+          <td>渠道佣金税前</td>
+          <td>
+            <money-text
+              :model-value="formItem.after_commission"
+              :mark-size="14"
+              :moneySize="14"
+              mark-color="#333333"
+              money-color="#333333"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>渠道佣金税后</td>
+          <td>
+            <money-text
+              :model-value="formItem.after_commission"
+              :mark-size="14"
+              :moneySize="14"
+              mark-color="#333333"
+              money-color="#333333"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>结算金额</td>
+          <td>
+            <money-text
+              :model-value="formItem.settlement_amount"
+              :mark-size="14"
+              :moneySize="14"
+              mark-color="#333333"
+              money-color="#333333"
+            />
+          </td>
+        </tr>
+      </table>
     </div>
     <template #footer>
       <span class="dialog-footer">
@@ -57,6 +79,7 @@
   </el-dialog>
 </template>
 <script setup lang="ts">
+import { formatToDateTime } from "@/utils/dateUtil";
 import { updateChannelSettlementStatus } from "@/api/settlementCenter/channelCommissionSettlement";
 const { proxy } = getCurrentInstance() as any;
 const emit = defineEmits(["update:dialogVisible", "up-Table"]);
@@ -121,3 +144,59 @@ const handleClose = (done: () => void) => {
     });
 };
 </script>
+<style lang="scss" scoped>
+.enterprise-dialog {
+  .el-dialog__header {
+    display: none;
+  }
+  .el-dialog__body {
+    padding: 20px;
+    padding-bottom: 0;
+  }
+  &-box {
+    padding: 30px;
+    background-image: url("@/assets/watermark.png");
+    background-size: contain;
+    font-family: SourceHanSansSC-Medium, SourceHanSansSC, sans-serif;
+    &-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #333333;
+      text-align: center;
+    }
+    &-tip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      font-size: 14px;
+      color: #3d4a52;
+    }
+    &-content {
+      width: 100%;
+      border-top: 1px solid #dcdfe6;
+      border-left: 1px solid #dcdfe6;
+      tr {
+        td {
+          border-right: 1px solid #dcdfe6;
+          border-bottom: 1px solid #dcdfe6;
+          &:first-child {
+            width: 26%;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: #656565;
+          }
+          &:last-child {
+            padding-left: 30px;
+            width: 74%;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333333;
+          }
+        }
+      }
+    }
+  }
+}
+</style>
