@@ -111,7 +111,7 @@ async function handleUpload(options: UploadRequestOptions): Promise<any> {
 const handleExceed: UploadProps["onExceed"] = (files) => {
   console.log(files);
 
-  ElMessage.warning("上传图片不能超过三张");
+  ElMessage.warning(`上传图片不能超过${props.limit}张`);
   //   upload.value!.clearFiles()
   //   const file = files[0] as UploadRawFile
   //   file.uid = genFileId()

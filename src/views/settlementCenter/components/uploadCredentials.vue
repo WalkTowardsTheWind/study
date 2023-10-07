@@ -13,7 +13,7 @@
     <div>
       <el-form :model="image" label-width="100px">
         <el-form-item label="上传多张图片">
-          <multi-upload v-model="image.imageList"></multi-upload>
+          <multi-upload :limit="3" v-model="image.imageList"></multi-upload>
         </el-form-item>
       </el-form>
     </div>
