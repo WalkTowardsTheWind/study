@@ -47,7 +47,7 @@
                 v-model="form.company_name"
               ></el-input>
             </el-form-item>
-            <el-form-item label="开户行">
+            <el-form-item label="开户行" prop="bank">
               <el-input placeholder="请输入" v-model="form.bank"></el-input>
             </el-form-item>
             <el-form-item label="渠道管理员" prop="channel_admin">
@@ -79,7 +79,7 @@
                 v-model="form.credit_code"
               ></el-input>
             </el-form-item>
-            <el-form-item label="银行账号">
+            <el-form-item label="银行账号" prop="bank_account">
               <el-input
                 placeholder="请输入"
                 v-model="form.bank_account"
@@ -165,6 +165,8 @@ const validatePassword = (rule, value, callback) => {
 const rules = {
   username: [{ required: true, message: "必填", trigger: "blur" }],
   password: [{ required: true, message: "必填", trigger: "blur" }],
+  bank: [{ required: true, message: "必填", trigger: "blur" }],
+  bank_account: [{ required: true, message: "必填", trigger: "blur" }],
   conf_password: [
     { required: true, message: "必填", trigger: "blur" },
     {

@@ -132,7 +132,7 @@
             <el-form-item label="联系人">
               <el-input v-model="formItem.contact" :readonly="!isEdit" />
             </el-form-item>
-            <el-form-item label="开户行">
+            <el-form-item label="开户行" prop="bank">
               <el-input v-model="formItem.bank" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="收款方式" prop="collection_type">
@@ -166,7 +166,7 @@
             <el-form-item label="联系号码">
               <el-input v-model="formItem.contact_phone" :readonly="!isEdit" />
             </el-form-item>
-            <el-form-item label="银行账号">
+            <el-form-item label="银行账号" prop="bank_account">
               <el-input v-model="formItem.bank_account" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="渠道佣金结算时间" prop="settlement_type">
@@ -237,6 +237,8 @@ const commonRules = {
   collection_type: [{ required: true, message: "必填", trigger: "change" }],
   settlement_type: [{ required: true, message: "必填", trigger: "change" }],
   agreement_img: [{ required: true, message: "必填", trigger: "change" }],
+  bank: [{ required: true, message: "必填", trigger: "blur" }],
+  bank_account: [{ required: true, message: "必填", trigger: "blur" }],
 };
 const rules1 = {
   username: [{ required: true, message: "必填", trigger: "blur" }],
