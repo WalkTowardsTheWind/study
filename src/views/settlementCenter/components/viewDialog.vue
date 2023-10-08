@@ -28,9 +28,9 @@
         <!--          <td>渠道状态</td>-->
         <!--          <td>收佣渠道</td>-->
         <!--        </tr>-->
-        <tr v-if="formItem.settlement_time">
+        <tr v-if="formItem.confirm_time">
           <td>确认时间时间</td>
-          <td>{{ formatToDateTime(formItem.settlement_time) }}</td>
+          <td>{{ formItem.confirm_time }}</td>
         </tr>
         <tr>
           <td>渠道佣金税前</td>
@@ -79,9 +79,7 @@
   </el-dialog>
 </template>
 <script setup lang="ts">
-import { formatToDateTime } from "@/utils/dateUtil";
 import { updateChannelSettlementStatus } from "@/api/settlementCenter/channelCommissionSettlement";
-const { proxy } = getCurrentInstance() as any;
 const emit = defineEmits(["update:dialogVisible", "up-Table"]);
 const props = defineProps({
   dialogVisible: { type: Boolean, default: false },
