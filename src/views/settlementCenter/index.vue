@@ -35,8 +35,8 @@ const tabsList = reactive([
 
 const enterprise = ref();
 const channelCommission = ref();
-const handleTabChange = (active: string) => {
-  sessionStorage.setItem("account", active);
+const handleTabChange = (tab: string) => {
+  sessionStorage.setItem("settlementCenter", tab);
   // if (route.query.activeName) {
   //   if (route.query.activeName === "enterprise") {
   //     activeName.value = "enterprise";
@@ -44,14 +44,23 @@ const handleTabChange = (active: string) => {
   //     activeName.value = "channelCommission";
   //   }
   // }
-
   // if (activeName.value === "enterprise") {
   //   enterprise.value.getTableData();
   // } else if (activeName.value === "channelCommission") {
   //   channelCommission.value.getTableData();
   // }
+  upData();
 };
+const upData = () => {
+  activeName.value = sessionStorage.getItem("settlementCenter") || "enterprise";
+  if (activeName.value === "enterprise") {
+    enterprise.value.getTableData();
+  } else if (activeName.value === "channelCommission") {
+    channelCommission.value.getTableData();
+  }
+};
+
 onMounted(() => {
-  activeName.value = sessionStorage.getItem("account") || "enterprise";
+  upData();
 });
 </script>
