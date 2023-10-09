@@ -4,14 +4,14 @@
     <div class="high">
       <div class="title">
         <zxn-title>上级渠道</zxn-title>
-        <el-button
+        <!-- <el-button
           v-if="isEdit"
           class="add"
           plain
           type="primary"
           @click="add(newFormRef, 'top')"
           >+新增</el-button
-        >
+        > -->
       </div>
       <zxn-table
         :table-data="tableData1"

@@ -6,7 +6,11 @@
       @on-reset="handleReset"
     >
       <el-form-item>
-        <el-input v-model="formItem.name" placeholder="请输入账号名称">
+        <el-input
+          v-model="formItem.name"
+          placeholder="请输入账号名称"
+          clearable
+        >
           <template #prefix>
             <i-ep-Search />
           </template>
@@ -44,6 +48,7 @@
         <el-input
           v-model="formItem.channel_admin_name"
           placeholder="请输入渠道管理员姓名"
+          clearable
         >
           <template #prefix>
             <i-ep-Search />
@@ -67,6 +72,7 @@
     <zxn-table
       :table-data="tableData"
       :column-list="columnList"
+      :loading="isLoading"
       hasSelect
       :page-info="pageInfo"
       @page-change="pageChange"
@@ -161,6 +167,7 @@ const pageInfo = reactive({
   total: 0,
 });
 
+const isLoading = ref(false);
 const tableData = reactive([] as any);
 const columnList = [
   { label: "账号名称", prop: "username", minWidth: 150 },
@@ -219,6 +226,7 @@ function pageChange(current: any) {
 }
 
 function handleSearch() {
+  isLoading.value = true;
   let params = {
     keyword: formItem.name,
     channel_type: formItem.channel_type,
@@ -235,6 +243,7 @@ function handleSearch() {
     tableData.length = 0;
     tableData.push(...res.data.data);
     pageInfo.total = res.data.total;
+    isLoading.value = false;
   });
 }
 
