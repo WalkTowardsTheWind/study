@@ -250,7 +250,7 @@ const handleInspect = () => {
 const handleDetails = (scope: any) => {
   router.push({
     name: "settlementDocDetails",
-    query: { activeName: "1", id: scope.row.id },
+    query: { activeName: "1", id: scope.row.company_settlement_id },
   });
 };
 /**
