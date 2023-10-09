@@ -16,6 +16,21 @@
                 </template>
               </el-input>
             </el-form-item>
+            <el-form-item label="结算类型">
+              <el-select
+                v-model="formItem.settlement_type"
+                @change="handleSearch"
+              >
+                <el-option
+                  v-for="item in proxy.$const[
+                    'settlementCenterEnum.settlement_type'
+                  ]"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
             <el-form-item label="渠道名称">
               <el-select
                 v-model="formItem.channel_id"
@@ -52,21 +67,6 @@
             </el-form-item>
             <el-form-item prop="date" label="结算时间">
               <zxn-date-range v-model="formItem.timeData" />
-            </el-form-item>
-            <el-form-item label="结算类型">
-              <el-select
-                v-model="formItem.settlement_type"
-                @change="handleSearch"
-              >
-                <el-option
-                  v-for="item in proxy.$const[
-                    'settlementCenterEnum.settlement_type'
-                  ]"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
             </el-form-item>
             <el-form-item label="结算状态">
               <el-select v-model="formItem.status" @change="handleSearch">
@@ -414,7 +414,7 @@ const getTableData = async () => {
   if (!(formItem.value.channel_id && formItem.value.company_id)) {
     ElMessage({
       type: "warning",
-      message: `请先选择渠道和企业`,
+      message: `请先选择结算类型、渠道和企业`,
     });
     return;
   }
