@@ -58,7 +58,7 @@
                 />
               </el-select>
             </el-form-item>
-            <el-form-item>
+            <el-form-item v-show="IsSearch">
               <el-input v-model="formItem.keywords" placeholder="请输入关键字">
                 <template #prefix>
                   <el-icon><i-ep-Search /></el-icon>
@@ -106,6 +106,11 @@
         </div>
 
         <!-- </zxn-bottom-btn> -->
+      </template>
+      <template #right>
+        <div @click="handleIsSearch">
+          <el-icon><i-ep-Search /></el-icon>
+        </div>
       </template>
     </zxn-tabs>
     <viewDialog
@@ -181,6 +186,10 @@ const getCompany = async () => {
   optionsCompany.value.push(...newData);
 };
 // 查询重置
+const IsSearch = ref(false);
+const handleIsSearch = () => {
+  IsSearch.value = !IsSearch.value;
+};
 const pageInfo = reactive({
   page: 1,
   total: 0,
