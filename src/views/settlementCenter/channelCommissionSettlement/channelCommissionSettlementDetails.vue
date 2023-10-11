@@ -209,7 +209,7 @@ const tableData = reactive([] as any);
 const columnList = [
   { label: "企业名称", prop: "company_name" },
   { label: "结算类型", prop: "settlement_type" },
-  { label: "发票类型", prop: "invoice_type" },
+  { label: "发票类型", prop: "invoice_type", width: 180 },
   { label: "成本点位", prop: "cost_tax_point" },
   { label: "企业点位", prop: "tax_point" },
   { label: "渠道点位", prop: "channel_point" },
@@ -346,8 +346,12 @@ const getTableData = async () => {
       return {
         id: item.id,
         company_name: item.company_name,
-        settlement_type: item.settlement_type,
-        invoice_type: item.invoice_type,
+        settlement_type:
+          proxy.$enumSet["settlementCenterEnum.settlement_type"][
+            item.settlement_type
+          ],
+        invoice_type:
+          proxy.$enumSet["settlementCenterEnum.InvoiceType"][item.invoice_type],
         cost_tax_point: item.cost_tax_point,
         tax_point: item.tax_point,
         channel_point: item.channel_point,
