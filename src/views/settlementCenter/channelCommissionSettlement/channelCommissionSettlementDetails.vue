@@ -154,6 +154,7 @@ import { useRouter, useRoute } from "vue-router";
 import {
   getChannelSettlementDetails,
   getDocDetails,
+  getChannelToBeSettlementTaskExcel,
 } from "@/api/settlementCenter/channelCommissionSettlement";
 import viewDialog from "../components/viewDialog.vue";
 import { ElMessage } from "element-plus";
@@ -320,13 +321,13 @@ const handleExport = () => {
  * 下载Excel
  */
 const handleExcel = async (ids: Array<string>) => {
-  // const params = {
-  //   ids,
-  //   page: 1,
-  //   limit: pageInfo.limit,
-  // };
-  // const { data } = await getChannelSettlementDocExcel(params);
-  // downloadByData(data, "渠道佣金结算单Excel.xlsx");
+  const params = {
+    ids,
+    page: 1,
+    limit: pageInfo.limit,
+  };
+  const { data } = await getChannelToBeSettlementTaskExcel(params);
+  downloadByData(data, "待结算佣金任务列表Excel.xlsx");
 };
 //获取数据
 const getTableData = async () => {
