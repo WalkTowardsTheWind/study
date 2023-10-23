@@ -109,7 +109,7 @@
           link
           type="primary"
           @click="handleDelete(scope)"
-          v-if="[4].includes(scope.row.status)"
+          v-if="[0, 4].includes(scope.row.status)"
           >删除</el-button
         >
         <el-button link @click="handleDetails(scope)">详情</el-button>
