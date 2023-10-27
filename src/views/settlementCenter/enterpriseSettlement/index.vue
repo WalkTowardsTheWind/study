@@ -46,12 +46,11 @@
       :column-list="columnList"
       :page-info="pageInfo"
       @page-change="handlePageChange"
-      hasSelect
-      @selection-change="handleSelect"
       field-total="real_money"
     >
       <template #tableTop>
-        <el-dropdown
+        <el-button type="primary" @click="handleExport">导出</el-button>
+        <!-- <el-dropdown
           class="ml-4"
           trigger="click"
           @command="handleBatchOperation"
@@ -60,10 +59,10 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="1">导出</el-dropdown-item>
-              <!-- <el-dropdown-item command="2">删除</el-dropdown-item> -->
+              <el-dropdown-item command="2">删除</el-dropdown-item>
             </el-dropdown-menu>
           </template>
-        </el-dropdown>
+        </el-dropdown> -->
       </template>
       <template #status="scope">
         <div
@@ -380,16 +379,23 @@ const handleSelect = (data: any) => {
   selectionData.value = data.map((item: any) => item.id);
 };
 
+// 导出
+const handleExport = async () => {
+  const params = transformTimeRange({ ...formItem.value }) as any;
+  const { data } = await getEnterpriseExcel(params);
+  downloadByData(data, "结算列表.xlsx");
+  await getTableData();
+};
 /**
  * 批量操作
  */
-const handleBatchOperation = async (command: string | number | object) => {
-  if (command == 1) {
-    const { data } = await getEnterpriseExcel({ ids: selectionData.value });
-    downloadByData(data, "结算列表.xlsx");
-    await getTableData();
-  }
-};
+// const handleBatchOperation = async (command: string | number | object) => {
+//   if (command == 1) {
+//     const { data } = await getEnterpriseExcel({ ids: selectionData.value });
+//     downloadByData(data, "结算列表.xlsx");
+//     await getTableData();
+//   }
+// };
 
 const getTableData = async () => {
   const params = transformTimeRange({ ...formItem.value }) as any;

@@ -9,17 +9,10 @@
             @on-search="handleSearch"
             @on-reset="handleReset"
           >
-            <el-form-item>
-              <el-input v-model="formItem.keywords" placeholder="请输入关键字">
-                <template #prefix>
-                  <el-icon><i-ep-Search /></el-icon>
-                </template>
-              </el-input>
-            </el-form-item>
             <el-form-item label="结算类型">
               <el-select
                 v-model="formItem.settlement_type"
-                @change="handleSearch"
+                @change="handleUpdata"
               >
                 <el-option
                   v-for="item in proxy.$const[
@@ -37,7 +30,7 @@
                 filterable
                 clearable
                 placeholder="请选择渠道"
-                @change="getCompany"
+                @change="handleUpdata"
               >
                 <el-option
                   v-for="item in optionsChannel"
@@ -64,6 +57,13 @@
                   :value="item.value"
                 />
               </el-select>
+            </el-form-item>
+            <el-form-item v-show="IsSearch">
+              <el-input v-model="formItem.keywords" placeholder="请输入关键字">
+                <template #prefix>
+                  <el-icon><i-ep-Search /></el-icon>
+                </template>
+              </el-input>
             </el-form-item>
             <el-form-item prop="date" label="结算时间">
               <zxn-date-range v-model="formItem.timeData" />
@@ -106,6 +106,11 @@
         </div>
 
         <!-- </zxn-bottom-btn> -->
+      </template>
+      <template #right>
+        <div @click="handleIsSearch">
+          <el-icon><i-ep-Search /></el-icon>
+        </div>
       </template>
     </zxn-tabs>
     <viewDialog
@@ -158,6 +163,14 @@ const getChannel = async () => {
 const companySelect = ref();
 const optionsCompany = ref<ListItem[]>([]);
 const getCompany = async () => {
+  if (!formItem.value.channel_id) {
+    ElMessage({
+      type: "warning",
+      message: `请先选择渠道名称`,
+    });
+    return;
+  }
+
   let params = {
     channel_id: formItem.value.channel_id,
     settlement_type: formItem.value.settlement_type,
@@ -173,6 +186,10 @@ const getCompany = async () => {
   optionsCompany.value.push(...newData);
 };
 // 查询重置
+const IsSearch = ref(false);
+const handleIsSearch = () => {
+  IsSearch.value = !IsSearch.value;
+};
 const pageInfo = reactive({
   page: 1,
   total: 0,
@@ -190,6 +207,10 @@ const handleReset = () => {
     limit: "",
   };
   handleSearch();
+};
+const handleUpdata = () => {
+  formItem.value.company_id = "";
+  getCompany();
 };
 const handleIsSelect = () => {
   if (!formItem.value.channel_id) {

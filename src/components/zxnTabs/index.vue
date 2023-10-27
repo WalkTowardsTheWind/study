@@ -12,13 +12,9 @@
         <component :is="item.subassembly"></component>
       </el-tab-pane>
     </el-tabs>
-    <!--    <div class="zxn-tabs-back" v-if="hasUpdate" @click="handleClickRight">-->
-    <!--&lt;!&ndash;      <el-icon size="14" color="#474747">&ndash;&gt;-->
-    <!--&lt;!&ndash;                <i-ep-ArrowLeft v-if="hasBack" />&ndash;&gt;-->
-    <!--&lt;!&ndash;        <i-ep-RefreshRight v-if="hasUpdate" />&ndash;&gt;-->
-    <!--&lt;!&ndash;      </el-icon>&ndash;&gt;-->
-    <!--&lt;!&ndash;      <span>{{ hasBack ? "返回上一级" : "更新" }}</span>&ndash;&gt;-->
-    <!--    </div>-->
+    <div class="zxn-tabs-back">
+      <slot name="right"></slot>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>

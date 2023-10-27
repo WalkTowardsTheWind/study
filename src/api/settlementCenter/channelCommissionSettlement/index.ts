@@ -90,17 +90,17 @@ export function rebuild(data: id) {
     params: data,
   });
 }
-// /**
-//  *下载渠道结算单Excel
-//  */
-// export function getChannelSettlementDocExcel(params: ids) {
-//   return request({
-//     url: `/adminapi/invoice/get_invoice_list_excel`,
-//     method: "GET",
-//     params,
-//     responseType: "arraybuffer",
-//   });
-// }
+/**
+ *导出待结算佣金任务列表Excel
+ */
+export function getChannelToBeSettlementTaskExcel(params: ids) {
+  return request({
+    url: `/adminapi/finance/channel/get_list_excel`,
+    method: "GET",
+    params,
+    responseType: "arraybuffer",
+  });
+}
 /**
  *获取新建渠道结算单列表
  *

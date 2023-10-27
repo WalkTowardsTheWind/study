@@ -44,14 +44,14 @@
         </zxn-select>
       </el-form-item>
       <el-form-item label="收入类型">
-        <el-select v-model="formItem.settlement_type" @change="handleSearch">
+        <zxn-select v-model="formItem.settlement_type" @change="handleSearch">
           <el-option
             v-for="item in proxy.$const['settlementCenterEnum.settlement_type']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
-        </el-select>
+        </zxn-select>
       </el-form-item>
       <el-form-item prop="date" label="创建日期">
         <zxn-date-range v-model="formItem.createTimeData" />
@@ -109,7 +109,7 @@
           link
           type="primary"
           @click="handleDelete(scope)"
-          v-if="[4].includes(scope.row.status)"
+          v-if="[0, 4].includes(scope.row.status)"
           >删除</el-button
         >
         <el-button link @click="handleDetails(scope)">详情</el-button>
@@ -160,7 +160,7 @@ const handleReset = () => {
   formItem.value = {
     keywords: "",
     status: "",
-    settlement_type: "1",
+    settlement_type: "",
     createTimeData: [],
     paymentTimeData: [],
     page: "",
@@ -201,7 +201,7 @@ var not_total_money = ref();
 const formItem = ref({
   keywords: "",
   status: "",
-  settlement_type: "1",
+  settlement_type: "",
   createTimeData: [],
   paymentTimeData: [],
   page: "",
