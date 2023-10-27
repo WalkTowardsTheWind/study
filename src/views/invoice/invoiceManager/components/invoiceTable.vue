@@ -70,10 +70,14 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="reject">驳回</el-dropdown-item>
-              <el-dropdown-item command="excel">导出</el-dropdown-item>
+              <!--              <el-dropdown-item command="excel">导出</el-dropdown-item>-->
             </el-dropdown-menu>
           </template>
         </el-dropdown>
+
+        <el-button class="ml-16px" type="primary" plain @click="handleExcel"
+          >导出</el-button
+        >
       </template>
       <template #img="{ row }">
         <zxn-image
@@ -307,15 +311,15 @@ const handleReject = (ids: number[]) => {
     getList();
   });
 };
-const handleExcel = async (ids: number[]) => {
-  const params = {
-    ids,
-    page: 1,
-    limit: pageInfo.limit,
-  };
+const handleExcel = async () => {
+  const params = transformTimeRange({ ...formItem });
+  params.category_id = params.category_id.pop();
+  params.task_type = props.type;
+  params.page = 1;
+  params.limit = "9999";
   const { data } = await getInvoiceExcel(params);
   downloadByData(data, "发票列表.xlsx");
-  await getList();
+  // await getList();
 };
 
 const handleUpload = (cur) => {
