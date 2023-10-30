@@ -37,6 +37,10 @@ const filterAsyncRoutes = (routes: RouteRecordRaw[]) => {
     if (route.children) {
       tmpRoute.children = filterAsyncRoutes(route.children);
     }
+
+    if (route.title && route.title === "工作台") {
+      tmpRoute.meta.affix = true;
+    }
     // console.log(tmpRoute, "tmpRoute");
     asyncRoutes.push(tmpRoute);
   });
