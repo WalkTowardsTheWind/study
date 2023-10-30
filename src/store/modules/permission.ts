@@ -30,7 +30,6 @@ const filterAsyncRoutes = (routes: RouteRecordRaw[]) => {
       const component = modules[`../../views/${route.c_path}.vue`];
       if (component) {
         tmpRoute.component = component;
-        // tmpRoute.name = 'taskManagerIndex';
       } else {
         tmpRoute.component = modules[`../../views/error-page/404.vue`];
       }
@@ -63,7 +62,7 @@ export const usePermissionStore = defineStore("permission", () => {
     const accessedRoutes = filterAsyncRoutes(menuList);
     console.log(accessedRoutes);
     // const accessedRoutes: any[] = [];
-    // setRoutes(accessedRoutes);
+    setRoutes(accessedRoutes);
     hasRoles.value = true;
     return accessedRoutes;
   }
