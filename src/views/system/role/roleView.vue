@@ -170,6 +170,7 @@ const handleSelect = (obj) => {
       );
       break;
   }
+  checkUpChange(obj);
 };
 const handleSelectChange = (obj) => {
   const { type, rank, secondRank, thirdRank } = obj;
@@ -181,17 +182,27 @@ const handleSelectChange = (obj) => {
       break;
     case "second":
       val = roleList[secondRank.value].children[rank].selected;
-      roleList[secondRank.value].selected = roleList[
-        secondRank.value
-      ].children.reduce((arr, cur) => {
-        return arr || cur.selected;
-      }, false);
       changeSelect(roleList[secondRank.value].children[rank].children, val);
       break;
     case "third":
       val =
         roleList[secondRank.value].children[thirdRank.value].children[rank]
           .selected;
+      break;
+  }
+  checkUpChange(obj);
+};
+const checkUpChange = (obj) => {
+  const { type, secondRank, thirdRank } = obj;
+  switch (type) {
+    case "second":
+      roleList[secondRank.value].selected = roleList[
+        secondRank.value
+      ].children.reduce((arr, cur) => {
+        return arr || cur.selected;
+      }, false);
+      break;
+    case "third":
       roleList[secondRank.value].children[thirdRank.value].selected = roleList[
         secondRank.value
       ].children[thirdRank.value].children.reduce((arr, cur) => {
