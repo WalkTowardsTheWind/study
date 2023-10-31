@@ -37,7 +37,9 @@ const filterAsyncRoutes = (routes: RouteRecordRaw[]) => {
     if (route.children) {
       tmpRoute.children = filterAsyncRoutes(route.children);
     }
-
+    if (route.path === "/") {
+      tmpRoute.redirect = "/dashboard";
+    }
     if (route.title && route.title === "工作台") {
       tmpRoute.meta.affix = true;
     }
