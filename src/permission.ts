@@ -37,16 +37,16 @@ router.beforeEach(async (to, from, next) => {
       } else {
         try {
           const menuList = userStore.menusList;
-          const accessRoutes = permissionStore.generateRoutes(menuList);
-          accessRoutes.forEach((route) => {
-            // console.log(route, "=========");
-            router.addRoute(route);
-          });
+          permissionStore.generateRoutes(menuList);
+          // accessRoutes.forEach((route) => {
+          //   // console.log(route, "=========");
+          //   router.addRoute(route);
+          // });
           next({ ...to, replace: true });
         } catch (error) {
           // 移除 token 并跳转登录页
           await userStore.resetToken();
-          next(`/login?redirect=${to.path}`);
+          next(`/login`);
           NProgress.done();
         }
       }
@@ -56,7 +56,7 @@ router.beforeEach(async (to, from, next) => {
     if (whiteList.indexOf(to.path) !== -1) {
       next();
     } else {
-      next(`/login?redirect=${to.path}`);
+      next(`/login`);
       NProgress.done();
     }
   }

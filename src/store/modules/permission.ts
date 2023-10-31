@@ -3,8 +3,24 @@ import { defineStore } from "pinia";
 import { constantRoutes } from "@/router";
 import { store } from "@/store";
 
-const modules = import.meta.glob("../../views/**/**.vue");
-const Layout = () => import("@/layout/index.vue");
+// const modules = import.meta.glob("../../views/**/**.vue");
+// const Layout = () => import("@/layout/index.vue");
+
+const baseRouter = [
+  {
+    path: "/",
+    redirect: "/dashboard",
+    name: "dashboard",
+    meta: { title: "首页", icon: "dashboard" },
+    children: [
+      {
+        path: "dashboard",
+        name: "Dashboard",
+        meta: { title: "工作台", icon: "dashboard", affix: true },
+      },
+    ],
+  },
+];
 
 /**
  * 递归过滤有权限的异步(动态)路由
@@ -22,21 +38,7 @@ const filterAsyncRoutes = (routes: RouteRecordRaw[]) => {
       title: route.title,
       icon: route.icon,
       hidden: !route.is_header,
-      keepAlive: route.c_cache === "1",
     };
-    if (route.module) {
-      tmpRoute.name = route.module;
-    }
-    if (route.c_path?.toString() === "Layout") {
-      tmpRoute.component = Layout;
-    } else {
-      const component = modules[`../../views/${route.c_path}.vue`];
-      if (component) {
-        tmpRoute.component = component;
-      } else {
-        tmpRoute.component = modules[`../../views/error-page/404.vue`];
-      }
-    }
     if (route.children) {
       tmpRoute.children = filterAsyncRoutes(route.children);
     }
@@ -50,11 +52,11 @@ const filterAsyncRoutes = (routes: RouteRecordRaw[]) => {
 export const usePermissionStore = defineStore("permission", () => {
   // state
   const hasRoles = ref(false);
-  const routes = ref<RouteRecordRaw[]>(constantRoutes);
+  const routes = ref<RouteRecordRaw[]>(baseRouter);
 
   // actions
   function setRoutes(newRoutes: RouteRecordRaw[]) {
-    routes.value = constantRoutes.concat(newRoutes);
+    routes.value = baseRouter.concat(newRoutes);
   }
   /**
    * 生成动态路由
