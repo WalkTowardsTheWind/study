@@ -24,6 +24,9 @@ const filterAsyncRoutes = (routes: RouteRecordRaw[]) => {
       hidden: !route.is_header,
       keepAlive: route.c_cache === "1",
     };
+    if (route.module) {
+      tmpRoute.name = route.module;
+    }
     if (route.c_path?.toString() === "Layout") {
       tmpRoute.component = Layout;
     } else {
@@ -36,12 +39,6 @@ const filterAsyncRoutes = (routes: RouteRecordRaw[]) => {
     }
     if (route.children) {
       tmpRoute.children = filterAsyncRoutes(route.children);
-    }
-    if (route.path === "/") {
-      tmpRoute.redirect = "/dashboard";
-    }
-    if (route.title && route.title === "工作台") {
-      tmpRoute.meta.affix = true;
     }
     // console.log(tmpRoute, "tmpRoute");
     asyncRoutes.push(tmpRoute);

@@ -22,10 +22,18 @@ export const constantRoutes: RouteRecordRaw[] = [
     meta: { hidden: true },
   },
   {
-    path: "/error",
+    path: "/",
     component: Layout,
-    meta: { hidden: true },
+    redirect: "/dashboard",
+    name: "dashboard",
+    meta: { title: "首页", icon: "dashboard" },
     children: [
+      {
+        path: "dashboard",
+        component: () => import("@/views/dashboard/index.vue"),
+        name: "Dashboard",
+        meta: { title: "工作台", affix: true, icon: "dashboard" },
+      },
       {
         path: "401",
         component: () => import("@/views/error-page/401.vue"),
@@ -38,31 +46,6 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
-  // {
-  //   path: "/",
-  //   component: Layout,
-  //   redirect: "/dashboard",
-  //   name: "dashboard",
-  //   meta: { title: "首页", icon: "dashboard" },
-  //   children: [
-  //     {
-  //       path: "dashboard",
-  //       component: () => import("@/views/dashboard/index.vue"),
-  //       name: "Dashboard",
-  //       meta: { title: "工作台", affix: true, icon: "dashboard" },
-  //     },
-  //     {
-  //       path: "401",
-  //       component: () => import("@/views/error-page/401.vue"),
-  //       meta: { hidden: true },
-  //     },
-  //     {
-  //       path: "404",
-  //       component: () => import("@/views/error-page/404.vue"),
-  //       meta: { hidden: true },
-  //     },
-  //   ],
-  // },
   // // 账户管理
   // {
   //   path: "/accountManage",
