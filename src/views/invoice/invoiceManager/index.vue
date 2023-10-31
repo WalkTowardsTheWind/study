@@ -62,10 +62,10 @@ const tabsList = [
   //   name: "channel",
   //   label: "渠道发票",
   // },
-  {
-    name: "taxPayment",
-    label: "完税凭证",
-  },
+  // {
+  //   name: "taxPayment",
+  //   label: "完税凭证",
+  // },
 ];
 const enterprise = ref();
 const channel = ref();

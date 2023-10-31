@@ -103,7 +103,7 @@
               <el-form-item label="账户ID">
                 <el-input v-model="addForm.account" placeholder="请输入" />
               </el-form-item>
-              <el-form-item label="密码">
+              <el-form-item v-if="!isEdit" label="密码">
                 <el-input
                   v-model="addForm.pwd"
                   type="password"
@@ -112,7 +112,7 @@
                 >
                 </el-input>
               </el-form-item>
-              <el-form-item label="确认密码">
+              <el-form-item v-if="!isEdit" label="确认密码">
                 <el-input
                   v-model="addForm.conf_pwd"
                   type="password"
