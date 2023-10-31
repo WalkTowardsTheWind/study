@@ -1,8 +1,8 @@
 <template>
   <div class="role-table">
     <div class="role-table-header">
-      <span class="role-table-header-title">{{ floor }}级分类</span>
       <el-checkbox :disabled="!list.length" v-model="selected" />
+      <span class="role-table-header-title">{{ floor }}级分类</span>
     </div>
     <div
       v-for="(item, index) in list"
@@ -86,12 +86,12 @@ defineExpose({
   &-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     height: 56px;
     padding: 0 16px;
     background-color: #eff4fe;
 
     &-title {
+      margin-left: 8px;
       font-size: 14px;
       color: #656565;
     }

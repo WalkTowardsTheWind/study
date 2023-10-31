@@ -1,11 +1,16 @@
 <template>
   <zxn-plan has-bottom class="role-view">
     <zxn-tabs
-      :tabsList="[{ name: 'role', label: '新增角色' }]"
+      :tabsList="[
+        {
+          name: 'role',
+          label: $route.name == 'addRole' ? '新增角色' : '编辑角色',
+        },
+      ]"
       active-name="role"
       has-back
     />
-    <div class="mt-10px pl-40px">
+    <div class="mt-25px pl-40px">
       <el-form
         ref="form"
         label-width="70px"

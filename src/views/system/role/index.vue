@@ -6,26 +6,13 @@
       hasUpdate
     />
     <div class="p-[24px] p-b-[0]">
-      <!--      <zxn-search-->
-      <!--        :formItem="formItem"-->
-      <!--        @on-search="handleSearch"-->
-      <!--        @on-reset="handleSearch"-->
-      <!--      >-->
-      <!--        <el-form-item prop="role_name">-->
-      <!--          <el-input v-model="formItem.role_name" placeholder="请输入关键字">-->
-      <!--            <template #prefix>-->
-      <!--              <el-icon><i-ep-Search /></el-icon>-->
-      <!--            </template>-->
-      <!--          </el-input>-->
-      <!--        </el-form-item>-->
-      <!--      </zxn-search>-->
       <zxn-table
         ref="table"
         :table-data="tableData"
         :column-list="columnList"
         hasSelect
-        :loading="loading"
         :hasPagination="false"
+        :loading="loading"
       >
         <template #tableTop>
           <div class="flex justify-between">
@@ -96,14 +83,23 @@ const columnList = [
     showOverflowTooltip: true,
     minWidth: 150,
   },
-  { label: "账号数量", minWidth: 120 },
   {
-    label: "状态",
+    label: "账号状态",
     prop: "status",
     path: "system.roleType",
     type: "enum",
-    minWidth: 120,
+    minWidth: 100,
+    color: {
+      0: { color: "#3aadf6", background: "#DFF2FE" },
+      1: { color: "#366FF4", background: "#DFE8FD" },
+    },
   },
+  {
+    label: "账号数量",
+    minWidth: 120,
+    prop: "role_num",
+  },
+
   { label: "创建时间", prop: "update_time", width: 180 },
   { label: "操作", slot: "operation", fixed: "right", width: 150 },
 ];
@@ -119,10 +115,8 @@ const getList = async () => {
     loading.value = false;
     tableData.length = 0;
     tableData.push(...data.list);
-    console.log(tableData);
   } catch (e) {
     loading.value = false;
-    console.log(e);
   }
 };
 const handleAdd = () => {
@@ -173,7 +167,7 @@ const handleCommand = async (instar: "reject" | "fulfill", id) => {
   }
   ElMessageBox({
     title: "",
-    message: h("p", null, `确定${instar === "reject" ? "停用" : "启用"}该任务`),
+    message: h("p", null, `确定${instar === "reject" ? "停用" : "启用"}该角色`),
     showCancelButton: true,
     confirmButtonText: "确定",
     cancelButtonText: "取消",
@@ -188,19 +182,24 @@ const handleCommand = async (instar: "reject" | "fulfill", id) => {
           ids,
           status: instar === "reject" ? 0 : 1,
         };
-        await setRoleStatus(params);
-        instance.confirmButtonLoading = false;
-        done();
+        try {
+          await setRoleStatus(params);
+          instance.confirmButtonLoading = false;
+          done();
+          ElMessage({
+            type: "success",
+            message: `${instar === "reject" ? "停用" : "启用"}成功`,
+          });
+          getList();
+        } catch (error) {
+          console.log(`output->error`, error);
+          instance.confirmButtonLoading = false;
+          done();
+        }
       } else {
         done();
       }
     },
-  }).then(() => {
-    ElMessage({
-      type: "success",
-      message: `${instar === "reject" ? "停用" : "启用"}成功`,
-    });
-    getList();
   });
 };
 const handleEdit = (id) => {
