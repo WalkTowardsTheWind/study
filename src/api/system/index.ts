@@ -7,7 +7,7 @@ import { RoleQuery, LogQuery, menusQuery, SetRoleQuery } from "./types";
  * @param params
  */
 
-export function getRolePage(params: RoleQuery): AxiosPromise {
+export function getRolePage(params?: RoleQuery): AxiosPromise {
   return request({
     url: "/adminapi/setting/role",
     method: "GET",
@@ -156,5 +156,106 @@ export function setTaxLand(params: any): AxiosPromise {
     url: "/adminapi/setTaxLand",
     method: "GET",
     params,
+  });
+}
+
+// user
+
+/**
+ * 获取角色下拉框数据
+ * @param params
+ */
+
+export function getEnableRole(params?: RoleQuery): AxiosPromise {
+  return request({
+    url: "/adminapi/setting/role_list",
+    method: "GET",
+    params,
+  });
+}
+/**
+ * 获取所有账号列表
+ * @param data
+ */
+
+export function getOtherAccountList(params: any) {
+  return request({
+    url: "/adminapi/setting/admin",
+    method: "get",
+    params,
+  });
+}
+
+/**
+ * 创建账号
+ * @param data
+ */
+
+export function createOtherAccount(data: any) {
+  return request({
+    url: "/adminapi/setting/admin/createAdmin",
+    method: "post",
+    data,
+  });
+}
+
+/**
+ * 编辑账号
+ * @param data
+ */
+
+export function updateOtherAccount(data: any) {
+  return request({
+    url: `/adminapi/setting/admin/${data.id}`,
+    method: "put",
+    data,
+  });
+}
+
+/**
+ * 获取账号详情
+ * @param id
+ */
+
+export function getOtherAccountDetail(id: string) {
+  return request({
+    url: `/adminapi/setting/admin/read/${id}`,
+    method: "get",
+  });
+}
+
+/**
+ * 删除账号
+ * @param id
+ */
+
+export function delOtherAccount(id: string) {
+  return request({
+    url: `/adminapi/setting/admin/${id}`,
+    method: "delete",
+  });
+}
+
+/**
+ * 更新账户状态
+ * @param id
+ */
+
+export function updateOtherAccountStatus(params: any) {
+  return request({
+    url: `/adminapi/setting/set_status/${params.id}/${params.status}`,
+    method: "put",
+  });
+}
+
+/**
+ * 查省列表传0
+ * @param id
+ */
+
+export function getAreaIdList(parent_id = "0") {
+  return request({
+    url: `/adminapi/setting/city/list/${parent_id}`,
+    method: "get",
   });
 }
