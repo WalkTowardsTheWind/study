@@ -1,11 +1,16 @@
 <template>
   <zxn-plan has-bottom class="role-view">
     <zxn-tabs
-      :tabsList="[{ name: 'role', label: '新增角色' }]"
+      :tabsList="[
+        {
+          name: 'role',
+          label: $route.name == 'addRole' ? '新增角色' : '编辑角色',
+        },
+      ]"
       active-name="role"
       has-back
     />
-    <div class="mt-10px pl-40px">
+    <div class="mt-25px pl-40px">
       <el-form
         ref="form"
         label-width="70px"
@@ -165,6 +170,7 @@ const handleSelect = (obj) => {
       );
       break;
   }
+  checkUpChange(obj);
 };
 const handleSelectChange = (obj) => {
   const { type, rank, secondRank, thirdRank } = obj;
@@ -176,18 +182,37 @@ const handleSelectChange = (obj) => {
       break;
     case "second":
       val = roleList[secondRank.value].children[rank].selected;
-      roleList[secondRank.value].selected =
-        roleList[secondRank.value].selected || val;
       changeSelect(roleList[secondRank.value].children[rank].children, val);
       break;
     case "third":
       val =
         roleList[secondRank.value].children[thirdRank.value].children[rank]
           .selected;
-      roleList[secondRank.value].selected =
-        roleList[secondRank.value].selected || val;
-      roleList[secondRank.value].children[thirdRank.value].selected =
-        roleList[secondRank.value].children[thirdRank.value].selected || val;
+      break;
+  }
+  checkUpChange(obj);
+};
+const checkUpChange = (obj) => {
+  const { type, secondRank, thirdRank } = obj;
+  switch (type) {
+    case "second":
+      roleList[secondRank.value].selected = roleList[
+        secondRank.value
+      ].children.reduce((arr, cur) => {
+        return arr || cur.selected;
+      }, false);
+      break;
+    case "third":
+      roleList[secondRank.value].children[thirdRank.value].selected = roleList[
+        secondRank.value
+      ].children[thirdRank.value].children.reduce((arr, cur) => {
+        return arr || cur.selected;
+      }, false);
+      roleList[secondRank.value].selected = roleList[
+        secondRank.value
+      ].children.reduce((arr, cur) => {
+        return arr || cur.selected;
+      }, false);
       break;
   }
 };

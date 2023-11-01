@@ -22,10 +22,22 @@
           @on-logistics="handleLogistics"
         />
       </template>
+      <template #taxPayment>
+        <taxPaymentReceipt
+          ref="taxPayment"
+          type="taxPayment"
+          @on-upload="handleUploadCredentials"
+          @on-logistics="handleLogistics"
+        />
+      </template>
     </zxn-tabs>
     <task-dialog ref="taskDialogRef" />
     <add-invoice ref="addInvoiceRef" @on-success="handleTabChange" />
     <logistics-dialog ref="logisticsDialogRef" />
+    <upload-credentials
+      ref="uploadCredentialsRef"
+      @on-success="handleTabChange"
+    />
   </zxn-plan>
 </template>
 <script lang="ts">
@@ -38,6 +50,8 @@ import taskDialog from "./components/taskDialog.vue";
 import addInvoice from "./components/addinvoice.vue";
 import invoiceTable from "./components/invoiceTable.vue";
 import logisticsDialog from "./components/logisticsDialog.vue";
+import taxPaymentReceipt from "./components/taxPaymentReceipt.vue";
+import uploadCredentials from "./components/uploadCredentials.vue";
 const activeName = ref("enterprise");
 const tabsList = [
   {
@@ -48,22 +62,33 @@ const tabsList = [
   //   name: "channel",
   //   label: "渠道发票",
   // },
+  // {
+  //   name: "taxPayment",
+  //   label: "完税凭证",
+  // },
 ];
 const enterprise = ref();
 const channel = ref();
+const taxPayment = ref();
 const handleTabChange = () => {
   if (activeName.value === "enterprise") {
     enterprise.value.getList();
-  } else {
+  } else if (activeName.value === "channel") {
     channel.value.getList();
+  } else if (activeName.value === "taxPayment") {
+    taxPayment.value.getList();
   }
 };
 const addInvoiceRef = ref();
-const handleUpload = (cur) => {
+const handleUpload = (cur: any) => {
   addInvoiceRef.value.init(cur.id);
 };
+const uploadCredentialsRef = ref();
+const handleUploadCredentials = (cur: any) => {
+  uploadCredentialsRef.value.init(cur.id);
+};
 const logisticsDialogRef = ref();
-const handleLogistics = (cur) => {
+const handleLogistics = (cur: any) => {
   logisticsDialogRef.value.init(cur.id);
 };
 onActivated(() => {

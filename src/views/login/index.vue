@@ -476,7 +476,9 @@ onUnmounted(() => {
   height: 100%;
   overflow: hidden;
   background-color: #f6f6f6;
-
+  :deep(.el-input .el-input__wrapper input) {
+    font-size: 16px;
+  }
   .loginLogo {
     position: absolute;
     top: -25%;

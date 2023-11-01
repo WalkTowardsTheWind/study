@@ -389,7 +389,11 @@
                     />
                   </el-select>
                 </el-form-item> -->
-                <el-form-item class="mt-25px" label="社会信用代码">
+                <el-form-item
+                  class="mt-25px"
+                  label="社会信用代码"
+                  prop="tax_organ_code"
+                >
                   <el-input
                     v-model="formItem.tax_organ_code"
                     placeholder="请输入"
@@ -655,7 +659,7 @@ const Rules3 = {
       trigger: "blur",
     },
   ],
-  tax_contract_term: [{ required: true, message: "请输入", trigger: "change" }],
+  tax_contract_term: [{ required: true, message: "请选择", trigger: "change" }],
   tax_reg_type: [{ required: true, message: "请选择", trigger: "change" }],
   tax_organ_code: [{ required: true, message: "请输入", trigger: "blur" }],
   agreement_url: [{ required: true, message: "请上传图片", trigger: "blur" }],

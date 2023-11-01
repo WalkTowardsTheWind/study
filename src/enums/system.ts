@@ -12,3 +12,8 @@ export enum roleType {
   "禁用" = 0,
   "启用" = 1,
 }
+
+export enum userStatus {
+  "关闭" = 0,
+  "启用",
+}

@@ -98,7 +98,7 @@
       </el-form>
       <zxn-bottom-btn v-if="isEdit">
         <el-button type="info" plain @click="$router.go(-1)">取消</el-button>
-        <el-button type="primary" @click="debouncedF1(formRef1)"
+        <el-button type="primary" @click="debouncedF(formRef1, 1)"
           >保存</el-button
         >
       </zxn-bottom-btn>
@@ -203,7 +203,7 @@
       </el-form>
       <zxn-bottom-btn v-if="isEdit">
         <el-button type="info" plain @click="$router.go(-1)">取消</el-button>
-        <el-button type="primary" @click="debouncedF2(formRef2)"
+        <el-button type="primary" @click="debouncedF(formRef2, 2)"
           >保存</el-button
         >
       </zxn-bottom-btn>
@@ -219,6 +219,7 @@ import {
 } from "@/api/account/channel";
 import { settlement_type, collection_type } from "./options";
 import { useDebounceFn } from "@vueuse/core";
+import router from "@/router";
 const props = defineProps({
   isEdit: {
     type: Boolean,
@@ -260,38 +261,33 @@ watch(
   }
 );
 
-const debouncedF1 = useDebounceFn((formInstance) => {
+const debouncedF = useDebounceFn((formInstance, type: number) => {
   // do something
-  updateAccount1(formInstance);
-}, 1000);
-const debouncedF2 = useDebounceFn((formInstance) => {
-  // do something
-  updateAccount2(formInstance);
+  updateAccount(formInstance, type);
 }, 1000);
 
-const updateAccount1 = async (formInstance) => {
+const updateAccount = async (formInstance, type) => {
   if (!formInstance) return;
   await formInstance.validate((valid, fields) => {
     if (valid) {
-      updateCompanyChannelAccount(formItem.value).then(() => {
-        ElMessage.success({
-          message: "保存成功",
-        });
-      });
-    } else {
-      console.log("error submit!", fields);
-    }
-  });
-};
-const updateAccount2 = async (formInstance) => {
-  if (!formInstance) return;
-  await formInstance.validate((valid, fields) => {
-    if (valid) {
-      updatePersonChannelAccount(formItem.value).then(() => {
-        ElMessage.success({
-          message: "保存成功",
-        });
-      });
+      switch (type) {
+        case 1:
+          updateCompanyChannelAccount(formItem.value).then(() => {
+            ElMessage.success({
+              message: "保存成功",
+            });
+          });
+          router.back();
+          break;
+        case 2:
+          updatePersonChannelAccount(formItem.value).then(() => {
+            ElMessage.success({
+              message: "保存成功",
+            });
+          });
+          router.back();
+          break;
+      }
     } else {
       console.log("error submit!", fields);
     }
