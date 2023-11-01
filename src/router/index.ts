@@ -508,6 +508,12 @@ export const constantRoutes: RouteRecordRaw[] = [
         name: "account",
         meta: { title: "账号设置", icon: "account" },
       },
+      {
+        path: "user",
+        component: () => import("@/views/system/user/index.vue"),
+        name: "user",
+        meta: { title: "账号管理" },
+      },
       // {
       //   path: "theme",
       //   component: () => import("@/views/system/theme/index.vue"),

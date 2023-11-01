@@ -97,13 +97,20 @@
             :title="dialogTitle"
             width="500px"
             :close-on-click-modal="false"
+            @closed="closeDialog"
           >
             <!-- 新增编辑 -->
-            <el-form label-width="70px" v-if="isAdd">
-              <el-form-item label="账户ID">
+            <el-form
+              ref="elFormRef"
+              :model="addForm"
+              label-width="80px"
+              v-if="isAdd"
+              :rules="rules"
+            >
+              <el-form-item label="账户ID" prop="account">
                 <el-input v-model="addForm.account" placeholder="请输入" />
               </el-form-item>
-              <el-form-item v-if="!isEdit" label="密码">
+              <el-form-item v-if="!isEdit" label="密码" prop="pwd">
                 <el-input
                   v-model="addForm.pwd"
                   type="password"
@@ -112,7 +119,7 @@
                 >
                 </el-input>
               </el-form-item>
-              <el-form-item v-if="!isEdit" label="确认密码">
+              <el-form-item v-if="!isEdit" label="确认密码" prop="conf_pwd">
                 <el-input
                   v-model="addForm.conf_pwd"
                   type="password"
@@ -121,7 +128,7 @@
                 >
                 </el-input>
               </el-form-item>
-              <el-form-item label="角色">
+              <el-form-item label="角色" prop="roles">
                 <el-select
                   class="w-full"
                   placeholder="请选择"
@@ -201,6 +208,12 @@ import {
   updateOtherAccountStatus,
   getOtherAccountDetail,
 } from "@/api/system";
+const rules = {
+  account: [{ required: true, message: "请输入账户ID", trigger: "blur" }],
+  pwd: [{ required: true, message: "请输入密码", trigger: "blur" }],
+  conf_pwd: [{ required: true, message: "请确认密码", trigger: "blur" }],
+  roles: [{ required: true, message: "请选择密码", trigger: "change" }],
+};
 //
 const activeName = ref("user");
 const tabsList = reactive([
@@ -434,43 +447,50 @@ function getAreaList() {
     options.value.push(...res.data);
   });
 }
-
+const elFormRef = ref();
 function addSubmit() {
-  // console.log(area.value);
-  // console.log(Object.values(area.value));
-  if (typeof area.value === "object") {
-    addForm.area_id = Object.values(area.value);
-  }
-  area.value.forEach((item: any) => {
-    if (Array.isArray(item)) {
-      addForm.area_id = area.value.map((item2: any) => item2[1]);
+  elFormRef.value.validate((valid) => {
+    if (valid) {
+      // console.log(area.value);
+      // console.log(Object.values(area.value));
+      if (typeof area.value === "object") {
+        addForm.area_id = Object.values(area.value);
+      }
+      area.value.forEach((item: any) => {
+        if (Array.isArray(item)) {
+          addForm.area_id = area.value.map((item2: any) => item2[1]);
+        }
+      });
+
+      // 新增
+      if (isAdd.value === true && isEdit.value === false) {
+        addForm.area_id = Object.values(area.value);
+        createOtherAccount(addForm).then(() => {
+          visible.value = false;
+          ElMessage({
+            type: "success",
+            message: "操作成功",
+          });
+          handleSearch();
+        });
+      }
+      if (isEdit.value) {
+        // 编辑
+        updateOtherAccount(addForm).then(() => {
+          visible.value = false;
+          ElMessage({
+            type: "success",
+            message: "操作成功",
+          });
+          handleSearch();
+        });
+      }
     }
   });
-
-  // 新增
-  if (isAdd.value === true && isEdit.value === false) {
-    addForm.area_id = Object.values(area.value);
-    createOtherAccount(addForm).then(() => {
-      visible.value = false;
-      ElMessage({
-        type: "success",
-        message: "操作成功",
-      });
-      handleSearch();
-    });
-  }
-  if (isEdit.value) {
-    // 编辑
-    updateOtherAccount(addForm).then(() => {
-      visible.value = false;
-      ElMessage({
-        type: "success",
-        message: "操作成功",
-      });
-      handleSearch();
-    });
-  }
 }
+const closeDialog = () => {
+  elFormRef.value.clearValidate();
+};
 
 function handleReset() {
   formItem.name = "";
