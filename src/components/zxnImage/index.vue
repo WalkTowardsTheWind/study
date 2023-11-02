@@ -2,16 +2,27 @@
   <div class="zxn-image">
     <div
       class="zxn-image-item"
-      :class="{ 'has-click': targetClick, 'mr-[16px]': currentImg.length > 1 }"
-      :style="uploadStyle"
+      :class="{ 'has-click': targetClick }"
+      :style="{ width: `${width}px`, height: `${height}px` }"
       v-for="(item, index) in currentImg"
       :key="item"
       @click="handleTarget(index)"
     >
-      <el-image :style="uploadStyle" :src="item" :fit="fit as 'fill'" />
+      <el-image
+        v-if="isPdf(item)"
+        :style="{ width: `${width}px`, height: `${height}px` }"
+        :src="pdfImg"
+        :fit="fit as 'fill'"
+      />
+      <el-image
+        v-else
+        :style="{ width: `${width}px`, height: `${height}px` }"
+        :src="item"
+        :fit="fit as 'fill'"
+      />
       <div class="zxn-image-item-bottom">
-        <span @click.stop="handlePreview(index)">预览</span>
-        <span v-if="hasDelete" @click.stop="handleDelete(index)">删除</span>
+        <span @click="handlePreview(index)">预览</span>
+        <span v-if="hasDelete">删除</span>
       </div>
       <div
         class="zxn-image-item-ellipsis"
@@ -27,7 +38,7 @@
     </div>
     <el-image-viewer
       v-if="showViewer"
-      :url-list="imgList"
+      :url-list="preViewImg"
       :initial-index="previewIndex"
       z-index="999"
       @close="closeImgViewer"
@@ -37,11 +48,10 @@
 </template>
 <script setup lang="ts">
 import { useEventListener } from "@vueuse/core";
-import { isArray } from "@/utils/is";
-import { addUnit } from "@/utils";
-import { CSSProperties } from "vue";
+import { isArray, isImage, isPdf } from "@/utils/is";
+import pdfImg from "@/assets/pdf.png";
 const props = defineProps({
-  imgList: { type: [Array, String], default: () => [] },
+  imgList: { type: Array, default: () => [] },
   width: { type: Number, default: 80 },
   height: { type: Number, default: 80 },
   fit: { type: String, default: "fill" },
@@ -49,15 +59,13 @@ const props = defineProps({
   targetClick: { type: Boolean, default: false },
   ellipsis: { type: Boolean, default: false },
 });
-const emits = defineEmits(["on-delete"]);
-const uploadStyle = computed<CSSProperties>(() => {
-  const boxWidth = addUnit(props.width);
-  const boxHeight = addUnit(props.height);
-  return { width: boxWidth, height: boxHeight };
-});
 const currentImg = computed(() => {
   const _imgList = isArray(props.imgList) ? props.imgList : [props.imgList];
   return props.ellipsis ? _imgList.filter((i, r) => r <= 2) : _imgList;
+});
+const preViewImg = computed(() => {
+  console.log(currentImg, "222");
+  return currentImg.value.filter(isImage);
 });
 let stopWheelListener: (() => void) | undefined;
 let prevOverflow = "";
@@ -76,13 +84,20 @@ function wheelHandler(e: WheelEvent) {
   }
 }
 const handlePreview = (index: number) => {
-  stopWheelListener = useEventListener("wheel", wheelHandler, {
-    passive: false,
-  });
-  prevOverflow = document.body.style.overflow;
-  document.body.style.overflow = "hidden";
-  previewIndex.value = index;
-  showViewer.value = true;
+  if (isImage(currentImg.value[index])) {
+    const rank = preViewImg.value.findIndex(
+      (it) => it === currentImg.value[index]
+    );
+    stopWheelListener = useEventListener("wheel", wheelHandler, {
+      passive: false,
+    });
+    prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    previewIndex.value = rank;
+    showViewer.value = true;
+  } else {
+    window.open(currentImg.value[index], "_blank");
+  }
 };
 const closeImgViewer = () => {
   stopWheelListener?.();
@@ -94,9 +109,6 @@ const handleTarget = (index: number) => {
     handlePreview(index);
   }
 };
-const handleDelete = (index: number) => {
-  emits("on-delete", index);
-};
 </script>
 <style lang="scss" scoped>
 .zxn-image {
@@ -105,19 +117,22 @@ const handleDelete = (index: number) => {
 
   &-item {
     position: relative;
+    margin-right: 16px;
     overflow: hidden;
     font-size: 0;
     border-radius: 8px;
-
     &-ellipsis {
-      position: absolute;
-      inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
       font-size: 12px;
-      color: #fff;
-      background: rgb(51 51 51 / 60%);
+      color: #ffffff;
+      background: rgba(51, 51, 51, 0.6);
     }
 
     &-bottom {

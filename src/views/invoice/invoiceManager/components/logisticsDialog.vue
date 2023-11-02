@@ -3,7 +3,7 @@
     <div class="logistics">
       <el-form class="logistics-img" label-width="80">
         <el-form-item label="票样">
-          <zxn-image :imgList="[formItem.invoice_sample_url]" />
+          <zxn-image :imgList="formItem.invoice_sample_url" />
         </el-form-item>
         <el-form-item label="物流面单">
           <zxn-image :imgList="[formItem.express_url]" />
@@ -34,12 +34,12 @@ export default {
 <script setup lang="ts">
 let visible = ref(false);
 const formItem = reactive({
-  invoice_sample_url: "",
+  invoice_sample_url: [],
   express_url: "",
   Traces: [],
 });
 const init = (id: number): void => {
-  formItem.invoice_sample_url = "";
+  formItem.invoice_sample_url = [];
   formItem.express_url = "";
   formItem.Traces = [];
   visible.value = true;
