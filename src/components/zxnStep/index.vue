@@ -4,6 +4,7 @@
       <div
         class="step-item-left"
         :class="activeStep >= index ? 'is-active' : ''"
+        @click="$emit('activeClick', index)"
       >
         <div class="round">{{ index + 1 }}</div>
         <div class="desc">{{ item.desc }}</div>
@@ -14,9 +15,13 @@
         v-if="index !== stepList.length - 1"
       >
         <div class="arrow">
-          <el-icon size="20">
+          <!-- <el-icon size="20">
             <i-ep-DArrowRight />
-          </el-icon>
+          </el-icon> -->
+          <div
+            class="line"
+            :class="activeStep >= index + 1 ? 'is-active' : ''"
+          ></div>
         </div>
       </div>
     </div>
@@ -45,8 +50,10 @@ defineProps({
 <style scoped lang="scss">
 .step {
   display: flex;
-  margin: 50px;
-  font-size: 14px;
+  margin-top: 31px;
+  font-size: 16px;
+  align-items: center;
+  justify-content: center;
 
   &-item {
     display: flex;
@@ -55,6 +62,7 @@ defineProps({
       display: flex;
       flex-direction: column;
       align-items: center;
+      cursor: pointer;
 
       .round {
         width: 40px;
@@ -73,11 +81,15 @@ defineProps({
     }
 
     &-right {
-      margin: 0 50px;
-      margin-top: 10px;
-
+      margin-top: 20px;
       .arrow {
         color: #999;
+
+        .line {
+          width: 288px;
+          height: 2px;
+          background: #999;
+        }
       }
     }
   }
@@ -95,6 +107,7 @@ defineProps({
 
     .arrow {
       color: #356ff3;
+      background-color: #356ff3;
     }
   }
 }

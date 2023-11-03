@@ -23,8 +23,13 @@
       <template #6>
         <SettlementInfo :isEdit="isEdit" :id="id" />
       </template>
+      <template #7>
+        <ContractInfo :isEdit="isEdit" :id="id" />
+      </template>
     </zxn-tabs>
-    <zxn-bottom-btn v-if="isEdit && !['3', '4', '5', '6'].includes(activeName)">
+    <zxn-bottom-btn
+      v-if="isEdit && !['3', '4', '5', '6', '7'].includes(activeName)"
+    >
       <el-button @click="$router.go(-1)">取消</el-button>
       <el-button type="primary" @click="updateBusinessAccount">保存</el-button>
     </zxn-bottom-btn>
@@ -61,35 +66,37 @@ import {
   getBusinessAccountDetail,
 } from "@/api/account/business";
 import router from "@/router";
+import ContractInfo from "./components/contract-info.vue";
 
 const tabsList = [
   { name: "1", label: "基本信息" },
   { name: "3", label: "税地信息" },
   { name: "2", label: "证件信息" },
-  // { name: "3", label: "合同信息" },
   { name: "4", label: "任务记录" },
   { name: "5", label: "充值记录" },
   { name: "6", label: "结算记录" },
+  { name: "7", label: "合同信息" },
+
   // { name: "7", label: "渠道信息" },
 ];
 
 const activeName = ref("1");
 
-watch(activeName, (newVal) => {
-  sessionStorage.setItem("activeName", newVal);
-});
+// watch(activeName, (newVal) => {
+//   sessionStorage.setItem("activeName", newVal);
+// });
 
-onMounted(() => {
-  const curTab = sessionStorage.getItem("activeName") || "";
-  if (curTab) {
-    activeName.value = curTab;
-  }
-});
-// 监听页面离开事件
-onBeforeUnmount(() => {
-  // 重置 activeName
-  activeName.value = "";
-});
+// onMounted(() => {
+//   const curTab = sessionStorage.getItem("activeName") || "";
+//   if (curTab) {
+//     activeName.value = curTab;
+//   }
+// });
+// // 监听页面离开事件
+// onBeforeUnmount(() => {
+//   // 重置 activeName
+//   sessionStorage.setItem("activeName", "1");
+// });
 
 const reject_reason = ref("");
 

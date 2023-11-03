@@ -117,12 +117,11 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="上传合同" prop="contract_img">
+        <!-- <el-form-item label="上传合同" prop="contract_img">
           <MultiUpload v-model="state.formItem.contract_img">
             <i-ep-Plus />
           </MultiUpload>
-          <!-- <PicturePreview v-else :image-list="formItem.contract_img" /> -->
-        </el-form-item>
+        </el-form-item> -->
         <div style="display: flex; justify-content: center">
           <el-button type="primary" @click="taxLandConfirm(formItem)"
             >确认</el-button
@@ -211,7 +210,6 @@ const state = reactive({
     tax_point: "",
     auth_type: "",
     sign_type: "",
-    contract_img: [],
   },
 });
 
@@ -295,7 +293,6 @@ const taxLandClick = (active: string, item?: any) => {
     state.formItem.tax_point = "";
     state.formItem.sign_type = "";
     state.formItem.auth_type = "";
-    state.formItem.contract_img = [];
     state.formItem.company_id = route.query.id as string;
   }
   if (active == "edit") {
@@ -308,7 +305,6 @@ const taxLandClick = (active: string, item?: any) => {
     state.formItem.tax_point = item.tax_point;
     state.formItem.sign_type = item.sign_type;
     state.formItem.auth_type = item.auth_type;
-    state.formItem.contract_img = item.contract_img;
   }
 };
 // 选择税地后才有对应规则
@@ -394,7 +390,6 @@ const cancelClick = () => {
   state.formItem.tax_point = "";
   state.formItem.sign_type = "";
   state.formItem.auth_type = "";
-  state.formItem.contract_img = [];
 };
 
 const checkImg = (url) => {

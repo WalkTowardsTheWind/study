@@ -64,6 +64,7 @@ export const constantRoutes: RouteRecordRaw[] = [
           import("@/views/account-management/business/detail-or-edit.vue"),
         name: "business-account-detail",
         meta: {
+          title: "账户详情",
           hidden: true,
         },
       },
@@ -450,6 +451,26 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/category-management/index.vue"),
         name: "categoryInvoice",
         meta: { title: "发票分类", icon: "invoice" },
+      },
+    ],
+  },
+  // 合同管理
+  {
+    path: "/contract-management",
+    component: Layout,
+    meta: { title: "合同管理", icon: "contract" },
+    children: [
+      {
+        path: "template",
+        component: () => import("@/views/contract-management/template.vue"),
+        name: "contract-management-template",
+        meta: { title: "合同模板", icon: "contract" },
+      },
+      {
+        path: "list",
+        component: () => import("@/views/contract-management/list.vue"),
+        name: "contract-management-list",
+        meta: { title: "合同列表", icon: "contract" },
       },
     ],
   },
