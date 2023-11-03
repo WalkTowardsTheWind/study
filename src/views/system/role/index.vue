@@ -84,7 +84,7 @@ const columnList = [
     minWidth: 150,
   },
   {
-    label: "账号状态",
+    label: "状态",
     prop: "status",
     path: "system.roleType",
     type: "enum",
