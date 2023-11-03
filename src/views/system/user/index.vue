@@ -375,7 +375,7 @@ function getStatusOption() {
 const stop = (id: string, status: string) => {
   // 启用
   if (status == "1") {
-    ElMessageBox.confirm("是否启用账号?", "Warning", {
+    ElMessageBox.confirm("是否启用账号?", "提示", {
       confirmButtonText: "确认",
       cancelButtonText: "取消",
       type: "warning",
@@ -396,7 +396,7 @@ const stop = (id: string, status: string) => {
   }
   // 关闭
   if (status == "0") {
-    ElMessageBox.confirm("是否关闭账户?", "Warning", {
+    ElMessageBox.confirm("是否关闭账户?", "提示", {
       confirmButtonText: "确认",
       cancelButtonText: "取消",
       type: "warning",
@@ -418,7 +418,7 @@ const stop = (id: string, status: string) => {
 };
 
 const del = (id: string) => {
-  ElMessageBox.confirm("是否删除账号?", "Warning", {
+  ElMessageBox.confirm("是否删除账号?", "提示", {
     confirmButtonText: "确认",
     cancelButtonText: "取消",
     type: "warning",
