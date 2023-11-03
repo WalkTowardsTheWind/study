@@ -27,16 +27,7 @@
       @page-change="handlePageChange"
     >
       <template #tableTop>
-        <el-button type="primary" plain @click="handleUpload">上传</el-button>
-        <!-- <el-dropdown trigger="click" @command="handleCommand">
-            <el-button type="primary" plain>批量操作</el-button>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item command="reject">驳回</el-dropdown-item>
-                <el-dropdown-item command="excel">导出</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown> -->
+        <el-button type="primary" @click="handleUpload">上传</el-button>
       </template>
       <template #img="{ row }">
         <zxn-image
@@ -48,47 +39,37 @@
         />
       </template>
       <template #operation="{ row }">
-        <template v-if="!row.status">
-          <!-- <el-button link type="primary" @click="handleReject([row.id])"
-              >驳回</el-button
-            > -->
-          <!-- <el-button link type="primary" @click="handleUpload(row)"
-              >上传发票</el-button
-            > -->
-        </template>
         <el-button link type="primary" @click="handleView(row)">查看</el-button>
-        <el-button link type="primary" @click="handleLogistics(row)"
-          >查看物流</el-button
+        <el-button link type="primary" @click="handleUpload(row)"
+          >编辑</el-button
         >
-        <el-button link type="primary" @click="handleDownload(row)"
+        <el-button link type="primary" @click="handleDownload([Number(row.id)])"
           >下载</el-button
+        >
+        <el-button link type="primary" @click="handleDelete(row)"
+          >删除</el-button
         >
       </template>
     </zxn-table>
   </div>
 </template>
 <script setup lang="ts">
-import type { ComponentInternalInstance } from "vue";
-const { proxy } = getCurrentInstance() as ComponentInternalInstance;
-import { getTreeList } from "@/api/common";
 import {
-  getInvoiceInCompany,
-  getInvoiceInChannel,
-  setStatus,
-  channelSetStatus,
-  getInvoiceExcel,
+  getCredentialsList,
+  downloadCredentials,
+  delCredentials,
 } from "@/api/invoice";
 import { transformTimeRange } from "@/utils";
 import { downloadByData } from "@/utils/download";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-import { useRouteParams } from "@/store/modules/routeParams";
-import { isNumber } from "@/utils/is";
+import { isArray } from "../../../../utils/is";
+import { number } from "echarts";
 const router = useRouter();
 const props = defineProps({
   type: { type: String, default: "enterprise" },
 });
-const emits = defineEmits(["on-upload", "on-logistics"]);
+const emits = defineEmits(["on-upload", "on-view"]);
 const pageInfo = reactive({
   page: 1,
   total: 0,
@@ -100,10 +81,10 @@ const formItem = reactive({
   timeData: [],
 });
 const columnList: any[] = reactive([
-  { label: "企业名称", prop: "company_name", minWidth: 120 },
-  { label: "税源地", prop: "tax_land_name", minWidth: 120 },
-  { label: "完税月份", prop: "add_time", minWidth: 120 },
-  { label: "上传账户", prop: "account", minWidth: 120 },
+  { label: "企业名称", prop: "company_name", minWidth: 160 },
+  { label: "税源地", prop: "tax_land_name", minWidth: 160 },
+  { label: "完税月份", prop: "month", minWidth: 120 },
+  { label: "上传账户", prop: "real_name", minWidth: 160 },
   { label: "上传时间", prop: "add_time", minWidth: 180 },
   {
     label: "操作",
@@ -135,10 +116,7 @@ const getList = async () => {
   params.limit = pageInfo.limit;
   loading.value = true;
   try {
-    const { data } =
-      props.type === "enterprise"
-        ? await getInvoiceInCompany(params)
-        : await getInvoiceInChannel(params);
+    const { data } = await getCredentialsList(params);
     loading.value = false;
     tableData.length = 0;
     pageInfo.page = data.current_page;
@@ -150,92 +128,54 @@ const getList = async () => {
   }
 };
 const handleView = (cur: any) => {
-  router.push({ name: "invoiceView", query: { id: cur.id, type: props.type } });
+  emits("on-view", cur);
 };
-const handleDownload = (cur: any) => {
-  router.push({ name: "invoiceView", query: { id: cur.id, type: props.type } });
+const handleEdit = (cur: any) => {
+  // emits("on-view", cur);
 };
-// const table = ref();
-// const handleCommand = (type: string) => {
-//   const selected = table.value.getSelectionRows();
-//   const ids = selected.map((it) => it.id);
-//   if (!ids.length) {
-//     return ElMessage({
-//       type: "error",
-//       message: `请选择数据`,
-//     });
-//   }
-//   switch (type) {
-//     case "reject":
-//       handleReject(ids);
-//       break;
-//     case "excel":
-//       handleExcel(ids);
-//       break;
-//   }
-// };
-// const handleReject = (ids: number[]) => {
-//   ElMessageBox.prompt("", "驳回原因", {
-//     confirmButtonText: "确定",
-//     cancelButtonText: "取消",
-//     inputErrorMessage: "请输入驳回原因",
-//     beforeClose: async (
-//       action: string,
-//       instance: { confirmButtonLoading: boolean; inputValue: string },
-//       done: () => void
-//     ) => {
-//       if (action === "confirm") {
-//         instance.confirmButtonLoading = true;
-//         const params = {
-//           ids,
-//           status: 2,
-//           reject_reason: instance.inputValue,
-//         };
-//         props.type === "enterprise"
-//           ? await setStatus(params)
-//           : await channelSetStatus(params);
-//         instance.confirmButtonLoading = false;
-//         done();
-//       } else {
-//         done();
-//       }
-//     },
-//   }).then(() => {
-//     ElMessage({
-//       type: "success",
-//       message: `驳回成功`,
-//     });
-//     getList();
-//   });
-// };
-const handleExcel = async (ids: number[]) => {
+/**
+ * 下载完税凭证ZIP
+ */
+const handleDownload = async (ids: Array<number>) => {
   const params = {
     ids,
-    page: 1,
-    limit: pageInfo.limit,
   };
-  const { data } = await getInvoiceExcel(params);
-  downloadByData(data, "发票列表.xlsx");
-  await getList();
+  const { data } = await downloadCredentials(params);
+  downloadByData(data, "完税凭证.zip");
 };
-
+const handleDelete = (row: any) => {
+  ElMessageBox({
+    title: "",
+    message: h("p", null, `确定删除该凭证`),
+    showCancelButton: true,
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    beforeClose: async (
+      action: string,
+      instance: { confirmButtonLoading: boolean },
+      done: () => void
+    ) => {
+      if (action === "confirm") {
+        instance.confirmButtonLoading = true;
+        await delCredentials(row.id);
+        instance.confirmButtonLoading = false;
+        done();
+      } else {
+        done();
+      }
+    },
+  }).then(() => {
+    ElMessage({
+      type: "success",
+      message: "成功删除该凭证",
+    });
+    getList();
+  });
+};
 const handleUpload = (cur: any) => {
   emits("on-upload", cur);
 };
-const handleLogistics = (cur: any) => {
-  emits("on-logistics", cur);
-};
 onMounted(() => {});
-// onActivated(() => {
-//   const { pullParams } = useRouteParams();
-//   const searchParams: any = pullParams("invoiceManager");
-//   if (searchParams) {
-//     formItem.status =
-//       isNumber(searchParams.status) || searchParams.status
-//         ? searchParams.status + ""
-//         : "";
-//   }
-// });
 defineExpose({
   getList,
 });

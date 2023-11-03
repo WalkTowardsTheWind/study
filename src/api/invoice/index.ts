@@ -129,3 +129,72 @@ export function getPersonInvoiceList(params: any): AxiosPromise {
     params,
   });
 }
+/**
+ * 上传完税凭证
+ */
+export function uploadCredentials(params: any): AxiosPromise {
+  return request({
+    url: `/adminapi/invoice/upload_receipt`,
+    method: "PUT",
+    params,
+  });
+}
+/**
+ * 完税凭证列表
+ */
+export function getCredentialsList(params: any): AxiosPromise {
+  return request({
+    url: `/adminapi/invoice/receipt_list`,
+    method: "GET",
+    params,
+  });
+}
+/**
+ * 获取完税凭证信息
+ */
+export function getCredentialsDetails(id: any): AxiosPromise {
+  return request({
+    url: `/adminapi/invoice/editReceipt/${id}`,
+    method: "GET",
+  });
+}
+/**
+ * 删除完税凭证
+ */
+export function delCredentials(id: any): AxiosPromise {
+  return request({
+    url: `/adminapi/invoice/deleteReceipt/${id}`,
+    method: "DELETE",
+  });
+}
+/**
+ * 修改完税凭证
+ */
+export function editCredentials(data: any): AxiosPromise {
+  return request({
+    url: `/adminapi/invoice/updateReceipt`,
+    method: "POST",
+    data,
+  });
+}
+/**
+ * 下载完税凭证
+ */
+export function downloadCredentials(params: any): AxiosPromise {
+  return request({
+    url: `/adminapi/invoice/download`,
+    method: "GET",
+    params,
+    responseType: "arraybuffer",
+  });
+}
+/**
+ * 获取企业列表
+ */
+export function getCompanyList(params: any): AxiosPromise {
+  return request({
+    url: `/adminapi/invoice/getCompany`,
+    method: "GET",
+    params,
+  });
+}

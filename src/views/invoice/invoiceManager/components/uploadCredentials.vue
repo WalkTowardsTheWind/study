@@ -2,7 +2,7 @@
   <el-dialog
     v-model="visible"
     class="zxn-dialog"
-    title="上传凭证"
+    :title="formItem.id ? '编辑' : '上传凭证'"
     width="452"
     :close-on-click-modal="false"
     @close="handleClose"
@@ -10,30 +10,48 @@
     <el-form ref="form" :model="formItem" label-width="110" :rules="rules">
       <el-form-item label="税地名称" prop="tax_land_id">
         <el-select
-          class="w-100%"
-          placeholder="请选择"
           v-model="formItem.tax_land_id"
+          filterable
+          clearable
+          placeholder="请选择税地"
+          @change="handleUpdata"
         >
           <el-option
-            v-for="(item, index) in taxLandOption"
-            :key="index"
-            :value="item.id"
-            :label="item.tax_land_name"
-          ></el-option>
+            v-for="item in taxLandOption"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
         </el-select>
       </el-form-item>
-      <el-form-item label="企业名称" prop="company_name">
-        <el-input v-model="formItem.company_name" />
+      <el-form-item label="企业名称" prop="company_id">
+        <el-select
+          ref="companySelect"
+          v-model="formItem.company_id"
+          filterable
+          clearable
+          placeholder="请选择企业"
+          @focus="handleIsSelect"
+        >
+          <el-option
+            v-for="item in optionsCompany"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
       </el-form-item>
-      <el-form-item label="完税月份" prop="time">
+      <el-form-item label="完税月份" prop="month">
         <el-date-picker
-          v-model="formItem.time"
+          v-model="formItem.month"
           type="month"
           placeholder="请选择月份"
+          format="YYYY-MM"
+          value-format="YYYY-MM"
         />
       </el-form-item>
-      <el-form-item label="完税凭证" prop="invoice_sample_url">
-        <multi-upload v-model="formItem.invoice_sample_url" :limit="10" />
+      <el-form-item label="完税凭证" prop="tax_payment_receipt">
+        <multi-upload v-model="formItem.tax_payment_receipt" :limit="10" />
       </el-form-item>
       <el-form-item label="">
         <div>
@@ -54,19 +72,76 @@ export default {
 <script setup lang="ts">
 import { getLandList } from "@/api/common";
 import MultiUpload from "@/components/Upload/MultiUpload.vue";
-import { getLogisticsCompany, uploadInvoice } from "@/api/invoice";
+import {
+  uploadCredentials,
+  editCredentials,
+  getCompanyList,
+  getCredentialsDetails,
+} from "@/api/invoice";
 import type { FormRules } from "element-plus";
 import { ElMessage } from "element-plus";
 //税地
-const taxLandOption = ref([] as any);
-function getTaxLandOption() {
-  taxLandOption.value.length = 0;
-  getLandList().then((res) => {
-    taxLandOption.value.push(...res.data.tax_land_list);
-  });
+interface ListItem {
+  value: string;
+  label: string;
 }
+const taxLandOption = ref<ListItem[]>([]);
+const getTaxLandOption = async () => {
+  const { data } = await getLandList();
+  console.log(data);
+  const newData = data.tax_land_list.map((item: any) => {
+    return {
+      label: item.tax_land_name,
+      value: item.id,
+    };
+  });
+  taxLandOption.value = [];
+  taxLandOption.value.push(...newData);
+};
 getTaxLandOption();
+//获取企业列表
 
+const companySelect = ref();
+const optionsCompany = ref<ListItem[]>([]);
+const getCompany = async () => {
+  if (!formItem.tax_land_id) {
+    ElMessage({
+      type: "warning",
+      message: `请先选择税地名称`,
+    });
+    return;
+  }
+
+  let params = {
+    tax_land_id: formItem.tax_land_id,
+  };
+  const { data } = await getCompanyList(params);
+  const newData = data.map((item: any) => {
+    return {
+      label: item.company_name,
+      value: item.id,
+    };
+  });
+  optionsCompany.value = [];
+  optionsCompany.value.push(...newData);
+};
+//
+const handleUpdata = () => {
+  formItem.company_id = "";
+  getCompany();
+};
+const handleIsSelect = () => {
+  if (!formItem.tax_land_id) {
+    companySelect.value.blur();
+    ElMessage({
+      type: "warning",
+      message: `请先选择税地名称`,
+    });
+  }
+  return;
+};
+
+//
 const emits = defineEmits(["on-success"]);
 let visible = ref(false);
 const imgValidate = (message: any, rule: any, value: any, callback: any) => {
@@ -78,21 +153,35 @@ const imgValidate = (message: any, rule: any, value: any, callback: any) => {
 };
 const rules = reactive<FormRules>({
   tax_land_id: [{ required: true, message: "税地名称", trigger: "change" }],
-  company_name: [{ required: true, message: "企业名称", trigger: "change" }],
-  time: [{ required: true, message: "完税月份", trigger: "change" }],
-  invoice_sample_url: [
-    { validator: imgValidate.bind(null, "请上传完税凭证"), trigger: "change" },
+  company_id: [{ required: true, message: "企业名称", trigger: "change" }],
+  month: [{ required: true, message: "完税月份", trigger: "change" }],
+  tax_payment_receipt: [
+    {
+      required: true,
+      validator: imgValidate.bind(null, "请上传完税凭证"),
+      trigger: "change",
+    },
   ],
 });
 const formItem = reactive({
   id: 0,
   tax_land_id: "",
-  company_name: "",
-  time: "",
-  invoice_sample_url: [],
+  company_id: "",
+  month: "",
+  tax_payment_receipt: [],
 });
-const init = (id: number): void => {
+const init = async (id: number): Promise<void> => {
   formItem.id = id;
+  if (id) {
+    const { data } = await getCredentialsDetails(id);
+    formItem.tax_land_id = data.tax_land_id;
+    if (formItem.tax_land_id) {
+      getCompany();
+    }
+    formItem.company_id = data.company_id;
+    formItem.month = data.month;
+    formItem.tax_payment_receipt = data.tax_payment_receipt;
+  }
   visible.value = true;
 };
 
@@ -103,16 +192,21 @@ const handleSubmit = () => {
     if (valid) {
       const params: any = {};
       params.tax_land_id = formItem.tax_land_id;
-      params.company_name = formItem.company_name;
-      params.time = formItem.time;
-      params.time = formItem.invoice_sample_url.join(",");
-      params.invoice_sample_url = formItem.invoice_sample_url.join(",");
+      params.company_id = formItem.company_id;
+      params.month = formItem.month;
+      params.tax_payment_receipt = formItem.tax_payment_receipt;
+      if (formItem.id) {
+        params.id = formItem.id;
+      }
       try {
-        await uploadInvoice(formItem.id, params);
+        formItem.id
+          ? await editCredentials(params)
+          : await uploadCredentials(params);
+
         loading.value = false;
         ElMessage({
           type: "success",
-          message: `上传成功`,
+          message: `${formItem.id ? "修改成功" : "上传成功"}`,
         });
         emits("on-success");
         handleCancel();

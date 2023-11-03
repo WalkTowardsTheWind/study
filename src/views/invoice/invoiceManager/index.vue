@@ -27,7 +27,7 @@
           ref="taxPayment"
           type="taxPayment"
           @on-upload="handleUploadCredentials"
-          @on-logistics="handleLogistics"
+          @on-view="handleView"
         />
       </template>
     </zxn-tabs>
@@ -38,6 +38,7 @@
       ref="uploadCredentialsRef"
       @on-success="handleTabChange"
     />
+    <img-dialog ref="imgDialogRef" @on-success="handleTabChange" />
   </zxn-plan>
 </template>
 <script lang="ts">
@@ -52,6 +53,7 @@ import invoiceTable from "./components/invoiceTable.vue";
 import logisticsDialog from "./components/logisticsDialog.vue";
 import taxPaymentReceipt from "./components/taxPaymentReceipt.vue";
 import uploadCredentials from "./components/uploadCredentials.vue";
+import imgDialog from "./components/imgDialog.vue";
 const activeName = ref("enterprise");
 const tabsList = [
   {
@@ -70,13 +72,22 @@ const tabsList = [
 const enterprise = ref();
 const channel = ref();
 const taxPayment = ref();
-const handleTabChange = () => {
-  if (activeName.value === "enterprise") {
+const handleTabChange = (name?: any) => {
+  if (name) {
+    sessionStorage.setItem("invoiceManagerActiveName", name);
+  }
+  activeName.value =
+    sessionStorage.getItem("invoiceManagerActiveName") ?? "enterprise";
+  if (sessionStorage.getItem("invoiceManagerActiveName") === "enterprise") {
     enterprise.value.getList();
-  } else if (activeName.value === "channel") {
+  } else if (sessionStorage.getItem("invoiceManagerActiveName") === "channel") {
     channel.value.getList();
-  } else if (activeName.value === "taxPayment") {
+  } else if (
+    sessionStorage.getItem("invoiceManagerActiveName") === "taxPayment"
+  ) {
     taxPayment.value.getList();
+  } else if (activeName.value === "enterprise") {
+    enterprise.value.getList();
   }
 };
 const addInvoiceRef = ref();
@@ -91,11 +102,11 @@ const logisticsDialogRef = ref();
 const handleLogistics = (cur: any) => {
   logisticsDialogRef.value.init(cur.id);
 };
+const imgDialogRef = ref();
+const handleView = (cur: any) => {
+  imgDialogRef.value.init(cur);
+};
 onActivated(() => {
   handleTabChange();
 });
-// const taskDialogRef = ref(null);
-// const handleSearch = () => {
-//   taskDialogRef.value.init([]);
-// };
 </script>
