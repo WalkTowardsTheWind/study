@@ -13,8 +13,11 @@
       <template #3>
         <ProxyView :channel_id="idv" :isEdit="isEdit" />
       </template>
-      <template #4>
+      <!-- <template #4>
         <HistoryView :isEdit="isEdit" />
+      </template> -->
+      <template #5>
+        <ContractView :channel_id="idv" :isEdit="isEdit" />
       </template>
     </zxn-tabs>
   </zxn-plan>
@@ -28,6 +31,7 @@ import ChannelView from "./components/3channel.vue";
 import ProxyView from "./components/4proxy.vue";
 import HistoryView from "./components/5history.vue";
 import { getChannelAccountInfo } from "@/api/account/channel";
+import ContractView from "./components/6contract.vue";
 
 const route = useRoute();
 
@@ -49,6 +53,7 @@ const tabsList = [
   { name: 2, label: "渠道信息" },
   { name: 3, label: "渠道企业信息" },
   // { name: 4, label: "历史点位记录" },
+  // { name: 5, label: "合同信息" },
 ];
 const activeName = ref(0);
 

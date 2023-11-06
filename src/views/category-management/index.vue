@@ -21,7 +21,7 @@ import InvoiceView from "./components/invoice.vue";
 import { useRoute } from "vue-router";
 const route = useRoute();
 const routeName = route.name;
-console.log(route.name);
+// console.log(route.name);
 const routeSet = {
   "category-management": { name: "1", label: "行业分类" },
   categoryPosition: { name: "2", label: "岗位分类" },

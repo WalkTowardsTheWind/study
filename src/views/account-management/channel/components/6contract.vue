@@ -28,12 +28,11 @@
 import { getBusinessAccountContractList } from "@/api/account/business";
 
 const props = defineProps({
+  channel_id: {
+    type: String || Number,
+  },
   isEdit: {
     type: Boolean,
-    default: () => false,
-  },
-  id: {
-    default: () => "",
   },
 });
 
@@ -75,6 +74,7 @@ const columnList = [
 const handleSelect = (val) => {
   console.log(val);
 };
+
 /**
  * 获取列表
  */
