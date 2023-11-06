@@ -314,3 +314,12 @@ export function openWindow(
 
   window.open(url, target, feature.join(","));
 }
+export function isProhibit(time: any) {
+  const newTime = dateUtil(dateUtil().format("YYYY-MM-DD"));
+
+  if (newTime.diff(time, "month", true) < 0) {
+    return true;
+  } else {
+    return false;
+  }
+}

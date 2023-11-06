@@ -48,6 +48,7 @@
           placeholder="请选择月份"
           format="YYYY-MM"
           value-format="YYYY-MM"
+          :disabled-date="disabled"
         />
       </el-form-item>
       <el-form-item label="完税凭证" prop="tax_payment_receipt">
@@ -70,6 +71,7 @@ export default {
 };
 </script>
 <script setup lang="ts">
+import { isProhibit } from "@/utils";
 import { getLandList } from "@/api/common";
 import MultiUpload from "@/components/Upload/MultiUpload.vue";
 import {
@@ -124,6 +126,10 @@ const getCompany = async () => {
   });
   optionsCompany.value = [];
   optionsCompany.value.push(...newData);
+};
+// 大于当前月份禁止选择
+const disabled = (data: any) => {
+  return isProhibit(data);
 };
 //
 const handleUpdata = () => {

@@ -7,7 +7,10 @@
       :label-width="100"
     >
       <el-form-item label="" prop="keywords">
-        <el-input v-model="formItem.keywords" placeholder="请输入">
+        <el-input
+          v-model="formItem.keywords"
+          placeholder="请输入企业名称或税源地"
+        >
           <template #prefix>
             <el-icon><i-ep-Search /></el-icon>
           </template>
@@ -25,9 +28,11 @@
       :loading="loading"
       hasSelect
       @page-change="handlePageChange"
+      @selection-change="handleSelect"
     >
       <template #tableTop>
         <el-button type="primary" @click="handleUpload">上传</el-button>
+        <el-button type="primary" @click="handleBatchDownload">下载</el-button>
       </template>
       <template #img="{ row }">
         <zxn-image
@@ -174,6 +179,34 @@ const handleDelete = (row: any) => {
 };
 const handleUpload = (cur: any) => {
   emits("on-upload", cur);
+};
+
+/**
+ * 批量选择
+ */
+//选中的数据
+//返回id数组
+const selectionData = ref([]);
+const handleSelect = (data: any) => {
+  selectionData.value = data.map((item: any) => item.id);
+};
+
+/**
+ * 批量操作
+ */
+const handleBatchDownload = async () => {
+  if (Object.keys(selectionData.value).length == 0) {
+    ElMessage({
+      type: "error",
+      message: `请选择完税凭证!`,
+    });
+  } else {
+    const params = {
+      ids: selectionData.value,
+    };
+    const { data } = await downloadCredentials(params);
+    downloadByData(data, "完税凭证.zip");
+  }
 };
 onMounted(() => {});
 defineExpose({
