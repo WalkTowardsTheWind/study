@@ -118,7 +118,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="上传合同" prop="contract_img">
-          <MultiUpload v-model="state.formItem.contract_img">
+          <MultiUpload v-model="state.formItem.contract_img" :limit="20">
             <i-ep-Plus />
           </MultiUpload>
           <!-- <PicturePreview v-else :image-list="formItem.contract_img" /> -->
