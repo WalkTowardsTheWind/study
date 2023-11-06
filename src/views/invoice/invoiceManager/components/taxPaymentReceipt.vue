@@ -7,7 +7,10 @@
       :label-width="100"
     >
       <el-form-item label="" prop="keywords">
-        <el-input v-model="formItem.keywords" placeholder="请输入">
+        <el-input
+          v-model="formItem.keywords"
+          placeholder="请输入企业名称或税源地"
+        >
           <template #prefix>
             <el-icon><i-ep-Search /></el-icon>
           </template>
