@@ -14,6 +14,7 @@
     :on-remove="handleRemove"
     :on-preview="previewImg"
     :limit="props.limit"
+    class="multi-upload"
   >
     <i-ep-plus style="width: 3em; height: 3em" />
   </el-upload>
@@ -31,12 +32,13 @@
 import {
   UploadRawFile,
   UploadRequestOptions,
-  UploadUserFile,
   UploadFile,
   UploadProps,
 } from "element-plus";
 import { uploadFileApi } from "@/api/file";
 import { useEventListener } from "@vueuse/core";
+import { isImage, isPdf } from "@/utils/is";
+import pdfImg from "@/assets/pdf.png";
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -60,11 +62,11 @@ const props = defineProps({
 const previewImgUrl = ref("");
 const dialogVisible = ref(false);
 
-const fileList = ref([] as UploadUserFile[]);
+const fileList = ref([]);
 watch(
   () => props.modelValue,
   (newVal: string[]) => {
-    const filePaths = fileList.value.map((file) => file.url);
+    const filePaths = fileList.value.map((file) => file.baseUrl);
     // 监听modelValue文件集合值未变化时，跳过赋值
     if (
       filePaths.length > 0 &&
@@ -76,7 +78,13 @@ watch(
     }
 
     fileList.value = newVal.map((filePath) => {
-      return { url: filePath } as UploadUserFile;
+      let _url = "";
+      if (isImage(filePath)) {
+        _url = filePath;
+      } else if (isPdf(filePath)) {
+        _url = pdfImg;
+      }
+      return { url: _url, baseUrl: filePath };
     });
   },
   { immediate: true }
@@ -95,14 +103,20 @@ async function handleUpload(options: UploadRequestOptions): Promise<any> {
   const fileIndex = fileList.value.findIndex(
     (file) => file.uid == (options.file as any).uid
   );
+  let _url = "";
+  if (isImage(fileInfo.src)) {
+    _url = fileInfo.src;
+  } else if (isPdf(fileInfo.src)) {
+    _url = pdfImg;
+  }
 
   fileList.value.splice(fileIndex, 1, {
-    url: fileInfo.src,
-  } as UploadUserFile);
-
+    url: _url,
+    baseUrl: fileInfo.src,
+  });
   emit(
     "update:modelValue",
-    fileList.value.map((file) => file.url)
+    fileList.value.map((file) => file.baseUrl)
   );
 }
 /**
@@ -129,7 +143,7 @@ function handleRemove(removeFile: UploadFile) {
     // 删除成功回调
     emit(
       "update:modelValue",
-      fileList.value.map((file) => file.url)
+      fileList.value.map((file) => file.baseUrl)
     );
     // });
   }
@@ -139,8 +153,8 @@ function handleRemove(removeFile: UploadFile) {
  * 限制用户上传文件的格式和大小
  */
 function handleBeforeUpload(file: UploadRawFile) {
-  if (file.size > 10 * 1048 * 1048) {
-    ElMessage.warning("上传图片不能大于10M");
+  if (file.size > 20 * 1048 * 1048) {
+    ElMessage.warning("上传图片不能大于20M");
     return false;
   }
   return true;
@@ -165,13 +179,17 @@ function wheelHandler(e: WheelEvent) {
  * 预览图片
  */
 const previewImg: UploadProps["onPreview"] = (uploadFile) => {
-  stopWheelListener = useEventListener("wheel", wheelHandler, {
-    passive: false,
-  });
-  prevOverflow = document.body.style.overflow;
-  document.body.style.overflow = "hidden";
-  previewImgUrl.value = uploadFile.url!;
-  dialogVisible.value = true;
+  if (isImage(uploadFile.baseUrl)) {
+    stopWheelListener = useEventListener("wheel", wheelHandler, {
+      passive: false,
+    });
+    prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    previewImgUrl.value = uploadFile.url!;
+    dialogVisible.value = true;
+  } else if (isPdf(uploadFile.baseUrl)) {
+    window.open(uploadFile.baseUrl, "_blank");
+  }
 };
 
 const closeImgViewer = () => {

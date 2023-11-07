@@ -130,3 +130,10 @@
 .scrollbar-wrapper {
   overflow-x: hidden;
 }
+
+.multi-upload {
+  .el-icon--close-tip {
+    display: none !important;
+    font-size: 0 !important;
+  }
+}

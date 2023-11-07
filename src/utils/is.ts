@@ -113,3 +113,18 @@ export function isPwd(pwd: string): boolean {
   const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[a-zA-Z0-9]{6,16}$/;
   return reg.test(pwd);
 }
+
+/** 是否图片格式
+ * @param {Object} value
+ */
+export function isImage(value: string) {
+  const newValue = value.split("?")[0];
+  const IMAGE_REGEXP = /\.(jpeg|jpg|gif|png|svg|webp|jfif|bmp|dpg)/i;
+  return IMAGE_REGEXP.test(newValue);
+}
+
+export function isPdf(value: string) {
+  const newValue = value.split("?")[0];
+  const PDF_REGEXP = /\.(pdf)/i;
+  return PDF_REGEXP.test(newValue);
+}

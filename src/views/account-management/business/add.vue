@@ -5,15 +5,21 @@
       v-model:activeName="activeName"
       hasBack
     ></zxn-tabs>
-    <zxn-step :step-list="stepList" :active-step="activeStep" />
+    <!-- <zxn-step
+      :step-list="stepList"
+      :active-step="activeStep"
+      @activeClick="handleActiveClick"
+    /> -->
     <el-form
       ref="addFormRef"
       :model="addForm"
       :rules="rules"
-      class="mt-[52px] ml-[50px]"
-      label-width="125px"
+      class="ml-[50px]"
+      label-width="auto"
     >
-      <el-row :gutter="30" v-show="activeStep === 0">
+      <!-- 基本信息 -->
+      <zxn-title class="m-35px" ref="activeRef0">基本信息</zxn-title>
+      <el-row :gutter="50">
         <el-col :span="7">
           <el-form-item label="企业登录名称" prop="account" required>
             <el-input
@@ -27,6 +33,8 @@
           <el-form-item label="确认密码" prop="conf_pwd" required>
             <el-input placeholder="请输入" v-model="addForm.conf_pwd" />
           </el-form-item>
+        </el-col>
+        <el-col :span="7">
           <el-form-item label="企业联系人" prop="contacts" required>
             <el-input placeholder="请输入" v-model="addForm.contacts" />
           </el-form-item>
@@ -42,20 +50,26 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row :gutter="30" v-show="activeStep === 1">
+      <!-- 公司信息 -->
+      <zxn-title class="m-35px" ref="activeRef1">公司信息</zxn-title>
+      <el-row :gutter="50">
         <el-col :span="7">
           <el-form-item label="统一社会信用代码" prop="credit_code" required>
             <el-input placeholder="请输入" v-model="addForm.credit_code" />
           </el-form-item>
-          <el-form-item label="营业执照到期时间">
-            <div class="w-full">
-              <el-date-picker
-                style="width: 100%"
-                v-model="addForm.license_end_date"
-                unlink-panels
-                value-format="YYYY-MM-DD"
-              />
-            </div>
+          <el-form-item label="选择行业">
+            <el-select
+              class="w-full"
+              placeholder="请选择"
+              v-model="addForm.category_id"
+            >
+              <el-option
+                v-for="item in cateGoryOptions"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="法人姓名">
             <el-input placeholder="请输入" v-model="addForm.legal_person" />
@@ -72,32 +86,31 @@
               v-model="addForm.legal_person_mobile"
             />
           </el-form-item>
-          <el-form-item label="选择行业">
-            <el-select
-              class="w-full"
-              placeholder="请选择"
-              v-model="addForm.category_id"
-            >
-              <el-option
-                v-for="item in cateGoryOptions"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
+        </el-col>
+        <el-col :span="7">
           <el-form-item label="营业地址">
             <el-input placeholder="请输入" v-model="addForm.company_address" />
+          </el-form-item>
+          <el-form-item label="营业执照到期时间">
+            <div class="w-full">
+              <el-date-picker
+                style="width: 100%"
+                v-model="addForm.license_end_date"
+                unlink-panels
+                value-format="YYYY-MM-DD"
+              />
+            </div>
+          </el-form-item>
+
+          <el-form-item label="法人身份证">
+            <MultiUpload v-model="addForm.idcard_img">
+              <i-ep-Plus />
+            </MultiUpload>
           </el-form-item>
         </el-col>
         <el-col :span="7">
           <el-form-item label="营业执照" prop="license" required>
             <MultiUpload v-model="addForm.license">
-              <i-ep-Plus />
-            </MultiUpload>
-          </el-form-item>
-          <el-form-item label="法人身份证">
-            <MultiUpload v-model="addForm.idcard_img">
               <i-ep-Plus />
             </MultiUpload>
           </el-form-item>
@@ -108,7 +121,9 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row :gutter="30" v-show="activeStep === 2">
+      <!-- 纳税信息 -->
+      <zxn-title class="m-35px" ref="activeRef2">纳税信息</zxn-title>
+      <el-row :gutter="50">
         <el-col :span="7">
           <el-form-item label="开户行">
             <el-input placeholder="请输入" v-model="addForm.bank" />
@@ -131,7 +146,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="17">
+        <el-col :span="7">
           <el-form-item label="开户许可证">
             <MultiUpload v-model="addForm.permit_img">
               <i-ep-Plus />
@@ -142,6 +157,8 @@
               <i-ep-Plus />
             </MultiUpload>
           </el-form-item>
+        </el-col>
+        <el-col :span="7">
           <el-form-item label="公司门头照片">
             <MultiUpload v-model="addForm.header_img">
               <i-ep-Plus />
@@ -154,8 +171,10 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row :gutter="30" v-show="activeStep === 3">
-        <el-col :span="8">
+      <!-- 合同渠道 -->
+      <zxn-title class="m-35px" ref="activeRef3">合同渠道</zxn-title>
+      <el-row :gutter="50">
+        <el-col :span="7">
           <el-form-item label="企业模式">
             <template #default>
               <div class="busType">
@@ -217,7 +236,8 @@
               <el-option label="外扣" value="1" />
             </el-select>
           </el-form-item>
-
+        </el-col>
+        <el-col :span="7">
           <el-form-item label="企业邮箱">
             <el-input placeholder="请输入" v-model="addForm.company_email" />
           </el-form-item>
@@ -234,7 +254,7 @@
             <el-input placeholder="请输入" v-model="addForm.address" />
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="7">
           <!-- 新建税地 -->
           <template v-for="(tax, index) in addForm.tax_land_list" :key="tax">
             <el-form-item
@@ -315,59 +335,21 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item
-              label="上传合同"
-              :prop="'tax_land_list.' + index + '.contract_img'"
-              :rules="{
-                required: true,
-                message: '必填',
-                trigger: 'change',
-              }"
-            >
-              <MultiUpload v-model="tax.contract_img">
-                <i-ep-Plus />
-              </MultiUpload>
-            </el-form-item>
-            <el-form-item v-if="addForm.tax_land_list.length > 1 && index != 0">
-              <div class="delTaxLand" @click="delTaxLand(index)">
-                × 删除税地
-              </div>
-            </el-form-item>
           </template>
         </el-col>
-        <!-- <el-col :span="8">
-          <el-form-item>
-            <div class="addTaxLand" @click="addNewTaxLand">+ 添加税地</div>
-          </el-form-item>
-        </el-col> -->
       </el-row>
       <zxn-bottom-btn>
         <el-button type="info" v-if="activeStep === 0" @click="$router.go(-1)"
           >取消</el-button
         >
-        <el-button type="info" v-if="activeStep !== 0" @click="activeStep--"
-          >上一步</el-button
-        >
-        <el-button type="primary" v-if="activeStep !== 3" @click="activeStep++"
-          >下一步</el-button
-        >
-        <el-button
-          type="primary"
-          v-if="activeStep === 3"
-          @click="submit(addFormRef)"
-          >完成</el-button
-        >
+        <el-button type="primary" @click="submit(addFormRef)">完成</el-button>
       </zxn-bottom-btn>
     </el-form>
   </zxn-plan>
 </template>
 
 <script lang="ts" setup>
-import {
-  createBusinessAccount,
-  getCategoryList,
-  getTaxlandDetail,
-} from "@/api/account/business";
+import { createBusinessAccount, getCategoryList } from "@/api/account/business";
 import { getLandList } from "@/api/common";
 import router from "@/router";
 import type { FormInstance, FormRules } from "element-plus";
@@ -458,7 +440,6 @@ const addForm = reactive({
       tax_point: "",
       sign_type: "",
       auth_type: "",
-      contract_img: [],
     },
   ],
 } as any);
@@ -466,15 +447,8 @@ const addForm = reactive({
 const isTaxLandListValid = computed(() => {
   if (addForm.tax_land_list.length > 0) {
     const allElementsValid = addForm.tax_land_list.every((item) => {
-      const { tax_land_id, tax_point, auth_type, sign_type, contract_img } =
-        item;
-      return (
-        tax_land_id &&
-        tax_point &&
-        auth_type &&
-        sign_type &&
-        contract_img.length
-      );
+      const { tax_land_id, tax_point, auth_type, sign_type } = item;
+      return tax_land_id && tax_point && auth_type && sign_type;
     });
     if (allElementsValid) {
       // 数组中所有元素的参数都有值时返回 true
@@ -569,8 +543,6 @@ async function submit(formEl: FormInstance | undefined) {
 
   await formEl.validate(async (valid, fields) => {
     if (valid) {
-      console.log(isAllComplete.value);
-
       // 全部填写完成
       if (isAllComplete.value) {
         const res = await createBusinessAccount(addForm);
@@ -642,10 +614,15 @@ async function submit(formEl: FormInstance | undefined) {
           });
       }
     } else {
+      document.querySelectorAll(".is-error")[0].scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "start",
+      });
       ElMessage.error({
         message: "当前表单必填项还未填写！",
       });
-      console.log("error submit!", fields);
+      // console.log("error submit!", fields);
     }
   });
 }
@@ -671,21 +648,6 @@ function addSelecTaxland(tax: any, index: number) {
   auth_type.value = taxLandStore.auth_type;
   sign_type.value = taxLandStore.sign_type;
 }
-
-// 添加税地
-const addNewTaxLand = () => {
-  addForm.tax_land_list.push({
-    tax_land_id: "",
-    tax_point: "",
-    sign_type: "",
-    auth_type: "",
-    contract_img: [],
-  });
-};
-
-const delTaxLand = (index: number) => {
-  addForm.tax_land_list.splice(index, 1);
-};
 
 getCategoryOptions();
 getTaxLandOption();
@@ -716,25 +678,5 @@ getTaxLandOption();
 
 :deep(.el-input__wrapper) {
   width: 100% !important;
-}
-
-.addTaxLand {
-  display: flex;
-  align-items: center;
-  gap: 0 5px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  color: #356ff3;
-}
-
-.delTaxLand {
-  display: flex;
-  align-items: center;
-  gap: 0 5px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  color: #f35135;
 }
 </style>

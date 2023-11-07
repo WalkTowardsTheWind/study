@@ -150,7 +150,6 @@ watch(
 </script>
 <style scoped lang="scss">
 .box {
-  padding-bottom: 100px;
 }
 
 .bottom-btn {

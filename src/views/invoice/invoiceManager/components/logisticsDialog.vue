@@ -3,7 +3,12 @@
     <div class="logistics">
       <el-form class="logistics-img" label-width="80">
         <el-form-item label="票样">
-          <zxn-image :imgList="[formItem.invoice_sample_url]" />
+          <zxn-image
+            class="logistics-img-item"
+            :imgList="formItem.invoice_sample_url"
+            targetClick
+            ellipsis
+          />
         </el-form-item>
         <el-form-item label="物流面单">
           <zxn-image :imgList="[formItem.express_url]" />
@@ -34,12 +39,12 @@ export default {
 <script setup lang="ts">
 let visible = ref(false);
 const formItem = reactive({
-  invoice_sample_url: "",
+  invoice_sample_url: [],
   express_url: "",
   Traces: [],
 });
 const init = (id: number): void => {
-  formItem.invoice_sample_url = "";
+  formItem.invoice_sample_url = [];
   formItem.express_url = "";
   formItem.Traces = [];
   visible.value = true;
@@ -65,15 +70,19 @@ defineExpose({
     display: flex;
     flex: none;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
     &-label {
       margin-right: 10px;
       margin-left: 30px;
       font-size: 14px;
       font-weight: 500;
       color: #656565;
+    }
+    .logistics-img-item {
+      display: flex;
+      flex-direction: column;
+      :deep(.zxn-image-item) {
+        margin-top: 10px;
+      }
     }
   }
 
