@@ -153,8 +153,8 @@ function handleRemove(removeFile: UploadFile) {
  * 限制用户上传文件的格式和大小
  */
 function handleBeforeUpload(file: UploadRawFile) {
-  if (file.size > 10 * 1048 * 1048) {
-    ElMessage.warning("上传图片不能大于10M");
+  if (file.size > 20 * 1048 * 1048) {
+    ElMessage.warning("上传图片不能大于20M");
     return false;
   }
   return true;
