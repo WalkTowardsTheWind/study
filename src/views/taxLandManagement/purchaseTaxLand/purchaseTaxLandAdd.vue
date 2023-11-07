@@ -433,7 +433,6 @@
           </div>
         </zxn-bottom-btn>
       </template>
-      <template #2> </template>
     </zxn-tabs>
   </zxn-plan>
 </template>
