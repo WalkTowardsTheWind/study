@@ -21,9 +21,7 @@
         </el-form-item>
         <el-form-item label="">
           <div>
-            <el-button type="primary" @click="handleSubmit" :loading="loading"
-              >确定</el-button
-            >
+            <el-button type="primary" @click="handleSubmit">确定</el-button>
             <el-button @click="handleCancel">取消</el-button>
           </div>
         </el-form-item>
@@ -51,14 +49,12 @@ const init = (data: any): void => {
   imageList.value = data.tax_payment_receipt;
   visible.value = true;
 };
-const loading = ref(false);
 const handleSubmit = () => {
-  loading.value = false;
-  emits("on-success");
+  // emits("on-success");
   visible.value = false;
 };
 const handleCancel = () => {
-  emits("on-success");
+  // emits("on-success");
   visible.value = false;
 };
 

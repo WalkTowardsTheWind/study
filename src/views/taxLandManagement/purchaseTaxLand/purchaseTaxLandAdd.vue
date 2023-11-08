@@ -243,6 +243,27 @@
                     placeholder="请输入"
                   />
                 </el-form-item>
+                <el-form-item
+                  class="mt-25px"
+                  label="开票方式"
+                  prop="invoice_form"
+                >
+                  <el-select
+                    class="w-[100%]"
+                    clearable
+                    v-model="formItem.invoice_form"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in proxy.$const[
+                        'taxLandManagementEnum.invoiceForm'
+                      ]"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="核账网址">
@@ -300,7 +321,7 @@
                 <el-form-item class="mt-25px" label="支付供应商">
                   <el-input
                     v-model="formItem.payment_supplier"
-                    placeholder="请选择"
+                    placeholder="请输入"
                   >
                   </el-input>
                 </el-form-item>
@@ -404,7 +425,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item class="mb-[0]" label="个人合同模板">
+                <!-- <el-form-item class="mb-[0]" label="个人合同模板">
                   <multi-upload
                     v-model="formItem.agreement_url"
                     :limit="3"
@@ -415,7 +436,7 @@
                     v-model="formItem.contract_img"
                     :limit="3"
                   ></multi-upload>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item class="mb-[0]" label="结算确认函">
                   <multi-upload
                     v-model="formItem.settlement_confirmation_letter"
@@ -425,6 +446,10 @@
               </el-col>
             </el-row>
           </el-form>
+          <div class="advert">
+            <span class="fc">注意</span
+            >：账户新建后，请在账户合同信息或合同管理进行相关合同的上传或在线签署。
+          </div>
         </div>
         <zxn-bottom-btn>
           <div class="but">
@@ -608,7 +633,7 @@ const imgValidate = (message: any, rule: any, value: any, callback: any) => {
   }
 };
 const Rules = {
-  tax_land_type: [{ required: true, message: "请输入", trigger: "change" }],
+  tax_land_type: [{ required: true, message: "请选择", trigger: "change" }],
   tax_land_name: [{ required: true, message: "请输入", trigger: "blur" }],
   min_employment_year: [
     { required: true, validator: validateMin_employment_year, trigger: "blur" },
@@ -624,13 +649,14 @@ const Rules = {
     },
   ],
   //
-  payment_type: [{ required: true, message: "请输入", trigger: "change" }],
+  payment_type: [{ required: true, message: "请选择", trigger: "change" }],
   bank_account: [{ required: true, message: "请输入", trigger: "blur" }],
+  invoice_form: [{ required: true, message: "请选择", trigger: "change" }],
   //
   certification_rules: [
-    { required: true, message: "请输入", trigger: "change" },
+    { required: true, message: "请选择", trigger: "change" },
   ],
-  signing_rules: [{ required: true, message: "请输入", trigger: "change" }],
+  signing_rules: [{ required: true, message: "请选择", trigger: "change" }],
   individual_monthly_limit: [
     {
       required: true,
@@ -638,7 +664,7 @@ const Rules = {
       trigger: "blur",
     },
   ],
-  tax_contract_term: [{ required: true, message: "请输入", trigger: "change" }],
+  tax_contract_term: [{ required: true, message: "请选择", trigger: "change" }],
 };
 const formItem = ref({
   tax_land_type: "1",
@@ -661,6 +687,7 @@ const formItem = ref({
   payment_type: "",
   bank: "",
   bank_account: "",
+  invoice_form: "",
   audit_web_url: "",
   audit_account: "",
   audit_password: "",
@@ -773,5 +800,18 @@ onMounted(() => {});
   margin-right: 10px;
   background: #356ff3;
   border-radius: 4px;
+}
+.advert {
+  margin-top: 40px;
+  margin-bottom: 60px;
+  height: 14px;
+  font-size: 14px;
+  font-family: SourceHanSansSC-Medium, SourceHanSansSC;
+  font-weight: 500;
+  color: #333333;
+  line-height: 14px;
+  .fc {
+    color: #f35135;
+  }
 }
 </style>
