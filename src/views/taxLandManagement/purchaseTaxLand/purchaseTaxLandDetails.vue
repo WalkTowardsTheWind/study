@@ -184,7 +184,11 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="发票金额上限">
-                  <zxn-money-input v-model="formItem.max_money" readonly />
+                  <zxn-money-input
+                    v-model="formItem.max_money"
+                    placeholder=" "
+                    readonly
+                  />
                 </el-form-item>
                 <el-form-item
                   class="mt-25px"

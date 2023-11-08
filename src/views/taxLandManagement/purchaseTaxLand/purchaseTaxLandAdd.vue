@@ -425,7 +425,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item class="mb-[0]" label="个人合同模板">
+                <!-- <el-form-item class="mb-[0]" label="个人合同模板">
                   <multi-upload
                     v-model="formItem.agreement_url"
                     :limit="3"
@@ -436,7 +436,7 @@
                     v-model="formItem.contract_img"
                     :limit="3"
                   ></multi-upload>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item class="mb-[0]" label="结算确认函">
                   <multi-upload
                     v-model="formItem.settlement_confirmation_letter"
@@ -446,6 +446,10 @@
               </el-col>
             </el-row>
           </el-form>
+          <div class="advert">
+            <span class="fc">注意</span
+            >：账户新建后，请在账户合同信息或合同管理进行相关合同的上传或在线签署。
+          </div>
         </div>
         <zxn-bottom-btn>
           <div class="but">
@@ -796,5 +800,18 @@ onMounted(() => {});
   margin-right: 10px;
   background: #356ff3;
   border-radius: 4px;
+}
+.advert {
+  margin-top: 40px;
+  margin-bottom: 60px;
+  height: 14px;
+  font-size: 14px;
+  font-family: SourceHanSansSC-Medium, SourceHanSansSC;
+  font-weight: 500;
+  color: #333333;
+  line-height: 14px;
+  .fc {
+    color: #f35135;
+  }
 }
 </style>
