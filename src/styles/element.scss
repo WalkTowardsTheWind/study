@@ -137,3 +137,11 @@
     font-size: 0 !important;
   }
 }
+
+// 日期组件宽度
+.el-date {
+  width: 100%;
+  .el-input__wrapper {
+    width: 100% !important;
+  }
+}

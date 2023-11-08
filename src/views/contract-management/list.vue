@@ -21,20 +21,20 @@ import otherContract from "./components/3other-c.vue";
 
 const tabsList = [
   {
-    name: 1,
+    name: "1",
     label: "企业合同",
   },
   {
-    name: 2,
+    name: "2",
     label: "渠道合同",
   },
   {
-    name: 3,
+    name: "3",
     label: "其他合同",
   },
 ];
 
-const activeName = ref(1);
+const activeName = ref("1");
 </script>
 
 <style scoped></style>
