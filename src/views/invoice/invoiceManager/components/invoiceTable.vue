@@ -71,6 +71,7 @@
             <el-dropdown-menu>
               <el-dropdown-item command="reject">驳回</el-dropdown-item>
               <el-dropdown-item command="excel">导出</el-dropdown-item>
+              <el-dropdown-item command="issue">开立</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -85,22 +86,42 @@
         />
       </template>
       <template #operation="{ row }">
-        <template v-if="!row.status">
-          <el-button link type="primary" @click="handleReject([row.id])"
-            >驳回</el-button
-          >
-          <el-button link type="primary" @click="handleUpload(row)"
-            >上传发票</el-button
-          >
-        </template>
-        <el-button link type="primary" @click="handleView(row)">详情</el-button>
         <el-button
-          v-if="row.status === 5 || row.status === 1"
+          v-if="[0].includes(row.status)"
+          link
+          type="primary"
+          @click="handleReject([row.id])"
+          >驳回</el-button
+        >
+        <el-button
+          v-if="[7].includes(row.status)"
+          link
+          type="primary"
+          @click="handleWithdraw([row.id])"
+          >撤回</el-button
+        >
+        <el-button
+          v-if="[7].includes(row.status)"
+          link
+          type="primary"
+          @click="handleUpload(row)"
+          >上传发票</el-button
+        >
+        <el-button
+          v-if="[0].includes(row.status)"
+          link
+          type="primary"
+          @click="handleIssue([row.id])"
+          >开立</el-button
+        >
+        <el-button
+          v-if="[1, 5].includes(row.status)"
           link
           type="primary"
           @click="handleLogistics(row)"
           >查看物流</el-button
         >
+        <el-button link type="primary" @click="handleView(row)">详情</el-button>
         <!--        <el-button link type="primary">导出</el-button>-->
       </template>
     </zxn-table>
@@ -191,6 +212,7 @@ const columnList: any[] = reactive([
       2: { color: "#F35135", backgroundColor: "#fde3df" },
       3: { color: "#FFFFFF", backgroundColor: "#f9a89a" },
       5: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+      7: { color: "#19B56B", backgroundColor: "#DAF3E7" },
     },
     minWidth: 120,
   },
@@ -271,6 +293,9 @@ const handleCommand = (type: string) => {
     case "excel":
       handleExcel(ids);
       break;
+    case "issue":
+      handleIssue(ids);
+      break;
   }
 };
 const handleReject = (ids: number[]) => {
@@ -306,6 +331,122 @@ const handleReject = (ids: number[]) => {
     });
     getList();
   });
+};
+// 开立
+const handleIssue = (ids: number[]) => {
+  let confirmed = ids.filter((item) => {
+    let obj = tableData.find((o: any) => {
+      return o.id == item;
+    });
+    return obj.settlement_confirmation_letter;
+  });
+  ElMessageBox({
+    title: "",
+    message: h("p", null, `确定开立？`),
+    showCancelButton: true,
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    beforeClose: async (
+      action: string,
+      instance: { confirmButtonLoading: boolean },
+      done: () => void
+    ) => {
+      if (action === "confirm") {
+        instance.confirmButtonLoading = true;
+        try {
+          const params = {
+            ids,
+            status: 7,
+          };
+          props.type === "enterprise"
+            ? await setStatus(params)
+            : await channelSetStatus(params);
+          instance.confirmButtonLoading = false;
+          done();
+          ElMessage({
+            type: "success",
+            message: "开立成功",
+          });
+        } catch (error) {
+          instance.confirmButtonLoading = false;
+          done();
+          ElMessage({
+            type: "error",
+            message: "开立失败",
+          });
+        }
+      } else {
+        done();
+      }
+    },
+  })
+    .then(() => {})
+    .catch((action) => {
+      if (action === "cancel") {
+        ElMessage({
+          type: "warning",
+          message: "取消操作",
+        });
+      }
+    })
+    .finally(() => {
+      getList();
+    });
+};
+// 撤回
+const handleWithdraw = (ids: number[]) => {
+  ElMessageBox({
+    title: "",
+    message: h("p", null, `确定撤回？`),
+    showCancelButton: true,
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    beforeClose: async (
+      action: string,
+      instance: { confirmButtonLoading: boolean },
+      done: () => void
+    ) => {
+      if (action === "confirm") {
+        instance.confirmButtonLoading = true;
+        try {
+          const params = {
+            ids,
+            status: 0,
+          };
+          props.type === "enterprise"
+            ? await setStatus(params)
+            : await channelSetStatus(params);
+          instance.confirmButtonLoading = false;
+          done();
+          ElMessage({
+            type: "success",
+            message: "撤回成功",
+          });
+        } catch (error) {
+          instance.confirmButtonLoading = false;
+          done();
+          ElMessage({
+            type: "error",
+            message: "撤回失败",
+          });
+        }
+      } else {
+        done();
+      }
+    },
+  })
+    .then(() => {})
+    .catch((action) => {
+      if (action === "cancel") {
+        ElMessage({
+          type: "warning",
+          message: "取消操作",
+        });
+      }
+    })
+    .finally(() => {
+      getList();
+    });
 };
 const handleExcel = async (ids: number[]) => {
   const params = {

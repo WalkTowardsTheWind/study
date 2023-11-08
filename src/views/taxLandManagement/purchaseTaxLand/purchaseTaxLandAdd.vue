@@ -433,7 +433,6 @@
           </div>
         </zxn-bottom-btn>
       </template>
-      <template #2> </template>
     </zxn-tabs>
   </zxn-plan>
 </template>
@@ -451,7 +450,7 @@ const activeName = ref("1");
 const tabsList = [
   {
     name: "1",
-    label: "新建税地",
+    label: "新建采购税地",
   },
   // {
   //   name: "2",
