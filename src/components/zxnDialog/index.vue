@@ -31,11 +31,9 @@ defineProps({
     required: true,
   },
   width: {
-    type: Number,
     default: () => 452 + "px",
   },
   top: {
-    type: Number,
     default: () => 25,
   },
   hasBottomBtn: {
