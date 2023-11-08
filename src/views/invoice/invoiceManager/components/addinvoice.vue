@@ -26,7 +26,11 @@
         <el-input v-model="formItem.express_no" />
       </el-form-item>
       <el-form-item label="票样" prop="invoice_sample_url">
-        <multi-upload v-model="formItem.invoice_sample_url" :limit="20" />
+        <multi-upload
+          v-model="formItem.invoice_sample_url"
+          :limit="20"
+          multiple
+        />
       </el-form-item>
       <el-form-item label="物流面单" prop="express_url">
         <multi-upload v-model="formItem.express_url" :limit="1" />
