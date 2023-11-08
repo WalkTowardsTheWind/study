@@ -382,6 +382,19 @@
               </div>
             </div>
           </el-form>
+          <!-- <zxn-table :table-data="tableData" :column-list="columnList">
+            <template #operation="scope">
+              <el-button link type="primary" @click="handleView(row)"
+                >查看</el-button
+              >
+              <el-button
+                link
+                type="primary"
+                @click="handleDownload([Number(row.id)])"
+                >下载</el-button
+              >
+            </template>
+          </zxn-table> -->
         </div>
       </template>
     </zxn-tabs>
@@ -619,6 +632,47 @@ const Rules3 = {
   tax_contract_term: [{ required: true, message: "请选择", trigger: "change" }],
   tax_organ_code: [{ required: true, message: "请输入", trigger: "blur" }],
 };
+//
+// const tableData = reactive([] as any);
+// const columnList = [
+//   { label: "合同编号", prop: "contract_no" },
+//   { label: "合同类型", prop: "contract_kind" },
+//   {
+//     label: "状态",
+//     type: "enum",
+//     path: "contractCenterEnum.contractStatus",
+//     prop: "status",
+//     // fixed: "left",
+//     color: {
+//       0: { color: "#366FF4", backgroundColor: "#DFE8FD" },
+//       1: { color: "#FFFFFF", backgroundColor: "#999999" },
+//       2: { color: "#333333", backgroundColor: "#DEDEDE" },
+//     },
+//   },
+//   { label: "签署形式", prop: "online_type" },
+//   { label: "甲方", prop: "party_a" },
+//   { label: "乙方", prop: "party_b" },
+//   {
+//     label: "签约时间",
+//     prop: "sign_time",
+//     //  sortable: "custom",
+//     width: 120,
+//   },
+//   {
+//     label: "到期时间",
+//     prop: "end_time",
+//     //  sortable: "custom",
+//     width: 120,
+//   },
+//   {
+//     label: "操作",
+//     slot: "operation",
+//     fixed: "right",
+//     width: 120,
+//     align: "right ",
+//     headerAlign: "right",
+//   },
+// ];
 const formItem = ref({
   tax_land_type: "0",
   tax_land_head: "",
