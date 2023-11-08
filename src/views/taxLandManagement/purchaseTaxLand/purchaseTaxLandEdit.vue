@@ -132,15 +132,6 @@
                 </el-form-item>
               </el-col>
             </el-row>
-          </el-form>
-
-          <el-form
-            class="zxn-box"
-            :model="formItem"
-            label-width="130px"
-            ref="FormRef2"
-            :rules="Rules2"
-          >
             <div class="title">
               <div class="line"></div>
               <div>发票厂家信息</div>
@@ -252,6 +243,27 @@
                     placeholder="请输入"
                   />
                 </el-form-item>
+                <el-form-item
+                  class="mt-25px"
+                  label="开票方式"
+                  prop="invoice_form"
+                >
+                  <el-select
+                    class="w-[100%]"
+                    clearable
+                    v-model="formItem.invoice_form"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in proxy.$const[
+                        'taxLandManagementEnum.invoiceForm'
+                      ]"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="核账网址">
@@ -339,14 +351,6 @@
                 </el-form-item>
               </el-col>
             </el-row>
-          </el-form>
-          <el-form
-            class="zxn-box"
-            :model="formItem"
-            label-width="130px"
-            ref="FormRef3"
-            :rules="Rules3"
-          >
             <div class="title">
               <div class="line"></div>
               <div>行业与合同信息</div>
@@ -591,8 +595,6 @@ const propsTaxLang = {
 
 //表单信息
 const FormRef = ref(ElForm);
-const FormRef2 = ref(ElForm);
-const FormRef3 = ref(ElForm);
 const validateMin_employment_year = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请输入"));
@@ -630,8 +632,15 @@ const validateIndividualMonthlyLimit = (
     callback();
   }
 };
+const imgValidate = (message: any, rule: any, value: any, callback: any) => {
+  if (value && value.length) {
+    callback();
+  } else {
+    callback(message);
+  }
+};
 const Rules = {
-  tax_land_type: [{ required: true, message: "请输入", trigger: "change" }],
+  tax_land_type: [{ required: true, message: "请选择", trigger: "change" }],
   tax_land_name: [{ required: true, message: "请输入", trigger: "blur" }],
   min_employment_year: [
     { required: true, validator: validateMin_employment_year, trigger: "blur" },
@@ -640,18 +649,19 @@ const Rules = {
     { required: true, validator: validateMax_employment_year, trigger: "blur" },
   ],
   tax_land_license: [
-    { required: true, message: "请上传图片", trigger: "change" },
+    {
+      required: true,
+      validator: imgValidate.bind(null, "请上传税地营业执照"),
+      trigger: "change",
+    },
   ],
-};
-const Rules2 = {
-  payment_type: [{ required: true, message: "请输入", trigger: "change" }],
+  payment_type: [{ required: true, message: "请选择", trigger: "change" }],
   bank_account: [{ required: true, message: "请输入", trigger: "blur" }],
-};
-const Rules3 = {
+  invoice_form: [{ required: true, message: "请选择", trigger: "change" }],
   certification_rules: [
-    { required: true, message: "请输入", trigger: "change" },
+    { required: true, message: "请选择", trigger: "change" },
   ],
-  signing_rules: [{ required: true, message: "请输入", trigger: "change" }],
+  signing_rules: [{ required: true, message: "请选择", trigger: "change" }],
   individual_monthly_limit: [
     {
       required: true,
@@ -659,7 +669,7 @@ const Rules3 = {
       trigger: "blur",
     },
   ],
-  tax_contract_term: [{ required: true, message: "请输入", trigger: "change" }],
+  tax_contract_term: [{ required: true, message: "请选择", trigger: "change" }],
 };
 const formItem = ref({
   tax_land_type: "1",
@@ -682,6 +692,7 @@ const formItem = ref({
   payment_type: "",
   bank: "",
   bank_account: "",
+  invoice_form: "",
   audit_web_url: "",
   audit_account: "",
   audit_password: "",
@@ -703,47 +714,43 @@ const formItem = ref({
   settlement_confirmation_letter: [],
 });
 const handleSubmit = () => {
-  FormRef.value.validate((valid1: boolean) => {
-    FormRef2.value.validate((valid2: boolean) => {
-      FormRef3.value.validate((valid3: boolean) => {
-        if (valid1 && valid2 && valid3) {
-          const ID = Number(route.query.id);
-          const params = { ...formItem.value } as any;
-          params.tax_land_license = JSON.stringify(params.tax_land_license);
-          params.company_qualifications = JSON.stringify(
-            params.company_qualifications
-          );
-          params.category_id = newArrayTransform(params.category_id);
-          params.invoice_sample = JSON.stringify(params.invoice_sample);
-          params.industry_limit = JSON.stringify(params.industry_limit);
-          // params.certification_rules = flatten(params.certification_rules);
-          // params.signing_rules = flatten(params.signing_rules);
-          params.agreement_url = JSON.stringify(params.agreement_url);
-          params.contract_img = JSON.stringify(params.contract_img);
-          params.settlement_confirmation_letter = JSON.stringify(
-            params.settlement_confirmation_letter
-          );
-          params.tax_land_city_id = newNumberTransform(params.tax_land_city_id);
-          // params.tax_reg_type = newNumberTransform(params.tax_reg_type);
+  FormRef.value.validate((valid: boolean) => {
+    if (valid) {
+      const ID = Number(route.query.id);
+      const params = { ...formItem.value } as any;
+      params.tax_land_license = JSON.stringify(params.tax_land_license);
+      params.company_qualifications = JSON.stringify(
+        params.company_qualifications
+      );
+      params.category_id = newArrayTransform(params.category_id);
+      params.invoice_sample = JSON.stringify(params.invoice_sample);
+      params.industry_limit = JSON.stringify(params.industry_limit);
+      // params.certification_rules = flatten(params.certification_rules);
+      // params.signing_rules = flatten(params.signing_rules);
+      params.agreement_url = JSON.stringify(params.agreement_url);
+      params.contract_img = JSON.stringify(params.contract_img);
+      params.settlement_confirmation_letter = JSON.stringify(
+        params.settlement_confirmation_letter
+      );
+      params.tax_land_city_id = newNumberTransform(params.tax_land_city_id);
+      // params.tax_reg_type = newNumberTransform(params.tax_reg_type);
 
-          console.log(params);
-          selfOperatedTaxLandEdit(ID, params)
-            .then(() => {
-              ElMessage({
-                type: "success",
-                message: `编辑税地成功`,
-              });
-              router.push({
-                name: "taxLandManagementIndex",
-                query: { activeName: "purchase" },
-              });
-            })
-            .catch((e) => {
-              console.log(e);
-            });
-        }
-      });
-    });
+      console.log(params);
+      selfOperatedTaxLandEdit(ID, params)
+        .then(() => {
+          ElMessage({
+            type: "success",
+            message: `编辑税地成功`,
+          });
+          router.push({
+            name: "taxLandManagementIndex",
+            query: { activeName: "purchase" },
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
   });
 };
 const handleClose = () => {
@@ -775,6 +782,7 @@ const getData = async () => {
       payment_type,
       bank,
       bank_account,
+      invoice_form,
       audit_web_url,
       audit_account,
       audit_password,
@@ -823,6 +831,7 @@ const getData = async () => {
       payment_type: payment_type + "",
       bank,
       bank_account,
+      invoice_form: invoice_form + "",
       audit_web_url,
       audit_account,
       audit_password,

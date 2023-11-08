@@ -8,7 +8,11 @@
     @close="handleClose"
   >
     <el-form ref="form" :model="formItem" label-width="110" :rules="rules">
-      <el-form-item label="选择物流" prop="express_id">
+      <el-form-item
+        v-if="formItem.type === 1"
+        label="选择物流"
+        prop="express_id"
+      >
         <el-select
           v-model="formItem.express_id"
           class="w-100%"
@@ -22,13 +26,21 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="输入物流单号" prop="express_no">
+      <el-form-item
+        v-if="formItem.type === 1"
+        label="输入物流单号"
+        prop="express_no"
+      >
         <el-input v-model="formItem.express_no" />
       </el-form-item>
       <el-form-item label="票样" prop="invoice_sample_url">
         <multi-upload v-model="formItem.invoice_sample_url" :limit="20" />
       </el-form-item>
-      <el-form-item label="物流面单" prop="express_url">
+      <el-form-item
+        v-if="formItem.type === 1"
+        label="物流面单"
+        prop="express_url"
+      >
         <multi-upload v-model="formItem.express_url" :limit="1" />
       </el-form-item>
       <el-form-item label="">
@@ -52,6 +64,7 @@ import MultiUpload from "@/components/Upload/MultiUpload.vue";
 import { getLogisticsCompany, uploadInvoice } from "@/api/invoice";
 import type { FormRules } from "element-plus";
 import { ElMessage } from "element-plus";
+import { number } from "echarts";
 const emits = defineEmits(["on-success"]);
 let visible = ref(false);
 const imgValidate = (message: any, rule: any, value: any, callback: any) => {
@@ -77,13 +90,15 @@ const rules = reactive<FormRules>({
 });
 const formItem = reactive({
   id: 0,
+  type: 0,
   express_id: "",
   express_no: "",
   invoice_sample_url: [],
   express_url: [],
 });
-const init = (id: number): void => {
+const init = (id: number, type: number): void => {
   formItem.id = id;
+  formItem.type = type;
   visible.value = true;
 };
 const logisticsCompany = reactive([]);

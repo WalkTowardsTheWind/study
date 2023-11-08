@@ -243,6 +243,27 @@
                     placeholder="请输入"
                   />
                 </el-form-item>
+                <el-form-item
+                  class="mt-25px"
+                  label="开票方式"
+                  prop="invoice_form"
+                >
+                  <el-select
+                    class="w-[100%]"
+                    clearable
+                    v-model="formItem.invoice_form"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in proxy.$const[
+                        'taxLandManagementEnum.invoiceForm'
+                      ]"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="核账网址">
@@ -300,7 +321,7 @@
                 <el-form-item class="mt-25px" label="支付供应商">
                   <el-input
                     v-model="formItem.payment_supplier"
-                    placeholder="请选择"
+                    placeholder="请输入"
                   >
                   </el-input>
                 </el-form-item>
@@ -608,7 +629,7 @@ const imgValidate = (message: any, rule: any, value: any, callback: any) => {
   }
 };
 const Rules = {
-  tax_land_type: [{ required: true, message: "请输入", trigger: "change" }],
+  tax_land_type: [{ required: true, message: "请选择", trigger: "change" }],
   tax_land_name: [{ required: true, message: "请输入", trigger: "blur" }],
   min_employment_year: [
     { required: true, validator: validateMin_employment_year, trigger: "blur" },
@@ -624,13 +645,14 @@ const Rules = {
     },
   ],
   //
-  payment_type: [{ required: true, message: "请输入", trigger: "change" }],
+  payment_type: [{ required: true, message: "请选择", trigger: "change" }],
   bank_account: [{ required: true, message: "请输入", trigger: "blur" }],
+  invoice_form: [{ required: true, message: "请选择", trigger: "change" }],
   //
   certification_rules: [
-    { required: true, message: "请输入", trigger: "change" },
+    { required: true, message: "请选择", trigger: "change" },
   ],
-  signing_rules: [{ required: true, message: "请输入", trigger: "change" }],
+  signing_rules: [{ required: true, message: "请选择", trigger: "change" }],
   individual_monthly_limit: [
     {
       required: true,
@@ -638,7 +660,7 @@ const Rules = {
       trigger: "blur",
     },
   ],
-  tax_contract_term: [{ required: true, message: "请输入", trigger: "change" }],
+  tax_contract_term: [{ required: true, message: "请选择", trigger: "change" }],
 };
 const formItem = ref({
   tax_land_type: "1",
@@ -661,6 +683,7 @@ const formItem = ref({
   payment_type: "",
   bank: "",
   bank_account: "",
+  invoice_form: "",
   audit_web_url: "",
   audit_account: "",
   audit_password: "",

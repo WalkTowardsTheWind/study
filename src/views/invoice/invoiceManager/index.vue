@@ -39,6 +39,7 @@
       @on-success="handleTabChange"
     />
     <img-dialog ref="imgDialogRef" @on-success="handleTabChange" />
+    <IMSelection ref="IMSelectionRef" @on-success="handleSelect" />
   </zxn-plan>
 </template>
 <script lang="ts">
@@ -54,6 +55,7 @@ import logisticsDialog from "./components/logisticsDialog.vue";
 import taxPaymentReceipt from "./components/taxPaymentReceipt.vue";
 import uploadCredentials from "./components/uploadCredentials.vue";
 import imgDialog from "./components/imgDialog.vue";
+import IMSelection from "./components/IMSelection.vue";
 const activeName = ref("enterprise");
 const tabsList = [
   {
@@ -92,7 +94,14 @@ const handleTabChange = (name?: any) => {
 };
 const addInvoiceRef = ref();
 const handleUpload = (cur: any) => {
-  addInvoiceRef.value.init(cur.id);
+  if (cur.invoice_form === 0) {
+    IMSelectionRef.value.init(cur.id);
+  } else if (cur.invoice_form === 1) {
+    addInvoiceRef.value.init(cur.id, 1);
+  } else if (cur.invoice_form === 2) {
+    addInvoiceRef.value.init(cur.id, 2);
+  }
+  console.log(cur, 99999999);
 };
 const uploadCredentialsRef = ref();
 const handleUploadCredentials = (cur: any) => {
@@ -105,6 +114,14 @@ const handleLogistics = (cur: any) => {
 const imgDialogRef = ref();
 const handleView = (cur: any) => {
   imgDialogRef.value.init(cur);
+};
+const IMSelectionRef = ref();
+const handleSelect = (id: number, type: any) => {
+  if (type === 1) {
+    addInvoiceRef.value.init(id, 1);
+  } else if (type === 2) {
+    addInvoiceRef.value.init(id, 2);
+  }
 };
 onActivated(() => {
   handleTabChange();

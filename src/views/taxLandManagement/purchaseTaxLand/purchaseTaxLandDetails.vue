@@ -36,14 +36,14 @@
                   <el-input
                     readonly
                     v-model="formItem.tax_land_head"
-                    placeholder="请输入"
+                    placeholder=" "
                   />
                 </el-form-item>
                 <el-form-item label="联系方式">
                   <el-input
                     readonly
                     v-model="formItem.head_mobile"
-                    placeholder="请输入"
+                    placeholder=" "
                   />
                 </el-form-item>
                 <el-form-item
@@ -55,7 +55,7 @@
                     readonly
                     class="w-[100%]"
                     v-model="formItem.tax_land_name"
-                    placeholder="请输入"
+                    placeholder=" "
                   >
                   </el-input>
                 </el-form-item>
@@ -73,7 +73,7 @@
                   <el-input
                     readonly
                     v-model="formItem.tax_cost_point"
-                    placeholder="请输入"
+                    placeholder=" "
                   />
                 </el-form-item>
 
@@ -84,7 +84,7 @@
                         readonly
                         type="number"
                         v-model="formItem.min_employment_year"
-                        placeholder="起始年龄"
+                        placeholder=" "
                       />
                     </el-form-item>
                   </el-col>
@@ -97,7 +97,7 @@
                         readonly
                         type="number"
                         v-model="formItem.max_employment_year"
-                        placeholder="截至年龄"
+                        placeholder=" "
                       />
                     </el-form-item>
                   </el-col>
@@ -131,9 +131,6 @@
                 </el-form-item>
               </el-col>
             </el-row>
-          </el-form>
-
-          <el-form class="zxn-box" :model="formItem" label-width="130px">
             <div class="title">
               <div class="line"></div>
               <div>发票厂家信息</div>
@@ -145,7 +142,6 @@
                     class="w-[100%]"
                     disabled
                     v-model="formItem.invoice_type"
-                    placeholder=" "
                   >
                     <el-option
                       v-for="item in proxy.$const[
@@ -212,11 +208,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item class="mt-25px" label="开户行">
-                  <el-input
-                    readonly
-                    v-model="formItem.bank"
-                    placeholder="请输入"
-                  >
+                  <el-input readonly v-model="formItem.bank" placeholder=" ">
                   </el-input>
                 </el-form-item>
                 <el-form-item
@@ -227,8 +219,25 @@
                   <el-input
                     readonly
                     v-model="formItem.bank_account"
-                    placeholder="请输入"
+                    placeholder=" "
                   />
+                </el-form-item>
+                <el-form-item class="mt-25px" label="开票方式">
+                  <el-select
+                    class="w-[100%]"
+                    disabled
+                    v-model="formItem.invoice_form"
+                    placeholder=" "
+                  >
+                    <el-option
+                      v-for="item in proxy.$const[
+                        'taxLandManagementEnum.invoiceForm'
+                      ]"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -303,8 +312,6 @@
                 </el-form-item>
               </el-col>
             </el-row>
-          </el-form>
-          <el-form class="zxn-box" :model="formItem" label-width="130px">
             <div class="title">
               <div class="line"></div>
               <div>行业与合同信息</div>
@@ -374,7 +381,7 @@
                   <el-input
                     readonly
                     v-model="formItem.incoming_materials"
-                    placeholder="请输入"
+                    placeholder=" "
                   >
                   </el-input>
                 </el-form-item>
@@ -400,7 +407,6 @@
           </el-form>
         </div>
       </template>
-      <template #2> </template>
     </zxn-tabs>
   </zxn-plan>
 </template>
@@ -551,6 +557,7 @@ const formItem = ref({
   payment_type: "",
   bank: "",
   bank_account: "",
+  invoice_form: "",
   audit_web_url: "",
   audit_account: "",
   audit_password: "",
@@ -595,6 +602,7 @@ const getData = async () => {
       payment_type,
       bank,
       bank_account,
+      invoice_form,
       audit_web_url,
       audit_account,
       audit_password,
@@ -643,6 +651,7 @@ const getData = async () => {
       payment_type: payment_type + "",
       bank,
       bank_account,
+      invoice_form: invoice_form + "",
       audit_web_url,
       audit_account,
       audit_password,
