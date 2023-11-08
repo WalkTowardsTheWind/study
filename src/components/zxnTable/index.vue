@@ -17,6 +17,9 @@
       class="zxn-table"
       :row-key="rowKey"
       :defaultExpandAll="defaultExpandAll"
+      :tooltip-options="{
+        popperClass: 'el-table-tip',
+      }"
       v-loading="loading"
     >
       <el-table-column
