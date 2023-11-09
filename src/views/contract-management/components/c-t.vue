@@ -55,6 +55,7 @@
           :model="addForm"
           :rules="rules"
           ref="addFormRef"
+          :disabled="!isHasBtn"
         >
           <el-form-item label="模板名称" required prop="template_name">
             <el-input placeholder="请输入" v-model="addForm.template_name" />
