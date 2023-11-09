@@ -369,8 +369,8 @@ export const constantRoutes: RouteRecordRaw[] = [
       {
         path: "taxLandManagement",
         component: () => import("@/views/taxLandManagement/index.vue"),
-        name: "taxLandManagementIndex",
-        meta: { title: "税地中心", icon: "taxLand" },
+        name: "taxLandManagement",
+        meta: { title: "税地中心", keepAlive: true, icon: "taxLand" },
       },
       {
         path: "selfOperatedTaxLandAdd",

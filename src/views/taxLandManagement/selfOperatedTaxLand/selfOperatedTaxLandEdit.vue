@@ -396,10 +396,10 @@
     </zxn-tabs>
     <zxn-bottom-btn
       ><div class="but">
+        <el-button @click="handleClose">取消</el-button>
         <el-button type="primary" @click="handleSelfOperatedTaxLandEdit"
           >保存</el-button
         >
-        <el-button @click="handleClose">取消</el-button>
       </div></zxn-bottom-btn
     >
     <img-dialog ref="imgDialogRef" />
@@ -407,6 +407,7 @@
 </template>
 <script setup lang="ts">
 import imgDialog from "../components/imgDialog.vue";
+import { downloadByData } from "@/utils/download";
 import {
   StringTransformNumber,
   categoryTransformNumber,
@@ -633,8 +634,8 @@ const Rules3 = {
 //
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "合同编号", prop: "contract_no" },
-  { label: "合同类型", prop: "contract_kind" },
+  { label: "合同编号", prop: "contract_no", width: 100 },
+  { label: "合同类型", prop: "contract_kind", width: 100 },
   {
     label: "状态",
     type: "enum",
@@ -646,21 +647,22 @@ const columnList = [
       1: { color: "#FFFFFF", backgroundColor: "#999999" },
       2: { color: "#333333", backgroundColor: "#DEDEDE" },
     },
+    width: 100,
   },
-  { label: "签署形式", prop: "online_type" },
+  { label: "签署形式", prop: "online_type", width: 100 },
   { label: "甲方", prop: "party_a" },
   { label: "乙方", prop: "party_b" },
   {
     label: "签约时间",
     prop: "sign_time",
     //  sortable: "custom",
-    width: 120,
+    width: 150,
   },
   {
     label: "到期时间",
     prop: "end_time",
     //  sortable: "custom",
-    width: 120,
+    width: 150,
   },
   {
     label: "操作",
@@ -675,7 +677,13 @@ const imgDialogRef = ref();
 const handleView = (row: any) => {
   imgDialogRef.value.init(row);
 };
-const handleDownload = (ids: Array<number>) => {};
+const handleDownload = async (ids: Array<number>) => {
+  // const params = {
+  //   ids,
+  // };
+  // const { data } = await downloadCredentials(params);
+  // downloadByData(data, "完税凭证.zip");
+};
 
 const formItem = ref({
   tax_land_type: "0",

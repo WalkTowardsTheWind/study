@@ -147,7 +147,6 @@ const { proxy } = getCurrentInstance() as any;
 const optionsManufacturer = ref([] as any);
 const getManufacturerList = async () => {
   const { data } = await getManufacturer();
-  console.log(data);
   const newData = data.map((item: any) => {
     return {
       label: item,
