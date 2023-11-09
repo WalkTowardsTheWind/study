@@ -64,7 +64,14 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="成本点位">
+                <el-form-item label="社会信用代码" prop="tax_organ_code">
+                  <el-input
+                    v-model="formItem.tax_organ_code"
+                    placeholder="请输入"
+                  >
+                  </el-input>
+                </el-form-item>
+                <el-form-item class="mt-25px" label="成本点位">
                   <el-input
                     v-model="formItem.tax_cost_point"
                     placeholder="请输入"
@@ -73,7 +80,7 @@
 
                 <el-form-item class="mt-25px" label="税地用工年限">
                   <el-col :span="11">
-                    <el-form-item>
+                    <el-form-item prop="min_employment_year">
                       <el-input
                         type="number"
                         v-model="formItem.min_employment_year"
@@ -85,7 +92,7 @@
                     <span class="text-gray-500">-</span>
                   </el-col>
                   <el-col :span="11">
-                    <el-form-item>
+                    <el-form-item prop="max_employment_year">
                       <el-input
                         type="number"
                         v-model="formItem.max_employment_year"
@@ -334,17 +341,6 @@
                   >
                   </el-input>
                 </el-form-item>
-                <el-form-item
-                  class="mt-25px"
-                  label="社会信用代码"
-                  prop="tax_organ_code"
-                >
-                  <el-input
-                    v-model="formItem.tax_organ_code"
-                    placeholder="请输入"
-                  >
-                  </el-input>
-                </el-form-item>
               </el-col>
               <el-col :span="8">
                 <!-- <el-form-item class="mb-[0]" label="个人合同模板">
@@ -530,6 +526,13 @@ const imgValidate = (message: any, rule: any, value: any, callback: any) => {
 const Rules = {
   tax_land_type: [{ required: true, message: "请选择", trigger: "change" }],
   tax_land_name: [{ required: true, message: "请输入", trigger: "blur" }],
+  tax_organ_code: [{ required: true, message: "请输入", trigger: "blur" }],
+  // min_employment_year: [
+  //   { required: true, validator: validateMin_employment_year, trigger: "blur" },
+  // ],
+  // max_employment_year: [
+  //   {  required: true, validator: validateMax_employment_year, trigger: "blur" },
+  // ],
   tax_land_license: [
     {
       required: true,
@@ -554,15 +557,14 @@ const Rules = {
     },
   ],
   tax_contract_term: [{ required: true, message: "请选择", trigger: "change" }],
-  tax_organ_code: [{ required: true, message: "请输入", trigger: "blur" }],
 };
 const formItem = ref({
   tax_land_type: "0",
   tax_land_head: "",
   head_mobile: "",
   tax_land_name: "",
+  tax_organ_code: "",
   tax_cost_point: "",
-  calculation_type: "",
   min_employment_year: "18",
   max_employment_year: "60",
   tax_land_city_id: "",
@@ -572,7 +574,6 @@ const formItem = ref({
   category_id: [],
   invoice_denomination: "",
   max_money: "",
-  is_payment_api: "",
   payment_type: "",
   bank: "",
   bank_account: "",
@@ -584,9 +585,8 @@ const formItem = ref({
   individual_monthly_limit: "98000",
   tax_contract_term: "",
   incoming_materials: "",
-  tax_organ_code: "",
-  agreement_url: [],
-  contract_img: [],
+  // agreement_url: [],
+  // contract_img: [],
   settlement_confirmation_letter: [],
 });
 const handleSubmit = () => {
