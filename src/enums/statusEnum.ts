@@ -83,6 +83,7 @@ export enum settlementTypeStatus {
 }
 
 export enum InvoiceType {
-  "纸质发票" = 1,
+  "不限",
+  "纸质发票",
   "电子发票",
 }
