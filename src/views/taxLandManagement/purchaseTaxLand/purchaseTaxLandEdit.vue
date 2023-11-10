@@ -934,7 +934,7 @@ const getData = async () => {
         part_b_name: item.part_b_name,
         b_sign_time: item.b_sign_time,
         effective_end_time: item.effective_end_time,
-        contract_path: item.contract_path,
+        contract_url: item.contract_url,
       };
     });
     tableData.push(...newData);
