@@ -256,9 +256,14 @@
               <span class="title">验收凭证</span>
             </div>
             <div class="m-t-[20px]">
-              <picture-preview
-                :imageList="formItem.check_url"
-              ></picture-preview>
+              <zxn-image
+                v-if="formItem.check_url.length"
+                :imgList="formItem.check_url"
+                :width="88"
+                :height="88"
+                targetClick
+              ></zxn-image>
+              <span v-else>--</span>
             </div>
           </div>
         </div>

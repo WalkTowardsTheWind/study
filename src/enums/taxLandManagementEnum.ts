@@ -60,7 +60,22 @@ export enum commissionRule {
   "单笔扣除" = 1,
   "合计扣除",
 }
-
+//
+export enum contractStatus {
+  "待签署",
+  "签署中",
+  "已生效",
+  "已失效",
+}
+export enum contractType {
+  "企业合同",
+  "渠道合同",
+  "其他合同",
+}
+export enum onlineType {
+  "线下签署",
+  "线上签署",
+}
 // 新建
 
 // taxLandManagementEnum

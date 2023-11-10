@@ -14,11 +14,14 @@
     </zxn-tabs>
   </zxn-plan>
 </template>
+<script lang="ts">
+export default {
+  name: "taxLandManagement",
+};
+</script>
 <script setup lang="ts">
-import { useRoute } from "vue-router";
 import selfOperatedTaxLand from "./selfOperatedTaxLand/selfOperatedTaxLand.vue";
 import purchaseTaxLand from "./purchaseTaxLand/purchaseTaxLand.vue";
-const route = useRoute();
 const activeName = ref("selfOperated");
 const tabsList = reactive([
   {
@@ -32,22 +35,25 @@ const tabsList = reactive([
 ]);
 const selfOperated = ref();
 const purchase = ref();
-const handleTabChange = () => {
-  if (route.query.activeName) {
-    if (route.query.activeName === "selfOperated") {
-      activeName.value = "selfOperated";
-    } else if (route.query.activeName === "purchase") {
-      activeName.value = "purchase";
-    }
+const handleTabChange = (name?: any) => {
+  if (name) {
+    sessionStorage.setItem("taxLandManagementActiveName", name);
   }
-
-  if (activeName.value === "selfOperated") {
+  activeName.value =
+    sessionStorage.getItem("taxLandManagementActiveName") ?? "selfOperated";
+  if (
+    sessionStorage.getItem("taxLandManagementActiveName") === "selfOperated"
+  ) {
     selfOperated.value.getTableData();
-  } else if (activeName.value === "purchase") {
+  } else if (
+    sessionStorage.getItem("taxLandManagementActiveName") === "purchase"
+  ) {
     purchase.value.getTableData();
+  } else if (activeName.value === "selfOperated") {
+    selfOperated.value.getTableData();
   }
 };
-onMounted(() => {
+onActivated(() => {
   handleTabChange();
 });
 </script>

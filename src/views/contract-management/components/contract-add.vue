@@ -1,6 +1,6 @@
 <template>
   <zxn-dialog
-    title="新建合同"
+    title="合同归档"
     top="15"
     :visible="visible"
     @close-dialog="addDialogClose(addFormRef)"
@@ -15,7 +15,7 @@
       <el-row>
         <el-col>
           <el-form-item label="合同类型" required prop="type">
-            <el-select class="w-full" v-model="addForm.type">
+            <el-select disabled class="w-full" v-model="addForm.type">
               <el-option
                 v-for="item of contract_types"
                 :key="item.value"
@@ -62,6 +62,9 @@ const props = defineProps({
     type: Boolean,
     default: () => false,
   },
+  contract_type: {
+    default: () => "",
+  },
 });
 
 const addFormRef = ref();
@@ -74,6 +77,9 @@ const addForm = reactive({
   remark: "",
   contract_url: [],
 });
+if (props.contract_type) {
+  addForm.type = props.contract_type;
+}
 const rules = {
   type: [
     {
@@ -142,9 +148,9 @@ const addDialogConfirm = async (formI) => {
     if (valid) {
       archiveContract(params).then((res) => {
         // console.log(res);
-        emit("add-confirm");
+        ElMessage.success("操作成功");
+        emit("add-confirm", false);
       });
-      console.log("submit!");
     } else {
       console.log("error submit!", fields);
     }

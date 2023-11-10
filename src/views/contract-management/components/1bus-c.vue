@@ -16,6 +16,7 @@
         <el-select v-model="formItem.status">
           <el-option
             v-for="item of contract_status"
+            :key="item.status"
             :label="item.label"
             :value="item.status"
           ></el-option>
@@ -41,14 +42,20 @@
         >
         <el-button type="primary" plain>下载</el-button>
       </template>
-      <template #type>
-        <span>企业合同</span>
+      <template #type="{ row }">
+        <span v-if="row.type == 1">企业合同</span>
+        <span v-if="row.type == 2">渠道合同</span>
+        <span v-if="row.type == 3">其他合同</span>
       </template>
       <template #is_online="{ row }">
         <span>{{ row.is_online == 1 ? "线上签署" : "线下签署" }}</span>
       </template>
       <template #caozuo="{ row }">
-        <el-button v-if="row.status == 0" type="primary" link
+        <el-button
+          v-if="row.status == 0"
+          type="primary"
+          link
+          @click="goToSign(row.id)"
           >发起签署</el-button
         >
         <el-button
@@ -89,21 +96,61 @@
     <!-- 合同归档 -->
     <ContractAdd
       :visible="isAddShow"
+      :contract_type="1"
       @add-close="addDialogClose"
       @add-confirm="addDialogConfirm"
     />
     <!-- 在线签署 -->
     <OnlineSign
       :visible="isOnline"
-      @close="onlineClose"
-      @confirm="onlineConfirm"
+      :contract_type="1"
+      @online-close="onlineClose"
+      @online-confirm="onlineConfirm"
     />
     <!-- 合同详情 -->
     <ContractDetail
       :visible="detailShow"
-      @close="detailClose"
+      @detail-close="detailClose"
       :detailId="detailId"
     />
+    <!-- 发起签署 -->
+    <zxn-dialog :visible="signVisible" :title="signTitle">
+      <template #default>
+        <el-form v-if="signStep == 1" label-width="auto">
+          <el-form-item required label="姓名">
+            <el-input v-model="signForm.name" />
+          </el-form-item>
+          <el-form-item required label="身份证号">
+            <el-input maxlength="18" v-model="signForm.id_card" />
+          </el-form-item>
+        </el-form>
+        <template v-if="signStep == 2">
+          <p class="font-size-8">
+            已成功生成您的个人电子签名，是否签署合同并推送给乙方？
+          </p>
+          <zxn-image :imgList="[signImage]"></zxn-image>
+        </template>
+      </template>
+      <template #bottom-btn>
+        <div class="flex justify-center">
+          <el-button
+            :loading="isLoading"
+            v-if="signStep == 1"
+            type="primary"
+            @click="scgrdzqm"
+            >生成个人电子签名</el-button
+          >
+          <el-button
+            :loading="isLoading"
+            v-if="signStep == 2"
+            type="primary"
+            @click="qshtfswj"
+            >签署合同并发送文件</el-button
+          >
+          <el-button type="primary" plain @click="closeSign">取消</el-button>
+        </div>
+      </template>
+    </zxn-dialog>
   </div>
 </template>
 
@@ -118,6 +165,8 @@ import {
   getContractList,
   setContractStatus,
   delContract,
+  createContractSeal,
+  goContractOnline,
 } from "@/api/contract-m/index";
 
 import { contract_status } from "./options";
@@ -133,7 +182,12 @@ const pageInfo = reactive({
   limit: 20,
   total: 0,
 });
-const handleReset = () => {};
+const handleReset = () => {
+  formItem.keyword = "";
+  formItem.status = "";
+  formItem.date = [];
+  handleSearch();
+};
 const handleSearch = () => {
   let params = {
     keyword: formItem.keyword,
@@ -216,14 +270,18 @@ const addClick = () => {
 const addDialogClose = (visible: boolean) => {
   isAddShow.value = visible;
 };
-const addDialogConfirm = () => {
+const addDialogConfirm = (visible) => {
+  isAddShow.value = visible;
   handleSearch();
 };
 
 const onlineClose = (visible: boolean) => {
   isOnline.value = visible;
 };
-const onlineConfirm = () => {};
+const onlineConfirm = (visible) => {
+  isOnline.value = visible;
+  handleSearch();
+};
 
 const checkUrl = (url) => {
   window.open(url, "_blank");
@@ -280,6 +338,67 @@ const delClick = (id) => {
 const toDetail = (id) => {
   detailId.value = id;
   detailShow.value = true;
+};
+
+const signVisible = ref(false);
+const signTitle = ref("");
+const signStep = ref(1);
+const signImage = ref("");
+const isLoading = ref(false);
+const signForm = reactive({
+  name: "",
+  id_card: "",
+});
+const closeSign = () => {
+  signVisible.value = false;
+  signStep.value = 1;
+  signForm.name = "";
+  signForm.id_card = "";
+  cfi.psn_id = "";
+  cfi.seal = "";
+  isLoading.value = false;
+};
+const goToSign = (id) => {
+  // 1 生成印章
+  // createContractSeal();
+  signVisible.value = true;
+  signTitle.value = "填写负责人信息";
+  cfi.id = id;
+};
+
+const scgrdzqm = () => {
+  if (!signForm.name || !signForm.id_card) return;
+  isLoading.value = true;
+  createContractSeal(signForm).then((res) => {
+    setTimeout(() => {
+      isLoading.value = false;
+      signStep.value = 2;
+      signTitle.value = "生成成功";
+      signImage.value = `data:image/jpeg;base64,${res.data.seal}`;
+      cfi.psn_id = res.data.psn_id;
+      cfi.seal = res.data.seal;
+    }, 2000);
+  });
+};
+const cfi = reactive({
+  id: "",
+  psn_id: "",
+  seal: "",
+});
+
+const qshtfswj = () => {
+  isLoading.value = true;
+  goContractOnline(cfi).then(() => {
+    setTimeout(() => {
+      isLoading.value = false;
+      ElMessage.success("操作成功");
+      signVisible.value = false;
+      handleSearch();
+    }, 2000);
+  });
+  // .catch(() => {
+  //   isLoading.value = false;
+  // });
 };
 handleSearch();
 </script>

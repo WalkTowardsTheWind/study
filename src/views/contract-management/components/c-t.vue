@@ -29,6 +29,9 @@
           </div>
         </div>
       </template>
+      <template #type="{ row }">
+        {{ row.type == 1 ? "企业合同" : "渠道合同" }}
+      </template>
       <template #caozuo="{ row }">
         <el-button link type="primary" @click="toDetail(row.id)"
           >详情</el-button
@@ -66,12 +69,8 @@
               placeholder="请选择"
               v-model="addForm.type"
             >
-              <el-option
-                v-for="item of contract_type"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
+              <el-option label="企业合同" :value="1"></el-option>
+              <el-option label="渠道合同" :value="2"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="备注要求">
@@ -136,6 +135,7 @@ import {
   deleteContractTemp,
   editContractTemp,
 } from "@/api/contract-m/index";
+import { contract_types } from "./options";
 
 const userStore = useUserStoreHook();
 const token = userStore.token;
@@ -146,20 +146,6 @@ const headers = {
   Authorization: `Bearer ${token}`,
 };
 
-const contract_type = [
-  {
-    label: "企业合同",
-    value: 1,
-  },
-  {
-    label: "渠道合同",
-    value: 2,
-  },
-  {
-    label: "其他合同",
-    value: 3,
-  },
-];
 const keyword = ref("");
 const fileList = ref([] as any);
 
@@ -209,6 +195,11 @@ const columnList = [
   {
     label: "合同模板名称",
     prop: "template_name",
+  },
+  {
+    label: "合同类型",
+    prop: "type",
+    slot: "type",
   },
   {
     label: "税源地",
@@ -284,6 +275,7 @@ const addNew = () => {
 const closeAdd = (formI) => {
   isVisible.value = false;
   fileList.value.length = 0;
+  addForm.fields = [];
   formI.resetFields();
   resetAddForm();
 };
@@ -333,6 +325,7 @@ const handleSuccess = (response, uploadFile) => {
   const { fields, file_path, file_url } = response.data;
   addForm.file_path = file_path;
   addForm.file_url = file_url;
+  temp_fields.length = 0;
   temp_fields.push(...fields);
   for (let index = 0; index < fields.length; index++) {
     addForm.fields.push({ label: "", field_name: temp_fields[index] });
@@ -340,6 +333,7 @@ const handleSuccess = (response, uploadFile) => {
 };
 const handleRemove = (uploadFile, uploadFiles) => {
   addForm.fields.length = 0;
+  addForm.fields = [];
 };
 
 const handleSearch = () => {

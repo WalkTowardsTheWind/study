@@ -97,9 +97,18 @@ export function createContractSeal(data) {
 	});
 }
 // 合同发起签署
-export function signContractOnline(data) {
+export function goContractOnline(data) {
 	return request({
 		url: `/adminapi/contract/sign`,
+		method: "post",
+		data
+	});
+}
+
+// 合同在线签署
+export function signContractOnline(data) {
+	return request({
+		url: `/adminapi/contract/create`,
 		method: "post",
 		data
 	});
