@@ -1,3 +1,4 @@
+import { AxiosPromise } from "axios";
 import request from "@/utils/request";
 import {
   selfOperatedTaxLandList,
@@ -85,5 +86,16 @@ export function selfOperatedTaxLandUpdateStatus(
     url: "/adminapi/tax/taxLand/updateStatus",
     method: "post",
     params: data,
+  });
+}
+/**
+ * 下载合同
+ */
+export function downloadContract(params: any): AxiosPromise {
+  return request({
+    url: `/adminapi/invoice/download`,
+    method: "GET",
+    params,
+    responseType: "arraybuffer",
   });
 }

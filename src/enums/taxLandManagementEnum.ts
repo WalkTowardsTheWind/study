@@ -60,6 +60,13 @@ export enum commissionRule {
   "单笔扣除" = 1,
   "合计扣除",
 }
+//
+export enum contractStatus {
+  "待签署",
+  "签署中",
+  "已生效",
+  "已失效",
+}
 export enum contractType {
   "业务拓展协议(个人)" = 1,
   "业务拓展协议(企业)" = 2,
@@ -67,8 +74,8 @@ export enum contractType {
   "自由职业者服务协议" = 4,
 }
 export enum onlineType {
-  "线上签署",
   "线下签署",
+  "线上签署",
 }
 // 新建
 

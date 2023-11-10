@@ -385,31 +385,43 @@
                 </el-form-item>
               </el-col>
             </el-row>
+            <zxn-table
+              class="mt-[40px] mb-[40px]"
+              :table-data="tableData"
+              :column-list="columnList"
+              :hasIndex="false"
+              :hasPagination="false"
+            >
+              <template #operation="{ row }">
+                <el-button link type="primary" @click="handleView(row)"
+                  >查看</el-button
+                >
+                <el-button
+                  link
+                  type="primary"
+                  @click="handleDownload([Number(row.id)])"
+                  >下载</el-button
+                >
+              </template>
+            </zxn-table>
           </el-form>
-          <div class="advert">
-            <span class="fc">注意</span
-            >：账户新建后，请在账户合同信息或合同管理进行相关合同的上传或在线签署。
-          </div>
         </div>
-
-        <!-- <zxn-bottom-btn>
-          <div class="but">
-            <el-button @click="handleClose">取消</el-button>
-            <el-button type="primary" @click="handleSubmit">保存</el-button>
-          </div>
-        </zxn-bottom-btn> -->
       </template>
     </zxn-tabs>
   </zxn-plan>
 </template>
 <script setup lang="ts">
+import { downloadByData } from "@/utils/download";
 import {
   StringTransformNumber,
   categoryTransformNumber,
   categoryTransformArray,
 } from "@/utils";
 import { useRouter, useRoute } from "vue-router";
-import { selfOperatedTaxLandDetails } from "@/api/taxLandManagement/selfOperatedTaxLand";
+import {
+  selfOperatedTaxLandDetails,
+  downloadContract,
+} from "@/api/taxLandManagement/selfOperatedTaxLand";
 import { getAreaList } from "@/api/taxLandManagement";
 import { getTreeList } from "@/api/common";
 const { proxy } = getCurrentInstance() as any;
@@ -503,6 +515,59 @@ const propsTaxLang = {
   // multiple: true,
   expandTrigger: "hover" as const,
 };
+const tableData = reactive([] as any);
+const columnList = [
+  { label: "合同编号", prop: "contract_no", width: 100 },
+  { label: "合同类型", prop: "contract_kind", width: 100 },
+  {
+    label: "状态",
+    type: "enum",
+    path: "taxLandManagementEnum.contractStatus",
+    prop: "status",
+    // fixed: "left",
+    color: {
+      0: { color: "#35C5F3", backgroundColor: "#DFF6FD" },
+      1: { color: "#1DE585", backgroundColor: "#DBFBEB" },
+      2: { color: "#356FF3", backgroundColor: "#DFE8FD" },
+      3: { color: "#333333", backgroundColor: "#DEDEDE" },
+    },
+    width: 100,
+  },
+  { label: "签署形式", prop: "is_online", width: 100 },
+  { label: "甲方", prop: "part_a_name" },
+  { label: "乙方", prop: "part_b_name" },
+  {
+    label: "签约时间",
+    prop: "b_sign_time",
+    //  sortable: "custom",
+    width: 150,
+  },
+  {
+    label: "到期时间",
+    prop: "effective_end_time",
+    //  sortable: "custom",
+    width: 150,
+  },
+  {
+    label: "操作",
+    slot: "operation",
+    fixed: "right",
+    width: 120,
+    align: "right ",
+    headerAlign: "right",
+  },
+];
+const imgDialogRef = ref();
+const handleView = (row: any) => {
+  imgDialogRef.value.init(row);
+};
+const handleDownload = async (ids: Array<number>) => {
+  const params = {
+    ids,
+  };
+  const { data } = await downloadContract(params);
+  downloadByData(data, "合同.zip");
+};
 const formItem = ref({
   tax_land_type: "0",
   tax_land_head: "",
@@ -566,9 +631,8 @@ const getData = async () => {
       individual_monthly_limit,
       tax_contract_term,
       incoming_materials,
-      agreement_url,
-      contract_img,
       settlement_confirmation_letter,
+      contract_list,
     } = data.info;
     formItem.value = {
       tax_land_type: tax_land_type + "",
@@ -605,6 +669,26 @@ const getData = async () => {
       incoming_materials,
       settlement_confirmation_letter,
     };
+    tableData.length = 0;
+    var newData = contract_list.map((item: any) => {
+      return {
+        id: item.id,
+        contract_no: item.contract_no,
+        contract_kind:
+          proxy.$enumSet["taxLandManagementEnum.contractType"][
+            item.contract_kind
+          ],
+        status: item.status,
+        is_online:
+          proxy.$enumSet["taxLandManagementEnum.onlineType"][item.is_online],
+        part_a_name: item.part_a_name,
+        part_b_name: item.part_b_name,
+        b_sign_time: item.b_sign_time,
+        effective_end_time: item.effective_end_time,
+        contract_path: item.contract_path,
+      };
+    });
+    tableData.push(...newData);
   } catch (error) {
     console.log(error);
   }

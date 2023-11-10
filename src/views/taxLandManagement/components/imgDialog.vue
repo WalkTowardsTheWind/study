@@ -39,7 +39,7 @@ export default {
 let visible = ref(false);
 let imageList = ref();
 const init = (data: any): void => {
-  imageList.value = data.tax_payment_receipt;
+  imageList.value = data.contract_path;
   visible.value = true;
 };
 const handleSubmit = () => {
