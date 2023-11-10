@@ -200,17 +200,16 @@ const getTempList = () => {
 getTempList();
 
 const handleSelectChange = (val) => {
-  // console.log(val);
   addForm.type = val.type;
   addForm.fields = val.fields;
   signByType.value = [];
+  addForm.part_b = "";
 };
 const signByType = ref([]);
 
 watch(
   () => addForm.type,
   (newVal) => {
-    console.log(newVal);
     switch (newVal) {
       // 企业
       case 1:
