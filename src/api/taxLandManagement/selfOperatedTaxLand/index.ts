@@ -91,11 +91,10 @@ export function selfOperatedTaxLandUpdateStatus(
 /**
  * 下载合同
  */
-export function downloadContract(params: any): AxiosPromise {
+export function downloadContract(id: any): AxiosPromise {
   return request({
-    url: `/adminapi/invoice/download`,
+    url: `/adminapi/contract/download/${id}`,
     method: "GET",
-    params,
     responseType: "arraybuffer",
   });
 }

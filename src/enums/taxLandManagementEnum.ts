@@ -68,10 +68,9 @@ export enum contractStatus {
   "已失效",
 }
 export enum contractType {
-  "业务拓展协议(个人)" = 1,
-  "业务拓展协议(企业)" = 2,
-  "共享经济服务协议" = 3,
-  "自由职业者服务协议" = 4,
+  "企业合同",
+  "渠道合同",
+  "其他合同",
 }
 export enum onlineType {
   "线下签署",

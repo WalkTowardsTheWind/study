@@ -399,7 +399,7 @@
                 <el-button
                   link
                   type="primary"
-                  @click="handleDownload([Number(row.id)])"
+                  @click="handleDownload(Number(row.id))"
                   >下载</el-button
                 >
               </template>
@@ -408,9 +408,11 @@
         </div>
       </template>
     </zxn-tabs>
+    <img-dialog ref="imgDialogRef" />
   </zxn-plan>
 </template>
 <script setup lang="ts">
+import imgDialog from "../components/imgDialog.vue";
 import { downloadByData } from "@/utils/download";
 import {
   StringTransformNumber,
@@ -518,7 +520,7 @@ const propsTaxLang = {
 const tableData = reactive([] as any);
 const columnList = [
   { label: "合同编号", prop: "contract_no", width: 100 },
-  { label: "合同类型", prop: "contract_kind", width: 100 },
+  { label: "合同类型", prop: "type", width: 100 },
   {
     label: "状态",
     type: "enum",
@@ -561,12 +563,9 @@ const imgDialogRef = ref();
 const handleView = (row: any) => {
   imgDialogRef.value.init(row);
 };
-const handleDownload = async (ids: Array<number>) => {
-  const params = {
-    ids,
-  };
-  const { data } = await downloadContract(params);
-  downloadByData(data, "合同.zip");
+const handleDownload = async (id: number) => {
+  const { data } = await downloadContract(id);
+  downloadByData(data, "合同.pdf");
 };
 const formItem = ref({
   tax_land_type: "0",
@@ -674,10 +673,7 @@ const getData = async () => {
       return {
         id: item.id,
         contract_no: item.contract_no,
-        contract_kind:
-          proxy.$enumSet["taxLandManagementEnum.contractType"][
-            item.contract_kind
-          ],
+        type: proxy.$enumSet["taxLandManagementEnum.contractType"][item.type],
         status: item.status,
         is_online:
           proxy.$enumSet["taxLandManagementEnum.onlineType"][item.is_online],

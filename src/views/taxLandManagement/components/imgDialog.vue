@@ -11,7 +11,7 @@
       <el-form ref="form" label-width="70">
         <el-form-item label="合同">
           <zxn-image
-            v-if="imageList.length"
+            v-if="imageList.length && imageList[0]"
             :imgList="imageList"
             :width="88"
             :height="88"
@@ -39,7 +39,7 @@ export default {
 let visible = ref(false);
 let imageList = ref();
 const init = (data: any): void => {
-  imageList.value = data.contract_path;
+  imageList.value = [data.contract_path];
   visible.value = true;
 };
 const handleSubmit = () => {
