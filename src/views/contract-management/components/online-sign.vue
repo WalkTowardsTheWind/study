@@ -30,11 +30,11 @@
               clearable
               class="w-full"
               placeholder="请选择"
-              @change="handleSelectChange"
               value-key="id"
+              @change="handleSelectChange"
             >
               <el-option
-                v-for="item in tempList"
+                v-for="item of tempList"
                 :key="item.id"
                 :value="item"
                 :label="item.template_name"
@@ -68,22 +68,12 @@
       </div>
       <el-form-item class="m-y-20px" label="签署单位" prop="part_b" required>
         <el-select v-model="addForm.part_b">
-          <template v-if="contract_type == 1">
-            <el-option
-              v-for="item in signByType"
-              :key="item.company_id"
-              :label="item.company_name"
-              :value="item.company_id"
-            ></el-option>
-          </template>
-          <template v-if="contract_type == 2">
-            <el-option
-              v-for="item in signByType"
-              :key="item.id"
-              :label="item.channel_name"
-              :value="item.id"
-            ></el-option>
-          </template>
+          <el-option
+            v-for="(item, index) of signByType"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
         </el-select>
       </el-form-item>
       <div class="head p-x-20px m-y-20px">
@@ -122,7 +112,7 @@ const props = defineProps({
     default: () => false,
   },
   contract_type: {
-    default: () => "",
+    default: () => 1,
   },
 });
 const emit = defineEmits(["online-close", "online-confirm"]);
@@ -210,25 +200,36 @@ const getTempList = () => {
 getTempList();
 
 const handleSelectChange = (val) => {
+  // console.log(val);
   addForm.type = val.type;
   addForm.fields = val.fields;
+  signByType.value = [];
 };
 const signByType = ref([]);
 
 watch(
   () => addForm.type,
   (newVal) => {
+    console.log(newVal);
     switch (newVal) {
       // 企业
       case 1:
         getBusinessAccountList({ limit: 1000, page: 1 }).then((res) => {
-          signByType.value = res.data.data;
+          signByType.value.push(...res.data.data);
+          for (const item of signByType.value) {
+            item["label"] = item["company_name"];
+            item["value"] = item["company_id"];
+          }
         });
         break;
       // 渠道
       case 2:
         getChannelAccountList({ limit: 1000, page: 1 }).then((res) => {
-          signByType.value = res.data.data;
+          signByType.value.push(...res.data.data);
+          for (const item of signByType.value) {
+            item["label"] = item["channel_name"];
+            item["value"] = item["id"];
+          }
         });
         break;
     }
