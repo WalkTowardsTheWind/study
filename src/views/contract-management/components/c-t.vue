@@ -29,6 +29,9 @@
           </div>
         </div>
       </template>
+      <template #type="{ row }">
+        {{ row.type == 1 ? "企业合同" : "渠道合同" }}
+      </template>
       <template #caozuo="{ row }">
         <el-button link type="primary" @click="toDetail(row.id)"
           >详情</el-button
@@ -42,7 +45,7 @@
     <!-- 新建/编辑/详情-->
     <zxn-dialog
       :title="title"
-      width="25vw"
+      width="35vw"
       top="15"
       :visible="isVisible"
       :hasBottomBtn="isHasBtn"
@@ -55,6 +58,7 @@
           :model="addForm"
           :rules="rules"
           ref="addFormRef"
+          :disabled="!isHasBtn"
         >
           <el-form-item label="模板名称" required prop="template_name">
             <el-input placeholder="请输入" v-model="addForm.template_name" />
@@ -65,12 +69,8 @@
               placeholder="请选择"
               v-model="addForm.type"
             >
-              <el-option
-                v-for="item of contract_type"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
+              <el-option label="企业合同" :value="1"></el-option>
+              <el-option label="渠道合同" :value="2"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="备注要求">
@@ -80,6 +80,56 @@
               v-model="addForm.remark"
             />
           </el-form-item>
+          <template v-if="isAdd">
+            <div class="flex">
+              <el-form-item label="甲方签字处"></el-form-item>
+              <el-form-item label="页码" prop="posPage">
+                <el-input v-model="addForm.a_sign_pos.posPage" />
+              </el-form-item>
+              <el-form-item label="X轴" prop="posX">
+                <el-input v-model="addForm.a_sign_pos.posX" />
+              </el-form-item>
+              <el-form-item label="Y轴" prop="posY">
+                <el-input v-model="addForm.a_sign_pos.posY" />
+              </el-form-item>
+            </div>
+            <div class="flex">
+              <el-form-item label="甲方盖章处"></el-form-item>
+              <el-form-item label="页码" prop="posPage">
+                <el-input v-model="addForm.a_seal_pos.posPage" />
+              </el-form-item>
+              <el-form-item label="X轴" prop="posX">
+                <el-input v-model="addForm.a_seal_pos.posX" />
+              </el-form-item>
+              <el-form-item label="Y轴" prop="posY">
+                <el-input v-model="addForm.a_seal_pos.posY" />
+              </el-form-item>
+            </div>
+            <div class="flex">
+              <el-form-item label="乙方签字处"></el-form-item>
+              <el-form-item label="页码" prop="posPage">
+                <el-input v-model="addForm.b_sign_pos.posPage" />
+              </el-form-item>
+              <el-form-item label="X轴" prop="posX">
+                <el-input v-model="addForm.b_sign_pos.posX" />
+              </el-form-item>
+              <el-form-item label="Y轴" prop="posY">
+                <el-input v-model="addForm.b_sign_pos.posY" />
+              </el-form-item>
+            </div>
+            <div class="flex">
+              <el-form-item label="乙方盖章处"></el-form-item>
+              <el-form-item label="页码" prop="posPage">
+                <el-input v-model="addForm.b_seal_pos.posPage" />
+              </el-form-item>
+              <el-form-item label="X轴" prop="posX">
+                <el-input v-model="addForm.b_seal_pos.posX" />
+              </el-form-item>
+              <el-form-item label="Y轴" prop="posY">
+                <el-input v-model="addForm.b_seal_pos.posY" />
+              </el-form-item>
+            </div>
+          </template>
           <!-- 编辑详情 -->
           <el-form-item v-if="isEdit && !isAdd" label="合同文件">
             <el-button link type="primary" @click="checkUrl(addForm.file_url)"
@@ -106,19 +156,23 @@
               </template>
             </el-upload>
           </el-form-item>
-          <div
-            class="p-l-30px flex"
-            v-for="(item, index) of addForm.fields"
-            :key="index"
-          >
-            <el-form-item>
-              <el-input disabled v-model="item.field_name" />
-            </el-form-item>
-
-            <span class="m-x-20px"></span>
-            <el-form-item>
-              <el-input placeholder="label" v-model="item['label']" />
-            </el-form-item>
+          <div class="flex flex-wrap gap-x-10px">
+            <div
+              class="flex gap-x-10px"
+              v-for="(item, index) of addForm.fields"
+              :key="index"
+            >
+              <el-form-item>
+                <el-input class="w-80px" disabled v-model="item.field_name" />
+              </el-form-item>
+              <el-form-item>
+                <el-input
+                  class="w-100px"
+                  placeholder="label"
+                  v-model="item['label']"
+                />
+              </el-form-item>
+            </div>
           </div>
         </el-form>
       </template>
@@ -145,20 +199,6 @@ const headers = {
   Authorization: `Bearer ${token}`,
 };
 
-const contract_type = [
-  {
-    label: "企业合同",
-    value: 1,
-  },
-  {
-    label: "渠道合同",
-    value: 2,
-  },
-  {
-    label: "其他合同",
-    value: 3,
-  },
-];
 const keyword = ref("");
 const fileList = ref([] as any);
 
@@ -177,6 +217,26 @@ let addForm = reactive({
   file_path: "",
   fields: [],
   remark: "",
+  a_seal_pos: {
+    posPage: "",
+    posX: "",
+    posY: "",
+  },
+  a_sign_pos: {
+    posPage: "",
+    posX: "",
+    posY: "",
+  },
+  b_seal_pos: {
+    posPage: "",
+    posX: "",
+    posY: "",
+  },
+  b_sign_pos: {
+    posPage: "",
+    posX: "",
+    posY: "",
+  },
 } as any);
 
 const rules = {
@@ -208,6 +268,11 @@ const columnList = [
   {
     label: "合同模板名称",
     prop: "template_name",
+  },
+  {
+    label: "合同类型",
+    prop: "type",
+    slot: "type",
   },
   {
     label: "税源地",
@@ -266,12 +331,17 @@ const getTD = (id) => {
 };
 
 const resetAddForm = () => {
-  addForm.template_name = "";
-  addForm.type = "";
-  addForm.file_url = "";
-  addForm.file_path = "";
-  addForm.fields.length = 0;
-  addForm.remark = "";
+  for (let key in addForm) {
+    if (Array.isArray(addForm[key])) {
+      addForm[key] = []; // 重置为一个空数组
+    } else if (typeof addForm[key] === "object" && addForm[key] !== null) {
+      for (let subKey in addForm[key]) {
+        addForm[key][subKey] = ""; // 重置对象内部的属性为""
+      }
+    } else {
+      addForm[key] = ""; // 其他类型的属性重置为""
+    }
+  }
 };
 const addNew = () => {
   title.value = "新建合同模板";
@@ -294,7 +364,7 @@ const submitAdd = async (formI) => {
     if (!fileList.value.length) return ElMessage.error("请上传文件！");
     await formI.validate((valid, fields) => {
       if (valid) {
-        console.log(addForm);
+        // console.log(addForm);
         createContractTemp(addForm).then(() => {
           ElMessage.success("操作成功！");
           isVisible.value = false;
@@ -304,12 +374,19 @@ const submitAdd = async (formI) => {
         console.log("error submit!", fields);
       }
     });
-    // 编辑
-  } else if (isEdit.value) {
-    editContractTemp(addForm).then(() => {
-      ElMessage.success("操作成功！");
-      isVisible.value = false;
-      handleSearch();
+  }
+  // 编辑
+  if (isEdit.value) {
+    await formI.validate((valid, fields) => {
+      if (valid) {
+        editContractTemp(addForm).then(() => {
+          ElMessage.success("操作成功！");
+          isVisible.value = false;
+          handleSearch();
+        });
+      } else {
+        console.log("error submit!", fields);
+      }
     });
   }
 };
@@ -328,17 +405,19 @@ const beforeUpload = (rawFile: any) => {
   }
   return true;
 };
-const handleSuccess = (response, uploadFile) => {
+const handleSuccess = (response) => {
   const { fields, file_path, file_url } = response.data;
   addForm.file_path = file_path;
   addForm.file_url = file_url;
+  temp_fields.length = 0;
   temp_fields.push(...fields);
   for (let index = 0; index < fields.length; index++) {
     addForm.fields.push({ label: "", field_name: temp_fields[index] });
   }
 };
-const handleRemove = (uploadFile, uploadFiles) => {
+const handleRemove = () => {
   addForm.fields.length = 0;
+  addForm.fields = [];
 };
 
 const handleSearch = () => {
@@ -385,7 +464,7 @@ const delById = (id) => {
         done();
       }
     },
-  }).then((action) => {
+  }).then(() => {
     ElMessage.success("删除成功");
     handleSearch();
   });

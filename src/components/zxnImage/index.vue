@@ -5,7 +5,7 @@
       :class="{ 'has-click': targetClick }"
       :style="{ width: `${width}px`, height: `${height}px` }"
       v-for="(item, index) in currentImg"
-      :key="item"
+      :key="index"
       @click="handleTarget(index)"
     >
       <el-image
@@ -48,10 +48,10 @@
 </template>
 <script setup lang="ts">
 import { useEventListener } from "@vueuse/core";
-import { isArray, isImage, isPdf } from "@/utils/is";
+import { isArray, isImage, isPdf, isBase64 } from "@/utils/is";
 import pdfImg from "@/assets/pdf.png";
 const props = defineProps({
-  imgList: { type: Array, default: () => [] },
+  imgList: { type: [Array, String], default: () => [] },
   width: { type: Number, default: 80 },
   height: { type: Number, default: 80 },
   fit: { type: String, default: "fill" },
@@ -64,8 +64,9 @@ const currentImg = computed(() => {
   return props.ellipsis ? _imgList.filter((i, r) => r <= 2) : _imgList;
 });
 const preViewImg = computed(() => {
-  console.log(currentImg, "222");
-  return currentImg.value.filter(isImage);
+  return currentImg.value.filter((it) => {
+    return isImage(it) || isBase64(it);
+  });
 });
 let stopWheelListener: (() => void) | undefined;
 let prevOverflow = "";
@@ -84,7 +85,7 @@ function wheelHandler(e: WheelEvent) {
   }
 }
 const handlePreview = (index: number) => {
-  if (isImage(currentImg.value[index])) {
+  if (isImage(currentImg.value[index]) || isBase64(currentImg.value[index])) {
     const rank = preViewImg.value.findIndex(
       (it) => it === currentImg.value[index]
     );

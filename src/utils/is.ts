@@ -128,3 +128,6 @@ export function isPdf(value: string) {
   const PDF_REGEXP = /\.(pdf)/i;
   return PDF_REGEXP.test(newValue);
 }
+export function isBase64(value: string) {
+  return value.indexOf("data:") != -1 && value.indexOf("base64") != -1;
+}

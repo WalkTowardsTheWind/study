@@ -55,5 +55,6 @@ const handleConfirm = () => {
 <style scoped lang="scss">
 .zxn-dialog {
   position: absolute;
+  border-radius: 8px;
 }
 </style>
