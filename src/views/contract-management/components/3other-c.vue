@@ -63,7 +63,13 @@
           @click="checkUrl(row.cert_url)"
           >查看证书</el-button
         >
-        <el-button type="primary" link>下载</el-button>
+        <el-button
+          :disabled="!row.contract_url"
+          type="primary"
+          link
+          @click="checkUrl(row.contract_url)"
+          >下载</el-button
+        >
         <el-button type="primary" link @click="toDetail(row.id)"
           >详情</el-button
         >
@@ -118,6 +124,8 @@ const handleSearch = () => {
     status: formItem.status,
     tax_land_id: formItem.tax_land_id,
     type: "3", // 1企业合同 2渠道合同 3其他合同
+    limit: pageInfo.limit,
+    page: pageInfo.page,
   };
   tableData.length = 0;
   getContractList(params).then((res) => {
