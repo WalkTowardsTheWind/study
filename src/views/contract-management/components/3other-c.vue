@@ -64,6 +64,13 @@
           >查看证书</el-button
         >
         <el-button
+          v-if="row.status == 2"
+          type="primary"
+          link
+          @click="setStatus(row.id, 3)"
+          >合同解除</el-button
+        >
+        <el-button
           :disabled="!row.contract_url"
           type="primary"
           link
@@ -95,7 +102,11 @@
 import ContractAdd from "./contract-add.vue";
 import ContractDetail from "./contract-detail.vue";
 
-import { getContractList, delContract } from "@/api/contract-m/index";
+import {
+  getContractList,
+  delContract,
+  setContractStatus,
+} from "@/api/contract-m/index";
 
 import { contract_status } from "./options";
 
@@ -222,6 +233,26 @@ const delClick = (id) => {
       handleSearch();
     });
   });
+};
+
+const setStatus = (id, status) => {
+  switch (status) {
+    case 3:
+      ElMessageBox.confirm("是否解除当前合同?", "", {
+        confirmButtonText: "确认",
+        cancelButtonText: "取消",
+      }).then(() => {
+        setContractStatus(id, status).then(() => {
+          ElMessage({
+            type: "success",
+            message: "操作成功",
+          });
+          handleSearch();
+        });
+      });
+
+      break;
+  }
 };
 
 const toDetail = (id) => {

@@ -188,7 +188,12 @@ const onlineConfirm = async (formI) => {
 };
 const tempList = ref([] as any);
 const getTempList = () => {
-  getContractTempList({ keyword: "", limit: 1000, page: 1 }).then((res) => {
+  getContractTempList({
+    keyword: "",
+    limit: 1000,
+    page: 1,
+    type: props.contract_type,
+  }).then((res) => {
     console.log(res);
     tempList.value = res.data.data;
   });

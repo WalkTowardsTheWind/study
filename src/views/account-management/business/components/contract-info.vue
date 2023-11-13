@@ -31,7 +31,6 @@
 </template>
 
 <script lang="ts" setup>
-import { getBusinessAccountContractList } from "@/api/account/business";
 import { getContractList } from "@/api/contract-m";
 
 const props = defineProps({
