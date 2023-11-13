@@ -359,7 +359,7 @@ const handleReject = (ids: number[]) => {
         type: "success",
         message: `驳回成功`,
       });
-      getList();
+      // getList();
     });
   } else {
     return ElMessage.warning('存在非"申请中"状态的信息，请重新勾选');
@@ -430,7 +430,7 @@ const handleIssue = (ids: number[]) => {
         }
       })
       .finally(() => {
-        getList();
+        // getList();
       });
   } else {
     return ElMessage.warning('存在非"申请中"状态的信息，请重新勾选');
@@ -488,7 +488,7 @@ const handleWithdraw = (ids: number[]) => {
       }
     })
     .finally(() => {
-      getList();
+      // getList();
     });
 };
 const handleExcel = async (ids: number[]) => {
@@ -499,7 +499,7 @@ const handleExcel = async (ids: number[]) => {
   };
   const { data } = await getInvoiceExcel(params);
   downloadByData(data, "发票列表.xlsx");
-  await getList();
+  // await getList();
 };
 
 const handleUpload = (cur: any) => {
