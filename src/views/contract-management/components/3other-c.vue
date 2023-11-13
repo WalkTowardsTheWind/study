@@ -16,6 +16,7 @@
         <el-select v-model="formItem.status">
           <el-option
             v-for="item of contract_status"
+            :key="item.status"
             :label="item.label"
             :value="item.status"
           ></el-option>
@@ -36,7 +37,7 @@
     >
       <template #tableTop>
         <el-button type="primary" @click="addClick">合同归档</el-button>
-        <el-button type="primary" plain>下载</el-button>
+        <el-button type="primary" plain>批量下载</el-button>
       </template>
       <template #type="{ row }">
         <span v-if="row.type == 1">企业合同</span>
@@ -55,10 +56,11 @@
           >删除</el-button
         >
         <el-button
+          :disabled="!row.cert_url"
           v-if="row.status == 2 || row.status == 3"
           type="primary"
           link
-          @click="checkUrl(row.contract_url)"
+          @click="checkUrl(row.cert_url)"
           >查看证书</el-button
         >
         <el-button type="primary" link>下载</el-button>
@@ -85,16 +87,9 @@
 
 <script lang="ts" setup>
 import ContractAdd from "./contract-add.vue";
-import OnlineSign from "./online-sign.vue";
 import ContractDetail from "./contract-detail.vue";
 
-import { getLandList } from "@/api/common";
-
-import {
-  getContractList,
-  setContractStatus,
-  delContract,
-} from "@/api/contract-m/index";
+import { getContractList, delContract } from "@/api/contract-m/index";
 
 import { contract_status } from "./options";
 
@@ -200,13 +195,6 @@ const addDialogClose = (visible: boolean) => {
 const addDialogConfirm = (visible) => {
   isAddShow.value = visible;
   handleSearch();
-};
-
-const onlineClose = (visible: boolean) => {
-  isOnline.value = visible;
-};
-const onlineConfirm = (visible) => {
-  isOnlie.value = visible;
 };
 
 const checkUrl = (url) => {

@@ -16,6 +16,7 @@
         <el-select v-model="formItem.status">
           <el-option
             v-for="item of contract_status"
+            :key="item.status"
             :label="item.label"
             :value="item.status"
           ></el-option>
@@ -39,7 +40,7 @@
         <el-button type="primary" plain @click="onlineSignClick"
           >在线签署</el-button
         >
-        <el-button type="primary" plain>下载</el-button>
+        <el-button type="primary" plain>批量下载</el-button>
       </template>
       <template #type="{ row }">
         <span v-if="row.type == 1">企业合同</span>
@@ -73,10 +74,11 @@
         >
 
         <el-button
+          :disabled="!row.cert_url"
           v-if="row.status == 2 || row.status == 3"
           type="primary"
           link
-          @click="checkUrl(row.contract_url)"
+          @click="checkUrl(row.cert_url)"
           >查看证书</el-button
         >
         <el-button
@@ -157,8 +159,6 @@
 import ContractAdd from "./contract-add.vue";
 import OnlineSign from "./online-sign.vue";
 import ContractDetail from "./contract-detail.vue";
-
-import { getLandList } from "@/api/common";
 
 import {
   getContractList,
