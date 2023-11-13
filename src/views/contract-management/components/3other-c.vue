@@ -49,13 +49,6 @@
       </template>
       <template #caozuo="{ row }">
         <el-button
-          v-if="row.status != 1 && row.status != 2"
-          type="primary"
-          link
-          @click="delClick(row.id)"
-          >删除</el-button
-        >
-        <el-button
           :disabled="!row.cert_url"
           v-if="row.status == 2 || row.status == 3"
           type="primary"
@@ -69,6 +62,13 @@
           link
           @click="setStatus(row.id, 3)"
           >合同解除</el-button
+        >
+        <el-button
+          v-if="row.status != 1 && row.status != 2"
+          type="primary"
+          link
+          @click="delClick(row.id)"
+          >删除</el-button
         >
         <el-button
           :disabled="!row.contract_url"

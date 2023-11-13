@@ -376,16 +376,20 @@ const goToSign = (id) => {
 const scgrdzqm = () => {
   if (!signForm.name || !signForm.id_card) return;
   isLoading.value = true;
-  createContractSeal(signForm).then((res) => {
-    setTimeout(() => {
+  createContractSeal(signForm)
+    .then((res) => {
+      setTimeout(() => {
+        isLoading.value = false;
+        signStep.value = 2;
+        signTitle.value = "生成成功";
+        signImage.value = `data:image/jpeg;base64,${res.data.seal}`;
+        cfi.psn_id = res.data.psn_id;
+        cfi.seal = res.data.seal;
+      }, 2000);
+    })
+    .catch(() => {
       isLoading.value = false;
-      signStep.value = 2;
-      signTitle.value = "生成成功";
-      signImage.value = `data:image/jpeg;base64,${res.data.seal}`;
-      cfi.psn_id = res.data.psn_id;
-      cfi.seal = res.data.seal;
-    }, 2000);
-  });
+    });
 };
 const cfi = reactive({
   id: "",
