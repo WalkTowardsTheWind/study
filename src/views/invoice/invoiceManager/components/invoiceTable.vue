@@ -57,24 +57,27 @@
       :column-list="columnList"
       :page-info="pageInfo"
       :loading="loading"
-      hasSelect
+      :hasSelect="hasSelect"
       :selectable="selectable"
       @page-change="handlePageChange"
     >
       <template #tableTop>
-        <!--        <el-button type="primary" plain @click="handleCommand"-->
-        <!--          >批量驳回</el-button-->
-        <!--        >-->
-        <el-dropdown trigger="click" @command="handleCommand">
-          <el-button type="primary" plain>批量操作</el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="reject">驳回</el-dropdown-item>
-              <el-dropdown-item command="excel">导出</el-dropdown-item>
-              <el-dropdown-item command="issue">开立</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
+        <template v-if="hasSelect">
+          <el-button type="primary" @click="handleBitchConfirm">确定</el-button>
+          <el-button type="info" @click="handleBitchCancel">取消</el-button>
+        </template>
+        <template v-else>
+          <el-dropdown trigger="click" @command="handleCommand">
+            <el-button type="primary" plain>批量操作</el-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item command="reject">驳回</el-dropdown-item>
+                <el-dropdown-item command="excel">导出</el-dropdown-item>
+                <el-dropdown-item command="issue">开立</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </template>
       </template>
       <template #img="{ row }">
         <zxn-image
@@ -270,14 +273,24 @@ const getList = async () => {
     console.log(e);
   }
 };
+const hasSelect = ref(false);
 const selectable = (row) => {
-  return Boolean(!row.status);
+  return bitchType === "excel" ? true : !row.status;
 };
 const handleView = (cur) => {
   router.push({ name: "invoiceView", query: { id: cur.id, type: props.type } });
 };
 const table = ref();
+let bitchType = "";
 const handleCommand = (type: string) => {
+  bitchType = type;
+  hasSelect.value = true;
+};
+const handleBitchCancel = () => {
+  table.value.getTable().clearSelection();
+  hasSelect.value = false;
+};
+const handleBitchConfirm = () => {
   const selected = table.value.getSelectionRows();
   const ids = selected.map((it) => it.id);
   if (!ids.length) {
@@ -286,7 +299,7 @@ const handleCommand = (type: string) => {
       message: `请选择数据`,
     });
   }
-  switch (type) {
+  switch (bitchType) {
     case "reject":
       handleReject(ids);
       break;
@@ -318,6 +331,7 @@ const handleReject = (ids: number[]) => {
         props.type === "enterprise"
           ? await setStatus(params)
           : await channelSetStatus(params);
+        handleBitchCancel();
         instance.confirmButtonLoading = false;
         done();
       } else {
@@ -361,6 +375,7 @@ const handleIssue = (ids: number[]) => {
           props.type === "enterprise"
             ? await setStatus(params)
             : await channelSetStatus(params);
+          handleBitchCancel();
           instance.confirmButtonLoading = false;
           done();
           ElMessage({
@@ -456,7 +471,7 @@ const handleExcel = async (ids: number[]) => {
   };
   const { data } = await getInvoiceExcel(params);
   downloadByData(data, "发票列表.xlsx");
-  await getList();
+  handleBitchCancel();
 };
 
 const handleUpload = (cur) => {
