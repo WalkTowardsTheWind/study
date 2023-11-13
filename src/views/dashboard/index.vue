@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <el-row class="mt-30px" gutter="16">
+    <el-row class="mt-30px" :gutter="16">
       <el-col :span="16">
         <div class="flex">
           <risk-ring />

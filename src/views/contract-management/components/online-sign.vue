@@ -69,7 +69,7 @@
       <el-form-item class="m-y-20px" label="签署单位" prop="part_b" required>
         <el-select v-model="addForm.part_b">
           <el-option
-            v-for="(item, index) of signByType"
+            v-for="item of signByType"
             :key="item.id"
             :label="item.label"
             :value="item.value"
@@ -125,7 +125,7 @@ const addForm = reactive({
   part_b: "",
   remark: "",
   fields: [],
-});
+} as any);
 const rules = {
   contract_name: [
     {
@@ -156,10 +156,6 @@ const rules = {
     },
   ],
 };
-
-const value1 = ref([]);
-
-const isOnline = ref(false);
 
 const onlineClose = (formI) => {
   if (formI) {
@@ -199,18 +195,18 @@ const getTempList = () => {
 };
 getTempList();
 
-const handleSelectChange = (val) => {
+const handleSelectChange = (val: any) => {
   addForm.type = val.type;
   addForm.fields = val.fields;
   signByType.value = [];
   addForm.part_b = "";
 };
-const signByType = ref([]);
+const signByType = ref([] as any);
 
 watch(
   () => addForm.type,
   (newVal) => {
-    switch (newVal) {
+    switch (Number(newVal)) {
       // 企业
       case 1:
         getBusinessAccountList({ limit: 1000, page: 1 }).then((res) => {
