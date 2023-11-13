@@ -63,13 +63,13 @@ const props = defineProps({
     default: () => false,
   },
   contract_type: {
-    default: () => "",
+    default: () => 1,
   },
 });
 
 const addFormRef = ref();
 const addForm = reactive({
-  type: "",
+  type: props.contract_type,
   contract_name: "",
   date: [],
   part_a_name: "",
@@ -77,9 +77,9 @@ const addForm = reactive({
   remark: "",
   contract_url: [],
 });
-if (props.contract_type) {
-  addForm.type = props.contract_type;
-}
+// if (props.contract_type) {
+//   addForm.type = props.contract_type;
+// }
 const rules = {
   type: [
     {
