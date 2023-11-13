@@ -399,15 +399,19 @@ const cfi = reactive({
 
 const qshtfswj = () => {
   isLoading.value = true;
-  goContractOnline(cfi).then(() => {
-    setTimeout(() => {
+  goContractOnline(cfi)
+    .then(() => {
+      setTimeout(() => {
+        isLoading.value = false;
+        ElMessage.success("操作成功");
+        signVisible.value = false;
+        signStep.value = 1;
+        handleSearch();
+      }, 2000);
+    })
+    .catch(() => {
       isLoading.value = false;
-      ElMessage.success("操作成功");
-      signVisible.value = false;
-      signStep.value = 1;
-      handleSearch();
-    }, 2000);
-  });
+    });
 };
 handleSearch();
 </script>

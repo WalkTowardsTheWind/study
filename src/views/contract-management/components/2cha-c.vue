@@ -406,7 +406,10 @@ const qshtfswj = () => {
       signVisible.value = false;
       handleSearch();
     }, 2000);
-  });
+	}).catch(() => {
+      isLoading.value = false;
+		
+	})
 };
 handleSearch();
 </script>
