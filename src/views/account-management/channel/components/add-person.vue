@@ -113,6 +113,50 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <div class="m-b-[20px] m-t-[50px]">
+          <zxn-title>绑定税地</zxn-title>
+        </div>
+        <!-- 绑定税地 -->
+        <el-row :gutter="50">
+          <el-col :span="7">
+            <el-form-item label="税地名称" prop="tax_land_id">
+              <el-select
+                class="w-full"
+                placeholder="请选择"
+                v-model="form.tax_land_id"
+              >
+                <el-option
+                  v-for="(item, index) in taxLandOption"
+                  :key="index"
+                  :value="item.id"
+                  :label="item.tax_land_name"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="7">
+            <el-form-item label="渠道点位" prop="channel_point">
+              <el-input
+                placeholder="请输入渠道点位"
+                v-inputFloat="{ max: 3 }"
+                v-model="form.channel_point"
+              >
+                <template #append>%</template>
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="7">
+            <el-form-item label="扣税点位" prop="tax_point">
+              <el-input
+                placeholder="请输入扣税点位"
+                v-inputFloat="{ max: 3 }"
+                v-model="form.tax_point"
+              >
+                <template #append>%</template>
+              </el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </div>
     <zxn-bottom-btn>
@@ -126,7 +170,8 @@
 import { createPersonChannelAccount } from "@/api/account/channel";
 import { settlement_type, collection_type } from "./options";
 import router from "@/router";
-import { useDebounceFn } from "@vueuse/core";
+import { useThrottleFn } from "@vueuse/core";
+import { getSelectLandList } from "@/api/common";
 
 const activeName = ref("1");
 const tabsList = [{ label: "新建个人渠道", name: "1" }];
@@ -148,6 +193,10 @@ const form = reactive({
   settlement_type: "", // 渠道佣金结算时间
   agreement_img: [], // 上传合伙人业务拓展协议
   idcard_img: [], // 身份证
+
+  tax_land_id: "", // 税地id
+  channel_point: "", //渠道点位
+  tax_point: "", // 扣税点位
 });
 
 const validatePassword = (rule, value, callback) => {
@@ -157,6 +206,15 @@ const validatePassword = (rule, value, callback) => {
     callback(new Error("两次输入的密码不一致！"));
   } else {
     callback();
+  }
+};
+
+const validateRate = (rule, value, callback) => {
+  const reg = /^([0-9]\d{0,1}|100$)(\.\d{1,2})?$/;
+  if (reg.test(value)) {
+    callback();
+  } else {
+    callback("点位范围为[0-100]");
   }
 };
 
@@ -177,9 +235,25 @@ const rules = {
   settlement_type: [{ required: true, message: "必填", trigger: "blur" }],
   collection_type: [{ required: true, message: "必填", trigger: "blur" }],
   agreement_img: [{ required: true, message: "必填", trigger: "blur" }],
+
+  tax_land_id: [{ required: true, message: "请选择税地", trigger: "change" }],
+  channel_point: [
+    { required: true, message: "请输入渠道点位", trigger: "change" },
+    { validator: validateRate, trigger: "change" },
+  ],
+  tax_point: [
+    { required: true, message: "请输入扣税点位", trigger: "change" },
+    { validator: validateRate, trigger: "change" },
+  ],
+};
+const taxLandOption = reactive([]);
+
+const selectLandList = async () => {
+  const { data } = await getSelectLandList();
+  taxLandOption.push(...data.tax_land_list);
 };
 
-const debouncedFn = useDebounceFn((formInstance) => {
+const debouncedFn = useThrottleFn((formInstance) => {
   // do something
   submit(formInstance);
 }, 1000);
@@ -201,6 +275,9 @@ const submit = async (formInstance) => {
     }
   });
 };
+onMounted(() => {
+  selectLandList();
+});
 </script>
 
 <style scoped lang="scss">

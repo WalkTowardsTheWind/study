@@ -115,6 +115,124 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row :gutter="50">
+          <el-col :span="7">
+            <el-form-item label="真实姓名" prop="realname">
+              <el-input placeholder="请输入" v-model="form.realname"></el-input>
+            </el-form-item>
+            <el-form-item label="开户行" prop="bank">
+              <el-input placeholder="请输入" v-model="form.bank"></el-input>
+            </el-form-item>
+            <el-form-item label="渠道管理员" prop="channel_admin">
+              <el-input
+                placeholder="请输入"
+                class="w-full"
+                v-model="form.channel_admin"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="收款方式" prop="collection_type">
+              <el-select
+                placeholder="请选择"
+                class="w-full"
+                v-model="form.collection_type"
+              >
+                <el-option
+                  v-for="i in collection_type"
+                  :value="i.value"
+                  :key="i.value"
+                  :label="i.label"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="7">
+            <el-form-item label="身份证号">
+              <el-input
+                placeholder="请输入"
+                v-model="form.idcard"
+                maxlength="18"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="银行账号" prop="bank_account">
+              <el-input
+                placeholder="请输入"
+                v-model="form.bank_account"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="管理员联系号码">
+              <el-input
+                placeholder="请输入"
+                v-model="form.admin_phone"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="渠道佣金结算时间" prop="settlement_type">
+              <el-select
+                placeholder="请选择"
+                class="w-full"
+                v-model="form.settlement_type"
+              >
+                <el-option
+                  v-for="i in settlement_type"
+                  :key="i.value"
+                  :value="i.value"
+                  :label="i.label"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item label="上传合伙人业务拓展协议" prop="agreement_img">
+              <MultiUpload v-model="form.agreement_img" />
+            </el-form-item>
+            <el-form-item label="身份证">
+              <MultiUpload v-model="form.idcard_img" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <div class="m-b-[20px] m-t-[50px]">
+          <zxn-title>绑定税地</zxn-title>
+        </div>
+        <!-- 绑定税地 -->
+        <el-row :gutter="50">
+          <el-col :span="7">
+            <el-form-item label="税地名称" prop="tax_land_id">
+              <el-select
+                class="w-full"
+                placeholder="请选择"
+                v-model="form.tax_land_id"
+              >
+                <el-option
+                  v-for="(item, index) in taxLandOption"
+                  :key="index"
+                  :value="item.id"
+                  :label="item.tax_land_name"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="7">
+            <el-form-item label="渠道点位" prop="channel_point">
+              <el-input
+                placeholder="请输入渠道点位"
+                v-inputFloat="{ max: 3 }"
+                v-model="form.channel_point"
+              >
+                <template #append>%</template>
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="7">
+            <el-form-item label="扣税点位" prop="tax_point">
+              <el-input
+                placeholder="请输入扣税点位"
+                v-inputFloat="{ max: 3 }"
+                v-model="form.tax_point"
+              >
+                <template #append>%</template>
+              </el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </div>
     <zxn-bottom-btn>
@@ -128,7 +246,8 @@
 import router from "@/router";
 import { settlement_type, collection_type } from "./options";
 import { createCompanyChannelAccount } from "@/api/account/channel";
-import { useDebounceFn } from "@vueuse/core";
+import { useThrottleFn } from "@vueuse/core";
+import { getSelectLandList } from "@/api/common";
 const activeName = ref("1");
 
 const tabsList = [{ label: "新建企业渠道", name: "1" }];
@@ -150,6 +269,10 @@ const form = reactive({
   settlement_type: "", // 渠道佣金结算时间
   agreement_img: [], // 合伙人协议
   license_img: [], // 营业执照
+
+  tax_land_id: "", // 税地id
+  channel_point: "", //渠道点位
+  tax_point: "", // 扣税点位
 });
 
 const validatePassword = (rule, value, callback) => {
@@ -159,6 +282,15 @@ const validatePassword = (rule, value, callback) => {
     callback(new Error("两次输入的密码不一致！"));
   } else {
     callback();
+  }
+};
+
+const validateRate = (rule, value, callback) => {
+  const reg = /^([0-9]\d{0,1}|100$)(\.\d{1,2})?$/;
+  if (reg.test(value)) {
+    callback();
+  } else {
+    callback("点位范围为[0-100]");
   }
 };
 
@@ -179,9 +311,25 @@ const rules = {
   settlement_type: [{ required: true, message: "必填", trigger: "blur" }],
   collection_type: [{ required: true, message: "必填", trigger: "blur" }],
   agreement_img: [{ required: true, message: "必填", trigger: "blur" }],
+
+  tax_land_id: [{ required: true, message: "请选择税地", trigger: "change" }],
+  channel_point: [
+    { required: true, message: "请输入渠道点位", trigger: "change" },
+    { validator: validateRate, trigger: "change" },
+  ],
+  tax_point: [
+    { required: true, message: "请输入扣税点位", trigger: "change" },
+    { validator: validateRate, trigger: "change" },
+  ],
+};
+const taxLandOption = reactive([]);
+
+const selectLandList = async () => {
+  const { data } = await getSelectLandList();
+  taxLandOption.push(...data.tax_land_list);
 };
 
-const debouncedFn = useDebounceFn((formInstance) => {
+const debouncedFn = useThrottleFn((formInstance) => {
   // do something
   submit(formInstance);
 }, 1000);
@@ -203,6 +351,9 @@ const submit = async (formInstance) => {
     }
   });
 };
+onMounted(() => {
+  selectLandList();
+});
 </script>
 
 <style scoped lang="scss">
