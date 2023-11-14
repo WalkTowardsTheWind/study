@@ -13,7 +13,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="合同状态">
-        <el-select v-model="formItem.status">
+        <el-select v-model="formItem.status" @change="handleSearch">
           <el-option
             v-for="item of contract_status"
             :key="item.status"
@@ -174,7 +174,7 @@ import {
   goContractOnline,
 } from "@/api/contract-m/index";
 
-import { contract_status } from "./options";
+import { contract_status, color } from "./options";
 
 const formItem = reactive({
   keyword: "",
@@ -222,24 +222,7 @@ const columnList = [
     prop: "status",
     type: "enum",
     path: "contractListEnum.contractStatus",
-    color: {
-      0: {
-        color: "#35C5F3",
-        background: "#DFF6FD",
-      },
-      1: {
-        color: "#1EE585",
-        background: "#DBFBEB",
-      },
-      2: {
-        color: "#356FF3",
-        background: "#DFE8FD",
-      },
-      3: {
-        color: "#333333",
-        background: "#DEDEDE",
-      },
-    },
+    color: color,
   },
   { label: "签署形式", slot: "is_online" },
   { label: "甲方", prop: "part_a_name" },
@@ -399,17 +382,18 @@ const cfi = reactive({
 
 const qshtfswj = () => {
   isLoading.value = true;
-  goContractOnline(cfi).then(() => {
-    setTimeout(() => {
+  goContractOnline(cfi)
+    .then(() => {
+      setTimeout(() => {
+        isLoading.value = false;
+        ElMessage.success("操作成功");
+        signVisible.value = false;
+        handleSearch();
+      }, 2000);
+    })
+    .catch(() => {
       isLoading.value = false;
-      ElMessage.success("操作成功");
-      signVisible.value = false;
-      handleSearch();
-    }, 2000);
-	}).catch(() => {
-      isLoading.value = false;
-		
-	})
+    });
 };
 handleSearch();
 </script>

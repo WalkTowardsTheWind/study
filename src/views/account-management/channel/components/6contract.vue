@@ -12,7 +12,13 @@
         <!-- <el-button type="primary">合同归档</el-button>
         <el-button type="primary" plain>在线签署</el-button> -->
       </template>
-      <template #operation="{ row }">
+      <template #type="{ row }">
+        {{ row.type == 2 ? "渠道合同" : "" }}
+      </template>
+      <template #is_online="{ row }">
+        {{ row.is_online == 1 ? "线上签署" : "线下签署" }}
+      </template>
+      <template #caozuo="{ row }">
         <!-- <el-button link type="primary">详情</el-button> -->
         <!-- <el-button link type="primary">发起签署</el-button> -->
         <!-- <el-button link type="primary">合同解除</el-button> -->
@@ -31,8 +37,8 @@
 </template>
 
 <script lang="ts" setup>
-import { getBusinessAccountContractList } from "@/api/account/business";
 import { getContractList } from "@/api/contract-m";
+import { color } from "@/views/contract-management/components/options";
 
 const props = defineProps({
   channel_id: {
@@ -65,24 +71,7 @@ const columnList = [
     prop: "status",
     type: "enum",
     path: "contractListEnum.contractStatus",
-    color: {
-      0: {
-        color: "#35C5F3",
-        background: "#DFF6FD",
-      },
-      1: {
-        color: "#1EE585",
-        background: "#DBFBEB",
-      },
-      2: {
-        color: "#356FF3",
-        background: "#DFE8FD",
-      },
-      3: {
-        color: "#333333",
-        background: "#DEDEDE",
-      },
-    },
+    color: color,
   },
   { label: "签署形式", slot: "is_online" },
   { label: "甲方", prop: "part_a_name" },
