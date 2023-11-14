@@ -42,10 +42,8 @@
         >
         <el-button type="primary" plain>批量下载</el-button>
       </template>
-      <template #type="{ row }">
-        <span v-if="row.type == 1">企业合同</span>
-        <span v-if="row.type == 2">渠道合同</span>
-        <span v-if="row.type == 3">其他合同</span>
+      <template #type>
+        <span>渠道合同</span>
       </template>
       <template #is_online="{ row }">
         <span>{{ row.is_online == 1 ? "线上签署" : "线下签署" }}</span>
@@ -206,7 +204,6 @@ const handleSearch = () => {
   };
   tableData.length = 0;
   getContractList(params).then((res) => {
-    console.log(res);
     tableData.push(...res.data.data);
     pageInfo.total = res.data.total;
   });

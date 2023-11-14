@@ -39,10 +39,8 @@
         <el-button type="primary" @click="addClick">合同归档</el-button>
         <el-button type="primary" plain>批量下载</el-button>
       </template>
-      <template #type="{ row }">
-        <span v-if="row.type == 1">企业合同</span>
-        <span v-if="row.type == 2">渠道合同</span>
-        <span v-if="row.type == 3">其他合同</span>
+      <template #type>
+        <span>其他合同</span>
       </template>
       <template #is_online="{ row }">
         <span>{{ row.is_online == 1 ? "线上签署" : "线下签署" }}</span>
@@ -140,7 +138,6 @@ const handleSearch = () => {
   };
   tableData.length = 0;
   getContractList(params).then((res) => {
-    console.log(res);
     tableData.push(...res.data.data);
     pageInfo.total = res.data.total;
   });
@@ -180,7 +177,7 @@ const detailClose = (visible: boolean) => {
   detailShow.value = visible;
 };
 
-const handleSelect = (val) => {
+const handleSelect = (val: any) => {
   console.log(val);
 };
 const isOnline = ref(false);
@@ -194,16 +191,16 @@ const addClick = () => {
 const addDialogClose = (visible: boolean) => {
   isAddShow.value = visible;
 };
-const addDialogConfirm = (visible) => {
+const addDialogConfirm = (visible: boolean) => {
   isAddShow.value = visible;
   handleSearch();
 };
 
-const checkUrl = (url) => {
+const checkUrl = (url: string) => {
   window.open(url, "_blank");
 };
 
-const delClick = (id) => {
+const delClick = (id: number) => {
   ElMessageBox.confirm("是否删除当前合同?", "", {
     confirmButtonText: "确认",
     cancelButtonText: "取消",
@@ -218,7 +215,7 @@ const delClick = (id) => {
   });
 };
 
-const setStatus = (id, status) => {
+const setStatus = (id: number, status: number) => {
   switch (status) {
     case 3:
       ElMessageBox.confirm("是否解除当前合同?", "", {
@@ -238,7 +235,7 @@ const setStatus = (id, status) => {
   }
 };
 
-const toDetail = (id) => {
+const toDetail = (id: number) => {
   detailId.value = id;
   detailShow.value = true;
 };

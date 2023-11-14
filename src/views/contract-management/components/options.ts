@@ -33,6 +33,10 @@ export const contract_types = [
     value: 3,
     label: "其他合同",
   },
+  {
+    value: 4,
+    label: "委托代征协议",
+  },
 ];
 
 export const color = {
