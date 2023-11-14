@@ -736,7 +736,7 @@ const handleSubmit = () => {
             message: `新建税地成功`,
           });
           router.push({
-            name: "taxLandManagementIndex",
+            name: "taxLandManagement",
             query: { activeName: "purchase" },
           });
         })
@@ -748,7 +748,7 @@ const handleSubmit = () => {
 };
 const handleClose = () => {
   router.push({
-    name: "taxLandManagementIndex",
+    name: "taxLandManagement",
     query: { activeName: "purchase" },
   });
 };

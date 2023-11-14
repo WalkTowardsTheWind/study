@@ -743,7 +743,7 @@ const handleSelfOperatedTaxLandEdit = () => {
                     message: `编辑税地成功`,
                   });
                   router.push({
-                    name: "taxLandManagementIndex",
+                    name: "taxLandManagement",
                     query: { activeName: "selfOperated" },
                   });
                 })
@@ -765,7 +765,7 @@ const handleSelfOperatedTaxLandEdit = () => {
 };
 const handleClose = () => {
   router.push({
-    name: "taxLandManagementIndex",
+    name: "taxLandManagement",
     query: { activeName: "selfOperated" },
   });
 };
