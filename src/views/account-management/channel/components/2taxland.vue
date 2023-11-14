@@ -109,7 +109,7 @@ import {
   setChannelTaxlandStatus,
   updateChannelTaxland,
 } from "@/api/account/channel";
-import { getLandList } from "@/api/common";
+import { getLandList, getSelectLandList } from "@/api/common";
 import { useRoute } from "vue-router";
 import { pointValidationRule } from "./options";
 const route = useRoute();
@@ -268,7 +268,7 @@ const taxLandOption = ref([] as any);
 
 function getTaxLandOption() {
   taxLandOption.value.length = 0;
-  getLandList().then((res) => {
+  getSelectLandList().then((res) => {
     taxLandOption.value.push(...res.data.tax_land_list);
   });
 }
