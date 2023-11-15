@@ -13,7 +13,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="合同状态">
-        <el-select v-model="formItem.status">
+        <el-select v-model="formItem.status" @change="handleSearch">
           <el-option
             v-for="item of contract_status"
             :key="item.status"
@@ -42,10 +42,8 @@
         >
         <el-button type="primary" plain>批量下载</el-button>
       </template>
-      <template #type="{ row }">
-        <span v-if="row.type == 1">企业合同</span>
-        <span v-if="row.type == 2">渠道合同</span>
-        <span v-if="row.type == 3">其他合同</span>
+      <template #type>
+        <span>渠道合同</span>
       </template>
       <template #is_online="{ row }">
         <span>{{ row.is_online == 1 ? "线上签署" : "线下签署" }}</span>
@@ -174,7 +172,7 @@ import {
   goContractOnline,
 } from "@/api/contract-m/index";
 
-import { contract_status } from "./options";
+import { contract_status, color } from "./options";
 
 const formItem = reactive({
   keyword: "",
@@ -206,7 +204,6 @@ const handleSearch = () => {
   };
   tableData.length = 0;
   getContractList(params).then((res) => {
-    console.log(res);
     tableData.push(...res.data.data);
     pageInfo.total = res.data.total;
   });
@@ -222,24 +219,7 @@ const columnList = [
     prop: "status",
     type: "enum",
     path: "contractListEnum.contractStatus",
-    color: {
-      0: {
-        color: "#35C5F3",
-        background: "#DFF6FD",
-      },
-      1: {
-        color: "#1EE585",
-        background: "#DBFBEB",
-      },
-      2: {
-        color: "#356FF3",
-        background: "#DFE8FD",
-      },
-      3: {
-        color: "#333333",
-        background: "#DEDEDE",
-      },
-    },
+    color: color,
   },
   { label: "签署形式", slot: "is_online" },
   { label: "甲方", prop: "part_a_name" },
@@ -399,17 +379,18 @@ const cfi = reactive({
 
 const qshtfswj = () => {
   isLoading.value = true;
-  goContractOnline(cfi).then(() => {
-    setTimeout(() => {
+  goContractOnline(cfi)
+    .then(() => {
+      setTimeout(() => {
+        isLoading.value = false;
+        ElMessage.success("操作成功");
+        signVisible.value = false;
+        handleSearch();
+      }, 2000);
+    })
+    .catch(() => {
       isLoading.value = false;
-      ElMessage.success("操作成功");
-      signVisible.value = false;
-      handleSearch();
-    }, 2000);
-	}).catch(() => {
-      isLoading.value = false;
-		
-	})
+    });
 };
 handleSearch();
 </script>

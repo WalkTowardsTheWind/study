@@ -16,9 +16,20 @@ export function getTreeList(params: { type: number }): AxiosPromise {
 /**
  * 获取税地列表
  */
-export function getLandList(): AxiosPromise {
+export function getLandList(params?): AxiosPromise {
   return request({
     url: "/adminapi/tax/taxLandList",
+    method: "GET",
+    params,
+  });
+}
+
+/**
+ * 获取可用税地列表
+ */
+export function getSelectLandList(): AxiosPromise {
+  return request({
+    url: "/adminapi/tax/online_list",
     method: "GET",
   });
 }

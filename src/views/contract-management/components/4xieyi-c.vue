@@ -37,40 +37,15 @@
     >
       <template #tableTop>
         <el-button type="primary" @click="addClick">合同归档</el-button>
-        <el-button type="primary" plain @click="onlineSignClick"
-          >在线签署</el-button
-        >
         <el-button type="primary" plain>批量下载</el-button>
       </template>
       <template #type>
-        <span>企业合同</span>
+        <span>委托代签协议</span>
       </template>
       <template #is_online="{ row }">
         <span>{{ row.is_online == 1 ? "线上签署" : "线下签署" }}</span>
       </template>
       <template #caozuo="{ row }">
-        <el-button
-          v-if="row.status == 0"
-          type="primary"
-          link
-          @click="goToSign(row.id)"
-          >发起签署</el-button
-        >
-        <el-button
-          v-if="row.status == 1"
-          type="primary"
-          link
-          @click="setStatus(row.id, 0)"
-          >撤回</el-button
-        >
-        <el-button
-          v-if="row.status != 1 && row.status != 2"
-          type="primary"
-          link
-          @click="delClick(row.id)"
-          >删除</el-button
-        >
-
         <el-button
           :disabled="!row.cert_url"
           v-if="row.status == 2 || row.status == 3"
@@ -87,6 +62,13 @@
           >合同解除</el-button
         >
         <el-button
+          v-if="row.status != 1 && row.status != 2"
+          type="primary"
+          link
+          @click="delClick(row.id)"
+          >删除</el-button
+        >
+        <el-button
           :disabled="!row.contract_url"
           type="primary"
           link
@@ -100,17 +82,10 @@
     </zxn-table>
     <!-- 合同归档 -->
     <ContractAdd
+      :contract_type="4"
       :visible="isAddShow"
-      :contract_type="1"
       @add-close="addDialogClose"
       @add-confirm="addDialogConfirm"
-    />
-    <!-- 在线签署 -->
-    <OnlineSign
-      :visible="isOnline"
-      :contract_type="1"
-      @online-close="onlineClose"
-      @online-confirm="onlineConfirm"
     />
     <!-- 合同详情 -->
     <ContractDetail
@@ -118,58 +93,17 @@
       @detail-close="detailClose"
       :detailId="detailId"
     />
-    <!-- 发起签署 -->
-    <zxn-dialog :visible="signVisible" :title="signTitle">
-      <template #default>
-        <el-form v-if="signStep == 1" label-width="auto">
-          <el-form-item required label="姓名">
-            <el-input v-model="signForm.name" />
-          </el-form-item>
-          <el-form-item required label="身份证号">
-            <el-input maxlength="18" v-model="signForm.id_card" />
-          </el-form-item>
-        </el-form>
-        <template v-if="signStep == 2">
-          <p class="font-size-8">
-            已成功生成您的个人电子签名，是否签署合同并推送给乙方？
-          </p>
-          <zxn-image :imgList="[signImage]"></zxn-image>
-        </template>
-      </template>
-      <template #bottom-btn>
-        <div class="flex justify-center">
-          <el-button
-            :loading="isLoading"
-            v-if="signStep == 1"
-            type="primary"
-            @click="scgrdzqm"
-            >生成个人电子签名</el-button
-          >
-          <el-button
-            :loading="isLoading"
-            v-if="signStep == 2"
-            type="primary"
-            @click="qshtfswj"
-            >签署合同并发送文件</el-button
-          >
-          <el-button type="primary" plain @click="closeSign">取消</el-button>
-        </div>
-      </template>
-    </zxn-dialog>
   </div>
 </template>
 
 <script lang="ts" setup>
 import ContractAdd from "./contract-add.vue";
-import OnlineSign from "./online-sign.vue";
 import ContractDetail from "./contract-detail.vue";
 
 import {
   getContractList,
-  setContractStatus,
   delContract,
-  createContractSeal,
-  goContractOnline,
+  setContractStatus,
 } from "@/api/contract-m/index";
 
 import { contract_status, color } from "./options";
@@ -198,13 +132,12 @@ const handleSearch = () => {
     end_time: formItem.date[1] || "",
     status: formItem.status,
     tax_land_id: formItem.tax_land_id,
-    type: "1", // 1企业合同 2渠道合同 3其他合同
+    type: "4", // 1企业合同 2渠道合同 3其他合同 4 协议
     limit: pageInfo.limit,
     page: pageInfo.page,
   };
   tableData.length = 0;
   getContractList(params).then((res) => {
-    console.log(res);
     tableData.push(...res.data.data);
     pageInfo.total = res.data.total;
   });
@@ -263,33 +196,27 @@ const addDialogConfirm = (visible) => {
   handleSearch();
 };
 
-const onlineClose = (visible: boolean) => {
-  isOnline.value = visible;
-};
-const onlineConfirm = (visible) => {
-  isOnline.value = visible;
-  handleSearch();
-};
-
 const checkUrl = (url) => {
   window.open(url, "_blank");
 };
+
+const delClick = (id) => {
+  ElMessageBox.confirm("是否删除当前合同?", "", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+  }).then(() => {
+    delContract(id).then(() => {
+      ElMessage({
+        type: "success",
+        message: "操作成功",
+      });
+      handleSearch();
+    });
+  });
+};
+
 const setStatus = (id, status) => {
   switch (status) {
-    case 0:
-      ElMessageBox.confirm("是否撤回当前合同?", "", {
-        confirmButtonText: "确认",
-        cancelButtonText: "取消",
-      }).then(() => {
-        setContractStatus(id, status).then(() => {
-          ElMessage({
-            type: "success",
-            message: "操作成功",
-          });
-          handleSearch();
-        });
-      });
-      break;
     case 3:
       ElMessageBox.confirm("是否解除当前合同?", "", {
         confirmButtonText: "确认",
@@ -308,92 +235,9 @@ const setStatus = (id, status) => {
   }
 };
 
-const delClick = (id) => {
-  ElMessageBox.confirm("是否删除当前合同?", "", {
-    confirmButtonText: "确认",
-    cancelButtonText: "取消",
-  }).then(() => {
-    delContract(id).then(() => {
-      ElMessage({
-        type: "success",
-        message: "操作成功",
-      });
-      handleSearch();
-    });
-  });
-};
-
 const toDetail = (id) => {
   detailId.value = id;
   detailShow.value = true;
 };
-
-const signVisible = ref(false);
-const signTitle = ref("");
-const signStep = ref(1);
-const signImage = ref("");
-const isLoading = ref(false);
-const signForm = reactive({
-  name: "",
-  id_card: "",
-});
-const closeSign = () => {
-  signVisible.value = false;
-  signStep.value = 1;
-  signForm.name = "";
-  signForm.id_card = "";
-  cfi.psn_id = "";
-  cfi.seal = "";
-  isLoading.value = false;
-};
-const goToSign = (id) => {
-  // 1 生成印章
-  // createContractSeal();
-  signVisible.value = true;
-  signTitle.value = "填写负责人信息";
-  cfi.id = id;
-};
-
-const scgrdzqm = () => {
-  if (!signForm.name || !signForm.id_card) return;
-  isLoading.value = true;
-  createContractSeal(signForm)
-    .then((res) => {
-      setTimeout(() => {
-        isLoading.value = false;
-        signStep.value = 2;
-        signTitle.value = "生成成功";
-        signImage.value = `data:image/jpeg;base64,${res.data.seal}`;
-        cfi.psn_id = res.data.psn_id;
-        cfi.seal = res.data.seal;
-      }, 2000);
-    })
-    .catch(() => {
-      isLoading.value = false;
-    });
-};
-const cfi = reactive({
-  id: "",
-  psn_id: "",
-  seal: "",
-});
-
-const qshtfswj = () => {
-  isLoading.value = true;
-  goContractOnline(cfi)
-    .then(() => {
-      setTimeout(() => {
-        isLoading.value = false;
-        ElMessage.success("操作成功");
-        signVisible.value = false;
-        signStep.value = 1;
-        handleSearch();
-      }, 2000);
-    })
-    .catch(() => {
-      isLoading.value = false;
-    });
-};
-
 handleSearch();
 </script>

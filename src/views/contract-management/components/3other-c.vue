@@ -13,7 +13,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="合同状态">
-        <el-select v-model="formItem.status">
+        <el-select v-model="formItem.status" @change="handleSearch">
           <el-option
             v-for="item of contract_status"
             :key="item.status"
@@ -39,10 +39,8 @@
         <el-button type="primary" @click="addClick">合同归档</el-button>
         <el-button type="primary" plain>批量下载</el-button>
       </template>
-      <template #type="{ row }">
-        <span v-if="row.type == 1">企业合同</span>
-        <span v-if="row.type == 2">渠道合同</span>
-        <span v-if="row.type == 3">其他合同</span>
+      <template #type>
+        <span>其他合同</span>
       </template>
       <template #is_online="{ row }">
         <span>{{ row.is_online == 1 ? "线上签署" : "线下签署" }}</span>
@@ -108,7 +106,7 @@ import {
   setContractStatus,
 } from "@/api/contract-m/index";
 
-import { contract_status } from "./options";
+import { contract_status, color } from "./options";
 
 const formItem = reactive({
   keyword: "",
@@ -140,7 +138,6 @@ const handleSearch = () => {
   };
   tableData.length = 0;
   getContractList(params).then((res) => {
-    console.log(res);
     tableData.push(...res.data.data);
     pageInfo.total = res.data.total;
   });
@@ -156,24 +153,7 @@ const columnList = [
     prop: "status",
     type: "enum",
     path: "contractListEnum.contractStatus",
-    color: {
-      0: {
-        color: "#35C5F3",
-        background: "#DFF6FD",
-      },
-      1: {
-        color: "#1EE585",
-        background: "#DBFBEB",
-      },
-      2: {
-        color: "#356FF3",
-        background: "#DFE8FD",
-      },
-      3: {
-        color: "#333333",
-        background: "#DEDEDE",
-      },
-    },
+    color: color,
   },
   { label: "签署形式", slot: "is_online" },
   { label: "甲方", prop: "part_a_name" },
@@ -197,7 +177,7 @@ const detailClose = (visible: boolean) => {
   detailShow.value = visible;
 };
 
-const handleSelect = (val) => {
+const handleSelect = (val: any) => {
   console.log(val);
 };
 const isOnline = ref(false);
@@ -211,16 +191,16 @@ const addClick = () => {
 const addDialogClose = (visible: boolean) => {
   isAddShow.value = visible;
 };
-const addDialogConfirm = (visible) => {
+const addDialogConfirm = (visible: boolean) => {
   isAddShow.value = visible;
   handleSearch();
 };
 
-const checkUrl = (url) => {
+const checkUrl = (url: string) => {
   window.open(url, "_blank");
 };
 
-const delClick = (id) => {
+const delClick = (id: number) => {
   ElMessageBox.confirm("是否删除当前合同?", "", {
     confirmButtonText: "确认",
     cancelButtonText: "取消",
@@ -235,7 +215,7 @@ const delClick = (id) => {
   });
 };
 
-const setStatus = (id, status) => {
+const setStatus = (id: number, status: number) => {
   switch (status) {
     case 3:
       ElMessageBox.confirm("是否解除当前合同?", "", {
@@ -255,7 +235,7 @@ const setStatus = (id, status) => {
   }
 };
 
-const toDetail = (id) => {
+const toDetail = (id: number) => {
   detailId.value = id;
   detailShow.value = true;
 };

@@ -66,7 +66,7 @@
       <div class="sign">
         <div class="title">设置签署方</div>
       </div>
-      <el-form-item class="m-y-20px" label="签署单位" prop="part_b" required>
+      <!-- <el-form-item class="m-y-20px" label="签署单位" prop="part_b" required>
         <el-select v-model="addForm.part_b">
           <el-option
             v-for="item of signByType"
@@ -75,7 +75,48 @@
             :value="item.value"
           ></el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
+      <div class="flex m-t-20px">
+        <template v-if="contract_type == 1">
+          <el-form-item label="甲方">
+            <el-select v-model="addForm.part_a">
+              <el-option
+                v-for="item of optionsListA"
+                :key="item.company_id"
+                :label="item.company_name"
+                :value="item.company_id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="乙方">
+            <el-select v-model="addForm.part_b">
+              <el-option
+                v-for="item of optionsListB"
+                :key="item.id"
+                :label="item.tax_land_name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </template>
+        <template v-if="contract_type == 2">
+          <el-form-item label="甲方">
+            <el-select v-model="addForm.part_a">
+              <el-option label="武汉中新能科技有限公司" value="0"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="乙方">
+            <el-select v-model="addForm.part_b">
+              <el-option
+                v-for="item of optionsListB"
+                :key="item.id"
+                :label="item.channel_name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </template>
+      </div>
       <div class="head p-x-20px m-y-20px">
         <div class="">参与方信息</div>
       </div>
@@ -105,6 +146,7 @@ import { getContractTempList, signContractOnline } from "@/api/contract-m";
 import { getBusinessAccountList } from "@/api/account/business";
 import { getChannelAccountList } from "@/api/account/channel";
 import { contract_types } from "./options";
+import { getSelfOperatedTaxLandList } from "@/api/taxLandManagement/selfOperatedTaxLand";
 
 const props = defineProps({
   visible: {
@@ -122,6 +164,7 @@ const addForm = reactive({
   template_id: "",
   type: "",
   date: [],
+  part_a: "",
   part_b: "",
   remark: "",
   fields: [],
@@ -142,6 +185,13 @@ const rules = {
     },
   ],
   date: [
+    {
+      required: true,
+      message: "必选",
+      trigger: "change",
+    },
+  ],
+  part_a: [
     {
       required: true,
       message: "必选",
@@ -171,6 +221,7 @@ const onlineConfirm = async (formI) => {
       let params = {
         contract_name: addForm.contract_name,
         template_id: addForm.template_id.id,
+        part_a: addForm.part_a,
         part_b: addForm.part_b,
         effective_start_time: addForm.date[0] ?? "",
         effective_end_time: addForm.date[1] ?? "",
@@ -235,6 +286,41 @@ watch(
     }
   }
 );
+
+const optionsListA = ref([] as any);
+const optionsListB = ref([] as any);
+const getOptionsList = () => {
+  switch (props.contract_type) {
+    case 1:
+      getBusinessAccountList({ limit: 1000, page: 1 }).then((res) => {
+        optionsListA.value.push(...res.data.data);
+        for (const item of optionsListA.value) {
+          item["label"] = item["company_name"];
+          item["value"] = item["company_id"];
+        }
+      });
+      getSelfOperatedTaxLandList({ status: 1, tax_land_type: "" }).then(
+        (res) => {
+          optionsListB.value = res.data.data;
+          for (const item of optionsListB.value) {
+            item["label"] = item["tax_land_name"];
+            item["value"] = item["id"];
+          }
+        }
+      );
+      break;
+    case 2:
+      getChannelAccountList({ limit: 1000, page: 1 }).then((res) => {
+        optionsListB.value = res.data.data;
+        for (const item of optionsListB.value) {
+          item["label"] = item["channel_name"];
+          item["value"] = item["id"];
+        }
+      });
+      break;
+  }
+};
+getOptionsList();
 </script>
 <style scoped lang="scss">
 .sign {

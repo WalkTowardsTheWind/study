@@ -10,6 +10,9 @@
       <template #3>
         <otherContract />
       </template>
+      <template #4>
+        <xieyiContract />
+      </template>
     </zxn-tabs>
   </zxn-plan>
 </template>
@@ -18,6 +21,7 @@
 import businessContract from "./components/1bus-c.vue";
 import channelContract from "./components/2cha-c.vue";
 import otherContract from "./components/3other-c.vue";
+import xieyiContract from "./components/4xieyi-c.vue";
 
 const tabsList = [
   {
@@ -31,6 +35,10 @@ const tabsList = [
   {
     name: "3",
     label: "其他合同",
+  },
+  {
+    name: "4",
+    label: "委托代征协议",
   },
 ];
 

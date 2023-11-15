@@ -13,6 +13,7 @@ export interface selfOperatedTaxLandList {
   invoice_denomination?: string;
   calculation_type?: string;
   tax_manufacturer?: string;
+  status?: number;
   page?: string;
   limit?: string;
 }
