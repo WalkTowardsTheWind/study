@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { RouteLocationNormalized } from "vue-router";
+import { store } from "@/store";
 
 export interface TagView extends Partial<RouteLocationNormalized> {
   title?: string;
@@ -216,3 +217,8 @@ export const useTagsViewStore = defineStore("tagsView", () => {
     delAllCachedViews,
   };
 });
+
+// 非setup
+export function useTagsViewStoreHook() {
+  return useTagsViewStore(store);
+}

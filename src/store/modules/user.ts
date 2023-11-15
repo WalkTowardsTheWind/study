@@ -9,6 +9,9 @@ import { store } from "@/store";
 import { LoginData } from "@/api/login/types";
 
 import { useStorage } from "@vueuse/core";
+import { useTagsViewStoreHook } from "./tagsView";
+
+const tagsViewStore = useTagsViewStoreHook();
 
 export const useUserStore = defineStore("user", () => {
   // state
@@ -71,7 +74,9 @@ export const useUserStore = defineStore("user", () => {
   async function taxSourceChange(value: string): Promise<void> {
     taxSource.value = value;
     await setTaxLand({ tax_land_id: value });
-    refreshSelectedTag();
+    tagsViewStore.delAllViews().then((_) => {
+      refreshSelectedTag();
+    });
   }
   function getSourceList(): Promise<void> {
     return new Promise((resolve, reject) => {
