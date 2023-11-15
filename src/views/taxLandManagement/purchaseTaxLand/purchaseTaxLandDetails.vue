@@ -598,7 +598,7 @@ const propsTaxLang = {
 const tableData = reactive([] as any);
 const columnList = [
   { label: "合同编号", prop: "contract_no", width: 100 },
-  { label: "合同类型", prop: "type", width: 100 },
+  { label: "合同类型", prop: "type", width: 120 },
   {
     label: "状态",
     type: "enum",

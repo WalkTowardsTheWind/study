@@ -68,9 +68,10 @@ export enum contractStatus {
   "已失效",
 }
 export enum contractType {
-  "企业合同",
+  "企业合同" = 1,
   "渠道合同",
   "其他合同",
+  "委托代征协议",
 }
 export enum onlineType {
   "线下签署",
