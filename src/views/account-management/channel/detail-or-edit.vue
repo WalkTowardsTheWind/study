@@ -17,7 +17,11 @@
         <HistoryView :isEdit="isEdit" />
       </template> -->
       <template #5>
-        <ContractView :channel_id="idv" :isEdit="isEdit" />
+        <ContractView
+          :channel_id="idv"
+          :isEdit="isEdit"
+          :name="formItem.channel_name"
+        />
       </template>
     </zxn-tabs>
   </zxn-plan>
@@ -38,7 +42,7 @@ const route = useRoute();
 const isEdit = ref(false);
 const idv = ref("");
 
-const formItem = ref();
+const formItem = ref({} as any);
 
 if (route.query.type === "edit") {
   isEdit.value = true;

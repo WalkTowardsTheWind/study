@@ -6,7 +6,10 @@
       @on-search="handleSearch"
     >
       <el-form-item>
-        <el-input placeholder="请输入" v-model="formItem.keyword">
+        <el-input
+          placeholder="请输入合同编号、合同名称、甲方、乙方"
+          v-model="formItem.keyword"
+        >
           <template #prefix>
             <i-ep-Search />
           </template>
@@ -131,7 +134,7 @@
         </el-form>
         <template v-if="signStep == 2">
           <p class="font-size-8">
-            已成功生成您的个人电子签名，是否签署合同并推送给乙方？
+            已成功生成您的个人电子签名，是否签署合同并推送给对方？
           </p>
           <zxn-image :imgList="[signImage]"></zxn-image>
         </template>
@@ -174,6 +177,13 @@ import {
 
 import { contract_status, color } from "./options";
 
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+// const tab_type = ref(1);
+// const company_name = ref("");
+
 const formItem = reactive({
   keyword: "",
   status: "",
@@ -204,7 +214,6 @@ const handleSearch = () => {
   };
   tableData.length = 0;
   getContractList(params).then((res) => {
-    console.log(res);
     tableData.push(...res.data.data);
     pageInfo.total = res.data.total;
   });
@@ -394,6 +403,14 @@ const qshtfswj = () => {
       isLoading.value = false;
     });
 };
-
-handleSearch();
+const getListByRoute = () => {
+  const company_name: any = route.query.company_name || "";
+  formItem.keyword = company_name;
+  handleSearch();
+};
+if (route.query.company_name && route.query.type == "1") {
+  getListByRoute();
+} else {
+  handleSearch();
+}
 </script>

@@ -6,7 +6,10 @@
       @on-search="handleSearch"
     >
       <el-form-item>
-        <el-input placeholder="请输入" v-model="formItem.keyword">
+        <el-input
+          placeholder="请输入合同编号、合同名称、甲方、乙方"
+          v-model="formItem.keyword"
+        >
           <template #prefix>
             <i-ep-Search />
           </template>
@@ -131,7 +134,7 @@
         </el-form>
         <template v-if="signStep == 2">
           <p class="font-size-8">
-            已成功生成您的个人电子签名，是否签署合同并推送给乙方？
+            已成功生成您的个人电子签名，是否签署合同并推送给对方？
           </p>
           <zxn-image :imgList="[signImage]"></zxn-image>
         </template>
@@ -171,7 +174,7 @@ import {
   createContractSeal,
   goContractOnline,
 } from "@/api/contract-m/index";
-
+import { useRoute } from "vue-router";
 import { contract_status, color } from "./options";
 
 const formItem = reactive({
@@ -392,5 +395,16 @@ const qshtfswj = () => {
       isLoading.value = false;
     });
 };
-handleSearch();
+var route = useRoute();
+
+const getListByRoute = () => {
+  const company_name: any = route.query.company_name || "";
+  formItem.keyword = company_name;
+  handleSearch();
+};
+if (route.query.company_name && route.query.type == "2") {
+  getListByRoute();
+} else {
+  handleSearch();
+}
 </script>

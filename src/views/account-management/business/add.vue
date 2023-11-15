@@ -256,86 +256,87 @@
         </el-col>
         <el-col :span="7">
           <!-- 新建税地 -->
-          <template v-for="(tax, index) in addForm.tax_land_list" :key="tax">
-            <el-form-item
-              label="选择税地"
-              :prop="'tax_land_list.' + index + '.tax_land_id'"
-              :rules="{
-                required: true,
-                message: '必填',
-                trigger: 'change',
-              }"
+          <el-form-item
+            label="选择税地"
+            prop="tax_land_id"
+            :rules="{
+              required: true,
+              message: '必填',
+              trigger: 'change',
+            }"
+          >
+            <el-select
+              class="w-full"
+              placeholder="请选择"
+              v-model="addForm.tax_land_id"
+              @change="addSelecTaxland"
+              value-key="id"
             >
-              <el-select
-                class="w-full"
-                placeholder="请选择"
-                v-model="tax.tax_land_id"
-                @change="addSelecTaxland(tax, index)"
-              >
-                <el-option
-                  v-for="(item, index) in taxLandOption"
-                  :key="index"
-                  :value="item.id"
-                  :label="item.tax_land_name"
-                ></el-option>
-              </el-select>
-            </el-form-item>
+              <el-option
+                v-for="(item, index) in taxLandOption"
+                :key="index"
+                :label="item.tax_land_name"
+                :value="item"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <template v-if="addForm.tax_land_type == 1">
             <el-form-item label="第三方账户">
               <el-input
                 placeholder="请输入"
-                v-model="tax.third_user_name"
+                v-model="addForm.third_user_name"
                 clearable
               />
             </el-form-item>
             <el-form-item label="第三方密码">
               <el-input
                 placeholder="请输入"
-                v-model="tax.third_password"
+                v-model="addForm.third_password"
                 clearable
               />
             </el-form-item>
-            <el-form-item
-              label="客户点位"
-              :prop="'tax_land_list.' + index + '.tax_point'"
-              :rules="{
-                trigger: 'change',
-                required: true,
-                validator: taxPointValidator,
-              }"
-            >
-              <el-input placeholder="请输入" v-model="tax.tax_point">
-                <template #append>%</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="认证规则">
-              <el-select
-                class="w-full"
-                placeholder="请选择（单选）"
-                v-model="tax.auth_type"
-              >
-                <el-option
-                  v-for="(item, index) in auth_type"
-                  :key="index"
-                  :value="item.value"
-                  :label="item.label"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="签约规则">
-              <el-select
-                class="w-full"
-                placeholder="请选择（单选）"
-                v-model="tax.sign_type"
-              >
-                <el-option
-                  v-for="(item, index) in sign_type"
-                  :key="index"
-                  :value="item.value"
-                  :label="item.label"
-                ></el-option>
-              </el-select>
-            </el-form-item>
           </template>
+          <el-form-item
+            label="客户点位"
+            prop="tax_point"
+            :rules="{
+              trigger: 'change',
+              required: true,
+              validator: taxPointValidator,
+            }"
+          >
+            <el-input placeholder="请输入" v-model="addForm.tax_point">
+              <template #append>%</template>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="认证规则">
+            <el-select
+              class="w-full"
+              placeholder="请选择（单选）"
+              v-model="addForm.auth_type"
+            >
+              <el-option
+                v-for="(item, index) in auth_type"
+                :key="index"
+                :value="item.value"
+                :label="item.label"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="签约规则">
+            <el-select
+              class="w-full"
+              placeholder="请选择（单选）"
+              v-model="addForm.sign_type"
+            >
+              <el-option
+                v-for="(item, index) in sign_type"
+                :key="index"
+                :value="item.value"
+                :label="item.label"
+              ></el-option>
+            </el-select>
+          </el-form-item>
         </el-col>
       </el-row>
       <zxn-bottom-btn>
@@ -385,12 +386,6 @@ const activeStep = ref(0);
 const taxLandOption = ref([] as any);
 
 const tabsList = [{ name: "0", label: "新建企业" }];
-const stepList = [
-  { desc: "基本信息" },
-  { desc: "公司信息" },
-  { desc: "纳税信息" },
-  { desc: "合同渠道" },
-];
 
 const cateGoryOptions = ref([] as any);
 
@@ -432,16 +427,14 @@ const addForm = reactive({
   channel_point: "",
   company_source_remark: "",
   calculation_type: "",
-  tax_land_list: [
-    {
-      tax_land_id: "",
-      third_user_name: "",
-      third_password: "",
-      tax_point: "",
-      sign_type: "",
-      auth_type: "",
-    },
-  ],
+  // 税地
+  tax_land_id: "",
+  third_user_name: "",
+  third_password: "",
+  tax_point: "",
+  sign_type: "",
+  auth_type: "",
+  tax_land_type: "",
 } as any);
 
 const isTaxLandListValid = computed(() => {
@@ -543,9 +536,22 @@ async function submit(formEl: FormInstance | undefined) {
 
   await formEl.validate(async (valid, fields) => {
     if (valid) {
+      let params = {
+        ...addForm,
+        tax_land_list: [
+          {
+            tax_land_id: addForm.tax_land_id.id,
+            third_user_name: addForm.third_user_name,
+            third_password: addForm.third_password,
+            tax_point: addForm.tax_point,
+            sign_type: addForm.sign_type,
+            auth_type: addForm.auth_type,
+          },
+        ],
+      };
       // 全部填写完成
       if (isAllComplete.value) {
-        const res = await createBusinessAccount(addForm);
+        const res = await createBusinessAccount(params);
         try {
           if (res.status === 200) {
             ElMessage({
@@ -573,7 +579,7 @@ async function submit(formEl: FormInstance | undefined) {
         )
           .then(async () => {
             addForm.is_active = 1;
-            const res = await createBusinessAccount(addForm);
+            const res = await createBusinessAccount(params);
             try {
               if (res.status === 200) {
                 ElMessage({
@@ -596,7 +602,7 @@ async function submit(formEl: FormInstance | undefined) {
               });
             } else {
               addForm.is_active = 0;
-              const res = await createBusinessAccount(addForm);
+              const res = await createBusinessAccount(params);
               try {
                 if (res.status === 200) {
                   ElMessage({
@@ -643,8 +649,11 @@ function getTaxLandOption() {
 }
 
 // 选择税地后才有对应规则
-function addSelecTaxland(tax: any, index: number) {
-  taxLandStore.updateTaxLandList(tax.tax_land_id);
+function addSelecTaxland(tax: any) {
+  addForm.auth_type = "";
+  addForm.sign_type = "";
+  addForm.tax_land_type = tax.tax_land_type;
+  taxLandStore.updateTaxLandList(tax.id);
   auth_type.value = taxLandStore.auth_type;
   sign_type.value = taxLandStore.sign_type;
 }

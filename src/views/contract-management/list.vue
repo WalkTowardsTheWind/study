@@ -23,6 +23,8 @@ import channelContract from "./components/2cha-c.vue";
 import otherContract from "./components/3other-c.vue";
 import xieyiContract from "./components/4xieyi-c.vue";
 
+import { useRoute } from "vue-router";
+const route = useRoute();
 const tabsList = [
   {
     name: "1",
@@ -40,9 +42,16 @@ const tabsList = [
     name: "4",
     label: "委托代征协议",
   },
+  // {
+  //   name: "5",
+  //   label: "个人合同",
+  // },
 ];
-
 const activeName = ref("1");
+
+if (route.query.type) {
+  activeName.value = String(route.query.type);
+}
 </script>
 
 <style scoped></style>

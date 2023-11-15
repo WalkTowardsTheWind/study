@@ -6,7 +6,10 @@
       @on-search="handleSearch"
     >
       <el-form-item>
-        <el-input placeholder="请输入" v-model="formItem.keyword">
+        <el-input
+          placeholder="请输入合同编号、合同名称、甲方、乙方"
+          v-model="formItem.keyword"
+        >
           <template #prefix>
             <i-ep-Search />
           </template>
@@ -181,9 +184,6 @@ const handleSelect = (val) => {
   console.log(val);
 };
 const isOnline = ref(false);
-const onlineSignClick = () => {
-  isOnline.value = true;
-};
 
 const addClick = () => {
   isAddShow.value = true;

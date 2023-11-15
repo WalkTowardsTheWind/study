@@ -6,10 +6,7 @@
       @on-search="handleSearch"
     >
       <el-form-item>
-        <el-input
-          placeholder="请输入合同编号、合同名称、甲方、乙方"
-          v-model="formItem.keyword"
-        >
+        <el-input placeholder="请输入甲方、乙方" v-model="formItem.keyword">
           <template #prefix>
             <i-ep-Search />
           </template>
