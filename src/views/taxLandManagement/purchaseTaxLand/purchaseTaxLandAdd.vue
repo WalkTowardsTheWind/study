@@ -62,6 +62,17 @@
                   >
                   </el-input>
                 </el-form-item>
+                <el-form-item
+                  class="mt-25px"
+                  label="社会信用代码"
+                  prop="tax_organ_code"
+                >
+                  <el-input
+                    v-model="formItem.tax_organ_code"
+                    placeholder="请输入"
+                  >
+                  </el-input>
+                </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="厂商" prop="tax_manufacturer">
@@ -635,6 +646,7 @@ const imgValidate = (message: any, rule: any, value: any, callback: any) => {
 const Rules = {
   tax_land_type: [{ required: true, message: "请选择", trigger: "change" }],
   tax_land_name: [{ required: true, message: "请输入", trigger: "blur" }],
+  tax_organ_code: [{ required: true, message: "请输入", trigger: "blur" }],
   min_employment_year: [
     { required: true, validator: validateMin_employment_year, trigger: "blur" },
   ],
@@ -671,6 +683,7 @@ const formItem = ref({
   tax_land_head: "",
   head_mobile: "",
   tax_land_name: "",
+  tax_organ_code: "",
   tax_manufacturer: "",
   tax_cost_point: "",
   min_employment_year: "18",
