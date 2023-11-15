@@ -40,7 +40,7 @@
         <el-button type="primary" plain>批量下载</el-button>
       </template>
       <template #type>
-        <span>其他合同</span>
+        <span>委托代签协议</span>
       </template>
       <template #is_online="{ row }">
         <span>{{ row.is_online == 1 ? "线上签署" : "线下签署" }}</span>

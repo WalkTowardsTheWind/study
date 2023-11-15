@@ -19,7 +19,9 @@
         {{ row.is_online == 1 ? "线上签署" : "线下签署" }}
       </template>
       <template #caozuo="{ row }">
-        <!-- <el-button link type="primary">详情</el-button> -->
+        <el-button link type="primary" @click="toDetail(row.id)"
+          >详情</el-button
+        >
         <!-- <el-button link type="primary">发起签署</el-button> -->
         <!-- <el-button link type="primary">合同解除</el-button> -->
         <!-- <el-button link type="primary">撤回</el-button> -->
@@ -33,12 +35,19 @@
         <!-- <el-button link type="primary">删除</el-button> -->
       </template>
     </zxn-table>
+    <!-- 合同详情 -->
+    <ContractDetail
+      :visible="detailShow"
+      @detail-close="detailClose"
+      :detailId="detailId"
+    />
   </zxn-plan>
 </template>
 
 <script lang="ts" setup>
 import { getContractList } from "@/api/contract-m";
 import { color } from "@/views/contract-management/components/options";
+import ContractDetail from "@/views/contract-management/components/contract-detail.vue";
 
 const props = defineProps({
   channel_id: {
@@ -106,6 +115,19 @@ async function getList() {
     pageInfo.total = res.data.total;
   });
 }
+const detailShow = ref(false);
+
+const detailClose = (visible: boolean) => {
+  detailShow.value = visible;
+};
+
+const detailId = ref(0);
+
+const toDetail = (id) => {
+  detailId.value = Number(id);
+  detailShow.value = true;
+};
+
 const checkUrl = (url) => {
   window.open(url, "_blank");
 };
