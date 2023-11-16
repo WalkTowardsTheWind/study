@@ -9,8 +9,9 @@
       @selection-change="handleSelect"
     >
       <template #tableTop>
-        <!-- <el-button type="primary">合同归档</el-button>
-        <el-button type="primary" plain>在线签署</el-button> -->
+        <el-button :disabled="isDisabled" type="primary" @click="toRoute"
+          >编辑合同</el-button
+        >
       </template>
       <template #type="{ row }">
         {{ row.type == 2 ? "渠道合同" : "" }}
@@ -48,6 +49,7 @@
 import { getContractList } from "@/api/contract-m";
 import { color } from "@/views/contract-management/components/options";
 import ContractDetail from "@/views/contract-management/components/contract-detail.vue";
+import router from "@/router";
 
 const props = defineProps({
   channel_id: {
@@ -55,6 +57,9 @@ const props = defineProps({
   },
   isEdit: {
     type: Boolean,
+  },
+  name: {
+    default: () => "",
   },
 });
 
@@ -131,5 +136,28 @@ const toDetail = (id) => {
 const checkUrl = (url) => {
   window.open(url, "_blank");
 };
+const toRoute = () => {
+  router.push({
+    name: "contract-management-list",
+    query: {
+      company_name: props.name,
+      type: 2,
+    },
+  });
+};
+const isDisabled = ref(true);
+const getIsDisabled = () => {
+  const list = JSON.parse(localStorage.getItem("menusList")!) || [];
+  let found = false; // 标记是否找到相等的项
+  for (const item of list) {
+    if (item.module === "contract-management") {
+      found = true;
+      break; // 找到相等的项后跳出循环
+    }
+  }
+  isDisabled.value = !found; // 根据标记给 isDisabled.value 赋值
+};
+
+getIsDisabled();
 getList();
 </script>

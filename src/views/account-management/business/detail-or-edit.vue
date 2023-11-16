@@ -24,7 +24,11 @@
         <SettlementInfo :isEdit="isEdit" :id="id" />
       </template>
       <template #7>
-        <ContractInfo :isEdit="isEdit" :id="id" />
+        <ContractInfo
+          :isEdit="isEdit"
+          :id="id"
+          :company_name="formItem.company_name"
+        />
       </template>
     </zxn-tabs>
     <zxn-bottom-btn

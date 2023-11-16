@@ -55,6 +55,15 @@ export function getContractList(params) {
 	});
 }
 
+// 个人合同
+export function getPerContractList(params) {
+	return request({
+		url: `/adminapi/contract/person_contract_list`,
+		method: "get",
+		params,
+	});
+}
+
 // 合同归档
 export function archiveContract(data) {
 	return request({

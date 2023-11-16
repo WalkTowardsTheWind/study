@@ -38,6 +38,7 @@
                 v-model="addForm.part_a.name"
                 value-key="id"
                 @change="handleSelectChange1A"
+                placeholder="请选择签署的企业"
               >
                 <el-option
                   v-for="item of busOptions"
@@ -53,6 +54,7 @@
                 value-key="id"
                 v-model="addForm.part_b.name"
                 @change="handleSelectChange1B"
+                placeholder="请选择签署的税地"
               >
                 <el-option
                   v-for="item of taxlandOptions"
@@ -84,6 +86,7 @@
                 value-key="id"
                 v-model="addForm.part_b.name"
                 @change="handleSelectChange2B"
+                placeholder="请选择签署的渠道"
               >
                 <el-option
                   v-for="item of channelOptions"
@@ -102,6 +105,7 @@
                 value-key="id"
                 v-model="addForm.part_a.name"
                 @change="handleSelectChange3A"
+                placeholder="请选择签署的税地"
               >
                 <el-option
                   v-for="item of taxlandOptions"
@@ -128,7 +132,10 @@
           <!-- 委托代征协议 -->
           <template v-if="addForm.type == 4">
             <el-form-item label="甲方" required prop="part_a.name">
-              <el-input placeholder="请输入" v-model="addForm.part_a.name" />
+              <el-input
+                placeholder="请输入委托单位"
+                v-model="addForm.part_a.name"
+              />
             </el-form-item>
             <el-form-item label="乙方" required prop="part_b.name">
               <el-select
@@ -136,6 +143,7 @@
                 value-key="id"
                 v-model="addForm.part_b.name"
                 @change="handleSelectChange4B"
+                placeholder="请选择签署的税地"
               >
                 <el-option
                   v-for="item of taxlandOptions"
