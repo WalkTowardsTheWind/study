@@ -73,6 +73,24 @@
             <div v-if="item.type === 'money'">
               <money-text :modelValue="row[item.prop]" />
             </div>
+            <div v-if="item.type === 'phone'">
+              {{
+                row[item.prop]
+                  ? row[item.prop].slice(0, 3) +
+                    "****" +
+                    row[item.prop].slice(-4)
+                  : ""
+              }}
+            </div>
+            <div v-if="item.type === 'card'">
+              {{
+                row[item.prop]
+                  ? row[item.prop].slice(0, 4) +
+                    "**********" +
+                    row[item.prop].slice(-4)
+                  : ""
+              }}
+            </div>
           </template>
         </el-table-column>
         <el-table-column
