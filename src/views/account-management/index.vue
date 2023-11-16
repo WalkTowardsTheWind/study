@@ -39,10 +39,10 @@ const tabsList = [
     name: "3",
     label: "渠道账户",
   },
-  // {
-  //   name: "2",
-  //   label: "自由职业者",
-  // },
+  {
+    name: "2",
+    label: "自由职业者",
+  },
   // {
   //   name: "4",
   //   label: "其他账户",

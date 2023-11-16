@@ -57,16 +57,15 @@ const tabsList = [
 ];
 const activeName = ref("1");
 
-if (route.query.type) {
-  activeName.value = String(route.query.type);
-}
-
 const handleChange = (activeName: string) => {
   sessionStorage.setItem("contract", activeName);
 };
 
 onMounted(() => {
-  activeName.value = sessionStorage.getItem("contract") || "1";
+  if (route.query.type) {
+    activeName.value = route.query.type as string;
+  }
+  handleChange(activeName.value);
 });
 </script>
 

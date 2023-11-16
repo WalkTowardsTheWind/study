@@ -16,6 +16,7 @@ export enum personalType {
   "正常",
   "预警",
   "封停",
+  "未注册",
 }
 
 export enum taxpayerType {
@@ -68,4 +69,9 @@ export enum authType {
   "三要素（姓名、手机号、身份证）",
   "三要素（姓名、身份证、银行卡）",
   "四要素（姓名、手机号、身份证、银行卡）",
+}
+
+export enum perContractEnum {
+  "已失效",
+  "已生效",
 }

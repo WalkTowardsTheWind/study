@@ -6,7 +6,10 @@
       @on-reset="handleReset"
     >
       <el-form-item>
-        <el-input v-model="formItem.name" placeholder="请输入姓名或联系号码">
+        <el-input
+          v-model="formItem.name"
+          placeholder="请输入姓名、联系号码、身份证号"
+        >
           <template #prefix>
             <i-ep-Search />
           </template>
@@ -43,9 +46,24 @@
           </template>
         </el-dropdown>
       </template>
-      <template #caozuo>
-        <el-button link type="primary">封停</el-button>
-        <el-button link type="primary">详情</el-button>
+      <template #caozuo="{ row }">
+        <el-button
+          v-if="row.status != 4 && row.type == 1"
+          link
+          type="primary"
+          @click="setStatus(row.user_id, 4)"
+          >封停</el-button
+        >
+        <el-button
+          v-if="row.status == 4"
+          link
+          type="primary"
+          @click="setStatus(row.user_id, 2)"
+          >解封</el-button
+        >
+        <el-button link type="primary" @click="toDetail(row.idcard)"
+          >详情</el-button
+        >
       </template>
     </zxn-table>
   </div>
@@ -53,13 +71,10 @@
 
 <script lang="ts" setup>
 import {
-  delPersonalAccount,
-  getPersonalAccountList,
   setPersonalStatus,
+  getPersonalAccountList,
 } from "@/api/account/personal";
 import router from "@/router";
-
-// import router from "@/router";
 
 const statusOptions = ref([
   { label: "全部", value: "" },
@@ -79,27 +94,38 @@ const pageInfo = reactive({
   total: 0,
 });
 
-const date = ref("");
-
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "姓名", prop: "" },
+  { label: "姓名", prop: "real_name", minWidth: 120 },
   {
     label: "状态",
-    prop: "status",
+    prop: "user_status",
+    type: "enum",
+    path: "accountEnum.personalType",
+    color: {
+      0: { color: "#1DE585", background: "#dbfbeb" },
+      1: { color: "#35C5F3", background: "#dff6fd" },
+      2: { color: "#356FF3", background: "#dfe8fd" },
+      3: { color: "#F35036", background: "#fde3df" },
+      4: { color: "#333333", background: "#dedede" },
+      5: { color: "#333333", background: "#dedede" },
+    },
+    minWidth: 120,
   },
-  { label: "手机号", prop: "real_name" },
-  { label: "身份证号", prop: "is_channel", slot: "is_channel" },
-  { label: "累计任务", prop: "phone" },
-  { label: "累计结算", prop: "add_time" },
-  { label: "是否认证", prop: "add_time" },
-  { label: "认证时间", prop: "add_time" },
-  { label: "操作", slot: "caozuo", fixed: "right", width: 250, align: "right" },
+  { label: "手机号", prop: "phone", type: "phone", minWidth: 150 },
+  { label: "身份证号", prop: "idcard", type: "card", minWidth: 200 },
+  { label: "累计任务", prop: "task_num", minWidth: 100 },
+  { label: "累计结算", prop: "amount", type: "money", minWidth: 100 },
+  // { label: "是否注册", prop: "type", slot: "type", minWidth: 100 },
+  { label: "认证时间", prop: "update_time", minWidth: 200 },
+  {
+    label: "操作",
+    slot: "caozuo",
+    fixed: "right",
+    minWidth: 120,
+    align: "right",
+  },
 ];
-
-// const toDetail = (status: string, id: number) => {
-//   router.push({ name: "personal-account-detail", query: { status, id } });
-// };
 
 /**
  * 页面
@@ -120,8 +146,8 @@ async function handleSearch() {
   let params = {
     ...formItem,
     ...pageInfo,
-    start_time: date.value[0],
-    end_time: date.value[1],
+    start_time: formItem.date[0],
+    end_time: formItem.date[1],
   };
   const { data } = await getPersonalAccountList(params);
   pageInfo.total = data.total;
@@ -133,60 +159,28 @@ async function handleSearch() {
 function handleReset() {
   formItem.name = "";
   formItem.status = "";
-  date.value = "";
+  formItem.date = [];
   handleSearch();
 }
 
-function stop(id: number, status: number) {
-  if (status === 1) {
-    ElMessageBox.confirm("是否解封账号?", "Warning", {
-      confirmButtonText: "确认",
-      cancelButtonText: "取消",
-      type: "warning",
-      center: true,
-    })
-      .then(() => {
-        setPersonalStatus({ id, status }).then((res) => {
-          console.log(res);
-          ElMessage({
-            type: "success",
-            message: "解封成功",
-          });
-          handleSearch();
-        });
-      })
-      .catch(() => {
-        ElMessage({
-          type: "info",
-          message: "取消删除",
-        });
+const toDetail = (idcard) => {
+  router.push({ name: "personal-account-detail", query: { ic: btoa(idcard) } });
+};
+
+const setStatus = (user_id: number, status: number) => {
+  ElMessageBox.confirm(`是否${status == 4 ? "封停" : "解封"}当前账户?`, "", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+  }).then(() => {
+    setPersonalStatus({ id: user_id, status }).then(() => {
+      ElMessage({
+        type: "success",
+        message: "操作成功",
       });
-  }
-  if (status === 2) {
-    ElMessageBox.confirm("是否封停账号?", "Warning", {
-      confirmButtonText: "确认",
-      cancelButtonText: "取消",
-      type: "warning",
-      center: true,
-    })
-      .then(() => {
-        setPersonalStatus({ id, status }).then((res) => {
-          console.log(res);
-          ElMessage({
-            type: "success",
-            message: "封停成功",
-          });
-          handleSearch();
-        });
-      })
-      .catch(() => {
-        ElMessage({
-          type: "info",
-          message: "取消删除",
-        });
-      });
-  }
-}
+      handleSearch();
+    });
+  });
+};
 
 handleSearch();
 </script>
