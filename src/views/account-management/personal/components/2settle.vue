@@ -10,22 +10,32 @@
       :column-list="columnList"
       :page-info="pageInfo"
       @page-change="pageChange"
+      hasSelect
+      @selection-change="select"
     >
       <template #tableTop>
-        <el-button type="primary" plain>结算信息导出</el-button>
+        <el-button type="primary" plain @click="piliangdaochu"
+          >结算信息导出</el-button
+        >
+      </template>
+      <template #caozuo="{ row }">
+        <el-button type="primary" link @click="daochu(row.id)">导出</el-button>
       </template>
     </zxn-table>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { getSettle } from "@/api/account/personal";
+import { getSettle, perDaoChu } from "@/api/account/personal";
+import { downloadByData } from "@/utils/download";
 
 const props = defineProps({
   idcard: {
     default: () => "",
   },
 });
+
+const ids = ref([] as any);
 const date = ref([] as any);
 const pageInfo = reactive({
   page: 1,
@@ -47,7 +57,7 @@ const columnList = [
   { label: "行业", prop: "name" },
   { label: "结算金额", prop: "settlement_amount", type: "money" },
   { label: "申请时间", prop: "add_time" },
-  // { label: "操作", slot: "caozuo" },
+  { label: "操作", slot: "caozuo" },
 ];
 
 const search = () => {
@@ -68,6 +78,27 @@ const reset = () => {
   date.value = [];
   search();
 };
+
+const daochu = (id) => {
+  console.log(id);
+  perDaoChu({ ids: [id] }).then((res) => {
+    // console.log(res);
+    downloadByData(res.data, "人员结算列表.xlsx");
+  });
+};
+
+const select = (val) => {
+  ids.value = val.map((i) => i.id);
+};
+
+const piliangdaochu = () => {
+  if (ids.value.length) {
+    perDaoChu({ ids: ids.value }).then((res) => {
+      downloadByData(res.data, "人员结算列表.xlsx");
+    });
+  }
+};
+
 search();
 </script>
 
