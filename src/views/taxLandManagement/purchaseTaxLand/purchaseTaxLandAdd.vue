@@ -240,7 +240,7 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="开户行">
+                <el-form-item class="mt-25px" label="开户行" prop="bank">
                   <el-input v-model="formItem.bank" placeholder="请输入">
                   </el-input>
                 </el-form-item>
@@ -454,6 +454,13 @@
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
+                <el-form-item class="mb-[0]" label="文件上传">
+                  <file-upload
+                    v-model="zip"
+                    :limit="1"
+                    :type="['zip']"
+                  ></file-upload>
+                </el-form-item>
               </el-col>
             </el-row>
           </el-form>
@@ -662,6 +669,7 @@ const Rules = {
   ],
   //
   payment_type: [{ required: true, message: "请选择", trigger: "change" }],
+  bank: [{ required: true, message: "请输入", trigger: "blur" }],
   bank_account: [{ required: true, message: "请输入", trigger: "blur" }],
   invoice_form: [{ required: true, message: "请选择", trigger: "change" }],
   //
@@ -678,6 +686,7 @@ const Rules = {
   ],
   tax_contract_term: [{ required: true, message: "请选择", trigger: "change" }],
 };
+const zip = ref([]) as any;
 const formItem = ref({
   tax_land_type: "1",
   tax_land_head: "",
@@ -720,6 +729,7 @@ const formItem = ref({
   agreement_url: [],
   contract_img: [],
   settlement_confirmation_letter: [],
+  materials_zip_url: "",
 });
 const handleSubmit = () => {
   FormRef.value.validate((valid: boolean) => {
@@ -740,8 +750,8 @@ const handleSubmit = () => {
       params.settlement_confirmation_letter = JSON.stringify(
         params.settlement_confirmation_letter
       );
+      params.materials_zip_url = zip.value[0] ? zip.value[0].baseUrl : "";
       params.tax_land_city_id = newNumberTransform(params.tax_land_city_id);
-      // params.tax_reg_type = newNumberTransform(params.tax_reg_type);
       selfOperatedTaxLandAdd(params)
         .then(() => {
           ElMessage({
