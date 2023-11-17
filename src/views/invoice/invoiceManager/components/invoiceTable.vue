@@ -172,13 +172,14 @@ const formItem = reactive({
   status: "",
 });
 const columnList: any[] = reactive([
-  { label: "发票任务编号", prop: "invoice_no", minWidth: 200 },
+  { label: "发票任务编号", prop: "invoice_no", width: 110, fixed: "left" },
   {
     label: "发票类目",
     prop: "category_num",
-    minWidth: 120,
+    width: 100,
+    fixed: "left",
   },
-  { label: "申请开票企业", prop: "company_name", minWidth: 150 },
+  { label: "申请开票企业", prop: "company_name", width: 120, fixed: "left" },
   {
     label: "开票样式",
     prop: "invoice_type",

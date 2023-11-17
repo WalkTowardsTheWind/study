@@ -229,14 +229,14 @@ const color = {
   4: { color: "#F45136", backgroundColor: "#FDE3DF" },
 };
 const columnList = [
-  { label: "结算单号", prop: "settlement_order_no", width: 200 },
+  { label: "结算单号", prop: "settlement_order_no", width: 100, fixed: "left" },
   // { label: "状态", slot: "status", width: 100, headerAlign: "left" },
   {
     label: "状态",
     type: "enum",
     path: "settlementCenterEnum.settlementCenterList",
     prop: "status",
-    // fixed: "left",
+    fixed: "left",
     color: {
       0: { color: "#1EE685", backgroundColor: "#DBFBEB" },
       1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
@@ -244,11 +244,11 @@ const columnList = [
       3: { color: "#F45136", backgroundColor: "#FDE3DF" },
       4: { color: "#333333", backgroundColor: "#DEDEDE" },
     },
-    width: 150,
+    width: 120,
   },
+  { label: "结算企业", prop: "company_name", width: 120, fixed: "left" },
+  { label: "税地名称", prop: "tax_land_name", width: 120, fixed: "left" },
   { label: "任务数量", prop: "task_count" },
-  { label: "结算企业", prop: "company_name", width: 200 },
-  { label: "税地名称", prop: "tax_land_name", width: 220 },
   { label: "结算人数", prop: "total_people" },
   { label: "实际人数", prop: "real_people" },
   { label: "点位", prop: "tax_point" },

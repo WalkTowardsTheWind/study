@@ -42,6 +42,7 @@ service.interceptors.response.use(
       return Promise.reject(new Error(msg));
     }
     if (response.data instanceof ArrayBuffer) {
+      console.log(response, "222");
       return response;
     }
 
