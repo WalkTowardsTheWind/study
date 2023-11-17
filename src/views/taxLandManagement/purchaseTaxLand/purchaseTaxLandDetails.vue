@@ -437,6 +437,19 @@
                   />
                   <span v-else>--</span>
                 </el-form-item>
+                <el-form-item class="mb-[0]" label="资料包">
+                  <zxn-image
+                    v-if="formItem.materials_zip_url"
+                    :imgList="[
+                      'http://39.98.67.98:8083/img/20231117/f2008c861a905a1aa79eb23bb9165839.png',
+                    ]"
+                    :width="88"
+                    :height="88"
+                    targetClick
+                    ellipsis
+                  />
+                  <span v-else>未上传</span>
+                </el-form-item>
               </el-col>
             </el-row>
             <zxn-table
@@ -683,6 +696,7 @@ const formItem = ref({
   tax_contract_term: "",
   incoming_materials: "",
   settlement_confirmation_letter: [],
+  materials_zip_url: "",
 });
 
 const getData = async () => {
@@ -724,6 +738,7 @@ const getData = async () => {
       tax_contract_term,
       incoming_materials,
       settlement_confirmation_letter,
+      materials_zip_url,
       contract_list,
     } = data.info;
     formItem.value = {
@@ -768,6 +783,7 @@ const getData = async () => {
       tax_contract_term: tax_contract_term + "",
       incoming_materials,
       settlement_confirmation_letter,
+      materials_zip_url,
     };
     tableData.length = 0;
     var newData = contract_list.map((item: any) => {

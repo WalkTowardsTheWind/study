@@ -443,7 +443,7 @@
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
-                <el-form-item class="mb-[0]" label="文件上传">
+                <el-form-item class="mb-[0]" label="资料包">
                   <file-upload
                     v-model="zip"
                     :limit="1"
