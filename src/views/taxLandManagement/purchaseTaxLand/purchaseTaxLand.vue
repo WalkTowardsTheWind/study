@@ -81,16 +81,14 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        <!-- <el-dropdown class="ml-4" trigger="click" @command="handleD">
-          <el-button type="primary">批量操作</el-button>
+        <el-dropdown class="ml-4" trigger="click" @command="handleExport">
+          <el-button type="primary">导出</el-button>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="1">上架</el-dropdown-item>
-              <el-dropdown-item command="2">删除</el-dropdown-item>
-              <el-dropdown-item command="3">导出</el-dropdown-item>
+              <el-dropdown-item command="1">资料包</el-dropdown-item>
             </el-dropdown-menu>
           </template>
-        </el-dropdown> -->
+        </el-dropdown>
       </template>
       <template #IndustryRestrictions="scope">
         <el-button
@@ -129,13 +127,14 @@
   />
 </template>
 <script setup lang="ts">
-import { newNumberTransform } from "@/utils";
-import { transformTimeRange } from "@/utils";
+import { newNumberTransform, transformTimeRange } from "@/utils";
+import { downloadByData } from "@/utils/download";
 import { useRouter } from "vue-router";
 import {
   getSelfOperatedTaxLandList,
   selfOperatedTaxLandDelete,
   selfOperatedTaxLandUpdateStatus,
+  downloadInformationPack,
 } from "@/api/taxLandManagement/selfOperatedTaxLand";
 import { getAreaList } from "@/api/taxLandManagement";
 import { getManufacturer } from "@/api/taxLandManagement/purchaseTaxLand";
@@ -333,25 +332,47 @@ const handleUpdateStatus = (scope: any) => {
     ) => {
       if (action === "confirm") {
         instance.confirmButtonLoading = true;
-        var data = {
-          id: scope.row.id,
-          status: [0].includes(scope.row.status) ? "1" : "0",
-        };
-        await selfOperatedTaxLandUpdateStatus(data);
-
-        instance.confirmButtonLoading = false;
-        done();
+        try {
+          var data = {
+            id: scope.row.id,
+            status: [0].includes(scope.row.status) ? "1" : "0",
+          };
+          await selfOperatedTaxLandUpdateStatus(data);
+          instance.confirmButtonLoading = false;
+          done();
+          ElMessage({
+            type: "success",
+            message: `${
+              [0].includes(scope.row.status) ? "上架" : "下架"
+            }该税地成功`,
+          });
+        } catch (error) {
+          instance.confirmButtonLoading = false;
+          done();
+          ElMessage({
+            type: "error",
+            message: `${
+              [0].includes(scope.row.status) ? "上架" : "下架"
+            }该税地失败`,
+          });
+        }
       } else {
         done();
       }
     },
-  }).then(() => {
-    ElMessage({
-      type: "success",
-      message: `成功${[0].includes(scope.row.status) ? "上架" : "下架"}该税地`,
+  })
+    .then(() => {})
+    .catch((action) => {
+      if (action === "cancel") {
+        ElMessage({
+          type: "warning",
+          message: "取消操作",
+        });
+      }
+    })
+    .finally(() => {
+      getTableData();
     });
-    getTableData();
-  });
 };
 /**
  * 编辑
@@ -380,27 +401,91 @@ const handleDelete = (scope: any) => {
     ) => {
       if (action === "confirm") {
         instance.confirmButtonLoading = true;
-        await selfOperatedTaxLandDelete(scope.row.id);
-
-        instance.confirmButtonLoading = false;
-        done();
+        try {
+          await selfOperatedTaxLandDelete(scope.row.id);
+          instance.confirmButtonLoading = false;
+          done();
+          ElMessage({
+            type: "success",
+            message: "删除成功",
+          });
+        } catch (error) {
+          instance.confirmButtonLoading = false;
+          done();
+          ElMessage({
+            type: "error",
+            message: "删除失败",
+          });
+        }
       } else {
         done();
       }
     },
-  }).then(() => {
-    ElMessage({
-      type: "success",
-      message: `成功删除税地`,
+  })
+    .then(() => {})
+    .catch((action) => {
+      if (action === "cancel") {
+        ElMessage({
+          type: "warning",
+          message: "取消操作",
+        });
+      }
+    })
+    .finally(() => {
+      getTableData();
     });
-    getTableData();
-  });
 };
 /**
- * 导出
+ * 下载资料包
  */
-const handleF = (scope: any) => {
-  console.log(scope.row.value, "导出");
+const handleDownloadInformationPack = (ids: Array<number>) => {
+  ElMessageBox({
+    title: "",
+    message: h("p", null, `确定导出资料包?`),
+    showCancelButton: true,
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    beforeClose: async (
+      action: string,
+      instance: { confirmButtonLoading: boolean },
+      done: () => void
+    ) => {
+      if (action === "confirm") {
+        instance.confirmButtonLoading = true;
+        try {
+          const { data } = await downloadInformationPack({ ids });
+          downloadByData(data, "资料包.zip");
+          instance.confirmButtonLoading = false;
+          done();
+          ElMessage({
+            type: "success",
+            message: "导出成功",
+          });
+        } catch (error) {
+          instance.confirmButtonLoading = false;
+          done();
+          ElMessage({
+            type: "error",
+            message: "导出失败",
+          });
+        }
+      } else {
+        done();
+      }
+    },
+  })
+    .then(() => {})
+    .catch((action) => {
+      if (action === "cancel") {
+        ElMessage({
+          type: "warning",
+          message: "取消操作",
+        });
+      }
+    })
+    .finally(() => {
+      getTableData();
+    });
 };
 /**
  * 详情
@@ -434,15 +519,11 @@ const handleAdd = (command: string | number | object) => {
   }
 };
 /**
- * 批量操作
+ * 导出批量操作
  */
-const handleD = (command: string | number | object) => {
+const handleExport = (command: string | number | object) => {
   if (command == 1) {
-    console.log("上架");
-  } else if (command == 2) {
-    console.log("删除");
-  } else if (command == 3) {
-    console.log("导出");
+    handleDownloadInformationPack(selectionData.value);
   }
 };
 
