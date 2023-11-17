@@ -99,7 +99,7 @@ async function handleUpload(options: UploadRequestOptions): Promise<any> {
   const { data: fileInfo } = await uploadFileApi(options.file);
 
   // 上传成功需手动替换文件路径为远程URL，否则图片地址为预览地址 blob:http://
-  const fileIndex = fileList.value.findIndex((file) => {
+  const fileIndex = fileList.value.findIndex((file: any) => {
     console.log(file, "file");
 
     if (file?.uid) {

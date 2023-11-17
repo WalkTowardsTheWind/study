@@ -463,10 +463,7 @@
                 <el-button link type="primary" @click="handleView(row)"
                   >查看</el-button
                 >
-                <el-button
-                  link
-                  type="primary"
-                  @click="handleDownload(Number(row.id))"
+                <el-button link type="primary" @click="handleDownload(row)"
                   >下载</el-button
                 >
               </template>
@@ -760,9 +757,9 @@ const imgDialogRef = ref();
 const handleView = (row: any) => {
   imgDialogRef.value.init(row);
 };
-const handleDownload = async (id: number) => {
-  const { data } = await downloadContract(id);
-  downloadByData(data, "合同.pdf");
+const handleDownload = async (row: any) => {
+  const { data } = await downloadContract(Number(row.id));
+  downloadByData(data, row.fileName);
 };
 const zip = ref([]) as any;
 const formItem = ref({
