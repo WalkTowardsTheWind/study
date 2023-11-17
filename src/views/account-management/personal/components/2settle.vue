@@ -80,9 +80,7 @@ const reset = () => {
 };
 
 const daochu = (id) => {
-  console.log(id);
   perDaoChu({ ids: [id] }).then((res) => {
-    // console.log(res);
     downloadByData(res.data, "人员结算列表.xlsx");
   });
 };

@@ -54,11 +54,11 @@
     >
       <template #default>
         <el-form
-          label-width="auto"
           :model="addForm"
           :rules="rules"
           ref="addFormRef"
           :disabled="!isHasBtn"
+          label-width="auto"
         >
           <el-form-item label="模板名称" required prop="template_name">
             <el-input placeholder="请输入" v-model="addForm.template_name" />
@@ -73,6 +73,16 @@
               <el-option label="渠道合同" :value="2"></el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="签署形式" required prop="seal_type">
+            <el-select
+              class="w-full"
+              placeholder="请选择"
+              v-model="addForm.seal_type"
+            >
+              <el-option label="单页签署" :value="1"></el-option>
+              <el-option label="多页签署" :value="2"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="备注要求">
             <el-input
               placeholder="请输入"
@@ -80,7 +90,8 @@
               v-model="addForm.remark"
             />
           </el-form-item>
-          <template v-if="isAdd">
+          <!-- 单页 -->
+          <template v-if="isAdd && addForm.seal_type == 1">
             <div class="flex">
               <el-form-item label="甲方签字处"></el-form-item>
               <el-form-item label="页码" prop="posPage">
@@ -129,6 +140,21 @@
                 <el-input v-model="addForm.b_seal_pos.posY" />
               </el-form-item>
             </div>
+          </template>
+          <!-- 多页 -->
+          <template v-if="isAdd && addForm.seal_type == 2">
+            <el-form-item label="甲方签字处关键字" prop="a_sign_key    ">
+              <el-input placeholder="请输入" v-model="addForm.a_sign_key" />
+            </el-form-item>
+            <el-form-item label="甲方盖章处关键字" prop="a_seal_key    ">
+              <el-input placeholder="请输入" v-model="addForm.a_seal_key" />
+            </el-form-item>
+            <el-form-item label="乙方签字处关键字" prop="b_sign_key  ">
+              <el-input placeholder="请输入" v-model="addForm.b_sign_key" />
+            </el-form-item>
+            <el-form-item label="乙方盖章处关键字" prop="b_seal_key">
+              <el-input placeholder="请输入" v-model="addForm.b_seal_key" />
+            </el-form-item>
           </template>
           <!-- 编辑详情 -->
           <el-form-item v-if="isEdit && !isAdd" label="合同文件">
@@ -213,6 +239,7 @@ let addForm = reactive({
   id: "",
   template_name: "",
   type: "",
+  seal_type: "",
   file_url: "",
   file_path: "",
   fields: [],
@@ -237,6 +264,10 @@ let addForm = reactive({
     posX: "",
     posY: "",
   },
+  a_seal_key: "",
+  a_sign_key: "",
+  b_seal_key: "",
+  b_sign_key: "",
 } as any);
 
 const rules = {
@@ -250,7 +281,14 @@ const rules = {
   type: [
     {
       required: true,
-      message: "必选",
+      message: "必填",
+      trigger: "change",
+    },
+  ],
+  seal_type: [
+    {
+      required: true,
+      message: "必填",
       trigger: "change",
     },
   ],
