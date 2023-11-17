@@ -35,6 +35,7 @@
       :table-data="tableData"
       :column-list="columnList"
       :pageInfo="pageInfo"
+      @page-change="pageChange"
       @selection-change="handleSelect"
     >
       <template #type>
@@ -64,14 +65,10 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  downloadPerContract,
-  getPerContractList,
-} from "@/api/contract-m/index";
+import { getPerContractList } from "@/api/contract-m/index";
 const route = useRoute();
 import { contract_status, percolor } from "./options";
 import { useRoute } from "vue-router";
-import { downloadByData } from "@/utils/download";
 
 const formItem = reactive({
   keyword: "",
@@ -134,6 +131,13 @@ const handleSelect = (val: any) => {
 
 const checkUrl = (url: string) => {
   window.open(url, "_blank");
+};
+
+const pageChange = (cur) => {
+  const { limit, page } = cur;
+  pageInfo.limit = limit;
+  pageInfo.page = page;
+  handleSearch();
 };
 
 const getListByRoute = () => {
