@@ -73,7 +73,7 @@
               <el-option label="渠道合同" :value="2"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="签署形式" required prop="seal_type">
+          <el-form-item v-if="isAdd" label="签署形式" required prop="seal_type">
             <el-select
               class="w-full"
               placeholder="请选择"

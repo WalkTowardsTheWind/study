@@ -78,6 +78,7 @@ import {
 const route = useRoute();
 import { contract_status, percolor } from "./options";
 import { useRoute } from "vue-router";
+import { downloadByData } from "@/utils/download";
 
 const formItem = reactive({
   keyword: "",
@@ -146,6 +147,7 @@ const download = (ids) => {
   console.log(ids);
   downloadPerContract({ ids: [ids] }).then((res) => {
     console.log(res);
+    downloadByData(res.data, "合同.pdf");
   });
 };
 

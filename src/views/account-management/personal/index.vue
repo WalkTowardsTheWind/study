@@ -16,7 +16,11 @@
         </el-input>
       </el-form-item>
       <el-form-item label="账户状态">
-        <el-select v-model="formItem.status" placeholder="请选择">
+        <el-select
+          v-model="formItem.status"
+          placeholder="请选择"
+          @change="handleSearch"
+        >
           <el-option
             v-for="item in statusOptions"
             :key="item.value"
@@ -48,14 +52,14 @@
       </template>
       <template #caozuo="{ row }">
         <el-button
-          v-if="row.status != 4 && row.type == 1"
+          v-if="row.user_status != 4 && row.type == 1"
           link
           type="primary"
           @click="setStatus(row.user_id, 4)"
           >封停</el-button
         >
         <el-button
-          v-if="row.status == 4"
+          v-if="row.user_status == 4 && row.type == 1"
           link
           type="primary"
           @click="setStatus(row.user_id, 2)"
@@ -110,7 +114,7 @@ const columnList = [
       1: { color: "#35C5F3", background: "#dff6fd" },
       2: { color: "#356FF3", background: "#dfe8fd" },
       3: { color: "#F35036", background: "#fde3df" },
-      4: { color: "#333333", background: "#dedede" },
+      4: { color: "#F35036", background: "#fde3df" },
       5: { color: "#333333", background: "#dedede" },
     },
     minWidth: 120,
@@ -148,9 +152,10 @@ async function handleSearch() {
   tableData.length = 0;
   let params = {
     ...formItem,
-    ...pageInfo,
     start_time: formItem.date[0],
     end_time: formItem.date[1],
+    page: pageInfo.page,
+    limit: pageInfo.limit,
   };
   const { data } = await getPersonalAccountList(params);
   pageInfo.total = data.total;
