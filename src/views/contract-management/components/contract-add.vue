@@ -291,13 +291,15 @@ const addDialogConfirm = async (formI) => {
 const getOptionByContractType = () => {
   switch (addForm.type) {
     case 1:
-      getBusinessAccountList({ limit: 1000, page: 1 }).then((res) => {
-        busOptions.value = res.data.data;
-        for (const item of busOptions.value) {
-          item["label"] = item["company_name"];
-          item["value"] = item["company_id"];
+      getBusinessAccountList({ limit: 1000, page: 1, is_all: 1 }).then(
+        (res) => {
+          busOptions.value = res.data.data;
+          for (const item of busOptions.value) {
+            item["label"] = item["company_name"];
+            item["value"] = item["company_id"];
+          }
         }
-      });
+      );
       getSelfOperatedTaxLandList({ status: 1, tax_land_type: "" }).then(
         (res) => {
           taxlandOptions.value = res.data.data;
@@ -309,7 +311,7 @@ const getOptionByContractType = () => {
       );
       break;
     case 2:
-      getChannelAccountList({ limit: 1000, page: 1 }).then((res) => {
+      getChannelAccountList({ limit: 1000, page: 1, is_all: 1 }).then((res) => {
         channelOptions.value = res.data.data;
         for (const item of channelOptions.value) {
           item["label"] = item["channel_name"];

@@ -41,7 +41,7 @@
         >
         <el-button link type="primary" @click="toEdit(row.id)">编辑</el-button>
         <el-button link type="primary" @click="delById(row.id)">删除</el-button>
-        <el-button link type="primary">下载</el-button>
+        <!-- <el-button link type="primary">下载</el-button> -->
       </template>
     </zxn-table>
 
