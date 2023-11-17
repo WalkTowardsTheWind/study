@@ -212,7 +212,6 @@ import {
   getChannelInfoLogByChannel,
   getChannelAccountTaxland,
 } from "@/api/account/channel";
-import useTaxlandList from "@/hooks/useTaxlandList";
 
 import { pointValidationRule } from "./options";
 

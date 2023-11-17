@@ -83,7 +83,7 @@ const routerName = {
   2: "taskManagerIndex",
   3: "settlementCenter",
   4: "invoiceManager",
-  5: "taxLandManagementIndex",
+  5: "taxLandManagement",
 };
 const handleGoRouter = (item: { type: number; target_id: number }) => {
   pushParams(routerName[item.type], { status: item.target_id });

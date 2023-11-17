@@ -24,7 +24,11 @@
         <SettlementInfo :isEdit="isEdit" :id="id" />
       </template>
       <template #7>
-        <ContractInfo :isEdit="isEdit" :id="id" />
+        <ContractInfo
+          :isEdit="isEdit"
+          :id="id"
+          :company_name="formItem.company_name"
+        />
       </template>
     </zxn-tabs>
     <zxn-bottom-btn
@@ -75,7 +79,7 @@ const tabsList = [
   { name: "4", label: "任务记录" },
   { name: "5", label: "充值记录" },
   { name: "6", label: "结算记录" },
-  // { name: "7", label: "合同信息" },
+  { name: "7", label: "合同信息" },
 
   // { name: "7", label: "渠道信息" },
 ];

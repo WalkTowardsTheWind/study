@@ -210,13 +210,13 @@ const formItem = ref({
 
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "发佣单号", prop: "channel_order_no" },
+  { label: "发佣单号", prop: "channel_order_no", width: 110, fixed: "left" },
   {
     label: "状态",
     type: "enum",
     path: "settlementCenterEnum.channelCommissionSettlementList",
     prop: "status",
-    // fixed: "left",
+    fixed: "left",
     color: {
       0: { color: "#1EE685", backgroundColor: "#DBFBEB" },
       1: { color: "#FFFFFF", backgroundColor: "#9AB7F9" },
@@ -226,18 +226,18 @@ const columnList = [
     },
     width: 100,
   },
-  { label: "收入类型", prop: "settlement_type" },
-  { label: "渠道名称", prop: "channel_name" },
-  { label: "结算金额", prop: "settlement_amount" },
-  { label: "渠道佣金（税后）", prop: "after_commission", width: 140 },
-  { label: "创建时间", prop: "add_time" },
-  { label: "下发时间（打款日）", prop: "settlement_time", width: 150 },
-  { label: "驳回原因", prop: "reason" },
+  { label: "收入类型", prop: "settlement_type", width: 110, fixed: "left" },
+  { label: "渠道名称", prop: "channel_name", width: 110, fixed: "left" },
+  { label: "结算金额", prop: "settlement_amount", minWidth: 120 },
+  { label: "渠道佣金（税后）", prop: "after_commission", minWidth: 140 },
+  { label: "创建时间", prop: "add_time", width: 180 },
+  { label: "下发时间（打款日）", prop: "settlement_time", width: 180 },
+  { label: "驳回原因", prop: "reason", minWidth: 180 },
   {
     label: "操作",
     slot: "operation",
     fixed: "right",
-    width: 250,
+    width: 230,
     align: "right",
     headerAlign: "right",
   },

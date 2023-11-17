@@ -10,11 +10,11 @@
             ellipsis
           />
         </el-form-item>
-        <el-form-item label="物流面单">
+        <el-form-item v-if="formItem.express_url" label="物流面单">
           <zxn-image :imgList="[formItem.express_url]" />
         </el-form-item>
       </el-form>
-      <div class="logistics-info">
+      <div class="logistics-info" v-if="formItem.express_url">
         <el-scrollbar height="400px">
           <el-timeline>
             <el-timeline-item

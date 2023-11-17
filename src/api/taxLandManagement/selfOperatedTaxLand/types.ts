@@ -13,6 +13,7 @@ export interface selfOperatedTaxLandList {
   invoice_denomination?: string;
   calculation_type?: string;
   tax_manufacturer?: string;
+  status?: number;
   page?: string;
   limit?: string;
 }
@@ -129,4 +130,10 @@ export interface selfOperatedTaxLandDetailsType {
 export interface selfOperatedTaxLandUpdateStatusType {
   id: number;
   status: string;
+}
+/**
+ * ids
+ */
+export interface ids {
+  ids: Array<number>;
 }

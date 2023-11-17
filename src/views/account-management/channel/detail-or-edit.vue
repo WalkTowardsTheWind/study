@@ -17,7 +17,11 @@
         <HistoryView :isEdit="isEdit" />
       </template> -->
       <template #5>
-        <ContractView :channel_id="idv" :isEdit="isEdit" />
+        <ContractView
+          :channel_id="idv"
+          :isEdit="isEdit"
+          :name="formItem.channel_name"
+        />
       </template>
     </zxn-tabs>
   </zxn-plan>
@@ -38,7 +42,7 @@ const route = useRoute();
 const isEdit = ref(false);
 const idv = ref("");
 
-const formItem = ref();
+const formItem = ref({} as any);
 
 if (route.query.type === "edit") {
   isEdit.value = true;
@@ -53,7 +57,7 @@ const tabsList = [
   { name: 2, label: "渠道信息" },
   { name: 3, label: "渠道企业信息" },
   // { name: 4, label: "历史点位记录" },
-  // { name: 5, label: "合同信息" },
+  { name: 5, label: "合同信息" },
 ];
 const activeName = ref(0);
 

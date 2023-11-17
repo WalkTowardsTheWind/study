@@ -14,7 +14,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="开票状态" prop="status">
-        <zxn-select v-model="formItem.status">
+        <zxn-select v-model="formItem.status" @change="handleSearch">
           <el-option
             v-for="item in proxy.$const['statusEnum.invoiceStatus']"
             :key="item.value"
@@ -62,14 +62,17 @@
       @page-change="handlePageChange"
     >
       <template #tableTop>
-        <!--        <el-button type="primary" plain @click="handleCommand"-->
-        <!--          >批量驳回</el-button-->
-        <!--        >-->
-        <el-dropdown trigger="click" @command="handleCommand">
+        <el-dropdown
+          v-if="['', '0'].includes(formItem.status)"
+          class="mr-[10px]"
+          trigger="click"
+          @command="handleCommand"
+        >
           <el-button type="primary" plain>批量操作</el-button>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="reject">驳回</el-dropdown-item>
+<<<<<<< HEAD
               <!--              <el-dropdown-item command="excel">导出</el-dropdown-item>-->
             </el-dropdown-menu>
           </template>
@@ -78,6 +81,14 @@
         <el-button class="ml-16px" type="primary" plain @click="handleExcel"
           >导出</el-button
         >
+=======
+              <!-- <el-dropdown-item command="excel">导出</el-dropdown-item> -->
+              <el-dropdown-item command="issue">开立</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+        <el-button type="primary" plain @click="handleAllExcel">导出</el-button>
+>>>>>>> test
       </template>
       <template #img="{ row }">
         <zxn-image
@@ -89,22 +100,42 @@
         />
       </template>
       <template #operation="{ row }">
-        <template v-if="!row.status">
-          <el-button link type="primary" @click="handleReject([row.id])"
-            >驳回</el-button
-          >
-          <el-button link type="primary" @click="handleUpload(row)"
-            >上传发票</el-button
-          >
-        </template>
-        <el-button link type="primary" @click="handleView(row)">详情</el-button>
         <el-button
-          v-if="row.status === 5 || row.status === 1"
+          v-if="[0].includes(row.status)"
+          link
+          type="primary"
+          @click="handleReject([row.id])"
+          >驳回</el-button
+        >
+        <el-button
+          v-if="[7].includes(row.status)"
+          link
+          type="primary"
+          @click="handleWithdraw([row.id])"
+          >撤回</el-button
+        >
+        <el-button
+          v-if="[7].includes(row.status)"
+          link
+          type="primary"
+          @click="handleUpload(row)"
+          >上传发票</el-button
+        >
+        <el-button
+          v-if="[0].includes(row.status)"
+          link
+          type="primary"
+          @click="handleIssue([row.id])"
+          >开立</el-button
+        >
+        <el-button
+          v-if="[1, 5].includes(row.status)"
           link
           type="primary"
           @click="handleLogistics(row)"
           >查看物流</el-button
         >
+        <el-button link type="primary" @click="handleView(row)">详情</el-button>
         <!--        <el-button link type="primary">导出</el-button>-->
       </template>
     </zxn-table>
@@ -152,13 +183,14 @@ const formItem = reactive({
   status: "",
 });
 const columnList: any[] = reactive([
-  { label: "发票任务编号", prop: "invoice_no", minWidth: 200 },
+  { label: "发票任务编号", prop: "invoice_no", width: 110, fixed: "left" },
   {
     label: "发票类目",
     prop: "category_num",
-    minWidth: 120,
+    width: 100,
+    fixed: "left",
   },
-  { label: "申请开票企业", prop: "company_name", minWidth: 150 },
+  { label: "申请开票企业", prop: "company_name", width: 120, fixed: "left" },
   {
     label: "开票样式",
     prop: "invoice_type",
@@ -195,6 +227,7 @@ const columnList: any[] = reactive([
       2: { color: "#F35135", backgroundColor: "#fde3df" },
       3: { color: "#FFFFFF", backgroundColor: "#f9a89a" },
       5: { color: "#356FF3", backgroundColor: "#dfe8fd" },
+      7: { color: "#19B56B", backgroundColor: "#DAF3E7" },
     },
     minWidth: 120,
   },
@@ -232,7 +265,7 @@ const handlePageChange = (cur) => {
 const loading = ref(false);
 const getList = async () => {
   const params = transformTimeRange({ ...formItem });
-  params.category_id = params.category_id.pop();
+  params.category_id = params.category_id ? params.category_id.pop() : [].pop();
   params.task_type = props.type;
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
@@ -253,12 +286,14 @@ const getList = async () => {
   }
 };
 const selectable = (row) => {
-  return Boolean(!row.status);
+  // return Boolean(!row.status);
+  return true;
 };
 const handleView = (cur) => {
   router.push({ name: "invoiceView", query: { id: cur.id, type: props.type } });
 };
 const table = ref();
+
 const handleCommand = (type: string) => {
   const selected = table.value.getSelectionRows();
   const ids = selected.map((it) => it.id);
@@ -272,44 +307,201 @@ const handleCommand = (type: string) => {
     case "reject":
       handleReject(ids);
       break;
-    case "excel":
-      handleExcel(ids);
+    // case "excel":
+    //   handleExcel(ids);
+    //   break;
+    case "issue":
+      handleIssue(ids);
       break;
   }
 };
+const handleAllExcel = async () => {
+  const selected = table.value.getSelectionRows();
+  const ids = selected.map((it) => it.id);
+  if (!ids.length) {
+    return ElMessage({
+      type: "error",
+      message: `请选择数据`,
+    });
+  } else {
+    handleExcel(ids);
+  }
+};
 const handleReject = (ids: number[]) => {
-  ElMessageBox.prompt("", "驳回原因", {
+  let confirmed = ids.filter((item) => {
+    let obj = tableData.find((o: any) => {
+      return o.id == item;
+    });
+    return obj.status === 0;
+  });
+  let unconfirmed = ids.filter((item) => {
+    let obj = tableData.find((o: any) => {
+      return o.id == item;
+    });
+    return obj.status !== 0;
+  });
+  if (confirmed.length != 0 && unconfirmed.length == 0) {
+    ElMessageBox.prompt("", "驳回原因", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      inputErrorMessage: "请输入驳回原因",
+      beforeClose: async (
+        action: string,
+        instance: { confirmButtonLoading: boolean; inputValue: string },
+        done: () => void
+      ) => {
+        if (action === "confirm") {
+          instance.confirmButtonLoading = true;
+          const params = {
+            ids: confirmed,
+            status: 2,
+            reject_reason: instance.inputValue,
+          };
+          props.type === "enterprise"
+            ? await setStatus(params)
+            : await channelSetStatus(params);
+          instance.confirmButtonLoading = false;
+          done();
+        } else {
+          done();
+        }
+      },
+    }).then(() => {
+      ElMessage({
+        type: "success",
+        message: `驳回成功`,
+      });
+      getList();
+    });
+  } else {
+    return ElMessage.warning('存在非"申请中"状态的信息，请重新勾选');
+  }
+};
+// 开立
+const handleIssue = (ids: number[]) => {
+  let confirmed = ids.filter((item) => {
+    let obj = tableData.find((o: any) => {
+      return o.id == item;
+    });
+    return obj.status === 0;
+  });
+  let unconfirmed = ids.filter((item) => {
+    let obj = tableData.find((o: any) => {
+      return o.id == item;
+    });
+    return obj.status !== 0;
+  });
+  if (confirmed.length != 0 && unconfirmed.length == 0) {
+    ElMessageBox({
+      title: "",
+      message: h("p", null, `确定开立？`),
+      showCancelButton: true,
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      beforeClose: async (
+        action: string,
+        instance: { confirmButtonLoading: boolean },
+        done: () => void
+      ) => {
+        if (action === "confirm") {
+          instance.confirmButtonLoading = true;
+          try {
+            const params = {
+              ids: confirmed,
+              status: 7,
+            };
+            props.type === "enterprise"
+              ? await setStatus(params)
+              : await channelSetStatus(params);
+            instance.confirmButtonLoading = false;
+            done();
+            ElMessage({
+              type: "success",
+              message: "开立成功",
+            });
+          } catch (error) {
+            instance.confirmButtonLoading = false;
+            done();
+            ElMessage({
+              type: "error",
+              message: "开立失败",
+            });
+          }
+        } else {
+          done();
+        }
+      },
+    })
+      .then(() => {})
+      .catch((action) => {
+        if (action === "cancel") {
+          ElMessage({
+            type: "warning",
+            message: "取消操作",
+          });
+        }
+      })
+      .finally(() => {
+        getList();
+      });
+  } else {
+    return ElMessage.warning('存在非"申请中"状态的信息，请重新勾选');
+  }
+};
+// 撤回
+const handleWithdraw = (ids: number[]) => {
+  ElMessageBox({
+    title: "",
+    message: h("p", null, `确定撤回？`),
+    showCancelButton: true,
     confirmButtonText: "确定",
     cancelButtonText: "取消",
-    inputErrorMessage: "请输入驳回原因",
     beforeClose: async (
       action: string,
-      instance: { confirmButtonLoading: boolean; inputValue: string },
+      instance: { confirmButtonLoading: boolean },
       done: () => void
     ) => {
       if (action === "confirm") {
         instance.confirmButtonLoading = true;
-        const params = {
-          ids,
-          status: 2,
-          reject_reason: instance.inputValue,
-        };
-        props.type === "enterprise"
-          ? await setStatus(params)
-          : await channelSetStatus(params);
-        instance.confirmButtonLoading = false;
-        done();
+        try {
+          const params = {
+            ids,
+            status: 0,
+          };
+          props.type === "enterprise"
+            ? await setStatus(params)
+            : await channelSetStatus(params);
+          instance.confirmButtonLoading = false;
+          done();
+          ElMessage({
+            type: "success",
+            message: "撤回成功",
+          });
+        } catch (error) {
+          instance.confirmButtonLoading = false;
+          done();
+          ElMessage({
+            type: "error",
+            message: "撤回失败",
+          });
+        }
       } else {
         done();
       }
     },
-  }).then(() => {
-    ElMessage({
-      type: "success",
-      message: `驳回成功`,
+  })
+    .then(() => {})
+    .catch((action) => {
+      if (action === "cancel") {
+        ElMessage({
+          type: "warning",
+          message: "取消操作",
+        });
+      }
+    })
+    .finally(() => {
+      getList();
     });
-    getList();
-  });
 };
 const handleExcel = async () => {
   const params = transformTimeRange({ ...formItem });
@@ -322,10 +514,10 @@ const handleExcel = async () => {
   // await getList();
 };
 
-const handleUpload = (cur) => {
+const handleUpload = (cur: any) => {
   emits("on-upload", cur);
 };
-const handleLogistics = (cur) => {
+const handleLogistics = (cur: any) => {
   emits("on-logistics", cur);
 };
 onMounted(() => {

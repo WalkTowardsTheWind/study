@@ -62,6 +62,17 @@
                   >
                   </el-input>
                 </el-form-item>
+                <el-form-item
+                  class="mt-25px"
+                  label="社会信用代码"
+                  prop="tax_organ_code"
+                >
+                  <el-input
+                    v-model="formItem.tax_organ_code"
+                    placeholder="请输入"
+                  >
+                  </el-input>
+                </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="厂商" prop="tax_manufacturer">
@@ -229,7 +240,7 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item class="mt-25px" label="开户行">
+                <el-form-item class="mt-25px" label="开户行" prop="bank">
                   <el-input v-model="formItem.bank" placeholder="请输入">
                   </el-input>
                 </el-form-item>
@@ -242,6 +253,27 @@
                     v-model="formItem.bank_account"
                     placeholder="请输入"
                   />
+                </el-form-item>
+                <el-form-item
+                  class="mt-25px"
+                  label="开票方式"
+                  prop="invoice_form"
+                >
+                  <el-select
+                    class="w-[100%]"
+                    clearable
+                    v-model="formItem.invoice_form"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in proxy.$const[
+                        'taxLandManagementEnum.invoiceForm'
+                      ]"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -300,7 +332,7 @@
                 <el-form-item class="mt-25px" label="支付供应商">
                   <el-input
                     v-model="formItem.payment_supplier"
-                    placeholder="请选择"
+                    placeholder="请输入"
                   >
                   </el-input>
                 </el-form-item>
@@ -404,7 +436,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item class="mb-[0]" label="个人合同模板">
+                <!-- <el-form-item class="mb-[0]" label="个人合同模板">
                   <multi-upload
                     v-model="formItem.agreement_url"
                     :limit="3"
@@ -415,16 +447,27 @@
                     v-model="formItem.contract_img"
                     :limit="3"
                   ></multi-upload>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item class="mb-[0]" label="结算确认函">
                   <multi-upload
                     v-model="formItem.settlement_confirmation_letter"
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
+                <el-form-item class="mb-[0]" label="资料包">
+                  <file-upload
+                    v-model="zip"
+                    :limit="1"
+                    :type="['zip']"
+                  ></file-upload>
+                </el-form-item>
               </el-col>
             </el-row>
           </el-form>
+          <div class="advert">
+            <span class="fc">注意</span
+            >：账户新建后，请在账户合同信息或合同管理进行相关合同的上传或在线签署。
+          </div>
         </div>
         <zxn-bottom-btn>
           <div class="but">
@@ -433,7 +476,6 @@
           </div>
         </zxn-bottom-btn>
       </template>
-      <template #2> </template>
     </zxn-tabs>
   </zxn-plan>
 </template>
@@ -451,7 +493,7 @@ const activeName = ref("1");
 const tabsList = [
   {
     name: "1",
-    label: "新建税地",
+    label: "新建采购税地",
   },
   // {
   //   name: "2",
@@ -609,8 +651,9 @@ const imgValidate = (message: any, rule: any, value: any, callback: any) => {
   }
 };
 const Rules = {
-  tax_land_type: [{ required: true, message: "请输入", trigger: "change" }],
+  tax_land_type: [{ required: true, message: "请选择", trigger: "change" }],
   tax_land_name: [{ required: true, message: "请输入", trigger: "blur" }],
+  tax_organ_code: [{ required: true, message: "请输入", trigger: "blur" }],
   min_employment_year: [
     { required: true, validator: validateMin_employment_year, trigger: "blur" },
   ],
@@ -625,13 +668,15 @@ const Rules = {
     },
   ],
   //
-  payment_type: [{ required: true, message: "请输入", trigger: "change" }],
+  payment_type: [{ required: true, message: "请选择", trigger: "change" }],
+  bank: [{ required: true, message: "请输入", trigger: "blur" }],
   bank_account: [{ required: true, message: "请输入", trigger: "blur" }],
+  invoice_form: [{ required: true, message: "请选择", trigger: "change" }],
   //
   certification_rules: [
-    { required: true, message: "请输入", trigger: "change" },
+    { required: true, message: "请选择", trigger: "change" },
   ],
-  signing_rules: [{ required: true, message: "请输入", trigger: "change" }],
+  signing_rules: [{ required: true, message: "请选择", trigger: "change" }],
   individual_monthly_limit: [
     {
       required: true,
@@ -639,13 +684,15 @@ const Rules = {
       trigger: "blur",
     },
   ],
-  tax_contract_term: [{ required: true, message: "请输入", trigger: "change" }],
+  tax_contract_term: [{ required: true, message: "请选择", trigger: "change" }],
 };
+const zip = ref([]) as any;
 const formItem = ref({
   tax_land_type: "1",
   tax_land_head: "",
   head_mobile: "",
   tax_land_name: "",
+  tax_organ_code: "",
   tax_manufacturer: "",
   tax_cost_point: "",
   min_employment_year: "18",
@@ -662,6 +709,7 @@ const formItem = ref({
   payment_type: "",
   bank: "",
   bank_account: "",
+  invoice_form: "",
   audit_web_url: "",
   audit_account: "",
   audit_password: "",
@@ -681,6 +729,7 @@ const formItem = ref({
   agreement_url: [],
   contract_img: [],
   settlement_confirmation_letter: [],
+  materials_zip_url: "",
 });
 const handleSubmit = () => {
   FormRef.value.validate((valid: boolean) => {
@@ -701,8 +750,8 @@ const handleSubmit = () => {
       params.settlement_confirmation_letter = JSON.stringify(
         params.settlement_confirmation_letter
       );
+      params.materials_zip_url = zip.value[0] ? zip.value[0].baseUrl : "";
       params.tax_land_city_id = newNumberTransform(params.tax_land_city_id);
-      // params.tax_reg_type = newNumberTransform(params.tax_reg_type);
       selfOperatedTaxLandAdd(params)
         .then(() => {
           ElMessage({
@@ -710,7 +759,7 @@ const handleSubmit = () => {
             message: `新建税地成功`,
           });
           router.push({
-            name: "taxLandManagementIndex",
+            name: "taxLandManagement",
             query: { activeName: "purchase" },
           });
         })
@@ -722,7 +771,7 @@ const handleSubmit = () => {
 };
 const handleClose = () => {
   router.push({
-    name: "taxLandManagementIndex",
+    name: "taxLandManagement",
     query: { activeName: "purchase" },
   });
 };
@@ -774,5 +823,18 @@ onMounted(() => {});
   margin-right: 10px;
   background: #356ff3;
   border-radius: 4px;
+}
+.advert {
+  margin-top: 40px;
+  margin-bottom: 60px;
+  height: 14px;
+  font-size: 14px;
+  font-family: SourceHanSansSC-Medium, SourceHanSansSC;
+  font-weight: 500;
+  color: #333333;
+  line-height: 14px;
+  .fc {
+    color: #f35135;
+  }
 }
 </style>

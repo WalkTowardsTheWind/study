@@ -9,6 +9,11 @@ export enum InvoiceType {
   "6%增值税发票",
   "普通发票/6%增值税发票",
 }
+export enum invoiceForm {
+  "不限",
+  "纸质发票",
+  "电子发票",
+}
 export enum invoice_denomination {
   "万元版",
   "十万元版",
@@ -55,7 +60,23 @@ export enum commissionRule {
   "单笔扣除" = 1,
   "合计扣除",
 }
-
+//
+export enum contractStatus {
+  "待签署",
+  "签署中",
+  "已生效",
+  "已失效",
+}
+export enum contractType {
+  "企业合同" = 1,
+  "渠道合同",
+  "其他合同",
+  "委托代征协议",
+}
+export enum onlineType {
+  "线下签署",
+  "线上签署",
+}
 // 新建
 
 // taxLandManagementEnum

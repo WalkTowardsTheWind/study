@@ -17,14 +17,24 @@
       class="zxn-table"
       :row-key="rowKey"
       :defaultExpandAll="defaultExpandAll"
+      :tooltip-options="{
+        popperClass: 'el-table-tip',
+      }"
       v-loading="loading"
     >
       <el-table-column
         v-if="hasSelect"
         type="selection"
         :selectable="selectable"
+        fixed="left"
       />
-      <el-table-column v-if="hasIndex" type="index" label="序号" width="65" />
+      <el-table-column
+        v-if="hasIndex"
+        type="index"
+        label="序号"
+        width="60"
+        fixed="left"
+      />
       <template v-for="(item, index) in tableColumnList" :key="index">
         <el-table-column
           v-if="item.slot"
@@ -69,6 +79,24 @@
             </div>
             <div v-if="item.type === 'money'">
               <money-text :modelValue="row[item.prop]" />
+            </div>
+            <div v-if="item.type === 'phone'">
+              {{
+                row[item.prop]
+                  ? row[item.prop].slice(0, 3) +
+                    "****" +
+                    row[item.prop].slice(-4)
+                  : ""
+              }}
+            </div>
+            <div v-if="item.type === 'card'">
+              {{
+                row[item.prop]
+                  ? row[item.prop].slice(0, 4) +
+                    "**********" +
+                    row[item.prop].slice(-4)
+                  : ""
+              }}
             </div>
           </template>
         </el-table-column>

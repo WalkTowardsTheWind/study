@@ -98,6 +98,7 @@
                       :href="formItem.payment_receipt"
                       >查看</a
                     >
+                    <span v-else>--</span>
                   </el-form-item>
                 </el-col>
               </el-row>

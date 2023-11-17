@@ -1,9 +1,11 @@
+import { AxiosPromise } from "axios";
 import request from "@/utils/request";
 import {
   selfOperatedTaxLandList,
   selfOperatedTaxLandAdd,
   selfOperatedTaxLandEditType,
   selfOperatedTaxLandUpdateStatusType,
+  ids,
 } from "./types";
 
 /**
@@ -85,5 +87,26 @@ export function selfOperatedTaxLandUpdateStatus(
     url: "/adminapi/tax/taxLand/updateStatus",
     method: "post",
     params: data,
+  });
+}
+/**
+ * 下载合同
+ */
+export function downloadContract(id: any): AxiosPromise {
+  return request({
+    url: `/adminapi/contract/download/${id}`,
+    method: "GET",
+    responseType: "arraybuffer",
+  });
+}
+/**
+ * 下载资料包
+ */
+export function downloadInformationPack(params: ids): AxiosPromise {
+  return request({
+    url: `/adminapi/tax/get_zip_download`,
+    method: "GET",
+    params,
+    responseType: "arraybuffer",
   });
 }

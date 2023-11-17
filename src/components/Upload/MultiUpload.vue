@@ -14,6 +14,7 @@
     :on-remove="handleRemove"
     :on-preview="previewImg"
     :limit="props.limit"
+    v-bind="$attrs"
     class="multi-upload"
   >
     <i-ep-plus style="width: 3em; height: 3em" />

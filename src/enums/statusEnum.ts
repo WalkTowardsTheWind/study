@@ -50,6 +50,7 @@ export enum invoiceStatus {
   "驳回",
   "冲红",
   "已收票" = 5,
+  "开立" = 7,
 }
 
 export enum invoiceType {
@@ -82,6 +83,7 @@ export enum settlementTypeStatus {
 }
 
 export enum InvoiceType {
-  "纸质发票" = 1,
+  "不限",
+  "纸质发票",
   "电子发票",
 }

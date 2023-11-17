@@ -11,7 +11,7 @@ import {
  * @param params
  * @returns
  */
-export function getBusinessAccountList(params: IGetBusinessAccountList) {
+export function getBusinessAccountList(params: any) {
 	return request({
 		url: "/adminapi/account/company/index",
 		method: "get",

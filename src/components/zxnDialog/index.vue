@@ -31,11 +31,9 @@ defineProps({
     required: true,
   },
   width: {
-    type: Number,
     default: () => 452 + "px",
   },
   top: {
-    type: Number,
     default: () => 25,
   },
   hasBottomBtn: {
@@ -57,5 +55,6 @@ const handleConfirm = () => {
 <style scoped lang="scss">
 .zxn-dialog {
   position: absolute;
+  border-radius: 8px;
 }
 </style>

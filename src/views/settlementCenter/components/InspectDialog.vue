@@ -11,7 +11,14 @@
       </div>
     </template>
     <div>
-      <picture-preview :imageList="(imageList as any)"></picture-preview>
+      <zxn-image
+        v-if="imageList.length"
+        :imgList="imageList"
+        :width="88"
+        :height="88"
+        targetClick
+      ></zxn-image>
+      <span v-else>--</span>
     </div>
     <template #footer>
       <span class="dialog-footer">
