@@ -33,13 +33,3 @@ export function getSelectLandList(): AxiosPromise {
     method: "GET",
   });
 }
-
-/**
- * 获取可用税地列表
- */
-export function getSelectLandList(): AxiosPromise {
-  return request({
-    url: "/adminapi/tax/online_list",
-    method: "GET",
-  });
-}
