@@ -30,15 +30,7 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="date" label="创建日期">
-        <el-date-picker
-          v-model="date"
-          type="daterange"
-          unlink-panels
-          range-separator="~"
-          start-placeholder="开始日期"
-          value-format="YYYY-MM-DD"
-          end-placeholder="结束日期"
-        />
+        <zxn-date-range v-model="formItem.date" />
       </el-form-item>
       <el-form-item label="客户点位">
         <div class="flex">
@@ -55,7 +47,7 @@
           />
         </div>
       </el-form-item>
-      <el-form-item prop=" date" label="计费方式">
+      <el-form-item prop=" calculation_type" label="计费方式">
         <el-select v-model="formItem.calculation_type" placeholder="请选择">
           <el-option label="全部" value="" />
           <el-option label="内扣" value="0" />
@@ -168,6 +160,7 @@ const formItem = reactive({
   calculation_type: "",
   point_min: "",
   point_max: "",
+  date: [],
 } as any);
 
 const pageInfo = reactive({
@@ -175,7 +168,6 @@ const pageInfo = reactive({
   page: 1,
   limit: 20,
 });
-const date = ref("");
 
 const tableData = reactive([] as any);
 const columnList = [
@@ -232,8 +224,8 @@ async function handleSearch() {
     ...formItem,
     page: pageInfo.page,
     limit: pageInfo.limit,
-    start_time: date.value[0] || "",
-    end_time: date.value[1] || "",
+    start_time: formItem.date[0] || "",
+    end_time: formItem.date[1] || "",
   };
   try {
     const { data } = await getBusinessAccountList(params);
@@ -252,7 +244,7 @@ function handleReset() {
   formItem.point_min = "";
   formItem.point_max = "";
   formItem.calculation_type = "";
-  date.value = "";
+  formItem.date = [];
   handleSearch();
 }
 
@@ -344,22 +336,7 @@ function free(id: string, status: string) {
     });
 }
 
-function resetPWD(company_id: string) {
-  console.log(company_id);
-}
-
 handleSearch();
 </script>
 
-<style lang="scss">
-.searchForm {
-  margin-top: 10px;
-}
-
-.line {
-  margin: 0 2px;
-  font-size: 1px;
-  color: #ccc;
-  border: none !important;
-}
-</style>
+<style lang="scss"></style>

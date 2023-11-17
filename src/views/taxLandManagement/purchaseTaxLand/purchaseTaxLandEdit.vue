@@ -443,6 +443,13 @@
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
+                <el-form-item class="mb-[0]" label="文件上传">
+                  <file-upload
+                    v-model="zip"
+                    :limit="1"
+                    :type="['zip']"
+                  ></file-upload>
+                </el-form-item>
               </el-col>
             </el-row>
             <zxn-table
@@ -456,10 +463,7 @@
                 <el-button link type="primary" @click="handleView(row)"
                   >查看</el-button
                 >
-                <el-button
-                  link
-                  type="primary"
-                  @click="handleDownload(Number(row.id))"
+                <el-button link type="primary" @click="handleDownload(row)"
                   >下载</el-button
                 >
               </template>
@@ -753,10 +757,11 @@ const imgDialogRef = ref();
 const handleView = (row: any) => {
   imgDialogRef.value.init(row);
 };
-const handleDownload = async (id: number) => {
-  const { data } = await downloadContract(id);
-  downloadByData(data, "合同.pdf");
+const handleDownload = async (row: any) => {
+  const { data } = await downloadContract(Number(row.id));
+  downloadByData(data, row.fileName);
 };
+const zip = ref([]) as any;
 const formItem = ref({
   tax_land_type: "1",
   tax_land_head: "",
@@ -796,6 +801,7 @@ const formItem = ref({
   tax_contract_term: "",
   incoming_materials: "",
   settlement_confirmation_letter: [],
+  materials_zip_url: "",
 });
 const handleSubmit = () => {
   FormRef.value.validate((valid: boolean) => {
@@ -816,6 +822,9 @@ const handleSubmit = () => {
               params.settlement_confirmation_letter = JSON.stringify(
                 params.settlement_confirmation_letter
               );
+              params.materials_zip_url = zip.value[0]
+                ? zip.value[0].baseUrl
+                : "";
               params.tax_land_city_id = newNumberTransform(
                 params.tax_land_city_id
               );
@@ -891,6 +900,7 @@ const getData = async () => {
       tax_contract_term,
       incoming_materials,
       settlement_confirmation_letter,
+      materials_zip_url,
       contract_list,
     } = data.info;
     formItem.value = {
@@ -935,7 +945,16 @@ const getData = async () => {
       tax_contract_term: tax_contract_term + "",
       incoming_materials,
       settlement_confirmation_letter,
+      materials_zip_url,
     };
+    if (materials_zip_url) {
+      zip.value = [
+        {
+          name: "zip文件",
+          baseUrl: formItem.value.materials_zip_url,
+        },
+      ];
+    }
     tableData.length = 0;
     var newData = contract_list.map((item: any) => {
       return {
@@ -950,6 +969,7 @@ const getData = async () => {
         b_sign_time: item.b_sign_time,
         effective_end_time: item.effective_end_time,
         contract_url: item.contract_url,
+        fileName: item.fileName,
       };
     });
     tableData.push(...newData);

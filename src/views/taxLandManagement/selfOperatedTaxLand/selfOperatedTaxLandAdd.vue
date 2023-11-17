@@ -361,6 +361,13 @@
                     :limit="3"
                   ></multi-upload>
                 </el-form-item>
+                <el-form-item class="mb-[0]" label="文件上传">
+                  <file-upload
+                    v-model="zip"
+                    :limit="1"
+                    :type="['zip']"
+                  ></file-upload>
+                </el-form-item>
               </el-col>
             </el-row>
           </el-form>
@@ -558,6 +565,7 @@ const Rules = {
   ],
   tax_contract_term: [{ required: true, message: "请选择", trigger: "change" }],
 };
+const zip = ref([]) as any;
 const formItem = ref({
   tax_land_type: "0",
   tax_land_head: "",
@@ -585,11 +593,13 @@ const formItem = ref({
   individual_monthly_limit: "98000",
   tax_contract_term: "",
   incoming_materials: "",
-  // agreement_url: [],
-  // contract_img: [],
   settlement_confirmation_letter: [],
+  materials_zip_url: "",
 });
+
 const handleSubmit = () => {
+  console.log(zip.value);
+
   FormRef.value.validate((valid: boolean) => {
     if (valid) {
       const params = { ...formItem.value } as any;
@@ -600,11 +610,10 @@ const handleSubmit = () => {
       params.category_id = newArrayTransform(params.category_id);
       params.invoice_sample = JSON.stringify(params.invoice_sample);
       params.industry_limit = JSON.stringify(params.industry_limit);
-      params.agreement_url = JSON.stringify(params.agreement_url);
-      params.contract_img = JSON.stringify(params.contract_img);
       params.settlement_confirmation_letter = JSON.stringify(
         params.settlement_confirmation_letter
       );
+      params.materials_zip_url = zip.value[0] ? zip.value[0].baseUrl : "";
       params.tax_land_city_id = newNumberTransform(params.tax_land_city_id);
       console.log(params);
       selfOperatedTaxLandAdd(params)

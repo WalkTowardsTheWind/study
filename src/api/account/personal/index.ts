@@ -1,42 +1,20 @@
 import request from "@/utils/request";
-import { IEditPersonalAccount, IGetPersonalAccountList } from "./types";
 
 /**
  * 获取个人账户列表
  * @param params
  * @returns
  */
-export function getPersonalAccountList(params: IGetPersonalAccountList) {
+export function getPersonalAccountList(params: any) {
   return request({
-    url: "/adminapi/account/user/index",
+    url: "/adminapi/member/auth",
     method: "get",
     params,
   });
 }
 
 /**
- * 个人账户编辑
- * @param data
- * @returns
- */
-export function editPersonalAccount(data: IEditPersonalAccount) {
-  return request({
-    url: "/adminapi/account/user/update",
-    method: "post",
-    data,
-  });
-}
-
-export function getPersonalAccountDetail(params: any) {
-  return request({
-    url: "/adminapi/account/user/read",
-    method: "get",
-    params,
-  });
-}
-
-/**
- *
+ * 封停 解封
  * @param params
  * @returns
  */
@@ -47,17 +25,46 @@ export function setPersonalStatus(params: any) {
   });
 }
 
-export function delPersonalAccount(id: string) {
+/**
+ * 个人账户 合同信息
+ */
+export function getContractInfo(params: any) {
   return request({
-    url: "/adminapi/account/user/" + id,
-    method: "delete",
+    url: "/adminapi/contract/person_contract_list",
+    method: "get",
+    params,
   });
 }
 
-export function createPersonalAccount(data: any) {
+/**
+ * 个人详情
+ */
+export function getDetail(params: any) {
   return request({
-    url: "/adminapi/account/user/create",
-    method: "post",
-    data,
+    url: "/adminapi/member/read/" + params,
+    method: "get",
+  });
+}
+
+/**
+ * 个人 结算信息
+ */
+export function getSettle(params: any) {
+  return request({
+    url: "/adminapi/finance/getUserSettlementList",
+    method: "get",
+    params,
+  });
+}
+
+/**
+ * 人员结算导出
+ */
+export function perDaoChu(params: any) {
+  return request({
+    url: "/adminapi/finance/get_user_settlement_excel",
+    method: "get",
+    params,
+    responseType: "arraybuffer",
   });
 }

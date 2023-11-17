@@ -6,7 +6,10 @@
       @on-search="handleSearch"
     >
       <el-form-item>
-        <el-input placeholder="请输入甲方、乙方" v-model="formItem.keyword">
+        <el-input
+          placeholder="请输入甲方、乙方、身份证号"
+          v-model="formItem.keyword"
+        >
           <template #prefix>
             <i-ep-Search />
           </template>
@@ -41,8 +44,8 @@
       <template #type>
         <span>个人合同</span>
       </template>
-      <template #is_online="{ row }">
-        <span>{{ row.is_online == 1 ? "线上签署" : "线下签署" }}</span>
+      <template #is_online>
+        <span>{{ "线上签署" }}</span>
       </template>
       <template #caozuo="{ row }">
         <el-button
@@ -68,11 +71,14 @@
 </template>
 
 <script lang="ts" setup>
-import ContractAdd from "./contract-add.vue";
-
-import { getPerContractList } from "@/api/contract-m/index";
-
+import {
+  downloadPerContract,
+  getPerContractList,
+} from "@/api/contract-m/index";
+const route = useRoute();
 import { contract_status, percolor } from "./options";
+import { useRoute } from "vue-router";
+import { downloadByData } from "@/utils/download";
 
 const formItem = reactive({
   keyword: "",
@@ -105,51 +111,32 @@ const handleSearch = () => {
     pageInfo.total = res.data.total;
   });
 };
-const detailId = ref(0);
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "合同类型", slot: "type" },
+  { label: "合同类型", slot: "type", width: 100 },
   {
     label: "状态",
     prop: "status",
     type: "enum",
     path: "contractListEnum.percontractStatus",
     color: percolor,
+    width: 100,
   },
-  { label: "签署形式", slot: "is_online" },
+  { label: "签署形式", slot: "is_online", width: 100 },
   { label: "甲方", prop: "tax_land_name", width: 250 },
   { label: "乙方", prop: "real_name" },
   { label: "签约时间", prop: "sign_time", width: 200 },
   {
     label: "操作",
     slot: "caozuo",
-    minWidth: 250,
+    minWidth: 220,
     align: "right",
     fixed: "right",
   },
 ];
 
-const isAddShow = ref(false);
-
-const detailShow = ref(false);
-
-const detailClose = (visible: boolean) => {
-  detailShow.value = visible;
-};
-
 const handleSelect = (val: any) => {
   console.log(val);
-};
-
-const addClick = () => {
-  isAddShow.value = true;
-};
-const addDialogClose = (visible: boolean) => {
-  isAddShow.value = visible;
-};
-const addDialogConfirm = (visible: boolean) => {
-  isAddShow.value = visible;
-  handleSearch();
 };
 
 const checkUrl = (url: string) => {
@@ -158,7 +145,22 @@ const checkUrl = (url: string) => {
 
 const download = (ids) => {
   console.log(ids);
+  downloadPerContract({ ids: [ids] }).then((res) => {
+    console.log(res);
+    downloadByData(res.data, "合同.pdf");
+  });
 };
 
-handleSearch();
+const getListByRoute = () => {
+  const company_name: any = route.query.company_name || "";
+  formItem.keyword = company_name;
+  handleSearch();
+};
+
+if (route.query.company_name && route.query.type == "5") {
+  getListByRoute();
+} else {
+  handleSearch();
+}
+// handleSearch();
 </script>
