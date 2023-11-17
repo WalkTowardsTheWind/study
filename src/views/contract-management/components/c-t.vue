@@ -12,7 +12,7 @@
         <div class="flex justify-between">
           <div class="l">
             <el-button type="primary" @click="addNew">新建</el-button>
-            <el-button type="primary" plain>批量操作</el-button>
+            <!-- <el-button type="primary" plain>批量操作</el-button> -->
           </div>
           <div class="r flex">
             <el-input class="w-80" placeholder="请输入关键字" v-model="keyword">
