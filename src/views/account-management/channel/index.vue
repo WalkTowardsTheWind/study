@@ -91,7 +91,7 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        <el-button type="primary" plain class="m-l-[15px]">导出EXCEL</el-button>
+        <!-- <el-button type="primary" plain class="m-l-[15px]">导出EXCEL</el-button> -->
       </template>
       <template #channel_type="{ row }">
         {{ row.channel_type == 1 ? "企业" : "个人" }}

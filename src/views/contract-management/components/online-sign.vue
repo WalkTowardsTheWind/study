@@ -66,16 +66,7 @@
       <div class="sign">
         <div class="title">设置签署方</div>
       </div>
-      <!-- <el-form-item class="m-y-20px" label="签署单位" prop="part_b" required>
-        <el-select v-model="addForm.part_b">
-          <el-option
-            v-for="item of signByType"
-            :key="item.id"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </el-form-item> -->
+
       <div class="flex m-t-20px">
         <template v-if="contract_type == 1">
           <el-form-item label="甲方">
@@ -254,51 +245,23 @@ getTempList();
 const handleSelectChange = (val: any) => {
   addForm.type = val.type;
   addForm.fields = val.fields;
-  signByType.value = [];
   addForm.part_b = "";
 };
-const signByType = ref([] as any);
-
-watch(
-  () => addForm.type,
-  (newVal) => {
-    switch (Number(newVal)) {
-      // 企业
-      case 1:
-        getBusinessAccountList({ limit: 1000, page: 1 }).then((res) => {
-          signByType.value.push(...res.data.data);
-          for (const item of signByType.value) {
-            item["label"] = item["company_name"];
-            item["value"] = item["company_id"];
-          }
-        });
-        break;
-      // 渠道
-      case 2:
-        getChannelAccountList({ limit: 1000, page: 1 }).then((res) => {
-          signByType.value.push(...res.data.data);
-          for (const item of signByType.value) {
-            item["label"] = item["channel_name"];
-            item["value"] = item["id"];
-          }
-        });
-        break;
-    }
-  }
-);
 
 const optionsListA = ref([] as any);
 const optionsListB = ref([] as any);
 const getOptionsList = () => {
   switch (props.contract_type) {
     case 1:
-      getBusinessAccountList({ limit: 1000, page: 1 }).then((res) => {
-        optionsListA.value.push(...res.data.data);
-        for (const item of optionsListA.value) {
-          item["label"] = item["company_name"];
-          item["value"] = item["company_id"];
+      getBusinessAccountList({ limit: 1000, page: 1, is_all: 1 }).then(
+        (res) => {
+          optionsListA.value.push(...res.data.data);
+          for (const item of optionsListA.value) {
+            item["label"] = item["company_name"];
+            item["value"] = item["company_id"];
+          }
         }
-      });
+      );
       getSelfOperatedTaxLandList({ status: 1, tax_land_type: "" }).then(
         (res) => {
           optionsListB.value = res.data.data;
@@ -310,7 +273,7 @@ const getOptionsList = () => {
       );
       break;
     case 2:
-      getChannelAccountList({ limit: 1000, page: 1 }).then((res) => {
+      getChannelAccountList({ limit: 1000, page: 1, is_all: 1 }).then((res) => {
         optionsListB.value = res.data.data;
         for (const item of optionsListB.value) {
           item["label"] = item["channel_name"];

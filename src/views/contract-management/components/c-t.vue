@@ -5,14 +5,13 @@
       :column-list="columnList"
       :page-info="pageInfo"
       @page-change="pageChange"
-      hasSelect
       @selection-change="handleSelect"
     >
       <template #tableTop>
         <div class="flex justify-between">
           <div class="l">
             <el-button type="primary" @click="addNew">新建</el-button>
-            <el-button type="primary" plain>批量操作</el-button>
+            <!-- <el-button type="primary" plain>批量操作</el-button> -->
           </div>
           <div class="r flex">
             <el-input class="w-80" placeholder="请输入关键字" v-model="keyword">
@@ -41,7 +40,7 @@
         >
         <el-button link type="primary" @click="toEdit(row.id)">编辑</el-button>
         <el-button link type="primary" @click="delById(row.id)">删除</el-button>
-        <el-button link type="primary">下载</el-button>
+        <!-- <el-button link type="primary">下载</el-button> -->
       </template>
     </zxn-table>
 

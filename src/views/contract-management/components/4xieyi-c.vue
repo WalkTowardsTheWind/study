@@ -35,7 +35,6 @@
       :table-data="tableData"
       :column-list="columnList"
       :pageInfo="pageInfo"
-      hasSelect
       @selection-change="handleSelect"
     >
       <template #tableTop>

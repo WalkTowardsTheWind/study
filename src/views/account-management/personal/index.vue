@@ -40,7 +40,7 @@
       :page-info="pageInfo"
       @page-change="pageChange"
     >
-      <template #tableTop>
+      <!-- <template #tableTop>
         <el-dropdown trigger="click">
           <el-button type="primary">批量操作 </el-button>
           <template #dropdown>
@@ -49,7 +49,7 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-      </template>
+      </template> -->
       <template #caozuo="{ row }">
         <el-button
           v-if="row.user_status != 4 && row.type == 1"
