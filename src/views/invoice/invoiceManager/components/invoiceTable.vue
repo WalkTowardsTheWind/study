@@ -72,23 +72,12 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="reject">驳回</el-dropdown-item>
-<<<<<<< HEAD
-              <!--              <el-dropdown-item command="excel">导出</el-dropdown-item>-->
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-
-        <el-button class="ml-16px" type="primary" plain @click="handleExcel"
-          >导出</el-button
-        >
-=======
               <!-- <el-dropdown-item command="excel">导出</el-dropdown-item> -->
               <el-dropdown-item command="issue">开立</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
         <el-button type="primary" plain @click="handleAllExcel">导出</el-button>
->>>>>>> test
       </template>
       <template #img="{ row }">
         <zxn-image
