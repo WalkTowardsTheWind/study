@@ -170,7 +170,7 @@ const pageInfo = reactive({
 const isLoading = ref(false);
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "账号名称", prop: "username", minWidth: 150 },
+  { label: "账号名称", prop: "username", minWidth: 120, fixed: "left" },
   {
     label: "状态",
     type: "enum",
@@ -180,15 +180,17 @@ const columnList = [
       0: { color: "#333333", background: "#dedede" },
       1: { color: "#356FF3", background: "#dfe8fd" },
     },
-    minWidth: 150,
+    minWidth: 100,
+    fixed: "left",
   },
   {
     label: "渠道类型",
     prop: "channel_type",
     minWidth: 120,
     slot: "channel_type",
+    fixed: "left",
   },
-  { label: "渠道名称", prop: "channel_name", minWidth: 200 },
+  { label: "渠道名称", prop: "channel_name", minWidth: 120, fixed: "left" },
   { label: "联系人", prop: "contact", minWidth: 200 },
   { label: "联系号码", prop: "contact_phone", minWidth: 150 },
   { label: "渠道等级", prop: "level", minWidth: 120, slot: "level" },

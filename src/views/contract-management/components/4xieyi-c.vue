@@ -40,7 +40,6 @@
     >
       <template #tableTop>
         <el-button type="primary" @click="addClick">合同归档</el-button>
-        <el-button type="primary" plain>批量下载</el-button>
       </template>
       <template #type>
         <span>委托代签协议</span>

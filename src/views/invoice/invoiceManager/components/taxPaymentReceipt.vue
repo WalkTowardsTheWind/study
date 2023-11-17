@@ -86,8 +86,8 @@ const formItem = reactive({
   timeData: [],
 });
 const columnList: any[] = reactive([
-  { label: "企业名称", prop: "company_name", minWidth: 160 },
-  { label: "税源地", prop: "tax_land_name", minWidth: 160 },
+  { label: "企业名称", prop: "company_name", width: 180, fixed: "left" },
+  { label: "税源地", prop: "tax_land_name", width: 220, fixed: "left" },
   { label: "完税月份", prop: "month", minWidth: 120 },
   { label: "上传账户", prop: "real_name", minWidth: 160 },
   { label: "上传时间", prop: "add_time", minWidth: 180 },

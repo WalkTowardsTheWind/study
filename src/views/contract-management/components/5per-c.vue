@@ -38,14 +38,11 @@
       hasSelect
       @selection-change="handleSelect"
     >
-      <template #tableTop>
-        <el-button type="primary" plain>批量下载</el-button>
-      </template>
       <template #type>
         <span>个人合同</span>
       </template>
-      <template #is_online="{ row }">
-        <span>{{ row.is_online == 1 ? "线上签署" : "线下签署" }}</span>
+      <template #is_online>
+        <span>{{ "线上签署" }}</span>
       </template>
       <template #caozuo="{ row }">
         <el-button
@@ -62,9 +59,6 @@
           @click="checkUrl(row.contract_url)"
           >查看合同</el-button
         >
-        <el-button type="primary" link @click="download(row.id)"
-          >下载</el-button
-        >
       </template>
     </zxn-table>
   </div>
@@ -78,6 +72,7 @@ import {
 const route = useRoute();
 import { contract_status, percolor } from "./options";
 import { useRoute } from "vue-router";
+import { downloadByData } from "@/utils/download";
 
 const formItem = reactive({
   keyword: "",
@@ -140,13 +135,6 @@ const handleSelect = (val: any) => {
 
 const checkUrl = (url: string) => {
   window.open(url, "_blank");
-};
-
-const download = (ids) => {
-  console.log(ids);
-  downloadPerContract({ ids: [ids] }).then((res) => {
-    console.log(res);
-  });
 };
 
 const getListByRoute = () => {

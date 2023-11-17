@@ -32,6 +32,9 @@
       <template #type="{ row }">
         {{ row.type == 1 ? "企业合同" : "渠道合同" }}
       </template>
+      <template #seal_type="{ row }">
+        {{ row.seal_type == 1 ? "单页签署" : "多页签署" }}</template
+      >
       <template #caozuo="{ row }">
         <el-button link type="primary" @click="toDetail(row.id)"
           >详情</el-button
@@ -73,7 +76,7 @@
               <el-option label="渠道合同" :value="2"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="签署形式" required prop="seal_type">
+          <el-form-item v-if="isAdd" label="签署形式" required prop="seal_type">
             <el-select
               class="w-full"
               placeholder="请选择"
@@ -311,6 +314,10 @@ const columnList = [
     label: "合同类型",
     prop: "type",
     slot: "type",
+  },
+  {
+    label: "签署方式",
+    slot: "seal_type",
   },
   {
     label: "税源地",

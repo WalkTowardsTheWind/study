@@ -179,7 +179,7 @@ const pageInfo = reactive({
 
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "充值单号", prop: "recharge_order_no", minWidth: 250 },
+  { label: "充值单号", prop: "recharge_order_no", width: 110, fixed: "left" },
   {
     label: "状态",
     prop: "status",
@@ -203,9 +203,10 @@ const columnList = [
         background: "#dedede",
       },
     },
-    minWidth: 150,
+    width: 120,
+    fixed: "left",
   },
-  { label: "企业名称", prop: "company_name", minWidth: 200 },
+  { label: "企业名称", prop: "company_name", minWidth: 120, fixed: "left" },
   { label: "税源地名称", prop: "tax_land_name", minWidth: 250 },
   { label: "税地账户", prop: "bank_account", width: 200 },
   { label: "充值金额", prop: "amount", type: "money", minWidth: 100 },

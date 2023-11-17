@@ -26,8 +26,15 @@
         v-if="hasSelect"
         type="selection"
         :selectable="selectable"
+        fixed="left"
       />
-      <el-table-column v-if="hasIndex" type="index" label="序号" width="65" />
+      <el-table-column
+        v-if="hasIndex"
+        type="index"
+        label="序号"
+        width="60"
+        fixed="left"
+      />
       <template v-for="(item, index) in tableColumnList" :key="index">
         <el-table-column
           v-if="item.slot"

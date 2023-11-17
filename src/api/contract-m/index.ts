@@ -129,5 +129,6 @@ export function downloadPerContract(params) {
     url: `/adminapi/contract/get_sign_download`,
     method: "get",
     params,
+    responseType: "arraybuffer",
   });
 }

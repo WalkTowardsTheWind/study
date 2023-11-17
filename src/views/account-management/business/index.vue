@@ -171,7 +171,7 @@ const pageInfo = reactive({
 
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "账户名称", prop: "account", width: 150 },
+  { label: "账户名称", prop: "account", width: 120, fixed: "left" },
   {
     label: "状态",
     type: "enum",
@@ -185,8 +185,9 @@ const columnList = [
       4: { color: "#333333", background: "#dedede" },
     },
     width: 100,
+    fixed: "left",
   },
-  { label: "企业", prop: "company_name", minWidth: 200 },
+  { label: "企业", prop: "company_name", minWidth: 200, fixed: "left" },
   { label: "企业联系人", prop: "contacts", width: 150 },
   { label: "联系号码", prop: "mobile", width: 150 },
   { label: "客户点位", prop: "tax_point", width: 100 },
