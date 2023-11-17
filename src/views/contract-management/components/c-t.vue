@@ -5,7 +5,6 @@
       :column-list="columnList"
       :page-info="pageInfo"
       @page-change="pageChange"
-      hasSelect
       @selection-change="handleSelect"
     >
       <template #tableTop>
