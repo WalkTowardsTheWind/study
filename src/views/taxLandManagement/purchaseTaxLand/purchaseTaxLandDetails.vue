@@ -440,9 +440,7 @@
                 <el-form-item class="mb-[0]" label="资料包">
                   <zxn-image
                     v-if="formItem.materials_zip_url"
-                    :imgList="[
-                      'http://39.98.67.98:8083/img/20231117/f2008c861a905a1aa79eb23bb9165839.png',
-                    ]"
+                    :imgList="[zipImg]"
                     :width="88"
                     :height="88"
                     targetClick
@@ -491,6 +489,7 @@ import {
 import { getAreaList } from "@/api/taxLandManagement";
 import { getTreeList } from "@/api/common";
 import { getCategoryTreeList } from "@/api/category";
+import zipImg from "@/assets/zip.png";
 const { proxy } = getCurrentInstance() as any;
 const route = useRoute();
 const activeName = ref("1");
