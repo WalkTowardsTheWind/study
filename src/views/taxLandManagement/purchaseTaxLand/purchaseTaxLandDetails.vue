@@ -619,6 +619,10 @@ const columnList = [
       1: { color: "#1DE585", backgroundColor: "#DBFBEB" },
       2: { color: "#356FF3", backgroundColor: "#DFE8FD" },
       3: { color: "#333333", backgroundColor: "#DEDEDE" },
+      4: {
+        color: "#f35036",
+        background: "#fde3df",
+      },
     },
     width: 100,
   },
