@@ -43,7 +43,6 @@
         <el-button type="primary" plain @click="onlineSignClick"
           >在线签署</el-button
         >
-        <el-button type="primary" plain>批量下载</el-button>
       </template>
       <template #type>
         <span>渠道合同</span>
