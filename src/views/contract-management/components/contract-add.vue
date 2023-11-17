@@ -329,7 +329,7 @@ const getOptionByContractType = () => {
       );
       break;
     case 4:
-      getSelfOperatedTaxLandList({ status: 1, tax_land_type: "" }).then(
+      getSelfOperatedTaxLandList({ status: 1, tax_land_type: "0" }).then(
         (res) => {
           taxlandOptions.value = res.data.data;
           for (const item of taxlandOptions.value) {
