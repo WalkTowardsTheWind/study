@@ -11,6 +11,11 @@
       :page-info="pageInfo"
       @page-change="pageChange"
     >
+      <template #tableTop>
+        <el-button :disabled="isDisabled" type="primary" @click="toRoute"
+          >编辑合同</el-button
+        >
+      </template>
       <template #type>
         {{ "个人合同" }}
       </template>
@@ -28,7 +33,9 @@
 
 <script lang="ts" setup>
 import { getContractInfo } from "@/api/account/personal";
-
+import router from "@/router";
+import { useRoute } from "vue-router";
+const route = useRoute();
 const props = defineProps({
   idcard: {
     default: () => "",
@@ -68,7 +75,7 @@ const pageChange = (cur) => {
 };
 const search = () => {
   let params = {
-    id: props.idcard,
+    keyword: props.idcard,
     start_time: date.value[0] || "",
     end_time: date.value[1] || "",
     page: pageInfo.page,
@@ -85,6 +92,30 @@ const reset = () => {
   search();
 };
 
+const isDisabled = ref(true);
+const getIsDisabled = () => {
+  const list = JSON.parse(localStorage.getItem("menusList")!) || [];
+  let found = false; // 标记是否找到相等的项
+  for (const item of list) {
+    if (item.module === "contract-management") {
+      found = true;
+      break; // 找到相等的项后跳出循环
+    }
+  }
+  isDisabled.value = !found; // 根据标记给 isDisabled.value 赋值
+};
+
+getIsDisabled();
+
+const toRoute = () => {
+  router.push({
+    name: "contract-management-list",
+    query: {
+      company_name: route.query.name!,
+      type: 5,
+    },
+  });
+};
 search();
 </script>
 

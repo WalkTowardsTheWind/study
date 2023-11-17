@@ -75,8 +75,9 @@ import {
   downloadPerContract,
   getPerContractList,
 } from "@/api/contract-m/index";
-
+const route = useRoute();
 import { contract_status, percolor } from "./options";
+import { useRoute } from "vue-router";
 
 const formItem = reactive({
   keyword: "",
@@ -148,5 +149,16 @@ const download = (ids) => {
   });
 };
 
-handleSearch();
+const getListByRoute = () => {
+  const company_name: any = route.query.company_name || "";
+  formItem.keyword = company_name;
+  handleSearch();
+};
+
+if (route.query.company_name && route.query.type == "5") {
+  getListByRoute();
+} else {
+  handleSearch();
+}
+// handleSearch();
 </script>

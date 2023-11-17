@@ -61,7 +61,10 @@
           @click="setStatus(row.user_id, 2)"
           >解封</el-button
         >
-        <el-button link type="primary" @click="toDetail(row.idcard)"
+        <el-button
+          link
+          type="primary"
+          @click="toDetail(row.idcard, row.real_name)"
           >详情</el-button
         >
       </template>
@@ -163,8 +166,11 @@ function handleReset() {
   handleSearch();
 }
 
-const toDetail = (idcard) => {
-  router.push({ name: "personal-account-detail", query: { ic: btoa(idcard) } });
+const toDetail = (idcard, name) => {
+  router.push({
+    name: "personal-account-detail",
+    query: { ic: btoa(idcard), name },
+  });
 };
 
 const setStatus = (user_id: number, status: number) => {

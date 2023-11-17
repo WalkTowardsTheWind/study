@@ -13,7 +13,7 @@
             <el-input readonly value="身份证" />
           </el-form-item>
           <el-form-item label="证件号">
-            <el-input readonly value="身份证" v-model="formData.idcard" />
+            <el-input readonly v-model="formData.idcard" />
           </el-form-item>
           <el-form-item label="开户行">
             <el-input readonly v-model="formData.bank" />
