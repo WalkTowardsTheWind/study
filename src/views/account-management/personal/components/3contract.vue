@@ -20,7 +20,7 @@
         {{ "个人合同" }}
       </template>
       <template #sign>
-        {{ "在线签署" }}
+        {{ "线上签署" }}
       </template>
       <template #caozuo>
         <el-button type="primary" link>查看合同</el-button>

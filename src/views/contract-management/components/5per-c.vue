@@ -44,8 +44,8 @@
       <template #type>
         <span>个人合同</span>
       </template>
-      <template #is_online="{ row }">
-        <span>{{ row.is_online == 1 ? "线上签署" : "线下签署" }}</span>
+      <template #is_online>
+        <span>{{ "线上签署" }}</span>
       </template>
       <template #caozuo="{ row }">
         <el-button
