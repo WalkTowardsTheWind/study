@@ -11,12 +11,10 @@ export enum channelType {
 }
 
 export enum personalType {
-  "申请中" = 0,
-  "未认证",
-  "正常",
-  "预警",
+  "未认证" = 0,
+  "已认证",
   "封停",
-  "未注册",
+  "未注册" = 5,
 }
 
 export enum taxpayerType {

@@ -52,17 +52,17 @@
       </template> -->
       <template #caozuo="{ row }">
         <el-button
-          v-if="row.user_status != 4 && row.type == 1"
-          link
-          type="primary"
-          @click="setStatus(row.user_id, 4)"
-          >封停</el-button
-        >
-        <el-button
-          v-if="row.user_status == 4 && row.type == 1"
+          v-if="row.user_status != 2 && row.type == 1"
           link
           type="primary"
           @click="setStatus(row.user_id, 2)"
+          >封停</el-button
+        >
+        <el-button
+          v-if="row.user_status == 2 && row.type == 1"
+          link
+          type="primary"
+          @click="setStatus(row.user_id, 1)"
           >解封</el-button
         >
         <el-button
@@ -85,8 +85,8 @@ import router from "@/router";
 
 const statusOptions = ref([
   { label: "全部", value: "" },
-  { label: "正常", value: 2 },
-  { label: "封停", value: 3 },
+  { label: "正常", value: 1 },
+  { label: "封停", value: 2 },
 ]);
 
 const formItem = reactive({
@@ -110,12 +110,10 @@ const columnList = [
     type: "enum",
     path: "accountEnum.personalType",
     color: {
-      0: { color: "#1DE585", background: "#dbfbeb" },
-      1: { color: "#35C5F3", background: "#dff6fd" },
-      2: { color: "#356FF3", background: "#dfe8fd" },
-      3: { color: "#F35036", background: "#fde3df" },
-      4: { color: "#F35036", background: "#fde3df" },
-      5: { color: "#333333", background: "#dedede" },
+      0: { color: "#333333", background: "#dedede" },
+      1: { color: "#356FF3", background: "#dfe8fd" },
+      2: { color: "#F35036", background: "#fde3df" },
+      5: { color: "#1DE585", background: "#dbfbeb" },
     },
     minWidth: 120,
   },
@@ -179,7 +177,7 @@ const toDetail = (idcard, name) => {
 };
 
 const setStatus = (user_id: number, status: number) => {
-  ElMessageBox.confirm(`是否${status == 4 ? "封停" : "解封"}当前账户?`, "", {
+  ElMessageBox.confirm(`是否${status == 2 ? "封停" : "解封"}当前账户?`, "", {
     confirmButtonText: "确认",
     cancelButtonText: "取消",
   }).then(() => {
