@@ -105,9 +105,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <el-form-item label="上传合伙人业务拓展协议" prop="agreement_img">
+            <!-- <el-form-item label="上传合伙人业务拓展协议" prop="agreement_img">
               <MultiUpload v-model="form.agreement_img" />
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="身份证">
               <MultiUpload v-model="form.idcard_img" />
             </el-form-item>
@@ -191,7 +191,7 @@ const form = reactive({
   bank_account: "", // 银行账号
   admin_phone: "", // 管理员联系号码
   settlement_type: "", // 渠道佣金结算时间
-  agreement_img: [], // 上传合伙人业务拓展协议
+  // agreement_img: [], // 上传合伙人业务拓展协议
   idcard_img: [], // 身份证
 
   tax_land_id: "", // 税地id

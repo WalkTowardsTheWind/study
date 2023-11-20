@@ -85,10 +85,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <el-form-item label="合伙人协议" prop="agreement_img">
+            <!-- <el-form-item label="合伙人协议" prop="agreement_img">
               <MultiUpload v-if="isEdit" v-model="formItem.agreement_img" />
               <PicturePreview v-else :image-list="formItem.agreement_img" />
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="营业执照">
               <MultiUpload v-if="isEdit" v-model="formItem.license_img" />
               <PicturePreview v-else :image-list="formItem.license_img" />
@@ -185,10 +185,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <el-form-item label="合伙人协议" prop="agreement_img">
+            <!-- <el-form-item label="合伙人协议" prop="agreement_img">
               <MultiUpload v-if="isEdit" v-model="formItem.agreement_img" />
               <PicturePreview v-else :image-list="formItem.agreement_img" />
-            </el-form-item>
+            </el-form-item> -->
 
             <el-form-item label="身份证">
               <MultiUpload v-if="isEdit" v-model="formItem.idcard_img" />

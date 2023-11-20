@@ -58,6 +58,13 @@ const props = defineProps({
     type: Number,
     default: 5,
   },
+  /**
+   * 文件上传大小限制
+   */
+  size: {
+    type: Number,
+    default: 20,
+  },
 });
 
 const previewImgUrl = ref("");
@@ -154,8 +161,8 @@ function handleRemove(removeFile: UploadFile) {
  * 限制用户上传文件的格式和大小
  */
 function handleBeforeUpload(file: UploadRawFile) {
-  if (file.size > 20 * 1048 * 1048) {
-    ElMessage.warning("上传图片不能大于20M");
+  if (file.size > props.size * 1048 * 1048) {
+    ElMessage.warning(`上传图片不能大于${props.size}M`);
     return false;
   }
   return true;
