@@ -30,10 +30,10 @@
           ellipsis &&
           index > 1 &&
           index === currentImg.length - 1 &&
-          currentImg.length !== imgList.length
+          currentImg.length !== filterImg.length
         "
       >
-        + {{ imgList.length - 3 }}
+        + {{ filterImg.length - 3 }}
       </div>
     </div>
     <el-image-viewer
@@ -59,8 +59,13 @@ const props = defineProps({
   targetClick: { type: Boolean, default: false },
   ellipsis: { type: Boolean, default: false },
 });
+const filterImg = computed(() => {
+  let _imgList = isArray(props.imgList) ? props.imgList : [props.imgList];
+  return _imgList.filter(Boolean);
+});
 const currentImg = computed(() => {
-  const _imgList = isArray(props.imgList) ? props.imgList : [props.imgList];
+  let _imgList = isArray(props.imgList) ? props.imgList : [props.imgList];
+  _imgList = _imgList.filter(Boolean);
   return props.ellipsis ? _imgList.filter((i, r) => r <= 2) : _imgList;
 });
 const preViewImg = computed(() => {

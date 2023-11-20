@@ -35,6 +35,7 @@
       :table-data="tableData"
       :column-list="columnList"
       :pageInfo="pageInfo"
+      @page-change="pageChange"
       @selection-change="handleSelect"
     >
       <template #tableTop>
@@ -181,7 +182,6 @@ const detailClose = (visible: boolean) => {
 const handleSelect = (val) => {
   console.log(val);
 };
-const isOnline = ref(false);
 
 const addClick = () => {
   isAddShow.value = true;
@@ -211,6 +211,13 @@ const delClick = (id) => {
       handleSearch();
     });
   });
+};
+
+const pageChange = (cur) => {
+  const { limit, page } = cur;
+  pageInfo.limit = limit;
+  pageInfo.page = page;
+  handleSearch();
 };
 
 const setStatus = (id, status) => {

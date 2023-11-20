@@ -35,6 +35,7 @@
       :table-data="tableData"
       :column-list="columnList"
       :pageInfo="pageInfo"
+      @page-change="pageChange"
       @selection-change="handleSelect"
     >
       <template #tableTop>
@@ -209,6 +210,14 @@ const handleSearch = () => {
     pageInfo.total = res.data.total;
   });
 };
+
+const pageChange = (cur) => {
+  const { limit, page } = cur;
+  pageInfo.limit = limit;
+  pageInfo.page = page;
+  handleSearch();
+};
+
 const detailId = ref(0);
 const tableData = reactive([] as any);
 const columnList = [

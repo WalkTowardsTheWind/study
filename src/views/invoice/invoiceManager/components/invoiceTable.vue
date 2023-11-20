@@ -492,12 +492,12 @@ const handleWithdraw = (ids: number[]) => {
       getList();
     });
 };
-const handleExcel = async (ids: number[]) => {
-  const params = {
-    ids,
-    page: 1,
-    limit: pageInfo.limit,
-  };
+const handleExcel = async () => {
+  const params = transformTimeRange({ ...formItem });
+  params.category_id = params.category_id.pop();
+  params.task_type = props.type;
+  params.page = 1;
+  params.limit = "9999";
   const { data } = await getInvoiceExcel(params);
   downloadByData(data, "发票列表.xlsx");
   // await getList();

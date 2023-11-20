@@ -66,7 +66,7 @@ export enum contractStatus {
   "签署中",
   "已生效",
   "已失效",
-  "已退回",
+  "已拒签",
 }
 export enum contractType {
   "企业合同" = 1,
