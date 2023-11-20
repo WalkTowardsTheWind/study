@@ -63,6 +63,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  size: {
+    type: Number,
+    default: 25,
+  },
 });
 
 const fileList = ref([]) as any;
@@ -79,9 +83,6 @@ watch(
     ) {
       return;
     }
-
-    console.log(fileList.value, "fileList.value");
-
     fileList.value = newVal;
   },
   { immediate: true }
@@ -163,23 +164,20 @@ function handleBeforeUpload(file: UploadRawFile) {
     return ["zip"].indexOf(suffix.toLowerCase()) !== -1;
   };
   if (props.type.includes("zip")) {
-    if (isZip(suffix)) {
-      return true;
-    } else {
+    if (!isZip(suffix)) {
       ElMessage.warning("请上传zip文件！");
       return false;
     }
   }
   if (props.type.includes("img")) {
-    if (isImage(suffix)) {
-      return true;
-    } else {
+    if (!isImage(suffix)) {
       ElMessage.warning("请上传图片！");
       return false;
     }
   }
-  if (file.size > 20 * 1048 * 1048) {
-    ElMessage.warning("上传图片不能大于20M");
+
+  if (file.size > props.size * 1048 * 1048) {
+    ElMessage.warning(`上传图片不能大于${props.size}M`);
     return false;
   }
   return true;
