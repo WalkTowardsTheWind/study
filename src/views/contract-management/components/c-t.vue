@@ -409,11 +409,11 @@ const submitAdd = async (formI) => {
     await formI.validate((valid, fields) => {
       if (valid) {
         console.log(addForm);
-        // createContractTemp(addForm).then(() => {
-        //   ElMessage.success("操作成功！");
-        //   isVisible.value = false;
-        //   handleSearch();
-        // });
+        createContractTemp(addForm).then(() => {
+          ElMessage.success("操作成功！");
+          isVisible.value = false;
+          handleSearch();
+        });
       } else {
         console.log("error submit!", fields);
       }
