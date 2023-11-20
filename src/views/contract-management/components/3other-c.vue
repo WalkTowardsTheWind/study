@@ -75,7 +75,7 @@
           type="primary"
           link
           @click="checkUrl(row.contract_url)"
-          >下载</el-button
+          >查看合同</el-button
         >
         <el-button type="primary" link @click="toDetail(row.id)"
           >详情</el-button

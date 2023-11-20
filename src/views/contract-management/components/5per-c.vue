@@ -46,17 +46,17 @@
       </template>
       <template #caozuo="{ row }">
         <el-button
-          :disabled="!row.cert_url"
-          type="primary"
-          link
-          @click="checkUrl(row.cert_url)"
-          >查看证书</el-button
-        >
-        <el-button
-          :disabled="!row.contract_url"
+          v-if="row.contract_url"
           type="primary"
           link
           @click="checkUrl(row.contract_url)"
+          >查看证书</el-button
+        >
+        <el-button
+          v-if="row.pdf_url"
+          type="primary"
+          link
+          @click="checkUrl(row.pdf_url)"
           >查看合同</el-button
         >
       </template>
