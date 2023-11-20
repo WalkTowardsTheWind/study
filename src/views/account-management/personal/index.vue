@@ -52,14 +52,14 @@
       </template> -->
       <template #caozuo="{ row }">
         <el-button
-          v-if="row.user_status != 2 && row.type == 1"
+          v-if="row.user_status == 1"
           link
           type="primary"
           @click="setStatus(row.user_id, 2)"
           >封停</el-button
         >
         <el-button
-          v-if="row.user_status == 2 && row.type == 1"
+          v-if="row.user_status == 2"
           link
           type="primary"
           @click="setStatus(row.user_id, 1)"
@@ -85,6 +85,8 @@ import router from "@/router";
 
 const statusOptions = ref([
   { label: "全部", value: "" },
+  { label: "未认证", value: 0 },
+  { label: "未注册", value: 5 },
   { label: "正常", value: 1 },
   { label: "封停", value: 2 },
 ]);
