@@ -162,7 +162,8 @@
             />
           </el-form-item>
           <el-form-item label="合同文件" required prop="contract_url">
-            <MultiUpload :limit="5" v-model="addForm.contract_url" />
+            <MultiUpload :limit="1" v-model="addForm.contract_url" />
+            <span class="ml-20px">请上传pdf文件</span>
           </el-form-item>
         </el-col>
       </el-row>
