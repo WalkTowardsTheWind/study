@@ -131,3 +131,9 @@ export interface selfOperatedTaxLandUpdateStatusType {
   id: number;
   status: string;
 }
+/**
+ * ids
+ */
+export interface ids {
+  ids: Array<number>;
+}

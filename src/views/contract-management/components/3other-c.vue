@@ -35,12 +35,11 @@
       :table-data="tableData"
       :column-list="columnList"
       :pageInfo="pageInfo"
-      hasSelect
+      @page-change="pageChange"
       @selection-change="handleSelect"
     >
       <template #tableTop>
         <el-button type="primary" @click="addClick">合同归档</el-button>
-        <el-button type="primary" plain>批量下载</el-button>
       </template>
       <template #type>
         <span>其他合同</span>
@@ -183,7 +182,6 @@ const detailClose = (visible: boolean) => {
 const handleSelect = (val: any) => {
   console.log(val);
 };
-const isOnline = ref(false);
 
 const addClick = () => {
   isAddShow.value = true;
@@ -213,6 +211,13 @@ const delClick = (id: number) => {
       handleSearch();
     });
   });
+};
+
+const pageChange = (cur) => {
+  const { limit, page } = cur;
+  pageInfo.limit = limit;
+  pageInfo.page = page;
+  handleSearch();
 };
 
 const setStatus = (id: number, status: number) => {

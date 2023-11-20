@@ -35,12 +35,9 @@
       :table-data="tableData"
       :column-list="columnList"
       :pageInfo="pageInfo"
-      hasSelect
+      @page-change="pageChange"
       @selection-change="handleSelect"
     >
-      <template #tableTop>
-        <el-button type="primary" plain>批量下载</el-button>
-      </template>
       <template #type>
         <span>个人合同</span>
       </template>
@@ -62,23 +59,16 @@
           @click="checkUrl(row.contract_url)"
           >查看合同</el-button
         >
-        <el-button type="primary" link @click="download(row.id)"
-          >下载</el-button
-        >
       </template>
     </zxn-table>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {
-  downloadPerContract,
-  getPerContractList,
-} from "@/api/contract-m/index";
+import { getPerContractList } from "@/api/contract-m/index";
 const route = useRoute();
 import { contract_status, percolor } from "./options";
 import { useRoute } from "vue-router";
-import { downloadByData } from "@/utils/download";
 
 const formItem = reactive({
   keyword: "",
@@ -143,12 +133,11 @@ const checkUrl = (url: string) => {
   window.open(url, "_blank");
 };
 
-const download = (ids) => {
-  console.log(ids);
-  downloadPerContract({ ids: [ids] }).then((res) => {
-    console.log(res);
-    downloadByData(res.data, "合同.pdf");
-  });
+const pageChange = (cur) => {
+  const { limit, page } = cur;
+  pageInfo.limit = limit;
+  pageInfo.page = page;
+  handleSearch();
 };
 
 const getListByRoute = () => {

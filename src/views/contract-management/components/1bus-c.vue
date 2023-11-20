@@ -35,7 +35,7 @@
       :table-data="tableData"
       :column-list="columnList"
       :pageInfo="pageInfo"
-      hasSelect
+      @page-change="pageChange"
       @selection-change="handleSelect"
     >
       <template #tableTop>
@@ -43,7 +43,6 @@
         <el-button type="primary" plain @click="onlineSignClick"
           >在线签署</el-button
         >
-        <el-button type="primary" plain>批量下载</el-button>
       </template>
       <template #type>
         <span>企业合同</span>
@@ -256,6 +255,14 @@ const detailClose = (visible: boolean) => {
 const handleSelect = (val) => {
   console.log(val);
 };
+
+const pageChange = (cur) => {
+  const { limit, page } = cur;
+  pageInfo.limit = limit;
+  pageInfo.page = page;
+  handleSearch();
+};
+
 const isOnline = ref(false);
 const onlineSignClick = () => {
   isOnline.value = true;

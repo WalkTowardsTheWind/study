@@ -437,6 +437,17 @@
                   />
                   <span v-else>--</span>
                 </el-form-item>
+                <el-form-item class="mb-[0]" label="资料包">
+                  <zxn-image
+                    v-if="formItem.materials_zip_url"
+                    :imgList="[zipImg]"
+                    :width="88"
+                    :height="88"
+                    targetClick
+                    ellipsis
+                  />
+                  <span v-else>未上传</span>
+                </el-form-item>
               </el-col>
             </el-row>
             <zxn-table
@@ -478,6 +489,7 @@ import {
 import { getAreaList } from "@/api/taxLandManagement";
 import { getTreeList } from "@/api/common";
 import { getCategoryTreeList } from "@/api/category";
+import zipImg from "@/assets/zip.png";
 const { proxy } = getCurrentInstance() as any;
 const route = useRoute();
 const activeName = ref("1");
@@ -607,6 +619,10 @@ const columnList = [
       1: { color: "#1DE585", backgroundColor: "#DBFBEB" },
       2: { color: "#356FF3", backgroundColor: "#DFE8FD" },
       3: { color: "#333333", backgroundColor: "#DEDEDE" },
+      4: {
+        color: "#f35036",
+        background: "#fde3df",
+      },
     },
     width: 100,
   },
@@ -683,6 +699,7 @@ const formItem = ref({
   tax_contract_term: "",
   incoming_materials: "",
   settlement_confirmation_letter: [],
+  materials_zip_url: "",
 });
 
 const getData = async () => {
@@ -724,6 +741,7 @@ const getData = async () => {
       tax_contract_term,
       incoming_materials,
       settlement_confirmation_letter,
+      materials_zip_url,
       contract_list,
     } = data.info;
     formItem.value = {
@@ -768,6 +786,7 @@ const getData = async () => {
       tax_contract_term: tax_contract_term + "",
       incoming_materials,
       settlement_confirmation_letter,
+      materials_zip_url,
     };
     tableData.length = 0;
     var newData = contract_list.map((item: any) => {
