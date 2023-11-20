@@ -408,12 +408,12 @@ const submitAdd = async (formI) => {
     if (!fileList.value.length) return ElMessage.error("请上传文件！");
     await formI.validate((valid, fields) => {
       if (valid) {
-        // console.log(addForm);
-        createContractTemp(addForm).then(() => {
-          ElMessage.success("操作成功！");
-          isVisible.value = false;
-          handleSearch();
-        });
+        console.log(addForm);
+        // createContractTemp(addForm).then(() => {
+        //   ElMessage.success("操作成功！");
+        //   isVisible.value = false;
+        //   handleSearch();
+        // });
       } else {
         console.log("error submit!", fields);
       }
