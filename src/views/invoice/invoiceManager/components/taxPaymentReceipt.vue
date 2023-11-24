@@ -32,7 +32,15 @@
     >
       <template #tableTop>
         <el-button type="primary" @click="handleUpload">上传</el-button>
-        <el-button type="primary" @click="handleBatchDownload">下载</el-button>
+        <!-- <el-button type="primary" @click="handleBatchDownload">下载</el-button> -->
+        <el-dropdown class="ml-4" trigger="click" @command="handleExport">
+          <el-button type="primary">导出</el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="1">资料包</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </template>
       <template #img="{ row }">
         <zxn-image
@@ -206,6 +214,14 @@ const handleBatchDownload = async () => {
     };
     const { data } = await downloadCredentials(params);
     downloadByData(data, "完税凭证.zip");
+  }
+};
+/**
+ * 导出批量操作
+ */
+const handleExport = (command: string | number | object) => {
+  if (command == 1) {
+    handleBatchDownload();
   }
 };
 onMounted(() => {});
