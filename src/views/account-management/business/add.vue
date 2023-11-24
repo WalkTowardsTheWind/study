@@ -62,6 +62,7 @@
               class="w-full"
               placeholder="请选择"
               v-model="addForm.category_id"
+              filterable
             >
               <el-option
                 v-for="item in cateGoryOptions"
@@ -271,6 +272,7 @@
               v-model="addForm.tax_land_id"
               @change="addSelecTaxland"
               value-key="id"
+              filterable
             >
               <el-option
                 v-for="(item, index) in taxLandOption"

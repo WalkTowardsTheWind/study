@@ -39,6 +39,7 @@
                 value-key="id"
                 @change="handleSelectChange1A"
                 placeholder="请选择签署的企业"
+                filterable
               >
                 <el-option
                   v-for="item of busOptions"
@@ -55,6 +56,7 @@
                 v-model="addForm.part_b.name"
                 @change="handleSelectChange1B"
                 placeholder="请选择签署的税地"
+                filterable
               >
                 <el-option
                   v-for="item of taxlandOptions"
@@ -73,6 +75,7 @@
                 value-key="value"
                 v-model="addForm.part_a.name"
                 @change="handleSelectChange2A"
+                filterable
               >
                 <el-option
                   label="武汉中新能科技有限公司"
@@ -87,6 +90,7 @@
                 v-model="addForm.part_b.name"
                 @change="handleSelectChange2B"
                 placeholder="请选择签署的渠道"
+                filterable
               >
                 <el-option
                   v-for="item of channelOptions"
@@ -106,6 +110,7 @@
                 v-model="addForm.part_a.name"
                 @change="handleSelectChange3A"
                 placeholder="请选择签署的税地"
+                filterable
               >
                 <el-option
                   v-for="item of taxlandOptions"
@@ -121,6 +126,7 @@
                 value-key="value"
                 v-model="addForm.part_b.name"
                 @change="handleSelectChange3B"
+                filterable
               >
                 <el-option
                   label="武汉中新能科技有限公司"
@@ -144,6 +150,7 @@
                 v-model="addForm.part_b.name"
                 @change="handleSelectChange4B"
                 placeholder="请选择签署的税地"
+                filterable
               >
                 <el-option
                   v-for="item of taxlandOptions"

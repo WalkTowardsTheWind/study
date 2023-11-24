@@ -32,6 +32,7 @@
           :options="industryList"
           :props="{ label: 'name', value: 'id' }"
           clearable
+          filterable
         />
       </el-form-item>
       <el-form-item prop="timeData" label="申请日期">

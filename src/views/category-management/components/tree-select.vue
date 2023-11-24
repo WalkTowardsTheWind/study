@@ -7,6 +7,7 @@
     :props="treeProps"
     check-strictly
     :render-after-expand="false"
+    filterable
   />
 </template>
 
