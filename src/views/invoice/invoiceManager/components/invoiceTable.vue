@@ -64,7 +64,6 @@
       <template #tableTop>
         <el-dropdown
           v-if="['', '0'].includes(formItem.status)"
-          class="mr-[10px]"
           trigger="click"
           @command="handleCommand"
         >
@@ -72,12 +71,18 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="reject">驳回</el-dropdown-item>
-              <!-- <el-dropdown-item command="excel">导出</el-dropdown-item> -->
               <el-dropdown-item command="issue">开立</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        <el-button type="primary" plain @click="handleAllExcel">导出</el-button>
+        <el-dropdown class="ml-4" trigger="click" @command="handleExport">
+          <el-button type="primary">导出</el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="1">表格</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </template>
       <template #img="{ row }">
         <zxn-image
@@ -125,7 +130,6 @@
           >查看物流</el-button
         >
         <el-button link type="primary" @click="handleView(row)">详情</el-button>
-        <!--        <el-button link type="primary">导出</el-button>-->
       </template>
     </zxn-table>
   </div>
@@ -314,6 +318,14 @@ const handleAllExcel = async () => {
     });
   } else {
     handleExcel(ids);
+  }
+};
+/**
+ * 导出批量操作
+ */
+const handleExport = (command: string | number | object) => {
+  if (command == 1) {
+    handleAllExcel();
   }
 };
 const handleReject = (ids: number[]) => {

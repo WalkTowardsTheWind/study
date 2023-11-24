@@ -14,9 +14,17 @@
       @selection-change="select"
     >
       <template #tableTop>
-        <el-button type="primary" plain @click="piliangdaochu"
+        <el-dropdown class="ml-4" trigger="click" @command="handleExport">
+          <el-button type="primary">导出</el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="1">结算信息</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+        <!-- <el-button type="primary" plain @click="piliangdaochu"
           >结算信息导出</el-button
-        >
+        > -->
       </template>
       <template #caozuo="{ row }">
         <el-button type="primary" link @click="daochu(row.id)">导出</el-button>
@@ -96,7 +104,14 @@ const piliangdaochu = () => {
     });
   }
 };
-
+/**
+ * 导出批量操作
+ */
+const handleExport = (command: string | number | object) => {
+  if (command == 1) {
+    piliangdaochu();
+  }
+};
 search();
 </script>
 

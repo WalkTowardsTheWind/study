@@ -119,9 +119,14 @@
               <div>结算任务列表</div>
             </div>
             <div class="right">
-              <el-button type="primary" @click="handleExport" plain
-                >导出excel</el-button
-              >
+              <el-dropdown class="ml-4" trigger="click" @command="handleExport">
+                <el-button type="primary">导出</el-button>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command="1">表格</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
             </div>
           </div>
           <zxn-table
@@ -266,8 +271,8 @@ const handleSelect = (data: any) => {
 /**
  * 批量操作
  */
-//导出
-const handleExport = () => {
+//导出表格
+const handleExportDoc = () => {
   if (Object.keys(selectionData.value).length == 0) {
     ElMessage({
       type: "error",
@@ -315,6 +320,14 @@ const handleExport = () => {
           });
         }
       });
+  }
+};
+/**
+ * 导出批量操作
+ */
+const handleExport = (command: string | number | object) => {
+  if (command == 1) {
+    handleExportDoc();
   }
 };
 /**

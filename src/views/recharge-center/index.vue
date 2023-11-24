@@ -68,19 +68,19 @@
             @page-change="pageChange"
             @selection-change="handleSelect"
           >
-            <template #tableTop>
+            <!-- <template #tableTop>
               <el-dropdown class="" trigger="click">
                 <el-button type="primary" plain>批量操作</el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <!-- <el-dropdown-item command="1">删除</el-dropdown-item> -->
+                    <el-dropdown-item command="1">删除</el-dropdown-item>
                     <el-dropdown-item command="2" @click="toUpload"
                       >导出</el-dropdown-item
                     >
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
-            </template>
+            </template> -->
             <template #certificate="scope">
               <zxn-image
                 :imgList="scope.row.certificate"

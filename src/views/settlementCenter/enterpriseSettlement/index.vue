@@ -49,7 +49,14 @@
       field-total="real_money"
     >
       <template #tableTop>
-        <el-button type="primary" @click="handleExport">导出</el-button>
+        <el-dropdown trigger="click" @command="handleExport">
+          <el-button type="primary">导出</el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="1">表格</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
         <!-- <el-dropdown
           class="ml-4"
           trigger="click"
@@ -380,11 +387,19 @@ const handleSelect = (data: any) => {
 };
 
 // 导出
-const handleExport = async () => {
+const handleExportDoc = async () => {
   const params = transformTimeRange({ ...formItem.value }) as any;
   const { data } = await getEnterpriseExcel(params);
   downloadByData(data, "结算列表.xlsx");
   await getTableData();
+};
+/**
+ * 导出批量操作
+ */
+const handleExport = (command: string | number | object) => {
+  if (command == 1) {
+    handleExportDoc();
+  }
 };
 /**
  * 批量操作
