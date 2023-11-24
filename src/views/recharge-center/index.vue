@@ -68,8 +68,8 @@
             @page-change="pageChange"
             @selection-change="handleSelect"
           >
-            <!-- <template #tableTop>
-              <el-dropdown class="" trigger="click">
+            <template #tableTop>
+              <!-- <el-dropdown class="" trigger="click">
                 <el-button type="primary" plain>批量操作</el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
@@ -79,8 +79,16 @@
                     >
                   </el-dropdown-menu>
                 </template>
+              </el-dropdown> -->
+              <el-dropdown trigger="click" @command="handleExport">
+                <el-button type="primary">导出</el-button>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command="1">表格</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
               </el-dropdown>
-            </template> -->
+            </template>
             <template #certificate="scope">
               <zxn-image
                 :imgList="scope.row.certificate"
@@ -216,13 +224,26 @@ const columnList = [
 ];
 
 const toUpload = async () => {
-  const { data } = await getRechargeExcel({
-    ids: ids.value,
-    limit: pageInfo.limit,
-  });
-  downloadByData(data, "充值列表.xlsx");
-
+  if (ids.value.length > 0) {
+    const { data } = await getRechargeExcel({
+      ids: ids.value,
+    });
+    downloadByData(data, "充值列表.xlsx");
+  } else {
+    ElMessage({
+      type: "info",
+      message: "请先选择充值单",
+    });
+  }
   // await handleSearch();
+};
+/**
+ * 导出批量操作
+ */
+const handleExport = (command: string | number | object) => {
+  if (command == 1) {
+    toUpload();
+  }
 };
 
 function handleSearch() {
