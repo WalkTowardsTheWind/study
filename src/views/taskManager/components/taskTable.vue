@@ -82,9 +82,15 @@
           <money-text :modelValue="row.task_attribute.salary" />
         </template>
         <template v-else>
-          <money-text :modelValue="row.task_attribute.salary_min" />
+          <money-text
+            :modelValue="row.task_attribute.salary_min"
+            :precision="0"
+          />
           -
-          <money-text :modelValue="row.task_attribute.salary_max" />
+          <money-text
+            :modelValue="row.task_attribute.salary_max"
+            :precision="0"
+          />
         </template>
       </template>
       <template #operation="{ row }">

@@ -1,5 +1,5 @@
 <template>
-  <div class="money-text" :class="{ slipLine }">
+  <div class="money-text" :class="{ slipLine, ellipsis }">
     <span :style="{ fontSize: `${markSize}px`, color: markColor }">{{
       mark
     }}</span>
@@ -10,7 +10,7 @@
         fontWeight: bold,
       }"
     >
-      {{ proxy.$moneyFormat(modelValue) }}
+      {{ proxy.$moneyFormat(modelValue, precision) }}
     </span>
   </div>
 </template>
@@ -41,21 +41,31 @@ defineProps({
     default: "#333",
   },
   bold: {
-    type: String,
+    type: [String, Number],
     default: "400",
   },
+  precision: {
+    type: Number,
+    default: 2,
+  },
+  ellipsis: Boolean,
   slipLine: Boolean,
 });
 const { proxy } = getCurrentInstance() as any;
 </script>
 <style lang="scss" scoped>
+.ellipsis {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .money-text {
   display: inline-block;
   font-family: DINAlternate-Bold, DINAlternate, sans-serif;
 }
-
 .slipLine {
-  color: #d0d0d0;
   text-decoration: line-through;
+  color: #d0d0d0;
 }
 </style>

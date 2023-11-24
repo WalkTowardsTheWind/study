@@ -21,8 +21,8 @@ import "@/styles/index.scss";
 import "uno.css";
 
 const app = createApp(App);
-app.config.globalProperties.$moneyFormat = (value: any) => {
-  return currencyFormat(value);
+app.config.globalProperties.$moneyFormat = (value: any, precision = 2) => {
+  return currencyFormat(value, precision);
 };
 // 全局注册 自定义指令(directive)
 setupDirective(app);
