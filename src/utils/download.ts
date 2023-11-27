@@ -1,6 +1,7 @@
 import { openWindow } from "./";
-import { dataURLtoBlob, urlToBase64 } from "./base64Conver";
+import { dataURLtoBlob } from "./base64Conver";
 import { dateUtil } from "./dateUtil";
+import request from "@/utils/request";
 
 /**
  * Download online pictures
@@ -11,12 +12,24 @@ import { dateUtil } from "./dateUtil";
  */
 export function downloadByOnlineUrl(
   url: string,
-  filename: string,
-  mime?: string,
-  bom?: BlobPart
+  params: any = {},
+  filename?: string
 ) {
-  urlToBase64(url).then((base64) => {
-    downloadByBase64(base64, filename, mime, bom);
+  return new Promise((resolve, reject) => {
+    request({ url, method: "GET", params, responseType: "arraybuffer" })
+      .then((res) => {
+        console.log(res);
+        const { data, headers } = res;
+        downloadByData(
+          data,
+          "待结算佣金任务列表Excel.xlsx",
+          headers["content-type"]
+        );
+        resolve("下载成功");
+      })
+      .catch((err) => {
+        reject(err);
+      });
   });
 }
 
