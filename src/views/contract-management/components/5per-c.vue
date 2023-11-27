@@ -45,13 +45,13 @@
         <span>{{ "线上签署" }}</span>
       </template>
       <template #caozuo="{ row }">
-        <!-- <el-button
+        <el-button
           v-if="row.contract_url"
           type="primary"
           link
           @click="checkUrl(row.contract_url)"
           >查看证书</el-button
-        > -->
+        >
         <el-button
           v-if="row.pdf_url"
           type="primary"
@@ -119,7 +119,7 @@ const columnList = [
   {
     label: "操作",
     slot: "caozuo",
-    minWidth: 220,
+    minWidth: 200,
     align: "right",
     fixed: "right",
   },

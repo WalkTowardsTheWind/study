@@ -87,7 +87,7 @@ const statusOptions = ref([
   { label: "全部", value: "" },
   { label: "未认证", value: 0 },
   { label: "未注册", value: 5 },
-  { label: "正常", value: 1 },
+  { label: "已认证", value: 1 },
   { label: "封停", value: 2 },
 ]);
 
