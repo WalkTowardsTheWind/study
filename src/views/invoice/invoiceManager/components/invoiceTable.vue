@@ -47,6 +47,9 @@
           :props="{ label: 'name', value: 'id' }"
         />
       </el-form-item>
+      <el-form-item prop="tax_land_id" label="税地名称">
+        <tax-source-select v-model:taxId="formItem.tax_land_id" />
+      </el-form-item>
       <el-form-item prop="timeData" label="申请日期">
         <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>
@@ -177,6 +180,7 @@ const formItem = reactive({
 });
 const columnList: any[] = reactive([
   { label: "发票任务编号", prop: "invoice_no", width: 110, fixed: "left" },
+  { label: "税地名称", prop: "tax_land_name", width: 120, fixed: "left" },
   {
     label: "发票类目",
     prop: "category_num",

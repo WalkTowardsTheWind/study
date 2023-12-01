@@ -22,6 +22,9 @@
             </template>
           </el-input>
         </el-form-item>
+        <el-form-item prop="tax_land_id" label="税地名称">
+          <tax-source-select v-model:taxId="formItem.tax_land_id" />
+        </el-form-item>
         <el-form-item label="统计日期">
           <zxn-date-range v-model="date" />
         </el-form-item>
@@ -71,6 +74,7 @@ const date = ref([]);
 const formItem = reactive({
   name: "",
   admin: "",
+  tax_land_id: "",
 });
 
 const pageInfo1 = reactive({
@@ -103,6 +107,7 @@ const columnList1 = [
 const handleReset = () => {
   formItem.name = "";
   formItem.admin = "";
+  formItem.tax_land_id = "";
   date.value = [];
   handleSearch();
 };

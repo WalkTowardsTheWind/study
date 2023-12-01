@@ -2,16 +2,12 @@ import { defineStore } from "pinia";
 
 import { loginApi, logoutApi } from "@/api/login";
 import { getLandList } from "@/api/common";
-import { setTaxLand } from "@/api/system";
-import { resetRouter, refreshSelectedTag } from "@/router";
+import { resetRouter } from "@/router";
 import { store } from "@/store";
 
 import { LoginData } from "@/api/login/types";
 
 import { useStorage } from "@vueuse/core";
-import { useTagsViewStoreHook } from "./tagsView";
-
-const tagsViewStore = useTagsViewStoreHook();
 
 export const useUserStore = defineStore("user", () => {
   // state
@@ -20,7 +16,6 @@ export const useUserStore = defineStore("user", () => {
   const avatar = ref("");
   const roles = ref<Array<string>>([]); // 用户角色编码集合 → 判断路由权限
   const perms = ref<Array<string>>([]); // 用户权限编码集合 → 判断按钮权限
-  const taxSource = ref(0); //  当前税地
   const sourceList = ref([]);
   const menusList = useStorage("menusList", []);
 
@@ -70,25 +65,16 @@ export const useUserStore = defineStore("user", () => {
     perms.value = [];
     menusList.value = [];
   }
-
-  async function taxSourceChange(value: string): Promise<void> {
-    taxSource.value = value;
-    await setTaxLand({ tax_land_id: value });
-    tagsViewStore.delAllViews().then((_) => {
-      refreshSelectedTag();
-    });
-  }
   function getSourceList(): Promise<void> {
     return new Promise((resolve, reject) => {
       getLandList()
         .then(({ data }) => {
-          const { tax_land_list, now_tax_land } = data;
+          const { tax_land_list } = data;
           if (tax_land_list && tax_land_list.length) {
             sourceList.value = tax_land_list.map((it: any) => ({
               label: it.tax_land_name,
               value: it.id,
             }));
-            taxSource.value = now_tax_land;
           }
           resolve();
         })
@@ -107,8 +93,6 @@ export const useUserStore = defineStore("user", () => {
     login,
     logout,
     resetToken,
-    taxSource,
-    taxSourceChange,
     sourceList,
     getSourceList,
     menusList,

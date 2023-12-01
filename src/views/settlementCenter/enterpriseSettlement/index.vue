@@ -36,6 +36,9 @@
           />
         </zxn-select>
       </el-form-item>
+      <el-form-item prop="tax_land_id" label="税地名称">
+        <tax-source-select v-model:taxId="formItem.tax_land_id" />
+      </el-form-item>
       <el-form-item prop="date" label="申请日期">
         <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>
@@ -187,6 +190,7 @@ const handleReset = () => {
     reason: "",
     page: "",
     limit: "",
+    tax_land_id: "",
   };
   handleSearch();
 };
@@ -225,6 +229,7 @@ const formItem = ref({
   reason: "",
   page: "",
   limit: "",
+  tax_land_id: "",
 });
 const tableData = reactive([] as any);
 const color = {

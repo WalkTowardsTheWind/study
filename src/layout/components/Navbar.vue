@@ -53,20 +53,14 @@ function logout() {
     <!-- 右侧导航设置 -->
     <div class="flex">
       <!-- 导航栏设置(窄屏隐藏)-->
-      <div v-if="device !== 'mobile'" class="flex items-center">
-        <!--        <el-icon size="16" color="#333333" class="m-r-[20px]"-->
-        <!--          ><i-ep-search-->
-        <!--        /></el-icon>-->
-        <!--        <el-icon size="16" color="#333333" class="m-r-[20px]"-->
-        <!--          ><i-ep-ChatDotRound-->
-        <!--        /></el-icon>-->
-        <tax-source-select />
-      </div>
+      <div v-if="device !== 'mobile'" class="flex items-center"></div>
 
       <!-- 用户头像 -->
       <el-dropdown trigger="click">
-        <div class="flex justify-center items-center mx-2 cursor-pointer">
-          <img :src="logo" class="w-[24px] h-[24px] b-rd-50% scalc" />
+        <div
+          class="flex justify-center items-center mx-2 mr-[24px] cursor-pointer"
+        >
+          <img :src="logo" class="w-[24px] h-[24px] b-rd-50%" />
           <span class="fs14 c-[#333] m-l-[8px] m-r-[8px]">{{
             userStore.nickname
           }}</span>

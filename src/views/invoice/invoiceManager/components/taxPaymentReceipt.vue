@@ -16,6 +16,9 @@
           </template>
         </el-input>
       </el-form-item>
+      <el-form-item prop="tax_land_id" label="税地名称">
+        <tax-source-select v-model:taxId="formItem.tax_land_id" />
+      </el-form-item>
       <el-form-item prop="timeData" label="上传日期">
         <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>
@@ -92,6 +95,7 @@ const pageInfo = reactive({
 const formItem = reactive({
   keywords: "",
   timeData: [],
+  tax_land_id: "",
 });
 const columnList: any[] = reactive([
   { label: "企业名称", prop: "company_name", width: 180, fixed: "left" },
