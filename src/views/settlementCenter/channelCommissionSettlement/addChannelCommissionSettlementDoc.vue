@@ -24,13 +24,31 @@
                 />
               </el-select>
             </el-form-item>
+            <el-form-item label="税地名称">
+              <el-select
+                v-model="formItem.tax_land_id"
+                filterable
+                clearable
+                placeholder="请选择税地"
+                @change="handleUpdataTaxLand"
+              >
+                <el-option
+                  v-for="item in optionsTaxLand"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
             <el-form-item label="渠道名称">
               <el-select
+                ref="channelSelect"
                 v-model="formItem.channel_id"
                 filterable
                 clearable
                 placeholder="请选择渠道"
                 @change="handleUpdata"
+                @focus="handleIsSelectChannel"
               >
                 <el-option
                   v-for="item in optionsChannel"
@@ -131,6 +149,7 @@ import {
   addChannelSettlementDoc,
   getSendDocDetails,
 } from "@/api/settlementCenter/channelCommissionSettlement";
+import { getSelectLandList, getLandList } from "@/api/common";
 import viewDialog from "../components/viewDialog.vue";
 const { proxy } = getCurrentInstance() as any;
 const router = useRouter();
@@ -142,14 +161,32 @@ const tabsList = reactive([
     label: "新建渠道佣金结算单",
   },
 ]);
-//获取渠道列表
+//获取税地列表
 interface ListItem {
   value: string;
   label: string;
 }
+const optionsTaxLand = ref<ListItem[]>([]);
+const getTaxLand = async () => {
+  const { data } = await getLandList();
+  const newData = data.tax_land_list.map((item: any) => {
+    return {
+      label: item.tax_land_name,
+      value: item.id,
+    };
+  });
+  optionsTaxLand.value = [];
+  optionsTaxLand.value.push(...newData);
+};
+// getTaxLand();
+//获取渠道列表
+const channelSelect = ref();
 const optionsChannel = ref<ListItem[]>([]);
 const getChannel = async () => {
-  const { data } = await getChannelList();
+  let params = {
+    tax_land_id: formItem.value.tax_land_id,
+  };
+  const { data } = await getChannelList(params);
   const newData = data.map((item: any) => {
     return {
       label: item.channel_name,
@@ -172,6 +209,7 @@ const getCompany = async () => {
   }
 
   let params = {
+    tax_land_id: formItem.value.tax_land_id,
     channel_id: formItem.value.channel_id,
     settlement_type: formItem.value.settlement_type,
   };
@@ -200,6 +238,7 @@ const handleReset = () => {
     keywords: "",
     settlement_type: "1",
     company_id: "",
+    tax_land_id: "",
     channel_id: "",
     status: "5",
     timeData: [],
@@ -208,9 +247,24 @@ const handleReset = () => {
   };
   handleSearch();
 };
+const handleUpdataTaxLand = () => {
+  formItem.value.channel_id = "";
+  formItem.value.company_id = "";
+  getChannel();
+};
 const handleUpdata = () => {
   formItem.value.company_id = "";
   getCompany();
+};
+const handleIsSelectChannel = () => {
+  if (!formItem.value.tax_land_id) {
+    channelSelect.value.blur();
+    ElMessage({
+      type: "warning",
+      message: `请先选择税地名称`,
+    });
+  }
+  return;
 };
 const handleIsSelect = () => {
   if (!formItem.value.channel_id) {
@@ -255,6 +309,7 @@ const formItem = ref({
   keywords: "",
   settlement_type: "1",
   company_id: "",
+  tax_land_id: "",
   channel_id: "",
   status: "5",
   timeData: [],
@@ -435,7 +490,7 @@ const getTableData = async () => {
   if (!(formItem.value.channel_id && formItem.value.company_id)) {
     ElMessage({
       type: "warning",
-      message: `请先选择结算类型、渠道和企业`,
+      message: `请先选择结算类型、税地、渠道和企业`,
     });
     return;
   }
@@ -495,7 +550,7 @@ const get = async () => {
   if (route.query.params) {
     await getCheckStatusData();
   } else {
-    await getChannel();
+    await getTaxLand();
   }
   await getTableData();
 };

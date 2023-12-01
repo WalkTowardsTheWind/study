@@ -13,7 +13,7 @@
       :model-value="modelValue"
       :placeholder="placeholder"
       @blur="handleBlur"
-      v-inputFloat="{ max: 8 }"
+      v-inputFloat="{ max: 10 }"
     />
   </div>
 </template>
