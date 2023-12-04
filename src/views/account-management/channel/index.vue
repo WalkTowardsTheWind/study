@@ -240,6 +240,7 @@ function handleSearch() {
     channel_admin_name: formItem.channel_admin_name,
     start_time: date.value[0] || "",
     end_time: date.value[1] || "",
+    tax_land_id: formItem.tax_land_id,
     // level: formItem.level,
     status: formItem.status,
     limit: pageInfo.limit,
