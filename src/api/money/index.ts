@@ -46,3 +46,16 @@ export function getChannelCommissionList(params: any) {
     params,
   });
 }
+
+/**
+ * 企业佣金统计列表
+ * @param params
+ * @returns
+ */
+export function getCompanyCommissionList(params: any) {
+  return request({
+    url: "/adminapi/finance/company/coompanyList",
+    method: "get",
+    params,
+  });
+}
