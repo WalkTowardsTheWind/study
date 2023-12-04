@@ -66,7 +66,7 @@ const dateList = [
   { name: "上月", val: "4" },
   { name: "本月", val: "3" },
 ];
-const currentDate = ref("3");
+const currentDate = ref("5");
 const date = ref([]);
 const formItem = reactive({
   company_name: "",
@@ -82,7 +82,6 @@ const pageInfo1 = reactive({
 const tableData1 = reactive([] as any);
 
 const columnList1 = [
-  { label: "企业ID", prop: "company_id" },
   { label: "企业名称", prop: "company_name" },
   { label: "税地名称", prop: "tax_land_name" },
   {
