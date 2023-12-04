@@ -218,7 +218,6 @@ const columnList = [
   },
   { label: "企业名称", prop: "company_name", minWidth: 120, fixed: "left" },
   { label: "税地名称", prop: "tax_land_name", width: 120 },
-  { label: "税源地名称", prop: "tax_land_name", minWidth: 250 },
   { label: "税地账户", prop: "bank_account", width: 200 },
   { label: "充值金额", prop: "amount", type: "money", minWidth: 100 },
   { label: "充值时间", prop: "add_time", width: 200 },

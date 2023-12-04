@@ -29,7 +29,16 @@
           />
         </el-form-item>
         <el-form-item label="统计日期">
-          <zxn-date-range v-model="date" />
+          <el-date-picker
+            v-model="date"
+            type="daterange"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            range-separator="-"
+            :shortcuts="shortcuts"
+            value-format="YYYY-MM-DD"
+            @change="handleSearch"
+          />
         </el-form-item>
       </zxn-search>
       <zxn-table
@@ -37,42 +46,20 @@
         :column-list="columnList1"
         :page-info="pageInfo1"
       >
-        <template #tableTop>
-          <div class="flex justify-between">
-            <!-- <el-button type="primary" plain>导出EXCEL</el-button> -->
-            <div></div>
-            <div class="date">
-              <div
-                v-for="(item, index) in dateList"
-                :key="index"
-                :class="{ active: item.val == currentDate }"
-                @click="chooseDate(item.val)"
-              >
-                {{ item.name }}
-              </div>
-            </div>
-          </div>
-        </template>
       </zxn-table>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import router from "@/router";
 import LineChart2 from "./line-chart2.vue";
 import { getChannelCommissionList } from "@/api/money";
-
-const dateList = [
-  { name: "今年", val: "5" },
-  { name: "去年", val: "6" },
-  { name: "上周", val: "2" },
-  { name: "本周", val: "1" },
-  { name: "上月", val: "4" },
-  { name: "本月", val: "3" },
-];
-const currentDate = ref("5");
-const date = ref([]);
+import { shortcuts } from "@/utils/dateUtil";
+import dayjs from "dayjs";
+const date = ref([
+  dayjs().startOf("year").format("YYYY-MM-DD"),
+  dayjs().endOf("year").format("YYYY-MM-DD"),
+]);
 
 const formItem = reactive({
   name: "",
@@ -111,17 +98,15 @@ const handleReset = () => {
   formItem.name = "";
   formItem.admin = "";
   formItem.tax_land_id = "";
-  date.value = [];
-  handleSearch();
-};
-const chooseDate = (date_val: string) => {
-  currentDate.value = date_val;
+  date.value = [
+    dayjs().startOf("year").format("YYYY-MM-DD"),
+    dayjs().endOf("year").format("YYYY-MM-DD"),
+  ];
   handleSearch();
 };
 
 const handleSearch = () => {
   let params = {
-    time_type: currentDate.value,
     start_time: date.value[0] || "",
     end_time: date.value[1] || "",
     channel_name: formItem.name,
@@ -134,7 +119,9 @@ const handleSearch = () => {
     pageInfo1.total = res.data.total;
   });
 };
-handleSearch();
+onMounted(() => {
+  handleSearch();
+});
 </script>
 
 <style lang="scss" scoped>
