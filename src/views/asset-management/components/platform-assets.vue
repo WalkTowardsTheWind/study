@@ -113,6 +113,10 @@ const columnList1 = [
     },
     width: 100,
   },
+  {
+    label: "最后结算时间",
+    prop: "time",
+  },
 ];
 
 const handleReset = () => {
