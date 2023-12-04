@@ -28,7 +28,10 @@
               </el-input>
             </el-form-item>
             <el-form-item prop="tax_land_id" label="税地名称">
-              <tax-source-select v-model:taxId="formItem.tax_land_id" />
+              <tax-source-select
+                v-model:taxId="formItem.tax_land_id"
+                @change-tax="handleSearch"
+              />
             </el-form-item>
             <el-form-item label="充值状态">
               <el-select v-model="formItem.status" placeholder="请选择">

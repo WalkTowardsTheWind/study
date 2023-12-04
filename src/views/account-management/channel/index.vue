@@ -66,7 +66,10 @@
         </el-select>
       </el-form-item> -->
       <el-form-item prop="tax_land_id" label="税地名称">
-        <tax-source-select v-model:taxId="formItem.tax_land_id" />
+        <tax-source-select
+          v-model:taxId="formItem.tax_land_id"
+          @change-tax="handleSearch"
+        />
       </el-form-item>
       <el-form-item prop="date" label="创建日期" label-width="">
         <zxn-date-range v-model="date" />

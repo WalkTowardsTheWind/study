@@ -5,7 +5,7 @@
     </div>
     <div>
       <div class="title">
-        <zxn-title>渠道数据合计</zxn-title>
+        <zxn-title>企业列表</zxn-title>
       </div>
       <zxn-search @on-search="handleSearch" @on-reset="handleReset">
         <el-form-item label="企业名称">
@@ -19,7 +19,10 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="tax_land_id" label="税地名称">
-          <tax-source-select v-model:taxId="formItem.tax_land_id" />
+          <tax-source-select
+            v-model:taxId="formItem.tax_land_id"
+            @change-tax="handleSearch"
+          />
         </el-form-item>
         <el-form-item label="统计日期">
           <zxn-date-range v-model="date" />
@@ -79,21 +82,37 @@ const pageInfo1 = reactive({
 const tableData1 = reactive([] as any);
 
 const columnList1 = [
-  { label: "公司名称", prop: "company_name" },
+  { label: "企业ID", prop: "company_id" },
+  { label: "企业名称", prop: "company_name" },
   { label: "税地名称", prop: "tax_land_name" },
   {
-    label: "公司累计结算税前",
+    label: "累计充值",
     prop: "recharge_amount",
     type: "money",
   },
   {
-    label: "公司累计结算税后",
+    label: "累计结算",
     prop: "settlement_amount",
     type: "money",
   },
   {
-    label: "最后结算时间",
-    prop: "time",
+    label: "企业余额",
+    prop: "balance_amount",
+    type: "money",
+  },
+  {
+    label: "状态",
+    type: "enum",
+    path: "accountEnum.businessType",
+    prop: "status",
+    color: {
+      0: { color: "#1DE585", background: "#dbfbeb" },
+      1: { color: "#35C5F3", background: "#dff6fd" },
+      2: { color: "#356FF3", background: "#dfe8fd" },
+      3: { color: "#F35036", background: "#fde3df" },
+      4: { color: "#333333", background: "#dedede" },
+    },
+    width: 100,
   },
 ];
 

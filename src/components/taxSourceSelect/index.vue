@@ -1,5 +1,10 @@
 <template>
-  <el-select v-model="taxIdValue" class="w-[272px]" filterable>
+  <el-select
+    v-model="taxIdValue"
+    class="w-[272px]"
+    filterable
+    @change="handleTaxChange"
+  >
     <el-option label="全部税地" value="" />
     <el-option
       v-for="item in useUser.sourceList"
@@ -22,7 +27,7 @@ const props = defineProps({
     default: "",
   },
 });
-const emits = defineEmits(["update:taxId"]);
+const emits = defineEmits(["update:taxId", "change-tax"]);
 const taxIdValue = computed({
   get() {
     return props.taxId ? props.taxId * 1 : "";
@@ -31,4 +36,7 @@ const taxIdValue = computed({
     emits("update:taxId", val);
   },
 });
+const handleTaxChange = (val: string) => {
+  emits("change-tax", val);
+};
 </script>
