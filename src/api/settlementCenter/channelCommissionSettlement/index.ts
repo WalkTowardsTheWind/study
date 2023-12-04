@@ -8,6 +8,7 @@ import {
   ids,
   idsStatus,
   id,
+  ChannelList,
   Company,
   SendDoc,
 } from "./types";
@@ -169,10 +170,11 @@ export function deleteChannelSettlementDoc(id: number) {
 /**
  * 获取渠道列表
  */
-export function getChannelList(): AxiosPromise {
+export function getChannelList(data: ChannelList): AxiosPromise {
   return request({
     url: "/adminapi/finance/channel/getChannel",
     method: "GET",
+    params: data,
   });
 }
 /**
