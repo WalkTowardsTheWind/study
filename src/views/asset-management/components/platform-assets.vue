@@ -10,7 +10,7 @@
       <zxn-search @on-search="handleSearch" @on-reset="handleReset">
         <el-form-item label="企业名称">
           <el-input
-            placeholder="请输入渠道名称"
+            placeholder="请输入企业名称"
             v-model="formItem.company_name"
           >
             <template #prefix>
