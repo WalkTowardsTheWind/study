@@ -132,6 +132,7 @@ const handleSearch = () => {
     start_time: date.value[0] || "",
     end_time: date.value[1] || "",
     company_name: formItem.company_name,
+    tax_land_id: formItem.tax_land_id,
   };
   getCompanyCommissionList(params).then((res) => {
     tableData1.length = 0;

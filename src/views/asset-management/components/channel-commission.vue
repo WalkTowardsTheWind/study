@@ -71,7 +71,7 @@ const dateList = [
   { name: "上月", val: "4" },
   { name: "本月", val: "3" },
 ];
-const currentDate = ref("3");
+const currentDate = ref("5");
 const date = ref([]);
 
 const formItem = reactive({
@@ -126,6 +126,7 @@ const handleSearch = () => {
     end_time: date.value[1] || "",
     channel_name: formItem.name,
     channel_admin: formItem.admin,
+    tax_land_id: formItem.tax_land_id,
   };
   getChannelCommissionList(params).then((res) => {
     tableData1.length = 0;
