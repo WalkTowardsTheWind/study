@@ -183,6 +183,13 @@ const getTaxLand = async () => {
 const channelSelect = ref();
 const optionsChannel = ref<ListItem[]>([]);
 const getChannel = async () => {
+  if (!formItem.value.tax_land_id) {
+    ElMessage({
+      type: "warning",
+      message: `请先选择税地名称`,
+    });
+    return;
+  }
   let params = {
     tax_land_id: formItem.value.tax_land_id,
   };
