@@ -100,6 +100,10 @@ const handleView = (item) => {
     const { pushParams } = useRouteParams();
     pushParams("invoiceManager", { status: 0 });
   }
+  if (item.title === "待审核任务") {
+    const { pushParams } = useRouteParams();
+    pushParams("taskManagerIndex", { status: 1 });
+  }
   router.push({ name: routerMap[item.title] });
 };
 onMounted(() => {
