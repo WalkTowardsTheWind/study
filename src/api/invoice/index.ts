@@ -107,19 +107,6 @@ export function setStatus(data: invoiceStatus): AxiosPromise {
 }
 
 /**
- * 发票导出
- */
-
-export function getInvoiceExcel(params: invoiceExcel): AxiosPromise {
-  return request({
-    url: `/adminapi/invoice/get_excel`,
-    method: "GET",
-    params,
-    responseType: "arraybuffer",
-  });
-}
-
-/**
  * 个人发票列表
  */
 export function getPersonInvoiceList(params: any): AxiosPromise {
@@ -175,17 +162,6 @@ export function editCredentials(data: any): AxiosPromise {
     url: `/adminapi/invoice/updateReceipt`,
     method: "POST",
     data,
-  });
-}
-/**
- * 下载完税凭证
- */
-export function downloadCredentials(params: any): AxiosPromise {
-  return request({
-    url: `/adminapi/invoice/download`,
-    method: "GET",
-    params,
-    responseType: "arraybuffer",
   });
 }
 /**

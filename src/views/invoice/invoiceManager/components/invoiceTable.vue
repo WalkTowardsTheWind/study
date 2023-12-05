@@ -149,10 +149,9 @@ import {
   getInvoiceInChannel,
   setStatus,
   channelSetStatus,
-  getInvoiceExcel,
 } from "@/api/invoice";
 import { transformTimeRange } from "@/utils";
-import { downloadByData } from "@/utils/download";
+import { downloadByOnlineUrl } from "@/utils/download";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { useRouteParams } from "@/store/modules/routeParams";
@@ -517,9 +516,7 @@ const handleExcel = async () => {
   params.task_type = props.type;
   params.page = 1;
   params.limit = "9999";
-  const { data } = await getInvoiceExcel(params);
-  downloadByData(data, "发票列表.xlsx");
-  // await getList();
+  await downloadByOnlineUrl("/adminapi/invoice/get_excel", params);
 };
 
 const handleUpload = (cur: any) => {

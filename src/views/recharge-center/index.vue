@@ -114,11 +114,10 @@
 </template>
 
 <script lang="ts" setup>
-import { downloadByData } from "@/utils/download";
+import { downloadByOnlineUrl } from "@/utils/download";
 import { getCategoryList } from "@/api/category";
 import { getLandList } from "@/api/common";
-import { getRechargeTaskList, getRechargeExcel } from "@/api/recharge";
-import router from "@/router";
+import { getRechargeTaskList } from "@/api/recharge";
 import { useRouteParams } from "@/store/modules/routeParams";
 import { isNumber } from "@/utils/is";
 
@@ -177,8 +176,6 @@ const formItem = reactive({
   name: "",
   status: "1",
   tax_land_id: "",
-  // category_id: "",
-  // tax_land_id: "",
 });
 
 const pageInfo = reactive({
@@ -225,12 +222,12 @@ const columnList = [
   // { label: "操作", slot: "operation", fixed: "right", width: 100 },
 ];
 
-const toUpload = async () => {
+const toUpload = () => {
   if (ids.value.length > 0) {
-    const { data } = await getRechargeExcel({
+    downloadByOnlineUrl("/adminapi/finance/recharge/get_excel", {
       ids: ids.value,
+      tax_land_id: formItem.tax_land_id,
     });
-    downloadByData(data, "充值列表.xlsx");
   } else {
     ElMessage({
       type: "info",

@@ -160,14 +160,12 @@
   <InspectDialog v-model:dialogVisible="dialogVisible" :imageList="imageList" />
 </template>
 <script setup lang="ts">
-import { downloadByData } from "@/utils/download";
+import { downloadByOnlineUrl } from "@/utils/download";
 import { transformTimeRange } from "@/utils";
 import InspectDialog from "../components/InspectDialog.vue";
 import { useRouter } from "vue-router";
 import {
   getEnterpriseSettlementList,
-  getEnterpriseExcel,
-  updateEnterpriseSettlementStatus,
   deleteEnterpriseSettlementDoc,
 } from "@/api/settlementCenter/enterpriseSettlement";
 import { businessAccountSetStatus } from "@/api/account/business";
@@ -348,11 +346,11 @@ const handleDetails = (scope: any) => {
     query: { activeName: "1", id: scope.row.id },
   });
 };
-const handleDownload = async (scope: any) => {
-  const { data } = await getEnterpriseExcel({ ids: [scope.row.id] });
-  downloadByData(data, "结算列表.xlsx");
-
-  await getTableData();
+const handleDownload = (scope: any) => {
+  downloadByOnlineUrl("/adminapi/finance/company/get_excel", {
+    ids: [scope.row.id],
+    tax_land_id: formItem.value.tax_land_id,
+  });
 };
 const handleDelete = (scope: any) => {
   ElMessageBox({
@@ -395,11 +393,9 @@ const handleSelect = (data: any) => {
 };
 
 // 导出
-const handleExportDoc = async () => {
+const handleExportDoc = () => {
   const params = transformTimeRange({ ...formItem.value }) as any;
-  const { data } = await getEnterpriseExcel(params);
-  downloadByData(data, "结算列表.xlsx");
-  await getTableData();
+  downloadByOnlineUrl("/adminapi/finance/company/get_excel", params);
 };
 /**
  * 导出批量操作
@@ -409,16 +405,6 @@ const handleExport = (command: string | number | object) => {
     handleExportDoc();
   }
 };
-/**
- * 批量操作
- */
-// const handleBatchOperation = async (command: string | number | object) => {
-//   if (command == 1) {
-//     const { data } = await getEnterpriseExcel({ ids: selectionData.value });
-//     downloadByData(data, "结算列表.xlsx");
-//     await getTableData();
-//   }
-// };
 
 const getTableData = async () => {
   const params = transformTimeRange({ ...formItem.value }) as any;

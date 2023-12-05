@@ -483,7 +483,7 @@
 </template>
 <script setup lang="ts">
 import imgDialog from "../components/imgDialog.vue";
-import { downloadByData } from "@/utils/download";
+import { downloadByOnlineUrl } from "@/utils/download";
 import {
   StringTransformNumber,
   categoryTransformNumber,
@@ -495,7 +495,6 @@ import { useRouter, useRoute } from "vue-router";
 import {
   selfOperatedTaxLandEdit,
   selfOperatedTaxLandDetails,
-  downloadContract,
 } from "@/api/taxLandManagement/selfOperatedTaxLand";
 import { getAreaList } from "@/api/taxLandManagement";
 import { getTreeList } from "@/api/common";
@@ -758,9 +757,8 @@ const imgDialogRef = ref();
 const handleView = (row: any) => {
   imgDialogRef.value.init(row);
 };
-const handleDownload = async (row: any) => {
-  const { data } = await downloadContract(Number(row.id));
-  downloadByData(data, row.fileName);
+const handleDownload = (row: any) => {
+  downloadByOnlineUrl(`/adminapi/contract/download/${row.id}`);
 };
 const zip = ref([]) as any;
 const formItem = ref({

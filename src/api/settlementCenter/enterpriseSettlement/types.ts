@@ -36,10 +36,3 @@ export interface updateStatus {
 export interface taskId {
   id: string;
 }
-/**
- *
- * 导出结算列表
- */
-export interface getEnterpriseExcel {
-  ids: number[];
-}

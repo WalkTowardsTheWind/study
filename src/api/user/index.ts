@@ -107,34 +107,6 @@ export function deleteUsers(ids: string) {
 }
 
 /**
- * 下载用户导入模板
- *
- * @returns
- */
-export function downloadTemplateApi() {
-  return request({
-    url: "/api/v1/users/template",
-    method: "get",
-    responseType: "arraybuffer",
-  });
-}
-
-/**
- * 导出用户
- *
- * @param queryParams
- * @returns
- */
-export function exportUser(queryParams: UserQuery) {
-  return request({
-    url: "/api/v1/users/_export",
-    method: "get",
-    params: queryParams,
-    responseType: "arraybuffer",
-  });
-}
-
-/**
  * 导入用户
  *
  * @param file

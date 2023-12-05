@@ -154,12 +154,11 @@
 </template>
 <script setup lang="ts">
 import { transformTimeRange } from "@/utils";
-import { downloadByData } from "@/utils/download";
+import { downloadByOnlineUrl } from "@/utils/download";
 import { useRouter, useRoute } from "vue-router";
 import {
   getChannelSettlementDetails,
   getDocDetails,
-  getChannelToBeSettlementTaskExcel,
 } from "@/api/settlementCenter/channelCommissionSettlement";
 import viewDialog from "../components/viewDialog.vue";
 import { ElMessage } from "element-plus";
@@ -333,14 +332,13 @@ const handleExport = (command: string | number | object) => {
 /**
  * 下载Excel
  */
-const handleExcel = async (ids: Array<string>) => {
+const handleExcel = (ids: Array<string>) => {
   const params = {
     ids,
     page: 1,
     limit: pageInfo.limit,
   };
-  const { data } = await getChannelToBeSettlementTaskExcel(params);
-  downloadByData(data, "待结算佣金任务列表Excel.xlsx");
+  downloadByOnlineUrl("/adminapi/finance/channel/get_list_excel", params);
 };
 //获取数据
 const getTableData = async () => {

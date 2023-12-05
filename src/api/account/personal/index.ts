@@ -56,15 +56,3 @@ export function getSettle(params: any) {
     params,
   });
 }
-
-/**
- * 人员结算导出
- */
-export function perDaoChu(params: any) {
-  return request({
-    url: "/adminapi/finance/get_user_settlement_excel",
-    method: "get",
-    params,
-    responseType: "arraybuffer",
-  });
-}

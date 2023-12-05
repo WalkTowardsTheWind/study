@@ -4,6 +4,9 @@
       <el-form-item label="结算日期">
         <zxn-date-range v-model="date" />
       </el-form-item>
+      <el-form-item prop="tax_land_id" label="税地名称">
+        <tax-source-select v-model:taxId="tax_land_id" @change-tax="search" />
+      </el-form-item>
     </zxn-search>
     <zxn-table
       :table-data="tableData"
@@ -34,8 +37,8 @@
 </template>
 
 <script lang="ts" setup>
-import { getSettle, perDaoChu } from "@/api/account/personal";
-import { downloadByData } from "@/utils/download";
+import { getSettle } from "@/api/account/personal";
+import { downloadByOnlineUrl } from "@/utils/download";
 
 const props = defineProps({
   idcard: {
@@ -45,6 +48,7 @@ const props = defineProps({
 
 const ids = ref([] as any);
 const date = ref([] as any);
+const tax_land_id = ref("");
 const pageInfo = reactive({
   page: 1,
   limit: 20,
@@ -73,6 +77,7 @@ const search = () => {
     id: props.idcard,
     start_time: date.value[0] || "",
     end_time: date.value[1] || "",
+    tax_land_id: tax_land_id.value,
     page: pageInfo.page,
     limit: pageInfo.limit,
   };
@@ -84,12 +89,14 @@ const search = () => {
 };
 const reset = () => {
   date.value = [];
+  tax_land_id.value = "";
   search();
 };
 
 const daochu = (id) => {
-  perDaoChu({ ids: [id] }).then((res) => {
-    downloadByData(res.data, "人员结算列表.xlsx");
+  downloadByOnlineUrl("/adminapi/finance/get_user_settlement_excel", {
+    ids: [id],
+    tax_land_id: tax_land_id.value,
   });
 };
 
@@ -99,9 +106,7 @@ const select = (val) => {
 
 const piliangdaochu = () => {
   if (ids.value.length) {
-    perDaoChu({ ids: ids.value }).then((res) => {
-      downloadByData(res.data, "人员结算列表.xlsx");
-    });
+    daochu(ids.value);
   }
 };
 /**

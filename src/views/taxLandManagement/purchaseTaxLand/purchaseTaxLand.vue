@@ -128,13 +128,12 @@
 </template>
 <script setup lang="ts">
 import { newNumberTransform, transformTimeRange } from "@/utils";
-import { downloadByData } from "@/utils/download";
+import { downloadByOnlineUrl } from "@/utils/download";
 import { useRouter } from "vue-router";
 import {
   getSelfOperatedTaxLandList,
   selfOperatedTaxLandDelete,
   selfOperatedTaxLandUpdateStatus,
-  downloadInformationPack,
 } from "@/api/taxLandManagement/selfOperatedTaxLand";
 import { getAreaList } from "@/api/taxLandManagement";
 import { getManufacturer } from "@/api/taxLandManagement/purchaseTaxLand";
@@ -449,8 +448,7 @@ const handleDownloadInformationPack = (ids: Array<number>) => {
       if (action === "confirm") {
         instance.confirmButtonLoading = true;
         try {
-          const { data } = await downloadInformationPack({ ids });
-          downloadByData(data, "资料包.zip");
+          await downloadByOnlineUrl(`/adminapi/tax/get_zip_download`, { ids });
           instance.confirmButtonLoading = false;
           done();
           ElMessage({

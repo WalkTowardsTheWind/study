@@ -18,13 +18,16 @@ export function downloadByOnlineUrl(
   return new Promise((resolve, reject) => {
     request({ url, method: "GET", params, responseType: "arraybuffer" })
       .then((res) => {
-        console.log(res);
         const { data, headers } = res;
-        downloadByData(
-          data,
-          "待结算佣金任务列表Excel.xlsx",
-          headers["content-type"]
-        );
+        const disposition = headers["content-disposition"];
+        console.log(disposition, "2222");
+        // 省略代码
+        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+        const matches = filenameRegex.exec(disposition);
+        const _name =
+          filename ||
+          decodeURIComponent(escape(matches[1].replace(/['"]/g, "")));
+        downloadByData(data, _name, headers["content-type"]);
         resolve("下载成功");
       })
       .catch((err) => {

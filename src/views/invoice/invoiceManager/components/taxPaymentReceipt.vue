@@ -73,17 +73,11 @@
   </div>
 </template>
 <script setup lang="ts">
-import {
-  getCredentialsList,
-  downloadCredentials,
-  delCredentials,
-} from "@/api/invoice";
+import { getCredentialsList, delCredentials } from "@/api/invoice";
 import { transformTimeRange } from "@/utils";
-import { downloadByData } from "@/utils/download";
+import { downloadByOnlineUrl } from "@/utils/download";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-import { isArray } from "../../../../utils/is";
-import { number } from "echarts";
 const router = useRouter();
 const props = defineProps({
   type: { type: String, default: "enterprise" },
@@ -159,9 +153,9 @@ const handleEdit = (cur: any) => {
 const handleDownload = async (ids: Array<number>) => {
   const params = {
     ids,
+    tax_land_id: formItem.tax_land_id,
   };
-  const { data } = await downloadCredentials(params);
-  downloadByData(data, "完税凭证.zip");
+  await downloadByOnlineUrl("/adminapi/invoice/get_excel", params);
 };
 const handleDelete = (row: any) => {
   ElMessageBox({
@@ -209,18 +203,14 @@ const handleSelect = (data: any) => {
 /**
  * 批量操作
  */
-const handleBatchDownload = async () => {
+const handleBatchDownload = () => {
   if (Object.keys(selectionData.value).length == 0) {
     ElMessage({
       type: "error",
       message: `请选择完税凭证!`,
     });
   } else {
-    const params = {
-      ids: selectionData.value,
-    };
-    const { data } = await downloadCredentials(params);
-    downloadByData(data, "完税凭证.zip");
+    handleDownload(selectionData.value);
   }
 };
 /**

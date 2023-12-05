@@ -421,17 +421,14 @@
 </template>
 <script setup lang="ts">
 import imgDialog from "../components/imgDialog.vue";
-import { downloadByData } from "@/utils/download";
+import { downloadByOnlineUrl } from "@/utils/download";
 import {
   StringTransformNumber,
   categoryTransformNumber,
   categoryTransformArray,
 } from "@/utils";
 import { useRouter, useRoute } from "vue-router";
-import {
-  selfOperatedTaxLandDetails,
-  downloadContract,
-} from "@/api/taxLandManagement/selfOperatedTaxLand";
+import { selfOperatedTaxLandDetails } from "@/api/taxLandManagement/selfOperatedTaxLand";
 import { getAreaList } from "@/api/taxLandManagement";
 import { getTreeList } from "@/api/common";
 import zipImg from "@/assets/zip.png";
@@ -573,9 +570,8 @@ const imgDialogRef = ref();
 const handleView = (row: any) => {
   imgDialogRef.value.init(row);
 };
-const handleDownload = async (row: any) => {
-  const { data } = await downloadContract(Number(row.id));
-  downloadByData(data, row.fileName);
+const handleDownload = (row: any) => {
+  downloadByOnlineUrl(`/adminapi/contract/download/${row.id}`);
 };
 const formItem = ref({
   tax_land_type: "0",
