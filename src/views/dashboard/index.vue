@@ -48,6 +48,7 @@ import { workbench } from "@/api/dashboard";
 import { getPercentValue } from "@/utils";
 import { useRouter } from "vue-router";
 import { useRouteParams } from "@/store/modules/routeParams";
+
 const router = useRouter();
 const statisticsList: any[] = reactive([]);
 const industryEcharts = ref([]);
@@ -104,7 +105,8 @@ const handleView = (item) => {
     const { pushParams } = useRouteParams();
     pushParams("taskManagerIndex", { status: 1 });
   }
-  router.push({ name: routerMap[item.title] });
+
+  // router.push({ name: routerMap[item.title] });
 };
 onMounted(() => {
   initData();

@@ -28,7 +28,7 @@ const btnList = ref([
   // { name: '新建渠道', router: '' }
 ]);
 const handleRouter = (item: any) => {
-  router.push(item);
+  // router.push(item);
 };
 </script>
 <style lang="scss" scoped>
