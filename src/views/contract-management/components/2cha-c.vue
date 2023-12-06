@@ -59,6 +59,13 @@
           >发起签署</el-button
         >
         <el-button
+          v-if="row.status == 0"
+          type="primary"
+          link
+          @click="edit(row.id)"
+          >编辑</el-button
+        >
+        <el-button
           v-if="row.status == 1"
           type="primary"
           link
@@ -120,8 +127,19 @@
       @detail-close="detailClose"
       :detailId="detailId"
     />
+    <!-- 合同编辑 -->
+    <ContractEdit
+      :detailId="detailId"
+      :visible="editShow"
+      @edit-close="editClose"
+      ref="editDialog"
+    />
     <!-- 发起签署 -->
-    <zxn-dialog :visible="signVisible" :title="signTitle">
+    <zxn-dialog
+      :visible="signVisible"
+      :title="signTitle"
+      @close-dialog="closeSign"
+    >
       <template #default>
         <el-form v-if="signStep == 1" label-width="auto">
           <el-form-item required label="姓名">
@@ -165,6 +183,7 @@
 import ContractAdd from "./contract-add.vue";
 import OnlineSign from "./online-sign.vue";
 import ContractDetail from "./contract-detail.vue";
+import ContractEdit from "./contract-edit.vue";
 
 import {
   getContractList,
@@ -414,4 +433,18 @@ if (route.query.company_name && route.query.type == "2") {
 } else {
   handleSearch();
 }
+
+const editDialog = ref();
+const editShow = ref(false);
+const editClose = (visible, isUpdate) => {
+  editShow.value = visible;
+  if (isUpdate) {
+    handleSearch();
+  }
+};
+const edit = (id) => {
+  detailId.value = id;
+  editDialog.value.getDetailById(id);
+  editShow.value = true;
+};
 </script>

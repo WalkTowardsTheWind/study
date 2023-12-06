@@ -65,6 +65,7 @@
       :loading="loading"
       :hasSelect="['', '0'].includes(formItem.status)"
       :selectable="selectable"
+      @selection-change="handleSelect"
       @page-change="handlePageChange"
     >
       <template #tableTop>
@@ -78,7 +79,7 @@
           </template>
         </el-dropdown>
         <el-dropdown
-          v-if="!['', '0'].includes(formItem.status)"
+          v-if="['', '0'].includes(formItem.status) && !selectionData.length"
           class="ml-4"
           trigger="click"
           @command="handleExport"
@@ -292,8 +293,11 @@ const selectable = (row) => {
 const handleView = (cur) => {
   router.push({ name: "invoiceView", query: { id: cur.id, type: props.type } });
 };
+const selectionData = ref([]);
+const handleSelect = (data: any) => {
+  selectionData.value = data.map((item: any) => item.id);
+};
 const table = ref();
-
 const handleCommand = (type: string) => {
   const selected = table.value.getSelectionRows();
   const ids = selected.map((it) => it.id);
