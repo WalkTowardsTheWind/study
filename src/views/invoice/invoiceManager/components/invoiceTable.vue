@@ -314,24 +314,24 @@ const handleCommand = (type: string) => {
       break;
   }
 };
-const handleAllExcel = async () => {
-  const selected = table.value.getSelectionRows();
-  const ids = selected.map((it) => it.id);
-  if (!ids.length) {
-    return ElMessage({
-      type: "error",
-      message: `请选择数据`,
-    });
-  } else {
-    handleExcel(ids);
-  }
-};
+// const handleAllExcel = async () => {
+//   const selected = table.value.getSelectionRows();
+//   const ids = selected.map((it) => it.id);
+//   if (!ids.length) {
+//     return ElMessage({
+//       type: "error",
+//       message: `请选择数据`,
+//     });
+//   } else {
+//     handleExcel(ids);
+//   }
+// };
 /**
  * 导出批量操作
  */
 const handleExport = (command: string | number | object) => {
   if (command == 1) {
-    handleAllExcel();
+    handleExcel();
   }
 };
 const handleReject = (ids: number[]) => {
