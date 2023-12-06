@@ -17,21 +17,6 @@
       <template #tax_point="scope">
         <div>{{ scope.row.tax_point }}%</div>
       </template>
-      <template #contract_img="scope">
-        <!-- <zxn-image
-          :imgList="scope.row.contract_img"
-          :width="40"
-          :height="40"
-          targetClick
-        /> -->
-        <el-button
-          v-if="scope.row.contract_img"
-          type="primary"
-          link
-          @click="checkImg(scope.row.contract_img)"
-          >查看</el-button
-        >
-      </template>
       <template #operation="scope" v-if="isEdit">
         <el-button
           link
@@ -251,12 +236,6 @@ const columnList = [
   { label: "税地银行", prop: "bank", minWidth: 250 },
   { label: "银行账户", prop: "sub_account_no", minWidth: 200 },
   { label: "账户余额", prop: "balance", type: "money", minWidth: 200 },
-  {
-    label: "签约合同",
-    prop: "contract_img",
-    slot: "contract_img",
-    minWidth: 150,
-  },
   {
     label: "认证规则",
     prop: "sign_type",

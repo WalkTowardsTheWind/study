@@ -54,6 +54,12 @@
           <el-option label="外扣" value="1" />
         </el-select>
       </el-form-item>
+      <el-form-item prop="tax_land_id" label="税地名称">
+        <tax-source-select
+          v-model:taxId="formItem.tax_land_id"
+          @change-tax="handleSearch"
+        />
+      </el-form-item>
     </zxn-search>
     <zxn-table
       :table-data="tableData"
@@ -161,6 +167,7 @@ const formItem = reactive({
   point_min: "",
   point_max: "",
   date: [],
+  tax_land_id: "",
 } as any);
 
 const pageInfo = reactive({
@@ -188,6 +195,7 @@ const columnList = [
     fixed: "left",
   },
   { label: "企业", prop: "company_name", minWidth: 200, fixed: "left" },
+  { label: "税地名称", prop: "tax_land_name", width: 150 },
   { label: "企业联系人", prop: "contacts", width: 150 },
   { label: "联系号码", prop: "mobile", width: 150 },
   { label: "客户点位", prop: "tax_point", width: 100 },

@@ -8,6 +8,7 @@ import {
   ids,
   idsStatus,
   id,
+  ChannelList,
   Company,
   SendDoc,
 } from "./types";
@@ -25,19 +26,6 @@ export function getChannelSettlementList(data: keywords) {
     params: data,
   });
 }
-
-// /**
-//  *下载渠道结算列表Excel
-//  *
-//  */
-// export function getChannelSettlementListExcel(params: ids) {
-//   return request({
-//     url: `/adminapi/invoice/get_invoice_list_excel`,
-//     method: "GET",
-//     params,
-//     responseType: "arraybuffer",
-//   });
-// }
 
 /**
  * 渠道结算详情
@@ -88,17 +76,6 @@ export function rebuild(data: id) {
     url: "/adminapi/finance/channel/regeneration",
     method: "post",
     params: data,
-  });
-}
-/**
- *导出待结算佣金任务列表Excel
- */
-export function getChannelToBeSettlementTaskExcel(params: ids) {
-  return request({
-    url: `/adminapi/finance/channel/get_list_excel`,
-    method: "GET",
-    params,
-    responseType: "arraybuffer",
   });
 }
 /**
@@ -169,10 +146,11 @@ export function deleteChannelSettlementDoc(id: number) {
 /**
  * 获取渠道列表
  */
-export function getChannelList(): AxiosPromise {
+export function getChannelList(data: ChannelList): AxiosPromise {
   return request({
     url: "/adminapi/finance/channel/getChannel",
     method: "GET",
+    params: data,
   });
 }
 /**

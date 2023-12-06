@@ -35,6 +35,12 @@
           filterable
         />
       </el-form-item>
+      <el-form-item prop="tax_land_id" label="税地名称">
+        <tax-source-select
+          v-model:taxId="formItem.tax_land_id"
+          @change-tax="handleSearch"
+        />
+      </el-form-item>
       <el-form-item prop="timeData" label="申请日期">
         <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>
@@ -143,6 +149,7 @@ const formItem = reactive({
   timeData: [],
   category_id: [],
   task_type: "",
+  tax_land_id: "",
 });
 const tableData = reactive([]);
 const checkStatusColor = {
@@ -171,6 +178,7 @@ const columnList = [
     fixed: "left",
   },
   { label: "任务名称", prop: "task_name", minWidth: 120, fixed: "left" },
+  { label: "税地名称", prop: "tax_land_name", width: 120 },
   { label: "关联企业", prop: "company_name", minWidth: 120, fixed: "left" },
   { label: "需求人数", prop: "task_attribute.person_count", type: "deep" },
   { label: "行业", prop: "category_name", minWidth: 80 },

@@ -47,6 +47,12 @@
           :props="{ label: 'name', value: 'id' }"
         />
       </el-form-item>
+      <el-form-item prop="tax_land_id" label="税地名称">
+        <tax-source-select
+          v-model:taxId="formItem.tax_land_id"
+          @change-tax="handleSearch"
+        />
+      </el-form-item>
       <el-form-item prop="timeData" label="申请日期">
         <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>
@@ -143,10 +149,9 @@ import {
   getInvoiceInChannel,
   setStatus,
   channelSetStatus,
-  getInvoiceExcel,
 } from "@/api/invoice";
 import { transformTimeRange } from "@/utils";
-import { downloadByData } from "@/utils/download";
+import { downloadByOnlineUrl } from "@/utils/download";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { useRouteParams } from "@/store/modules/routeParams";
@@ -177,6 +182,7 @@ const formItem = reactive({
 });
 const columnList: any[] = reactive([
   { label: "发票任务编号", prop: "invoice_no", width: 110, fixed: "left" },
+  { label: "税地名称", prop: "tax_land_name", width: 120, fixed: "left" },
   {
     label: "发票类目",
     prop: "category_num",
@@ -510,9 +516,7 @@ const handleExcel = async () => {
   params.task_type = props.type;
   params.page = 1;
   params.limit = "9999";
-  const { data } = await getInvoiceExcel(params);
-  downloadByData(data, "发票列表.xlsx");
-  // await getList();
+  await downloadByOnlineUrl("/adminapi/invoice/get_excel", params);
 };
 
 const handleUpload = (cur: any) => {

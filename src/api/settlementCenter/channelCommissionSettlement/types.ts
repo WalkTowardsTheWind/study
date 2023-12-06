@@ -57,10 +57,18 @@ export interface id {
   id: string;
 }
 /**
+ * 税地列表
+ */
+export interface ChannelList {
+  tax_land_id: string;
+}
+/**
  * 渠道结算列表
  */
 export interface Company {
+  tax_land_id: string;
   channel_id: string;
+  settlement_type: string;
 }
 /**
  * 渠道结算列表

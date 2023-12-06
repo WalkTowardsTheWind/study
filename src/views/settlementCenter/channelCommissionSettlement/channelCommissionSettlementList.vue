@@ -53,6 +53,12 @@
           />
         </zxn-select>
       </el-form-item>
+      <el-form-item prop="tax_land_id" label="税地名称">
+        <tax-source-select
+          v-model:taxId="formItem.tax_land_id"
+          @change-tax="handleSearch"
+        />
+      </el-form-item>
       <el-form-item prop="date" label="创建日期">
         <zxn-date-range v-model="formItem.createTimeData" />
       </el-form-item>
@@ -165,6 +171,7 @@ const handleReset = () => {
     paymentTimeData: [],
     page: "",
     limit: "",
+    tax_land_id: "",
   };
   handleSearch();
 };
@@ -206,11 +213,13 @@ const formItem = ref({
   paymentTimeData: [],
   page: "",
   limit: "",
+  tax_land_id: "",
 });
 
 const tableData = reactive([] as any);
 const columnList = [
   { label: "发佣单号", prop: "channel_order_no", width: 110, fixed: "left" },
+  { label: "税地名称", prop: "tax_land_name", width: 120, fixed: "left" },
   {
     label: "状态",
     type: "enum",

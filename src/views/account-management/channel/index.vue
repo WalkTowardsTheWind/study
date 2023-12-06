@@ -65,6 +65,12 @@
           />
         </el-select>
       </el-form-item> -->
+      <el-form-item prop="tax_land_id" label="税地名称">
+        <tax-source-select
+          v-model:taxId="formItem.tax_land_id"
+          @change-tax="handleSearch"
+        />
+      </el-form-item>
       <el-form-item prop="date" label="创建日期" label-width="">
         <zxn-date-range v-model="date" />
       </el-form-item>
@@ -159,6 +165,7 @@ const formItem = reactive({
   // level: "",
   status: "",
   channel_admin_name: "",
+  tax_land_id: "",
 });
 
 const pageInfo = reactive({
@@ -191,6 +198,7 @@ const columnList = [
     fixed: "left",
   },
   { label: "渠道名称", prop: "channel_name", minWidth: 120, fixed: "left" },
+  { label: "税地名称", prop: "tax_land_name", width: 150 },
   { label: "联系人", prop: "contact", minWidth: 200 },
   { label: "联系号码", prop: "contact_phone", minWidth: 150 },
   { label: "渠道等级", prop: "level", minWidth: 120, slot: "level" },
@@ -235,6 +243,7 @@ function handleSearch() {
     channel_admin_name: formItem.channel_admin_name,
     start_time: date.value[0] || "",
     end_time: date.value[1] || "",
+    tax_land_id: formItem.tax_land_id,
     // level: formItem.level,
     status: formItem.status,
     limit: pageInfo.limit,

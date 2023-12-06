@@ -122,13 +122,3 @@ export function signContractOnline(data) {
     data,
   });
 }
-
-// 个人合同下载
-export function downloadPerContract(params) {
-  return request({
-    url: `/adminapi/contract/get_sign_download`,
-    method: "get",
-    params,
-    responseType: "arraybuffer",
-  });
-}

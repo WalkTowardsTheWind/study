@@ -27,11 +27,12 @@
                 </template>
               </el-input>
             </el-form-item>
-            <!-- <el-form-item label="税源地">
-							<el-select v-model="formItem.tax_land_id" placeholder="请选择">
-								<el-option v-for="item in taxLand" :key="item.id" :label="item.tax_land_name" :value="item.id" />
-							</el-select>
-						</el-form-item> -->
+            <el-form-item prop="tax_land_id" label="税地名称">
+              <tax-source-select
+                v-model:taxId="formItem.tax_land_id"
+                @change-tax="handleSearch"
+              />
+            </el-form-item>
             <el-form-item label="充值状态">
               <el-select v-model="formItem.status" placeholder="请选择">
                 <el-option
@@ -113,11 +114,10 @@
 </template>
 
 <script lang="ts" setup>
-import { downloadByData } from "@/utils/download";
+import { downloadByOnlineUrl } from "@/utils/download";
 import { getCategoryList } from "@/api/category";
 import { getLandList } from "@/api/common";
-import { getRechargeTaskList, getRechargeExcel } from "@/api/recharge";
-import router from "@/router";
+import { getRechargeTaskList } from "@/api/recharge";
 import { useRouteParams } from "@/store/modules/routeParams";
 import { isNumber } from "@/utils/is";
 
@@ -175,8 +175,7 @@ const date = ref("");
 const formItem = reactive({
   name: "",
   status: "1",
-  // category_id: "",
-  // tax_land_id: "",
+  tax_land_id: "",
 });
 
 const pageInfo = reactive({
@@ -215,7 +214,7 @@ const columnList = [
     fixed: "left",
   },
   { label: "企业名称", prop: "company_name", minWidth: 120, fixed: "left" },
-  { label: "税源地名称", prop: "tax_land_name", minWidth: 250 },
+  { label: "税地名称", prop: "tax_land_name", width: 120 },
   { label: "税地账户", prop: "bank_account", width: 200 },
   { label: "充值金额", prop: "amount", type: "money", minWidth: 100 },
   { label: "充值时间", prop: "add_time", width: 200 },
@@ -223,12 +222,12 @@ const columnList = [
   // { label: "操作", slot: "operation", fixed: "right", width: 100 },
 ];
 
-const toUpload = async () => {
+const toUpload = () => {
   if (ids.value.length > 0) {
-    const { data } = await getRechargeExcel({
+    downloadByOnlineUrl("/adminapi/finance/recharge/get_excel", {
       ids: ids.value,
+      tax_land_id: formItem.tax_land_id,
     });
-    downloadByData(data, "充值列表.xlsx");
   } else {
     ElMessage({
       type: "info",
@@ -282,7 +281,7 @@ function pageChange(current: any) {
 const ids = ref([]);
 function handleReset() {
   formItem.name = "";
-  // formItem.tax_land_id = "";
+  formItem.tax_land_id = "";
   formItem.status = "";
   date.value = [];
   // formItem.category_id = "";

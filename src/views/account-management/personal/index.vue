@@ -9,6 +9,7 @@
         <el-input
           v-model="formItem.name"
           placeholder="请输入姓名、联系号码、身份证号"
+          clearable
         >
           <template #prefix>
             <i-ep-Search />
@@ -29,6 +30,9 @@
           />
         </el-select>
       </el-form-item>
+      <!--			<el-form-item prop="tax_land_id" label="税地名称">-->
+      <!--				<tax-source-select v-model:taxId="formItem.tax_land_id" />-->
+      <!--			</el-form-item>-->
       <el-form-item prop="date" label="认证时间">
         <zxn-date-range v-model="formItem.date" />
       </el-form-item>
@@ -95,6 +99,7 @@ const formItem = reactive({
   name: "",
   status: "",
   date: [],
+  tax_land_id: "",
 });
 
 const pageInfo = reactive({
@@ -106,6 +111,7 @@ const pageInfo = reactive({
 const tableData = reactive([] as any);
 const columnList = [
   { label: "姓名", prop: "real_name", minWidth: 120 },
+  // { label: "税地名称", prop: "tax_land_name", width: 150 },
   {
     label: "状态",
     prop: "user_status",
