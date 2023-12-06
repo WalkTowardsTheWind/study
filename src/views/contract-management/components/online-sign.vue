@@ -236,7 +236,6 @@ const getTempList = () => {
     page: 1,
     type: props.contract_type,
   }).then((res) => {
-    console.log(res);
     tempList.value = res.data.data;
   });
 };

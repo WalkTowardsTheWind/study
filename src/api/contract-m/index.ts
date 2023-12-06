@@ -122,3 +122,12 @@ export function signContractOnline(data) {
     data,
   });
 }
+
+// 合同更新
+export function updateContract(data) {
+  return request({
+    url: `/adminapi/contract/update`,
+    method: "post",
+    data,
+  });
+}
