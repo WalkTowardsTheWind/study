@@ -1,5 +1,11 @@
 <template>
-  <el-dialog :on="$attrs" class="zxn-dialog" width="600px">
+  <el-dialog
+    :on="$attrs"
+    class="zxn-dialog"
+    width="600px"
+    @close="handleClose"
+    :destroy-on-close="true"
+  >
     {{ coordinate }}
     <cropper-canvas background style="width: 100%; height: 600px">
       <cropper-image :src="props.fileUrl"></cropper-image>
@@ -23,7 +29,9 @@
       <el-button type="primary" @click="handleSubmit" :loading="loading">
         确定
       </el-button>
-      <el-button @click="handleCancel">取消</el-button>
+      <el-button type="info" class="is-cancel" @click="handleCancel"
+        >取消</el-button
+      >
     </template>
   </el-dialog>
 </template>
@@ -37,7 +45,7 @@ const props = defineProps<{
   cropperWidth: number;
   cropperHeight: number;
 }>();
-const emits = defineEmits(["on-success"]);
+const emits = defineEmits(["on-success", "on-cancel"]);
 watch(
   () => props.fileUrl,
   () => {
@@ -72,9 +80,9 @@ const initImage = () => {
   const image = new Image();
   image.src = props.fileUrl;
   cropper = new Cropper(image);
-  selection = cropper.getCropperSelection();
 };
 const handleSubmit = () => {
+  selection = cropper.getCropperSelection();
   selection
     .$toCanvas({
       width: coordinate.width,
@@ -90,5 +98,11 @@ const handleSubmit = () => {
       }, "image/png");
     });
 };
-const handleCancel = () => {};
+const handleClose = () => {
+  const cropperEls = document.querySelectorAll("cropper-canvas");
+  cropperEls[cropperEls.length - 1].remove();
+};
+const handleCancel = () => {
+  emits("on-cancel");
+};
 </script>

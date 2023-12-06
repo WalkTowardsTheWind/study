@@ -29,6 +29,7 @@
     :cropperHeight="height"
     :close-on-click-modal="false"
     @on-success="handleSuccess"
+    @on-cancel="handleCancel"
   />
 </template>
 <script setup lang="ts">
@@ -71,6 +72,9 @@ const handleUploadChange = (event: Event) => {
 const handleSuccess = (src) => {
   visible.value = false;
   emits("update:modelValue", src);
+};
+const handleCancel = () => {
+  visible.value = false;
 };
 const handleDelete = (event: HTMLElement) => {
   emits("update:modelValue", "");

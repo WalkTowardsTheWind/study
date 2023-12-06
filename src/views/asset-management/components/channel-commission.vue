@@ -45,6 +45,7 @@
         :table-data="tableData1"
         :column-list="columnList1"
         :page-info="pageInfo1"
+        @page-change="pageChange"
       >
       </zxn-table>
     </div>
@@ -105,6 +106,12 @@ const handleReset = () => {
   handleSearch();
 };
 
+function pageChange(current: any) {
+  const { page, limit } = current;
+  pageInfo1.limit = limit;
+  pageInfo1.page = page;
+  handleSearch();
+}
 const handleSearch = () => {
   let params = {
     start_time: date.value[0] || "",
@@ -113,6 +120,8 @@ const handleSearch = () => {
     channel_admin: formItem.admin,
     tax_land_id: formItem.tax_land_id,
   };
+  params.page = pageInfo1.page;
+  params.limit = pageInfo1.limit;
   getChannelCommissionList(params).then((res) => {
     tableData1.length = 0;
     tableData1.push(...res.data.data);

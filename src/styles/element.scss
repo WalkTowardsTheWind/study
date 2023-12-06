@@ -24,6 +24,11 @@
     color: #3561e9;
     background: rgb(53 97 233 / 8%);
     border: 1px solid rgb(53 97 233 / 8%);
+    &.is-cancel {
+      color: #999999;
+      border: 1px solid #e5e5e5;
+      background: #e5e5e5;
+    }
   }
 
   &.is-link {
