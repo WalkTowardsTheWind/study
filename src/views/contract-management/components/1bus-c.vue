@@ -135,7 +135,11 @@
       ref="editDialog"
     />
     <!-- 发起签署 -->
-    <zxn-dialog :visible="signVisible" :title="signTitle">
+    <zxn-dialog
+      :visible="signVisible"
+      :title="signTitle"
+      @close-dialog="closeSign"
+    >
       <template #default>
         <el-form v-if="signStep == 1" label-width="auto">
           <el-form-item required label="姓名">
