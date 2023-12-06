@@ -63,16 +63,12 @@
       :column-list="columnList"
       :page-info="pageInfo"
       :loading="loading"
-      hasSelect
+      :hasSelect="['', '0'].includes(formItem.status)"
       :selectable="selectable"
       @page-change="handlePageChange"
     >
       <template #tableTop>
-        <el-dropdown
-          v-if="['', '0'].includes(formItem.status)"
-          trigger="click"
-          @command="handleCommand"
-        >
+        <el-dropdown trigger="click" @command="handleCommand">
           <el-button type="primary" plain>批量操作</el-button>
           <template #dropdown>
             <el-dropdown-menu>
@@ -81,7 +77,12 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        <el-dropdown class="ml-4" trigger="click" @command="handleExport">
+        <el-dropdown
+          v-if="!['', '0'].includes(formItem.status)"
+          class="ml-4"
+          trigger="click"
+          @command="handleExport"
+        >
           <el-button type="primary">导出</el-button>
           <template #dropdown>
             <el-dropdown-menu>
