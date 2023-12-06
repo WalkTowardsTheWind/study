@@ -155,7 +155,7 @@ const handleDownload = async (ids: Array<number>) => {
     ids,
     tax_land_id: formItem.tax_land_id,
   };
-  await downloadByOnlineUrl("/adminapi/invoice/get_excel", params);
+  await downloadByOnlineUrl("/adminapi/invoice/download", params);
 };
 const handleDelete = (row: any) => {
   ElMessageBox({
