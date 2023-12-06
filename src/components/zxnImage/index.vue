@@ -2,7 +2,7 @@
   <div class="zxn-image">
     <div
       class="zxn-image-item"
-      :class="{ 'has-click': targetClick }"
+      :class="{ 'has-click': targetClick, 'mr-[16px]': currentImg.length > 1 }"
       :style="{ width: `${width}px`, height: `${height}px` }"
       v-for="(item, index) in currentImg"
       :key="index"
@@ -22,7 +22,7 @@
       />
       <div class="zxn-image-item-bottom">
         <span @click="handlePreview(index)">预览</span>
-        <span v-if="hasDelete">删除</span>
+        <span v-if="hasDelete" @click.stop="handleDelete(index)">删除</span>
       </div>
       <div
         class="zxn-image-item-ellipsis"
@@ -59,6 +59,7 @@ const props = defineProps({
   targetClick: { type: Boolean, default: false },
   ellipsis: { type: Boolean, default: false },
 });
+const emits = defineEmits(["on-delete"]);
 const filterImg = computed(() => {
   let _imgList = isArray(props.imgList) ? props.imgList : [props.imgList];
   return _imgList.filter(Boolean);
@@ -115,6 +116,9 @@ const handleTarget = (index: number) => {
     handlePreview(index);
   }
 };
+const handleDelete = (index: number) => {
+  emits("on-delete", index);
+};
 </script>
 <style lang="scss" scoped>
 .zxn-image {
@@ -123,7 +127,6 @@ const handleTarget = (index: number) => {
 
   &-item {
     position: relative;
-    margin-right: 16px;
     overflow: hidden;
     font-size: 0;
     border-radius: 8px;
@@ -152,7 +155,7 @@ const handleTarget = (index: number) => {
       height: 25%;
       font-size: 14px;
       font-weight: 600;
-      color: #333;
+      color: #eeeeee;
       background-color: rgb(0 0 0 / 30%);
       transition: bottom 0.2s;
 
