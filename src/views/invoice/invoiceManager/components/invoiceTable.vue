@@ -79,7 +79,7 @@
           </template>
         </el-dropdown>
         <el-dropdown
-          v-if="['', '0'].includes(formItem.status) && !selectionData.length"
+          v-if="!(['', '0'].includes(formItem.status) && selectionData.length)"
           class="ml-4"
           trigger="click"
           @command="handleExport"
