@@ -116,6 +116,7 @@
       :total="_total"
       :page="_page"
       :limit="_limit"
+      :pageSizes="pageSizes"
       @pagination="handlePageChange"
     />
   </div>
@@ -144,6 +145,12 @@ const props = defineProps({
   bottomGap: { type: Number, default: 0 },
   fieldTotal: { type: [String, Function] },
   totalUnit: { type: String, default: "元" },
+  pageSizes: {
+    type: Array as PropType<number[]>,
+    default() {
+      return [10, 20, 30, 50];
+    },
+  },
 });
 const emit = defineEmits([
   "sort-change",

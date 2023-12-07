@@ -70,6 +70,7 @@
       hasSelect
       :selectable="selectable"
       @page-change="handlePageChange"
+      :pageSizes="[10, 20, 30, 50, 200]"
     >
       <template #tableTop>
         <el-dropdown trigger="click" @command="handleCommand">
