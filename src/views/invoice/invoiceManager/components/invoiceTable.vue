@@ -336,7 +336,16 @@ const handleCommand = (type: string) => {
  */
 const handleExport = (command: string | number | object) => {
   if (command == 1) {
-    handleExcel();
+    const selected = table.value.getSelectionRows();
+    const ids = selected.map((it: any) => it.id);
+    if (!ids.length) {
+      return ElMessage({
+        type: "error",
+        message: `请选择数据`,
+      });
+    } else {
+      handleExcel(ids);
+    }
   }
 };
 const handleReject = (ids: number[]) => {
@@ -515,12 +524,16 @@ const handleWithdraw = (ids: number[]) => {
       getList();
     });
 };
-const handleExcel = async () => {
-  const params = transformTimeRange({ ...formItem });
-  params.category_id = params.category_id.pop();
-  params.task_type = props.type;
-  params.page = 1;
-  params.limit = "9999";
+const handleExcel = async (ids: Array<number>) => {
+  // const params = transformTimeRange({ ...formItem });
+  // params.category_id = params.category_id.pop();
+  // params.task_type = props.type;
+  // params.page = 1;
+  // params.limit = "9999";
+  const params = {
+    ids,
+    tax_land_id: formItem.tax_land_id,
+  };
   await downloadByOnlineUrl("/adminapi/invoice/get_excel", params);
 };
 
