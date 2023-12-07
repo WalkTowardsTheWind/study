@@ -57,15 +57,18 @@
         <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>
     </zxn-search>
+    <!-- 111 -->
+    <!-- :hasSelect="['', '0'].includes(formItem.status)" 
+      @selection-change="handleSelect"
+    -->
     <zxn-table
       ref="table"
       :table-data="tableData"
       :column-list="columnList"
       :page-info="pageInfo"
       :loading="loading"
-      :hasSelect="['', '0'].includes(formItem.status)"
+      hasSelect
       :selectable="selectable"
-      @selection-change="handleSelect"
       @page-change="handlePageChange"
     >
       <template #tableTop>
@@ -78,12 +81,8 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        <el-dropdown
-          v-if="!(['', '0'].includes(formItem.status) && selectionData.length)"
-          class="ml-4"
-          trigger="click"
-          @command="handleExport"
-        >
+        <!--  v-if="!(['', '0'].includes(formItem.status) && selectionData.length)" -->
+        <el-dropdown class="ml-4" trigger="click" @command="handleExport">
           <el-button type="primary">导出</el-button>
           <template #dropdown>
             <el-dropdown-menu>
@@ -167,7 +166,7 @@ const industryList = reactive([]);
 const pageInfo = reactive({
   page: 1,
   total: 0,
-  limit: 20,
+  limit: 200,
 });
 const getIndustryList = async () => {
   const { data } = await getTreeList({ type: 2 });
