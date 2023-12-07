@@ -31,7 +31,11 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="企业登录名称">
-              <el-input v-model="formItem.account" :readonly="!isEdit" />
+              <el-input
+                v-model="formItem.account"
+                :readonly="!isEdit"
+                disabled
+              />
             </el-form-item>
             <el-form-item label="法定代表人">
               <el-input v-model="formItem.legal_person" :readonly="!isEdit" />
