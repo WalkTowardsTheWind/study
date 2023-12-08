@@ -103,12 +103,35 @@
               />
             </template>
             <template #refundCertificate="scope">
-              <zxn-image
-                :imgList="scope.row.refund_url"
-                :width="40"
-                :height="40"
-                targetClick
-              />
+              <div
+                class="flex align-items"
+                v-if="[2, 4].includes(scope.row.status)"
+              >
+                <zxn-image
+                  v-if="scope.row.refund_url.length"
+                  :imgList="scope.row.refund_url"
+                  :width="40"
+                  :height="40"
+                  targetClick
+                />
+                <el-button
+                  v-else
+                  type="primary"
+                  link
+                  @click="refund(scope.row.recharge_id)"
+                  >{{
+                    scope.row.status == "2" ? "退款" : "重新上传"
+                  }}</el-button
+                >
+                <el-button
+                  class="m-l-[20px]"
+                  v-if="scope.row.refund_url.length"
+                  type="primary"
+                  link
+                  @click="delImg(scope.row.recharge_id)"
+                  >删除</el-button
+                >
+              </div>
             </template>
             <template #operation="scope">
               <el-button
@@ -138,7 +161,11 @@
 </template>
 
 <script lang="ts" setup>
-import { getCategoryList, uploadRechargeCert } from "@/api/category";
+import {
+  getCategoryList,
+  uploadRechargeCert,
+  deleteRechargeCert,
+} from "@/api/category";
 import { getLandList } from "@/api/common";
 import { getRechargeTaskList } from "@/api/recharge";
 import { useRouteParams } from "@/store/modules/routeParams";
@@ -172,6 +199,21 @@ function gotoUpload() {
       console.log(err);
     });
 }
+const delImg = (id: string) => {
+  ElMessageBox.confirm("是否删除凭证？", "", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    center: true,
+  }).then(() => {
+    deleteRechargeCert(id).then((res: any) => {
+      ElMessage.success({
+        message: res.msg,
+      });
+      handleSearch();
+      // console.log(res);
+    });
+  });
+};
 //
 const tabsList = [
   {
@@ -278,8 +320,8 @@ const columnList = computed(() => {
     { label: "充值金额", prop: "amount", type: "money", minWidth: 100 },
     { label: "充值时间", prop: "add_time", width: 200 },
     { label: "充值凭证", slot: "certificate", minWidth: 200 },
-    { label: "退款凭证", slot: "refundCertificate", minWidth: 200 },
-    { label: "操作", slot: "operation", fixed: "right", width: 100 },
+    { label: "退款凭证", slot: "refundCertificate", minWidth: 250 },
+    // { label: "操作", slot: "operation", fixed: "right", width: 100 },
   ];
 });
 // 退款

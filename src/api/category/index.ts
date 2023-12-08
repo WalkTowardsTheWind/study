@@ -94,3 +94,10 @@ export function uploadRechargeCert(data: any) {
     data,
   });
 }
+// 删除凭证
+export function deleteRechargeCert(id: any) {
+  return request({
+    url: `/adminapi/finance/recharge/del_cert/${id}`,
+    method: "get",
+  });
+}
