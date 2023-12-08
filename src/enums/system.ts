@@ -17,3 +17,7 @@ export enum userStatus {
   "关闭" = 0,
   "启用",
 }
+
+export enum oemType {
+  "全贴牌",
+}

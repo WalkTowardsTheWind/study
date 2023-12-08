@@ -119,7 +119,7 @@ export function isPwd(pwd: string): boolean {
  */
 export function isImage(value: string) {
   const newValue = value.split("?")[0];
-  const IMAGE_REGEXP = /\.(jpeg|jpg|gif|png|svg|webp|jfif|bmp|dpg)/i;
+  const IMAGE_REGEXP = /\.(jpeg|jpg|gif|png|svg|webp|jfif|bmp|dpg|ico)/i;
   return IMAGE_REGEXP.test(newValue);
 }
 
