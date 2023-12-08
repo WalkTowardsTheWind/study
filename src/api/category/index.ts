@@ -82,3 +82,22 @@ export function deleteCategory(id: string) {
     method: "delete",
   });
 }
+/**
+ * 上传退款凭证
+ * @param data
+ * @returns
+ */
+export function uploadRechargeCert(data: any) {
+  return request({
+    url: `/adminapi/finance/recharge/upload_cert`,
+    method: "post",
+    data,
+  });
+}
+// 删除凭证
+export function deleteRechargeCert(id: any) {
+  return request({
+    url: `/adminapi/finance/recharge/del_cert/${id}`,
+    method: "get",
+  });
+}

@@ -533,6 +533,8 @@ const handleExcel = async (ids: Array<number>) => {
   const params = {
     ids,
     tax_land_id: formItem.tax_land_id,
+    page: 1,
+    limit: "9999",
   };
   await downloadByOnlineUrl("/adminapi/invoice/get_excel", params);
 };

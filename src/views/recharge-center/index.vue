@@ -34,7 +34,11 @@
               />
             </el-form-item>
             <el-form-item label="充值状态">
-              <el-select v-model="formItem.status" placeholder="请选择">
+              <el-select
+                v-model="formItem.status"
+                placeholder="请选择"
+                @change="handleSearch"
+              >
                 <el-option
                   v-for="item in taskStatus"
                   :key="item.value"
@@ -93,17 +97,49 @@
             <template #certificate="scope">
               <zxn-image
                 :imgList="scope.row.certificate"
-                width="40"
-                height="40"
+                :width="40"
+                :height="40"
                 targetClick
               />
             </template>
+            <template #refundCertificate="scope">
+              <div
+                class="flex align-items"
+                v-if="[2, 4].includes(scope.row.status)"
+              >
+                <zxn-image
+                  v-if="scope.row.refund_url.length"
+                  :imgList="scope.row.refund_url"
+                  :width="40"
+                  :height="40"
+                  targetClick
+                />
+                <el-button
+                  v-else
+                  type="primary"
+                  link
+                  @click="refund(scope.row.recharge_id)"
+                  >{{
+                    scope.row.status == "2" ? "退款" : "重新上传"
+                  }}</el-button
+                >
+                <el-button
+                  class="m-l-[20px]"
+                  v-if="scope.row.refund_url.length"
+                  type="primary"
+                  link
+                  @click="delImg(scope.row.recharge_id)"
+                  >删除</el-button
+                >
+              </div>
+            </template>
             <template #operation="scope">
               <el-button
+                v-if="[2].includes(scope.row.status)"
                 link
                 type="primary"
-                @click="toUpload(scope.row.recharge_id)"
-                >导出</el-button
+                @click="refund(scope.row.recharge_id)"
+                >退款</el-button
               >
             </template>
           </zxn-table>
@@ -111,18 +147,74 @@
       </template>
     </zxn-tabs>
   </zxn-plan>
+  <el-dialog
+    v-model="visible"
+    title="上传退款凭证"
+    :before-close="dialogClose"
+    width="30%"
+  >
+    <multi-upload v-model="fileList" :limit="3"></multi-upload>
+    <el-button class="mt-[20px]" type="primary" @click="gotoUpload"
+      >开始上传</el-button
+    >
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
-import { downloadByOnlineUrl } from "@/utils/download";
-import { getCategoryList } from "@/api/category";
+import {
+  getCategoryList,
+  uploadRechargeCert,
+  deleteRechargeCert,
+} from "@/api/category";
 import { getLandList } from "@/api/common";
 import { getRechargeTaskList } from "@/api/recharge";
 import { useRouteParams } from "@/store/modules/routeParams";
 import { isNumber } from "@/utils/is";
-
 const { proxy } = getCurrentInstance() as any;
-
+// 上传退款凭证
+const visible = ref(false);
+const fileList = ref([]);
+const upload_id = ref("");
+function dialogClose() {
+  fileList.value = [];
+  visible.value = false;
+}
+function gotoUpload() {
+  let params = {
+    id: upload_id.value,
+    refund_url: [...fileList.value],
+  };
+  uploadRechargeCert(params)
+    .then((res: any) => {
+      ElMessage.success({
+        message: res.msg,
+      });
+      visible.value = false;
+      fileList.value = [];
+      setTimeout(() => {
+        handleSearch();
+      }, 500);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+const delImg = (id: string) => {
+  ElMessageBox.confirm("是否删除凭证？", "", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    center: true,
+  }).then(() => {
+    deleteRechargeCert(id).then((res: any) => {
+      ElMessage.success({
+        message: res.msg,
+      });
+      handleSearch();
+      // console.log(res);
+    });
+  });
+};
+//
 const tabsList = [
   {
     name: "1",
@@ -151,6 +243,10 @@ const taskStatus = [
     label: "服务费退回 ",
     value: "3",
   },
+  {
+    label: "已退款 ",
+    value: "4",
+  },
 ];
 const total_amount = ref();
 
@@ -174,7 +270,7 @@ const date = ref("");
 
 const formItem = reactive({
   name: "",
-  status: "1",
+  status: "",
   tax_land_id: "",
 });
 
@@ -185,64 +281,60 @@ const pageInfo = reactive({
 });
 
 const tableData = reactive([] as any);
-const columnList = [
-  { label: "充值单号", prop: "recharge_order_no", width: 110, fixed: "left" },
-  {
-    label: "状态",
-    prop: "status",
-    type: "enum",
-    path: "accountEnum.taskType",
-    color: {
-      0: {
-        color: "#36C5F3",
-        background: "#dff6fd",
+const columnList = computed(() => {
+  return [
+    { label: "充值单号", prop: "recharge_order_no", width: 110, fixed: "left" },
+    {
+      label: "状态",
+      prop: "status",
+      type: "enum",
+      path: "accountEnum.taskType",
+      color: {
+        0: {
+          color: "#36C5F3",
+          background: "#dff6fd",
+        },
+        1: {
+          color: "#366FF3",
+          background: "#dfe8fd",
+        },
+        2: {
+          color: "#F35135",
+          background: "#FDE3DF",
+        },
+        3: {
+          color: "#333",
+          background: "#dedede",
+        },
+        4: {
+          color: "#fff",
+          background: "#999999",
+        },
       },
-      1: {
-        color: "#366FF3",
-        background: "#dfe8fd",
-      },
-      2: {
-        color: "#F35135",
-        background: "#FDE3DF",
-      },
-      3: {
-        color: "#333",
-        background: "#dedede",
-      },
+      width: 120,
+      fixed: "left",
     },
-    width: 120,
-    fixed: "left",
-  },
-  { label: "企业名称", prop: "company_name", minWidth: 120, fixed: "left" },
-  { label: "税地名称", prop: "tax_land_name", width: 120 },
-  { label: "税地账户", prop: "bank_account", width: 200 },
-  { label: "充值金额", prop: "amount", type: "money", minWidth: 100 },
-  { label: "充值时间", prop: "add_time", width: 200 },
-  { label: "充值凭证", slot: "certificate", minWidth: 200 },
-  // { label: "操作", slot: "operation", fixed: "right", width: 100 },
-];
-
-const toUpload = () => {
-  if (ids.value.length > 0) {
-    downloadByOnlineUrl("/adminapi/finance/recharge/get_excel", {
-      ids: ids.value,
-      tax_land_id: formItem.tax_land_id,
-    });
-  } else {
-    ElMessage({
-      type: "info",
-      message: "请先选择充值单",
-    });
-  }
-  // await handleSearch();
+    { label: "企业名称", prop: "company_name", minWidth: 120, fixed: "left" },
+    { label: "税地名称", prop: "tax_land_name", width: 120 },
+    { label: "税地账户", prop: "bank_account", width: 200 },
+    { label: "充值金额", prop: "amount", type: "money", minWidth: 100 },
+    { label: "充值时间", prop: "add_time", width: 200 },
+    { label: "充值凭证", slot: "certificate", minWidth: 200 },
+    { label: "退款凭证", slot: "refundCertificate", minWidth: 250 },
+    // { label: "操作", slot: "operation", fixed: "right", width: 100 },
+  ];
+});
+// 退款
+const refund = (id: number) => {
+  visible.value = true;
+  upload_id.value = String(id);
 };
 /**
  * 导出批量操作
  */
 const handleExport = (command: string | number | object) => {
-  if (command == 1) {
-    toUpload();
-  }
+  // if (command == 1) {
+  // }
 };
 
 function handleSearch() {
