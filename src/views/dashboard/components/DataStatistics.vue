@@ -36,7 +36,7 @@
           {{ chooseTime[0] }}-{{ chooseTime[1] }}
         </div>
       </div>
-      <div class="data-statistics-card">
+      <div class="data-statistics-card mb-[12px]">
         <statistics-card
           v-for="item in statistics"
           :key="item.title"

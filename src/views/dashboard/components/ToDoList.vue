@@ -22,10 +22,32 @@ import { workbench } from "@/api/dashboard";
 import { useRouteParams } from "@/store/modules/routeParams";
 import { useRouter } from "vue-router";
 const router = useRouter();
-const statisticsList: any[] = reactive([]);
+const statisticsList: any[] = reactive([
+  {
+    title: "待审核任务",
+    count: 0,
+    img: new URL(`@/assets/dashboard/toDo.png`, import.meta.url).href,
+  },
+  {
+    title: "充值订单",
+    count: 0,
+    img: new URL(`@/assets/dashboard/toDo2.png`, import.meta.url).href,
+  },
+  {
+    title: "结算订单",
+    count: 0,
+    img: new URL(`@/assets/dashboard/toDo3.png`, import.meta.url).href,
+  },
+  {
+    title: "开票申请",
+    count: 0,
+    img: new URL(`@/assets/dashboard/toDo4.png`, import.meta.url).href,
+  },
+]);
 
 const initData = async () => {
   const { data } = await workbench();
+  statisticsList.length = 0;
   statisticsList.push(
     {
       title: "待审核任务",

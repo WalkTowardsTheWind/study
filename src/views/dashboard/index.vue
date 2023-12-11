@@ -16,7 +16,7 @@ import DataStatistics from "./components/DataStatistics.vue";
   display: flex;
   justify-content: space-between;
   height: 100%;
-  padding: 24px;
+  padding: 24px 18px 24px 24px;
   &-left {
     flex: 1 auto;
   }
