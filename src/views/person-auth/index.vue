@@ -199,6 +199,13 @@ const columnList = [
     minWidth: 200,
   },
   {
+    label: "认证规则",
+    prop: "auth_type",
+    type: "enum",
+    path: "personManagementEnum.auth_type",
+    minWidth: 330,
+  },
+  {
     label: "备注",
     prop: "reason",
     minWidth: 300,
