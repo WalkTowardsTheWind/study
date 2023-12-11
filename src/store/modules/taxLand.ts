@@ -26,8 +26,6 @@ export const useStore = defineStore("taxLand", {
       this.auth_type = [];
       getTaxlandDetail(tax_land_id)
         .then((res) => {
-          console.log(res);
-
           const { certification_rules: a_type, signing_rules: s_type } =
             res.data.info;
           this.S_T.forEach((i) => {

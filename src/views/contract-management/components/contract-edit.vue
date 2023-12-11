@@ -89,6 +89,8 @@ const emit = defineEmits(["edit-close"]);
 
 const closeEdit = (formI) => {
   formI.resetFields();
+  console.log(formItem);
+
   emit("edit-close", false);
 };
 

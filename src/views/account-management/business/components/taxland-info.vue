@@ -49,30 +49,33 @@
             placeholder="请选择"
             v-model="state.formItem.tax_land_id"
             :disabled="state.dialogType == 'edit'"
+            value-key="id"
             @change="selecTaxland"
           >
             <el-option
               v-for="(item, index) in taxLandOption"
               :key="index"
-              :value="item.id"
+              :value="item"
               :label="item.tax_land_name"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="第三方账户">
-          <el-input
-            placeholder="请输入"
-            v-model="state.formItem.third_user_name"
-          >
-          </el-input>
-        </el-form-item>
-        <el-form-item label="第三方密码">
-          <el-input
-            placeholder="请输入"
-            v-model="state.formItem.third_password"
-          >
-          </el-input>
-        </el-form-item>
+        <template v-if="state.formItem.tax_land_type == 1">
+          <el-form-item label="第三方账户">
+            <el-input
+              placeholder="请输入"
+              v-model="state.formItem.third_user_name"
+            >
+            </el-input>
+          </el-form-item>
+          <el-form-item label="第三方密码">
+            <el-input
+              placeholder="请输入"
+              v-model="state.formItem.third_password"
+            >
+            </el-input>
+          </el-form-item>
+        </template>
         <el-form-item label="客户点位" prop="tax_point">
           <el-input placeholder="请输入" v-model="state.formItem.tax_point">
             <template #append>%</template>
@@ -111,7 +114,7 @@
           <el-button type="primary" @click="taxLandConfirm(formItem)"
             >确认</el-button
           >
-          <el-button type="info" @click="cancelClick">取消</el-button>
+          <el-button type="primary" plain @click="cancelClick">取消</el-button>
         </div>
       </el-form>
     </el-dialog>
@@ -190,6 +193,7 @@ const state = reactive({
     id: "",
     company_id: "",
     tax_land_id: "",
+    tax_land_type: 0,
     third_user_name: "",
     third_password: "",
     tax_point: "",
@@ -268,6 +272,7 @@ const taxLandClick = (active: string, item?: any) => {
     state.dialogType = active;
     state.formItem.id = "";
     state.formItem.tax_land_id = "";
+    state.formItem.tax_land_type = 0;
     state.formItem.company_id = "";
     state.formItem.tax_point = "";
     state.formItem.sign_type = "";
@@ -279,19 +284,19 @@ const taxLandClick = (active: string, item?: any) => {
     state.dialogType = active;
     state.formItem.id = item.id;
     state.formItem.company_id = item.company_id;
-    state.formItem.tax_land_id = item.tax_land_id;
-    selecTaxland(item.tax_land_id);
+    state.formItem.tax_land_id = item.tax_land_name;
+    selecTaxland({ id: item.tax_land_id, tax_land_type: item.tax_land_type });
     state.formItem.tax_point = item.tax_point;
     state.formItem.sign_type = item.sign_type;
     state.formItem.auth_type = item.auth_type;
   }
 };
 // 选择税地后才有对应规则
-const selecTaxland = (tax_land_id: string) => {
+const selecTaxland = ({ id, tax_land_type }) => {
   state.formItem.auth_type = "";
   state.formItem.sign_type = "";
-
-  taxLandStore.updateTaxLandList(tax_land_id);
+  taxLandStore.updateTaxLandList(id);
+  state.formItem.tax_land_type = tax_land_type;
 
   auth_type.value = taxLandStore.auth_type;
   sign_type.value = taxLandStore.sign_type;
