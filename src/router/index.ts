@@ -58,6 +58,13 @@ export const constantRoutes: RouteRecordRaw[] = [
         name: "business-account",
         meta: { title: "账户中心", icon: "account" },
       },
+      // 人员认证
+      {
+        path: "person-auth",
+        component: () => import("@/views/person-auth/index.vue"),
+        name: "person-auth",
+        meta: { title: "人员认证", icon: "account" },
+      },
       {
         path: "business-account-detail",
         component: () =>
