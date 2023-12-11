@@ -21,6 +21,12 @@
       <el-form-item label="授权标识" prop="web_mark">
         <el-input v-model="formItem.web_mark" />
       </el-form-item>
+      <el-form-item label="负责人" prop="head_name">
+        <el-input v-model="formItem.head_name" />
+      </el-form-item>
+      <el-form-item label="负责人电话" prop="head_phone">
+        <el-input v-model="formItem.head_phone" />
+      </el-form-item>
       <el-form-item label="是否显示客服" prop="is_show">
         <el-switch
           v-model="formItem.is_show"
@@ -84,6 +90,10 @@ const rules = reactive<FormRules>({
   left_small_icon: [
     { required: true, message: "请上传左上角小图标", trigger: "change" },
   ],
+  head_name: [{ required: true, message: "请输入负责人", trigger: "change" }],
+  head_phone: [
+    { required: true, message: "请输入负责人电话", trigger: "change" },
+  ],
 });
 const formItem = reactive({
   id: "",
@@ -96,6 +106,8 @@ const formItem = reactive({
   web_icon: "",
   left_big_icon: "",
   left_small_icon: "",
+  head_name: "",
+  head_phone: "",
 });
 const visible = ref(false);
 const init = (editForm) => {

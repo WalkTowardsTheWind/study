@@ -90,6 +90,8 @@ const columnList = [
     path: "system.oemType",
     minWidth: 120,
   },
+  { label: "负责人", prop: "head_name", width: 120 },
+  { label: "负责人电话", prop: "head_phone", width: 160 },
   { label: "新增时间", prop: "add_time", width: 180 },
   { label: "操作", slot: "operation", fixed: "right", width: 120 },
 ];
