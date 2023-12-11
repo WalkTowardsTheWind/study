@@ -192,7 +192,7 @@ const state = reactive({
   formItem: {
     id: "",
     company_id: "",
-    tax_land_id: "",
+    tax_land_id: "" as any,
     tax_land_type: 0,
     third_user_name: "",
     third_password: "",
@@ -334,7 +334,16 @@ const taxLandConfirm = async (formEl: FormInstance) => {
     if (!formEl) return;
     await formEl.validate((valid, fields) => {
       if (valid) {
-        createAccountTaxLand(state.formItem).then((res) => {
+        let params = {
+          company_id: state.formItem.company_id,
+          tax_land_id: state.formItem.tax_land_id.id,
+          third_user_name: state.formItem.third_user_name,
+          third_password: state.formItem.third_password,
+          tax_point: state.formItem.tax_point,
+          auth_type: state.formItem.auth_type,
+          sign_type: state.formItem.sign_type,
+        };
+        createAccountTaxLand(params).then((res) => {
           ElMessage({
             message: "新建税地成功",
             type: "success",
@@ -350,7 +359,16 @@ const taxLandConfirm = async (formEl: FormInstance) => {
   if (state.dialogType == "edit") {
     await formEl.validate((valid, fields) => {
       if (valid) {
-        editAccountTaxLand(state.formItem).then((res) => {
+        let params = {
+          company_id: state.formItem.company_id,
+          tax_land_id: state.formItem.tax_land_id.id,
+          third_user_name: state.formItem.third_user_name,
+          third_password: state.formItem.third_password,
+          tax_point: state.formItem.tax_point,
+          auth_type: state.formItem.auth_type,
+          sign_type: state.formItem.sign_type,
+        };
+        editAccountTaxLand(params).then((res) => {
           ElMessage({
             message: "编辑税地成功",
             type: "success",
