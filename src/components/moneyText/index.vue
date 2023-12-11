@@ -1,8 +1,10 @@
 <template>
   <div class="money-text" :class="{ slipLine, ellipsis }">
-    <span :style="{ fontSize: `${markSize}px`, color: markColor }">{{
-      mark
-    }}</span>
+    <span
+      v-if="showMark"
+      :style="{ fontSize: `${markSize}px`, color: markColor }"
+      >{{ mark }}</span
+    >
     <span
       :style="{
         fontSize: `${moneySize}px`,
@@ -23,6 +25,10 @@ defineProps({
   mark: {
     type: String,
     default: "¥",
+  },
+  showMark: {
+    type: Boolean,
+    default: true,
   },
   markSize: {
     type: [String, Number],
