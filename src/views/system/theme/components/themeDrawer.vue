@@ -124,12 +124,15 @@ const init = (editForm) => {
       formItem.web_icon = editForm.web_icon;
       formItem.left_big_icon = editForm.left_big_icon;
       formItem.left_small_icon = editForm.left_small_icon;
+      formItem.head_name = editForm.head_name;
+      formItem.head_phone = editForm.head_phone;
     }
   });
 };
 const form = ref();
 const handleClose = () => {
   form.value.resetFields();
+  formItem.id = "";
 };
 const loading = ref(false);
 const handleSubmit = () => {

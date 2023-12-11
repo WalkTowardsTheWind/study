@@ -42,7 +42,7 @@
         </template>
       </zxn-table>
     </div>
-    <theme-drawer ref="themeDrawerRef" @update="handlePageChange" />
+    <theme-drawer ref="themeDrawerRef" @update="getList" />
   </zxn-plan>
 </template>
 <script setup lang="ts">
