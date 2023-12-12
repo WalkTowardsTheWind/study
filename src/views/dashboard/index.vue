@@ -4,12 +4,15 @@
       <to-do-list />
       <data-statistics class="mt-[24px]" />
     </div>
-    <div class="dashboard-right"></div>
+    <div class="dashboard-right">
+      <base-info />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
 import ToDoList from "./components/ToDoList.vue";
 import DataStatistics from "./components/DataStatistics.vue";
+import BaseInfo from "./components/BaseInfo.vue";
 </script>
 <style lang="scss" scoped>
 .dashboard {
