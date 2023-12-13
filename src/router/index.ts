@@ -557,6 +557,20 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
+  // 下载中心
+  {
+    path: "/download",
+    component: Layout,
+    meta: { title: "下载中心", icon: "download", code: "xzzx" },
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/download-center/index.vue"),
+        name: "download-center",
+        meta: { title: "下载列表", icon: "download", code: "xzlb" },
+      },
+    ],
+  },
 ];
 
 /**

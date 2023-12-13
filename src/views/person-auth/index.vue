@@ -44,6 +44,7 @@
       <zxn-table
         :table-data="tableData"
         ref="table"
+        :loading="loading"
         :column-list="columnList"
         hasSelect
         @selection-change="handleSelect"
@@ -107,6 +108,7 @@ import { getAuthList } from "@/api/person";
 import { downloadByOnlineUrl } from "@/utils/download";
 import router from "@/router";
 
+const loading = ref(false);
 const tabslist = [
   {
     name: "1",
@@ -247,6 +249,7 @@ function handleSelect(arr) {
 }
 
 function handleSearch() {
+  loading.value = true;
   let params = {
     name: formItem.name,
     status: formItem.status,
@@ -257,6 +260,7 @@ function handleSearch() {
   };
   tableData.length = 0;
   getAuthList(params).then((res) => {
+    loading.value = false;
     tableData.push(...res.data.data);
     pageInfo.total = res.data.total;
   });
