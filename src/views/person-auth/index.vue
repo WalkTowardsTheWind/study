@@ -303,6 +303,7 @@ const handleExport = (command: string | number | object) => {
     handleExportDoc();
   }
 };
+
 handleSearch();
 </script>
 

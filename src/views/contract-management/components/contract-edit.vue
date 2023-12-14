@@ -4,6 +4,7 @@
     :visible="visible"
     top="10"
     width="80vw"
+    :loading="btnLoading"
     @close-dialog="closeEdit(formItemRef)"
     @confirm-dialog="submit(formItemRef)"
   >
@@ -145,8 +146,9 @@ const getDetailById = (id) => {
     ];
   });
 };
-
+const btnLoading = ref(false);
 const submit = async (formI) => {
+  btnLoading.value = true;
   if (!formI) return;
   await formI.validate((valid, fields) => {
     if (valid) {
@@ -157,9 +159,14 @@ const submit = async (formI) => {
         effective_end_time: formItem.date[1] ?? "",
         fields: formItem.fields,
       };
-      updateContract(params).then(() => {
-        ElMessage.success("更新成功");
-        emit("edit-close", false, true);
+      formItem.contract_url = "";
+      updateContract(params).then((res) => {
+        setTimeout(() => {
+          btnLoading.value = false;
+          formItem.contract_url = res.data.url;
+          ElMessage.success("更新成功");
+          emit("edit-close", true, true);
+        }, 200);
       });
     } else {
       console.log("error submit!", fields);

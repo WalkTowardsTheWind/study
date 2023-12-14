@@ -11,7 +11,9 @@
       <slot />
       <slot name="bottom-btn" v-if="hasBottomBtn">
         <div class="flex align-center justify-center m-y-[10px]">
-          <el-button type="primary" @click="handleConfirm">确认</el-button>
+          <el-button :loading="loading" type="primary" @click="handleConfirm"
+            >确认</el-button
+          >
           <el-button type="primary" plain @click="handleClose">取消</el-button>
         </div>
       </slot>
@@ -39,6 +41,10 @@ defineProps({
   hasBottomBtn: {
     type: Boolean,
     default: () => true,
+  },
+  loading: {
+    type: Boolean,
+    default: () => false,
   },
 });
 
