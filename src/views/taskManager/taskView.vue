@@ -133,13 +133,21 @@
         <!--        />-->
       </div>
     </div>
+    <zxn-bottom-btn v-if="formItem.status == 1">
+      <el-button type="primary" @click="handleFulfill($route.query.id)"
+        >通过</el-button
+      >
+      <el-button type="primary" plain @click="handleReject($route.query.id)"
+        >驳回</el-button
+      >
+    </zxn-bottom-btn>
   </zxn-plan>
 </template>
 <script setup lang="ts">
 import type { Ref } from "vue";
-import { getTaskView } from "@/api/task";
+import { getTaskView, setTaskStatus } from "@/api/task";
 import { useRoute } from "vue-router";
-import { isNumber } from "@/utils/is";
+import { isArray, isNumber } from "@/utils/is";
 import { ElLoading } from "element-plus";
 import MemberTable from "./components/MemberTable.vue";
 
@@ -260,6 +268,72 @@ const getView = async () => {
     loading.close();
   }
 };
+const handleFulfill = (id: number | number[]) => {
+  ElMessageBox({
+    title: "",
+    message: h("p", null, `确定通过该任务`),
+    showCancelButton: true,
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    beforeClose: async (
+      action: string,
+      instance: { confirmButtonLoading: boolean },
+      done: () => void
+    ) => {
+      if (action === "confirm") {
+        instance.confirmButtonLoading = true;
+        const params = {
+          ids: isArray(id) ? id : [id],
+          status: 3,
+        };
+        await setTaskStatus(params);
+        instance.confirmButtonLoading = false;
+        done();
+      } else {
+        done();
+      }
+    },
+  }).then(() => {
+    ElMessage({
+      type: "success",
+      message: `通过成功`,
+    });
+    getView();
+  });
+};
+const handleReject = (id: number | number[]) => {
+  ElMessageBox.prompt("", "驳回原因", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    inputErrorMessage: "请输入驳回原因",
+    beforeClose: async (
+      action: string,
+      instance: { confirmButtonLoading: boolean; inputValue: string },
+      done: () => void
+    ) => {
+      if (action === "confirm") {
+        instance.confirmButtonLoading = true;
+        const params = {
+          ids: isArray(id) ? id : [id],
+          status: 2,
+          reject_reason: instance.inputValue,
+        };
+        await setTaskStatus(params);
+        instance.confirmButtonLoading = false;
+        done();
+      } else {
+        done();
+      }
+    },
+  }).then(() => {
+    ElMessage({
+      type: "success",
+      message: "驳回成功",
+    });
+    getView();
+  });
+};
+
 onMounted(() => {
   getView();
 });
