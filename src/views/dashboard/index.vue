@@ -6,6 +6,7 @@
     </div>
     <div class="dashboard-right">
       <base-info />
+      <notice-message class="mt-[24px]" />
     </div>
   </div>
 </template>
@@ -13,6 +14,7 @@
 import ToDoList from "./components/ToDoList.vue";
 import DataStatistics from "./components/DataStatistics.vue";
 import BaseInfo from "./components/BaseInfo.vue";
+import NoticeMessage from "@/views/dashboard/components/NoticeMessage.vue";
 </script>
 <style lang="scss" scoped>
 .dashboard {

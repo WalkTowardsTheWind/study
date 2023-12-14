@@ -145,7 +145,7 @@ const dateTrend = ref<HTMLDivElement>();
 onMounted(() => {
   const { bottom } = (dateTrend as any).value.getBoundingClientRect();
   boxHeight.value =
-    window.innerHeight - bottom < 360 ? 360 : window.innerHeight - bottom;
+    window.innerHeight - bottom < 356 ? 356 : window.innerHeight - bottom;
   nextTick(() => {
     chart = echarts.init(dateTrend.value as HTMLDivElement);
     chartInits();

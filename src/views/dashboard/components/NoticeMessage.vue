@@ -1,51 +1,78 @@
 <template>
-  <div ref="noticeMessage" class="notice-message">
-    <div class="notice-message-header">
-      <span class="notice-message-header-title">系统通知</span>
-      <span class="notice-message-header-more" @click="handleMore">更多></span>
+  <dashboard-card title="系统通知">
+    <template #header-right>
+      <div class="look-more">
+        <span class="look-more-text">查看更多</span>
+        <el-icon size="14" color="#808080">
+          <i-ep-arrow-right />
+        </el-icon>
+      </div>
+    </template>
+    <div class="notice-message">
+      <div class="notice-message-switch">
+        <div
+          class="notice-message-switch-item"
+          :class="{ active: type === 1 }"
+          @click="type = 1"
+        >
+          <div class="notice-message-switch-item-text">待办通知</div>
+          <span class="notice-message-switch-item-tip">92</span>
+        </div>
+        <div
+          class="notice-message-switch-item"
+          :class="{ active: type === 2 }"
+          @click="type = 2"
+        >
+          <div class="notice-message-switch-item-text">通知消息</div>
+          <span class="notice-message-switch-item-tip">2</span>
+        </div>
+        <span class="selection"></span>
+      </div>
     </div>
     <div
+      ref="noticeMessage"
+      class="message-box"
       :style="{
         height: `${boxHeight}px`,
-        background: '#fff',
         position: 'relative',
       }"
     >
-      <!--      <el-scrollbar ref="scrollbar" wrap-class="scrollbar-wrapper">-->
-      <!--        <TransitionGroup name="message-list" v-infinite-scroll="load" tag="div">-->
-      <!--          <div-->
-      <!--            class="notice-message-item"-->
-      <!--            v-for="item in tableData"-->
-      <!--            :key="item.id"-->
-      <!--          >-->
-      <!--            <div class="notice-message-item-type">-->
-      <!--              <div class="notice-message-item-type-icon"></div>-->
-      <!--              <div class="notice-message-item-type-text text-ellipsis">-->
-      <!--                {{ item.title }}-->
-      <!--              </div>-->
-      <!--            </div>-->
-      <!--            <div class="notice-message-item-content text-ellipsis-3">-->
-      <!--              {{ item.content }}-->
-      <!--            </div>-->
-      <!--            <div class="notice-message-item-btn">-->
-      <!--              <el-button plain type="primary" @click="handleGoRouter(item)"-->
-      <!--                >立刻处理</el-button-->
-      <!--              >-->
-      <!--            </div>-->
-      <!--          </div>-->
-      <!--        </TransitionGroup>-->
-      <!--      </el-scrollbar>-->
-      <empty-box />
+      <el-scrollbar
+        ref="scrollbar"
+        wrap-class="scrollbar-wrapper"
+        v-loading="false"
+      >
+        <TransitionGroup name="message-list" v-infinite-scroll="load" tag="div">
+          <div
+            class="notice-message-item"
+            v-for="item in tableData"
+            :key="item.id"
+          >
+            <div class="notice-message-item-head">
+              <div class="notice-message-item-head-title text-ellipsis">
+                {{ item.title }}
+              </div>
+              <div class="notice-message-item-head-btn">
+                <span>稍后提醒</span>
+                <span>立刻处理</span>
+              </div>
+            </div>
+            <div class="notice-message-item-content text-ellipsis-3">
+              {{ item.content }}
+            </div>
+          </div>
+        </TransitionGroup>
+      </el-scrollbar>
     </div>
-  </div>
+  </dashboard-card>
 </template>
 <script setup lang="ts">
+import DashboardCard from "@/views/dashboard/components/DashboardCard.vue";
 import { notifyIndex, notifyView } from "@/api/message";
 import { useRouter } from "vue-router";
 import { useRouteParams } from "@/store/modules/routeParams";
+const type = ref(1);
 
-const noticeMessage = ref<HTMLDivElement>();
-let boxHeight = ref(0);
 const tableData = reactive([]);
 const pageInfo = {
   page: 0,
@@ -85,6 +112,9 @@ const routerName = {
   4: "invoiceManager",
   5: "taxLandManagement",
 };
+
+const noticeMessage = ref<HTMLDivElement>();
+let boxHeight = ref(0);
 const handleGoRouter = (item: { type: number; target_id: number }) => {
   pushParams(routerName[item.type], { status: item.target_id });
   router.push({ name: routerName[item.type] });
@@ -92,80 +122,172 @@ const handleGoRouter = (item: { type: number; target_id: number }) => {
 };
 onMounted(() => {
   setTimeout(() => {
-    const parentHeight = noticeMessage.value.offsetParent.clientHeight;
-    const offTop = noticeMessage.value.offsetTop;
-    boxHeight.value = parentHeight - offTop - 20;
+    const { bottom } = (noticeMessage as any).value.getBoundingClientRect();
+    boxHeight.value =
+      window.innerHeight - bottom - 24 < 356
+        ? 356
+        : window.innerHeight - bottom - 24;
     load();
   });
 });
 </script>
 <style lang="scss" scoped>
-.message-list {
-}
-.message-list-enter-active,
-.message-list-leave-active {
-  transition: all 0.5s ease;
-}
-.message-list-enter-from,
-.message-list-leave-to {
-  opacity: 0;
-  transform: translateX(340px);
-}
-.notice-message {
-  margin-top: 30px;
-
-  &-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #333;
-
-    &-more {
-      cursor: pointer;
+.look-more {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  &:hover {
+    .look-more-text {
+      color: #356ff3;
     }
   }
-
-  &-item {
-    padding: 24px 14px 14px 24px;
-    margin-bottom: 16px;
-    background: #fff;
+  &-text {
+    font-size: 14px;
+    font-family: SourceHanSansSC, SourceHanSansSC, sans-serif;
+    color: #999999;
+  }
+}
+.notice-message {
+  padding: 0 24px 16px 24px;
+  &-switch {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    padding: 5px 8px;
+    width: 240px;
+    height: 40px;
+    background: #f6f6f6;
     border-radius: 4px;
-
-    &-type {
+    box-sizing: border-box;
+    .notice-message-switch-item {
+      width: 100%;
       display: flex;
-
-      &-icon {
-        width: 24px;
-        height: 24px;
-        margin-right: 16px;
-        background: #36c5f3;
-        border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1;
+      &.active {
+        .notice-message-switch-item-text {
+          color: #356ff3;
+        }
+        .notice-message-switch-item-tip {
+          background: #356ff3;
+        }
       }
 
-      &-text {
+      &:nth-child(1) + .active ~ .selection {
+        transform: translateX(100%);
+      }
+      .notice-message-switch-item-text {
         font-size: 14px;
-        font-weight: bold;
-        color: #333;
+        font-weight: 500;
+        color: #333333;
+        font-family: SourceHanSansSC, SourceHanSansSC, sans-serif;
+      }
+      &-tip {
+        margin-left: 6px;
+        padding: 0 6px;
+        height: 14px;
+        line-height: 14px;
+        font-size: 12px;
+        font-family: SourceHanSansSC, SourceHanSansSC, sans-serif;
+        font-weight: 500;
+        color: #ffffff;
+        background: #999999;
+        border-radius: 7px 7px 7px 7px;
+        opacity: 1;
       }
     }
-
-    &-content {
-      padding-left: 40px;
-      margin-top: 16px;
-      overflow: hidden;
-      font-size: 14px;
-      font-weight: 500;
-      color: #999;
+    .selection {
+      position: absolute;
+      left: 8px;
+      top: 5px;
+      width: calc(50% - 8px);
+      height: calc(100% - 10px);
+      border-radius: 4px 4px 4px 4px;
+      z-index: 0;
+      transition: 0.2s ease;
+      background: #ffffff;
     }
-
-    &-btn {
+  }
+  &-item {
+    padding: 24px;
+    border-bottom: 1px solid #f5f5f5;
+    &:first-child {
+      padding-top: 0;
+    }
+    &-head {
       display: flex;
-      justify-content: flex-end;
-      margin-top: 16px;
+      align-items: center;
+      justify-content: space-between;
+      &-title {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        font-family: SourceHanSansSC, SourceHanSansSC, sans-serif;
+        font-weight: 500;
+        color: #656565;
+        &:before {
+          display: inline-block;
+          content: "";
+          width: 3px;
+          height: 14px;
+          background: #356ff3;
+          margin-right: 4px;
+          border-radius: 2px;
+        }
+      }
+      &-btn {
+        display: flex;
+        span {
+          padding: 0 8px;
+          height: 29px;
+          line-height: 29px;
+          font-size: 14px;
+          font-family: SourceHanSansSC, SourceHanSansSC, sans-serif;
+          font-weight: 500;
+          color: #999999;
+          background: #ffffff;
+          border-radius: 4px;
+          cursor: pointer;
+          &:first-child {
+            margin-right: 12px;
+            border: 1px solid #e5e5e5;
+            &:hover {
+              background: #e5e5e5;
+              color: #000000;
+            }
+          }
+          &:last-child {
+            border: 1px solid #356ff3;
+            color: #356ff3;
+            &:hover {
+              background: #356ff3;
+              color: #ffffff;
+            }
+          }
+        }
+      }
     }
+    &-content {
+      margin-top: 14px;
+      font-size: 14px;
+      font-family: SourceHanSansSC, SourceHanSansSC, sans-serif;
+      color: #333333;
+    }
+  }
+}
+.message-box {
+  &:before {
+    content: "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    font-size: 12px;
+    filter: blur(5px) brightness(120%) grayscale(0.7);
+    z-index: 999;
   }
 }
 </style>

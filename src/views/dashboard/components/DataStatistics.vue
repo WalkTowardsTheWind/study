@@ -1,5 +1,10 @@
 <template>
   <dashboard-card title="数据汇总">
+    <template #header-right>
+      <div class="data-statistics-head-time">
+        {{ chooseTime[0] }}-{{ chooseTime[1] }}
+      </div>
+    </template>
     <div class="data-statistics">
       <div class="data-statistics-head">
         <tax-source-select
@@ -32,9 +37,6 @@
             />
           </div>
         </div>
-        <div class="data-statistics-head-time">
-          {{ chooseTime[0] }}-{{ chooseTime[1] }}
-        </div>
       </div>
       <div class="data-statistics-card mb-[12px]">
         <statistics-card
@@ -56,22 +58,22 @@ const formItem = ref({
   tax_land_id: "",
   date: [],
 });
-const dateType = ref(3);
+const dateType = ref(5);
 const dateTypeMap = [
-  // {
-  //   text: "今日",
-  //   value: () => {
-  //     const time = dayjs().format();
-  //     return [time, time];
-  //   },
-  // },
-  // {
-  //   text: "昨日",
-  //   value: () => {
-  //     const time = dayjs().subtract(1, "d").format();
-  //     return [time, time];
-  //   },
-  // },
+  {
+    text: "今日",
+    value: () => {
+      const time = dayjs().format();
+      return [time, time];
+    },
+  },
+  {
+    text: "昨日",
+    value: () => {
+      const time = dayjs().subtract(1, "d").format();
+      return [time, time];
+    },
+  },
   {
     text: "本周",
     value: () => {
@@ -178,6 +180,12 @@ const statistics = ref([
 const handleSearch = () => {};
 </script>
 <style lang="scss" scoped>
+.data-statistics-head-time {
+  font-size: 14px;
+  font-family: SourceHanSansSC, SourceHanSansSC, sans-serif;
+  font-weight: 500;
+  color: #999999;
+}
 .data-statistics {
   padding: 0 24px 24px 24px;
   &-head {
@@ -219,13 +227,6 @@ const handleSearch = () => {};
       :deep(.el-range-editor.el-input__wrapper) {
         width: 220px;
       }
-    }
-    &-time {
-      flex: none;
-      font-size: 14px;
-      font-family: SourceHanSansSC, SourceHanSansSC, sans-serif;
-      font-weight: 500;
-      color: #999999;
     }
   }
   &-card {
