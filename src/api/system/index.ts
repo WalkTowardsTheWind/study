@@ -248,3 +248,36 @@ export function getAreaIdList(parent_id = "0") {
     method: "get",
   });
 }
+
+/**
+ * eom配置列表
+ */
+
+export function settingIndex(params: any) {
+  return request({
+    url: `/adminapi/setting/setting`,
+    method: "get",
+    params,
+  });
+}
+
+/**
+ * eom新增编辑
+ */
+export function settingCreate(data: any) {
+  return request({
+    url: `/adminapi/setting/setting`,
+    method: "post",
+    data,
+  });
+}
+
+/**
+ * eom删除
+ */
+export function settingDelete(id: string) {
+  return request({
+    url: `/adminapi/setting/setting/${id}`,
+    method: "delete",
+  });
+}

@@ -2,67 +2,74 @@
   <zxn-dialog
     title="合同编辑"
     :visible="visible"
-    top="15"
-    width="50vw"
+    top="10"
+    width="80vw"
     @close-dialog="closeEdit(formItemRef)"
     @confirm-dialog="submit(formItemRef)"
   >
-    <el-form
-      ref="formItemRef"
-      :model="formItem"
-      :rules="rules"
-      label-width="auto"
-    >
-      <el-row :gutter="15">
-        <el-col :span="12">
-          <el-form-item label="合同类型">
-            <el-input disabled :value="formItem.type_name" />
-          </el-form-item>
-          <el-form-item label="合同名称" prop="contract_name">
-            <el-input v-model="formItem.contract_name" />
-          </el-form-item>
-          <el-form-item label="合同模板">
-            <el-input disabled :value="formItem.template_name" />
-          </el-form-item>
-          <el-form-item label="合同编号">
-            <el-input disabled :value="formItem.contract_no" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="合同期限" prop="date">
-            <zxn-date-range class="w-full" v-model="formItem.date" />
-          </el-form-item>
-          <el-form-item label="甲方">
-            <el-input disabled :value="formItem.part_a_name" />
-          </el-form-item>
-          <el-form-item label="乙方">
-            <el-input disabled :value="formItem.part_b_name" />
-          </el-form-item>
-          <el-form-item label="备注要求">
-            <el-input disabled v-model="formItem.remark" type="textarea" />
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <div class="fields">
-        <div
-          class="w-30%"
-          v-for="(item, index) of formItem.fields"
-          :key="index"
+    <div class="box">
+      <div class="left">
+        <el-form
+          ref="formItemRef"
+          :model="formItem"
+          :rules="rules"
+          label-width="auto"
         >
-          <el-form-item
-            :label="item.label"
-            :prop="'fields.' + index + '.field_value'"
-            :rules="{
-              required: true,
-              message: '必填',
-              trigger: 'blur',
-            }"
-          >
-            <el-input clearable v-model="item.field_value" />
-          </el-form-item>
-        </div>
+          <el-row :gutter="15">
+            <el-col :span="12">
+              <el-form-item label="合同类型">
+                <el-input disabled :value="formItem.type_name" />
+              </el-form-item>
+              <el-form-item label="合同名称" prop="contract_name">
+                <el-input v-model="formItem.contract_name" />
+              </el-form-item>
+              <el-form-item label="合同模板">
+                <el-input disabled :value="formItem.template_name" />
+              </el-form-item>
+              <el-form-item label="合同编号">
+                <el-input disabled :value="formItem.contract_no" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="合同期限" prop="date">
+                <zxn-date-range class="w-full" v-model="formItem.date" />
+              </el-form-item>
+              <el-form-item label="甲方">
+                <el-input disabled :value="formItem.part_a_name" />
+              </el-form-item>
+              <el-form-item label="乙方">
+                <el-input disabled :value="formItem.part_b_name" />
+              </el-form-item>
+              <el-form-item label="备注要求">
+                <el-input disabled v-model="formItem.remark" type="textarea" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <div class="fields">
+            <div
+              class="w-30%"
+              v-for="(item, index) of formItem.fields"
+              :key="index"
+            >
+              <el-form-item
+                :label="item.label"
+                :prop="'fields.' + index + '.field_value'"
+                :rules="{
+                  required: true,
+                  message: '必填',
+                  trigger: 'blur',
+                }"
+              >
+                <el-input clearable v-model="item.field_value" />
+              </el-form-item>
+            </div>
+          </div>
+        </el-form>
       </div>
-    </el-form>
+      <div class="right">
+        <iframe :src="formItem.contract_url"></iframe>
+      </div>
+    </div>
   </zxn-dialog>
 </template>
 
@@ -82,6 +89,8 @@ const emit = defineEmits(["edit-close"]);
 
 const closeEdit = (formI) => {
   formI.resetFields();
+  console.log(formItem);
+
   emit("edit-close", false);
 };
 
@@ -127,6 +136,7 @@ const getDetailById = (id) => {
     formItem.contract_no = res.data.contract_no;
     formItem.part_a_name = res.data.part_a_name;
     formItem.part_b_name = res.data.part_b_name;
+    formItem.contract_url = res.data.contract_url;
     formItem.remark = res.data.remark;
     formItem.fields = res.data.fields;
     formItem.date = [
@@ -163,11 +173,27 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
+.box {
+  display: flex;
+  gap: 0 20px;
+  .left {
+    width: 50%;
+  }
+  .right {
+    flex: 1;
+    width: 100%;
+    iframe {
+      width: inherit;
+      height: -webkit-fill-available;
+    }
+  }
+}
 .fields {
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
   justify-content: space-between;
   gap: 0 15px;
+  width: 100%;
 }
 </style>

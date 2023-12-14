@@ -58,7 +58,7 @@
       </el-form-item>
     </zxn-search>
     <!-- 111 -->
-    <!-- :hasSelect="['', '0'].includes(formItem.status)" 
+    <!-- :hasSelect="['', '0'].includes(formItem.status)"
       @selection-change="handleSelect"
     -->
     <zxn-table
@@ -70,7 +70,7 @@
       hasSelect
       :selectable="selectable"
       @page-change="handlePageChange"
-      :pageSizes="[10, 20, 30, 50, 200]"
+      :pageSizes="[10, 20, 30, 50, 200, 1000]"
     >
       <template #tableTop>
         <el-dropdown trigger="click" @command="handleCommand">
@@ -167,7 +167,7 @@ const industryList = reactive([]);
 const pageInfo = reactive({
   page: 1,
   total: 0,
-  limit: 200,
+  limit: 50,
 });
 const getIndustryList = async () => {
   const { data } = await getTreeList({ type: 2 });

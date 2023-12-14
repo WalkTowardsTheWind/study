@@ -58,6 +58,13 @@ export const constantRoutes: RouteRecordRaw[] = [
         name: "business-account",
         meta: { title: "账户中心", icon: "account" },
       },
+      // 人员认证
+      {
+        path: "person-auth",
+        component: () => import("@/views/person-auth/index.vue"),
+        name: "person-auth",
+        meta: { title: "人员认证", icon: "account" },
+      },
       {
         path: "business-account-detail",
         component: () =>
@@ -487,6 +494,19 @@ export const constantRoutes: RouteRecordRaw[] = [
   //       },
   //     ],
   //   },
+  {
+    path: "/oem",
+    component: Layout,
+    meta: { title: "OEM管理" },
+    children: [
+      {
+        path: "theme",
+        component: () => import("@/views/system/theme/index.vue"),
+        name: "theme",
+        meta: { title: "OEM管理" },
+      },
+    ],
+  },
   // 系统设置
   {
     path: "/system",
@@ -534,12 +554,6 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/system/user/index.vue"),
         name: "user",
         meta: { title: "账号管理" },
-      },
-      {
-        path: "theme",
-        component: () => import("@/views/system/theme/index.vue"),
-        name: "theme",
-        meta: { title: "主题配置", icon: "account" },
       },
     ],
   },

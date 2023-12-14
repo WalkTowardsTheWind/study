@@ -23,7 +23,7 @@
   />
   <zxn-cropper-modal
     v-model="visible"
-    :title="'裁剪图片' + width"
+    :title="'裁剪图片'"
     :fileUrl="imageUrl"
     :cropperWidth="width"
     :cropperHeight="height"

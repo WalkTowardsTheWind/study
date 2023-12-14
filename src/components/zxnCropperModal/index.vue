@@ -6,7 +6,6 @@
     @close="handleClose"
     :destroy-on-close="true"
   >
-    {{ coordinate }}
     <cropper-canvas background style="width: 100%; height: 600px">
       <cropper-image :src="props.fileUrl"></cropper-image>
       <cropper-handle action="move" plain></cropper-handle>

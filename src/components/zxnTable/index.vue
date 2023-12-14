@@ -98,6 +98,14 @@
                   : ""
               }}
             </div>
+            <zxn-image
+              v-if="item.type === 'image'"
+              :imgList="row[item.prop]"
+              :width="item.imgWidth || 40"
+              :height="item.imgHeight || 40"
+              targetClick
+              ellipsis
+            />
           </template>
         </el-table-column>
         <el-table-column
