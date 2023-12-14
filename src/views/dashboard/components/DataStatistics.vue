@@ -38,14 +38,16 @@
           </div>
         </div>
       </div>
-      <div class="data-statistics-card mb-[12px]">
-        <statistics-card
-          v-for="item in statistics"
-          :key="item.title"
-          :item-data="item"
-        />
+      <div v-loading="loading">
+        <div class="data-statistics-card mb-[12px]">
+          <statistics-card
+            v-for="item in statistics"
+            :key="item.title"
+            :item-data="item"
+          />
+        </div>
+        <trend-chart :arr-data="trendData" />
       </div>
-      <trend-chart />
     </div>
   </dashboard-card>
 </template>
@@ -54,6 +56,7 @@ import DashboardCard from "./DashboardCard.vue";
 import StatisticsCard from "./StatisticsCard.vue";
 import TrendChart from "./TrendChart.vue";
 import dayjs from "dayjs";
+import { workbenchChart } from "@/api/dashboard";
 const formItem = ref({
   tax_land_id: "",
   date: [],
@@ -63,14 +66,14 @@ const dateTypeMap = [
   {
     text: "今日",
     value: () => {
-      const time = dayjs().format();
+      const time = dayjs().format("YYYY-MM-DD");
       return [time, time];
     },
   },
   {
     text: "昨日",
     value: () => {
-      const time = dayjs().subtract(1, "d").format();
+      const time = dayjs().subtract(1, "d").format("YYYY-MM-DD");
       return [time, time];
     },
   },
@@ -141,9 +144,11 @@ const chooseTime = computed(() => {
 const handleTypeChange = (index) => {
   dateType.value = index;
   formItem.value.date = [];
+  handleSearch();
 };
 const handleDateChange = () => {
   dateType.value = -1;
+  handleSearch();
 };
 const statistics = ref([
   {
@@ -177,7 +182,27 @@ const statistics = ref([
     type: "up",
   },
 ]);
-const handleSearch = () => {};
+const loading = ref(false);
+const trendData = ref([]);
+const handleSearch = async () => {
+  const params = {
+    tax_land_id: formItem.value.tax_land_id,
+    start_time: dayjs(chooseTime.value[0]).unix(),
+    end_time: dayjs(chooseTime.value[1]).unix(),
+  };
+  console.log(params);
+  loading.value = true;
+  try {
+    const { data } = await workbenchChart(params);
+    loading.value = false;
+    trendData.value = data.income;
+  } catch (error) {
+    loading.value = false;
+  }
+};
+onMounted(() => {
+  handleSearch();
+});
 </script>
 <style lang="scss" scoped>
 .data-statistics-head-time {

@@ -2,144 +2,151 @@
   <div
     ref="dateTrend"
     :style="{ height: `${boxHeight - 40}px`, width: '100%' }"
-  >
-    ss
-  </div>
+  ></div>
 </template>
 <script setup lang="ts">
 import * as echarts from "echarts";
+const props = defineProps({
+  arrData: {
+    type: Array,
+    default: () => [],
+  },
+});
 
 let chart: echarts.ECharts | null = null;
+watch(
+  () => props.arrData,
+  (val) => {
+    const XData = [];
+    const profit = [];
+    const totalAmount = [];
+    const commissionTotal = [];
+    const totalSettlementAmount = [];
+    const totalCostAmount = [];
+    val.forEach((it) => {
+      XData.push(it.date_time);
+      profit.push(it.amount[0]);
+      totalAmount.push(it.amount[1]);
+      commissionTotal.push(it.amount[2]);
+      totalSettlementAmount.push(it.amount[3]);
+      totalCostAmount.push(it.amount[4]);
+    });
 
-const chartInits = async () => {
-  const option = {
-    title: {
-      text: "数据趋势",
-    },
-    tooltip: {
-      trigger: "axis",
-      axisPointer: {
-        type: "cross",
-        label: {
-          backgroundColor: "#366ff4",
-        },
+    const option = {
+      title: {
+        text: "数据趋势",
       },
-    },
-    legend: {
-      data: ["利润", "打款", "渠道结算", "下发", "成本"],
-      right: 0,
-    },
-    grid: {
-      left: "0",
-      right: "1%",
-      bottom: "0",
-      containLabel: true,
-    },
-    xAxis: [
-      {
-        type: "category",
-        boundaryGap: false,
-        data: ["1号", "2号", "3号", "4号", "5号", "6号", "7号"],
-        axisLine: {
-          lineStyle: {
-            color: "#F3F5F5",
-            width: 4,
+      tooltip: {
+        trigger: "axis",
+        axisPointer: {
+          type: "cross",
+          label: {
+            backgroundColor: "#366ff4",
           },
         },
-        axisTick: {
-          show: false,
-        },
-        axisLabel: {
-          color: "#999",
-          fontSize: 14,
-        },
       },
-    ],
-    yAxis: [
-      {
-        type: "value",
-        splitLine: {
-          lineStyle: {
-            color: "#F3F5F5",
-            type: "dashed",
+      legend: {
+        data: ["利润", "打款", "渠道结算", "下发", "成本"],
+        right: 0,
+      },
+      grid: {
+        left: "0",
+        right: "1%",
+        bottom: "0",
+        containLabel: true,
+      },
+      xAxis: [
+        {
+          type: "category",
+          boundaryGap: false,
+          data: XData,
+          axisLine: {
+            lineStyle: {
+              color: "#F3F5F5",
+              width: 4,
+            },
+          },
+          axisTick: {
+            show: false,
+          },
+          axisLabel: {
+            color: "#999",
+            fontSize: 14,
           },
         },
-        axisLabel: {
-          color: "#999",
-          fontSize: 14,
-        },
-      },
-    ],
-    series: [
-      {
-        name: "利润",
-        type: "line",
-        showSymbol: false,
-        areaStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {
-              offset: 0,
-              color: "rgba(54,111,243,0.3)",
+      ],
+      yAxis: [
+        {
+          type: "value",
+          splitLine: {
+            lineStyle: {
+              color: "#F3F5F5",
+              type: "dashed",
             },
-            {
-              offset: 1,
-              color: "rgba(54,111,243,0.01)",
-            },
-          ]),
+          },
+          axisLabel: {
+            color: "#999",
+            fontSize: 14,
+          },
         },
-        lineStyle: {
-          color: "#366ff4",
+      ],
+      series: [
+        {
+          name: "利润",
+          type: "line",
+          showSymbol: false,
+          smooth: true,
+          emphasis: {
+            focus: "series",
+          },
+          data: profit,
         },
-        smooth: true,
-        emphasis: {
-          focus: "series",
+        {
+          name: "打款",
+          type: "line",
+          showSymbol: false,
+          smooth: true,
+          emphasis: {
+            focus: "series",
+          },
+          data: totalAmount,
         },
-        data: [120, 132, 101, 134, 90, 230, 210],
-      },
-      // {
-      //   name: "Union Ads",
-      //   type: "line",
-      //   areaStyle: {},
-      // 	smooth: true,
-      //   emphasis: {
-      //     focus: "series",
-      //   },
-      //   data: [220, 182, 191, 234, 290, 330, 310],
-      // },
-      // {
-      //   name: "Video Ads",
-      //   type: "line",
-      //   areaStyle: {},
-      // 	smooth: true,
-      //   emphasis: {
-      //     focus: "series",
-      //   },
-      //   data: [150, 232, 201, 154, 190, 330, 410],
-      // },
-      // {
-      //   name: "Direct",
-      //   type: "line",
-      //   areaStyle: {},
-      // 	smooth: true,
-      //   emphasis: {
-      //     focus: "series",
-      //   },
-      //   data: [320, 332, 301, 334, 390, 330, 320],
-      // },
-      // {
-      //   name: "Search Engine",
-      //   type: "line",
-      //   areaStyle: {},
-      // 	smooth: true,
-      //   emphasis: {
-      //     focus: "series",
-      //   },
-      //   data: [820, 932, 901, 934, 1290, 1330, 1320],
-      // },
-    ],
-  };
-  chart.setOption(option);
-};
+        {
+          name: "渠道结算",
+          type: "line",
+          showSymbol: false,
+          smooth: true,
+          emphasis: {
+            focus: "series",
+          },
+          data: commissionTotal,
+        },
+        {
+          name: "下发",
+          type: "line",
+          showSymbol: false,
+          smooth: true,
+          emphasis: {
+            focus: "series",
+          },
+          data: totalSettlementAmount,
+        },
+        {
+          name: "成本",
+          type: "line",
+          showSymbol: false,
+          smooth: true,
+          emphasis: {
+            focus: "series",
+          },
+          data: totalCostAmount,
+        },
+      ],
+    };
+    chart?.setOption(option);
+  }
+);
+
 let boxHeight = ref(0);
 const dateTrend = ref<HTMLDivElement>();
 onMounted(() => {
@@ -148,7 +155,6 @@ onMounted(() => {
     window.innerHeight - bottom < 356 ? 356 : window.innerHeight - bottom;
   nextTick(() => {
     chart = echarts.init(dateTrend.value as HTMLDivElement);
-    chartInits();
     // 大小自适应
     window.addEventListener("resize", () => {
       chart.resize();

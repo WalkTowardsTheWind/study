@@ -16,7 +16,7 @@
           @click="type = 1"
         >
           <div class="notice-message-switch-item-text">待办通知</div>
-          <span class="notice-message-switch-item-tip">92</span>
+          <!--          <span class="notice-message-switch-item-tip"></span>-->
         </div>
         <div
           class="notice-message-switch-item"
@@ -24,7 +24,7 @@
           @click="type = 2"
         >
           <div class="notice-message-switch-item-text">通知消息</div>
-          <span class="notice-message-switch-item-tip">2</span>
+          <!--          <span class="notice-message-switch-item-tip">2</span>-->
         </div>
         <span class="selection"></span>
       </div>
@@ -53,7 +53,7 @@
                 {{ item.title }}
               </div>
               <div class="notice-message-item-head-btn">
-                <span>稍后提醒</span>
+                <span @click="handleGoRouter">稍后提醒</span>
                 <span>立刻处理</span>
               </div>
             </div>
@@ -81,7 +81,6 @@ const pageInfo = {
 };
 
 const load = () => {
-  console.log(pageInfo.page);
   if (pageInfo.page < pageInfo.lastPage) {
     pageInfo.page++;
     getList();
@@ -100,9 +99,6 @@ const getList = async () => {
   }
 };
 const router = useRouter();
-const handleMore = () => {
-  router.push({ name: "messageManager" });
-};
 
 const { pushParams } = useRouteParams();
 const routerName = {
@@ -278,16 +274,16 @@ onMounted(() => {
   }
 }
 .message-box {
-  &:before {
-    content: "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    font-size: 12px;
-    filter: blur(5px) brightness(120%) grayscale(0.7);
-    z-index: 999;
-  }
+  //&:before {
+  //  content: "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo";
+  //  position: absolute;
+  //  left: 0;
+  //  right: 0;
+  //  bottom: 0;
+  //  width: 100%;
+  //  font-size: 12px;
+  //  filter: blur(5px) brightness(120%) grayscale(0.7);
+  //  z-index: 999;
+  //}
 }
 </style>
