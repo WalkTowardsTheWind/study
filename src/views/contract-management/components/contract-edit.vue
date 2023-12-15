@@ -3,7 +3,7 @@
     title="合同编辑"
     :visible="visible"
     top="5"
-    width="80vw"
+    width="90vw"
     :loading="btnLoading"
     @close-dialog="closeEdit(formItemRef)"
     @confirm-dialog="submit(formItemRef)"
@@ -48,7 +48,7 @@
           </el-row>
           <div class="fields">
             <div
-              class="w-30%"
+              class="w-49%"
               v-for="(item, index) of formItem.fields"
               :key="index"
             >
@@ -183,6 +183,7 @@ defineExpose({
 .box {
   display: flex;
   height: 73vh;
+  overflow-y: scroll;
   gap: 0 20px;
   .left {
     width: 50%;

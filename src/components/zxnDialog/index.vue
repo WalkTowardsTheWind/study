@@ -11,11 +11,11 @@
     >
       <slot />
       <slot name="bottom-btn" v-if="hasBottomBtn">
-        <div class="flex align-center justify-center m-y-[10px]">
+        <div class="btn">
+          <el-button type="primary" plain @click="handleClose">取消</el-button>
           <el-button :loading="loading" type="primary" @click="handleConfirm"
             >确认</el-button
           >
-          <el-button type="primary" plain @click="handleClose">取消</el-button>
         </div>
       </slot>
     </el-dialog>
@@ -63,5 +63,11 @@ const handleConfirm = () => {
 .zxn-dialog {
   position: absolute;
   border-radius: 8px;
+}
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0 0 0;
 }
 </style>
