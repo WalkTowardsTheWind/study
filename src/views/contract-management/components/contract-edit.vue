@@ -166,7 +166,7 @@ const submit = async (formI) => {
           formItem.contract_url = res.data.url;
           ElMessage.success("更新成功");
           emit("edit-close", true, true);
-        }, 200);
+        }, 2000);
       });
     } else {
       console.log("error submit!", fields);
