@@ -300,6 +300,7 @@ onMounted(() => {
   width: 100%;
   //height: 34px;
   background-color: var(--el-bg-color);
+  box-shadow: 0px 4px 5px 0 rgba(0, 0, 0, 0.15);
 
   .tags-item {
     position: relative;
