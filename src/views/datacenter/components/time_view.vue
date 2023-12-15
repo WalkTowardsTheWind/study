@@ -3,7 +3,7 @@
     <div class="title">数据统计</div>
     <div class="select">
       <tax-source-select
-        class="w-440px"
+        class="w-340px"
         v-model:taxId="formItem.tax_land_id"
         @change-tax="handleSearch"
       />
