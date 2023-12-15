@@ -7,12 +7,7 @@
     @close-dialog="onlineClose(addFormRef)"
     @confirm-dialog="onlineConfirm(addFormRef)"
   >
-    <el-form
-      :model="addForm"
-      ref="addFormRef"
-      :rules="rules"
-      label-width="auto"
-    >
+    <el-form :model="addForm" ref="addFormRef" :rules="rules" label-width="100">
       <el-row :gutter="50">
         <el-col :span="8">
           <el-form-item label="合同名称" prop="contract_name" required>
@@ -112,21 +107,31 @@
         <div class="">参与方信息</div>
       </div>
       <div class="flex flex-wrap gap-x-40px">
-        <el-form-item
-          class="w-25%"
-          required
+        <div
+          class="w-400px"
           v-for="(item, index) in addForm.fields"
-          :key="item.field_name"
-          :label="item.label"
-          :prop="'fields.' + index + '.field_value'"
-          :rules="{
-            required: true,
-            message: '必填',
-            trigger: 'blur',
-          }"
+          :key="index"
         >
-          <el-input clearable v-model="item.field_value" placeholder="请输入" />
-        </el-form-item>
+          <el-form-item
+            required
+            label-width="200px"
+            :key="item.field_name"
+            :label="item.label"
+            :prop="'fields.' + index + '.field_value'"
+            :rules="{
+              required: true,
+              message: '必填',
+              trigger: 'blur',
+            }"
+          >
+            <el-input
+              clearable
+              v-model="item.field_value"
+              placeholder="请输入"
+              class="w-full"
+            />
+          </el-form-item>
+        </div>
       </div>
     </el-form>
   </zxn-dialog>
