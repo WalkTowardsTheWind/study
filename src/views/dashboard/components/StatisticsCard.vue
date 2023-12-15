@@ -6,8 +6,12 @@
     </div>
     <div class="statistic-card-tip">环比</div>
     <div class="statistic-card-rate">
-      <span>{{ itemData.rate }}</span>
-      <img :src="itemData.type === 'up' ? up : down" alt="" />
+      <span>
+        {{ itemData.rate === "0%" ? "" : itemData.type === "up" ? "+" : "-"
+        }}{{ itemData.rate }}
+      </span>
+      <span v-if="itemData.rate === '0%'"></span>
+      <img v-else :src="itemData.type === 'up' ? up : down" alt="" />
     </div>
   </div>
 </template>
@@ -63,6 +67,13 @@ defineProps({
       font-family: SourceHanSansSC, SourceHanSansSC, sans-serif;
       font-weight: bold;
       color: #333333;
+      &:last-child {
+        margin-left: 10px;
+        width: 12px;
+        height: 4px;
+        background-color: rgba(0, 0, 0, 0.6);
+        border-radius: 2px;
+      }
     }
     & > img {
       width: 12px;
