@@ -14,6 +14,7 @@ export const useUserStore = defineStore("user", () => {
   const token = useStorage("accessToken", "");
   const nickname = useStorage("nickname", "");
   const avatar = ref("");
+  const lastTime = ref("");
   const roles = ref<Array<string>>([]); // 用户角色编码集合 → 判断路由权限
   const perms = ref<Array<string>>([]); // 用户权限编码集合 → 判断按钮权限
   const sourceList = ref([]);
@@ -32,6 +33,7 @@ export const useUserStore = defineStore("user", () => {
           const { user_info, menus } = response.data;
           token.value = response.data.token;
           nickname.value = user_info.account;
+          lastTime.value = user_info.last_time;
           menusList.value = menus;
           resolve();
         })
@@ -88,6 +90,7 @@ export const useUserStore = defineStore("user", () => {
     token,
     nickname,
     avatar,
+    lastTime,
     roles,
     perms,
     login,

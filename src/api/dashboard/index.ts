@@ -11,3 +11,14 @@ export function workbench(): AxiosPromise {
     method: "GET",
   });
 }
+
+/**
+ * 会获取数据汇总
+ */
+export function workbenchChart(params: any): AxiosPromise {
+  return request({
+    url: "/adminapi/workbench_chart",
+    method: "GET",
+    params,
+  });
+}
