@@ -35,7 +35,7 @@
         :loading="loading"
         @page-change="handlePageChange"
       >
-        <template #page>--</template>
+        <template #page="{ row }">{{ row.page ?? "--" }}</template>
         <template #operation>
           <el-button link type="primary">查看</el-button>
         </template>
