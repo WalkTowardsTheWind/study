@@ -61,7 +61,7 @@ const formItem = ref({
   tax_land_id: "",
   date: [],
 });
-const dateType = ref(5);
+const dateType = ref(2);
 const dateTypeMap = [
   {
     text: "今日",
@@ -80,17 +80,22 @@ const dateTypeMap = [
   {
     text: "本周",
     value: () => {
-      const end = dayjs().endOf("week").format("YYYY-MM-DD");
-      const start = dayjs().startOf("week").format("YYYY-MM-DD");
+      const end = dayjs().endOf("week").add(1, "d").format("YYYY-MM-DD");
+      const start = dayjs().startOf("week").add(1, "d").format("YYYY-MM-DD");
       return [start, end];
     },
   },
   {
     text: "上周",
     value: () => {
-      const end = dayjs().endOf("week").subtract(1, "w").format("YYYY-MM-DD");
+      const end = dayjs()
+        .endOf("week")
+        .add(1, "d")
+        .subtract(1, "w")
+        .format("YYYY-MM-DD");
       const start = dayjs()
         .startOf("week")
+        .add(1, "d")
         .subtract(1, "w")
         .format("YYYY-MM-DD");
       return [start, end];
@@ -188,7 +193,7 @@ const handleSearch = async () => {
   const params = {
     tax_land_id: formItem.value.tax_land_id,
     start_time: dayjs(chooseTime.value[0]).unix(),
-    end_time: dayjs(chooseTime.value[1]).unix(),
+    end_time: dayjs(chooseTime.value[1]).add(1, "d").subtract(1, "s").unix(),
   };
   console.log(params);
   loading.value = true;
