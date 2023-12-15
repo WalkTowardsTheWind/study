@@ -30,6 +30,7 @@
 import DashboardCard from "./DashboardCard.vue";
 import { useUserStoreHook } from "@/store/modules/user";
 import { useRouter } from "vue-router";
+import { useRouteParams } from "@/store/modules/routeParams";
 const router = useRouter();
 const useUser = useUserStoreHook();
 const quickBtns = ref([
@@ -46,12 +47,12 @@ const quickBtns = ref([
   {
     title: "新建渠道",
     img: new URL(`@/assets/dashboard/info3.png`, import.meta.url).href,
-    route: "channel-account-add-business",
+    route: "business-account",
   },
   {
     title: "新建合同",
     img: new URL(`@/assets/dashboard/info4.png`, import.meta.url).href,
-    route: "contract-management-template",
+    route: "contract-management-list",
   },
   {
     title: "上传完税凭证",
@@ -60,6 +61,13 @@ const quickBtns = ref([
   },
 ]);
 const handleView = (item) => {
+  if (item.route === "invoiceManager") {
+    const { pushParams } = useRouteParams();
+    pushParams("invoiceManager2", { tagType: "taxPayment" });
+  }
+  if (item.route === "business-account") {
+    sessionStorage.setItem("account", "3");
+  }
   router.push({ name: item.route });
 };
 </script>

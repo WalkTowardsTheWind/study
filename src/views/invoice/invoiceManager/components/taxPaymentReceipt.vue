@@ -78,11 +78,13 @@ import { transformTimeRange } from "@/utils";
 import { downloadByOnlineUrl } from "@/utils/download";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
+import { useRouteParams } from "@/store/modules/routeParams";
+import { isNumber } from "@/utils/is";
 const router = useRouter();
 const props = defineProps({
   type: { type: String, default: "enterprise" },
 });
-const emits = defineEmits(["on-upload", "on-view"]);
+const emits = defineEmits(["on-upload", "on-view", "change-tag"]);
 const pageInfo = reactive({
   page: 1,
   total: 0,
@@ -221,7 +223,16 @@ const handleExport = (command: string | number | object) => {
     handleBatchDownload();
   }
 };
-onMounted(() => {});
+onActivated(() => {
+  const { pullParams } = useRouteParams();
+  const searchParams: any = pullParams("invoiceManager2");
+  if (searchParams) {
+    emits("change-tag", searchParams.tagType);
+    handleSearch();
+  } else {
+    getList();
+  }
+});
 defineExpose({
   getList,
 });

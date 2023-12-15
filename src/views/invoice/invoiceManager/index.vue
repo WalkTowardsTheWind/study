@@ -12,6 +12,7 @@
           type="enterprise"
           @on-upload="handleUpload"
           @on-logistics="handleLogistics"
+          @change-tag="handleChangeTag"
         />
       </template>
       <template #channel>
@@ -28,6 +29,7 @@
           type="taxPayment"
           @on-upload="handleUploadCredentials"
           @on-view="handleView"
+          @change-tag="handleChangeTag"
         />
       </template>
     </zxn-tabs>
@@ -75,21 +77,10 @@ const enterprise = ref();
 const channel = ref();
 const taxPayment = ref();
 const handleTabChange = (name?: any) => {
-  if (name) {
-    sessionStorage.setItem("invoiceManagerActiveName", name);
-  }
-  activeName.value =
-    sessionStorage.getItem("invoiceManagerActiveName") ?? "enterprise";
-  if (sessionStorage.getItem("invoiceManagerActiveName") === "enterprise") {
+  if (activeName.value === "enterprise") {
     enterprise.value.getList();
-  } else if (sessionStorage.getItem("invoiceManagerActiveName") === "channel") {
-    channel.value.getList();
-  } else if (
-    sessionStorage.getItem("invoiceManagerActiveName") === "taxPayment"
-  ) {
+  } else {
     taxPayment.value.getList();
-  } else if (activeName.value === "enterprise") {
-    enterprise.value.getList();
   }
 };
 const addInvoiceRef = ref();
@@ -101,7 +92,6 @@ const handleUpload = (cur: any) => {
   } else if (cur.invoice_form === 2) {
     addInvoiceRef.value.init(cur.id, 2);
   }
-  console.log(cur, 99999999);
 };
 const uploadCredentialsRef = ref();
 const handleUploadCredentials = (cur: any) => {
@@ -123,7 +113,7 @@ const handleSelect = (id: number, type: any) => {
     addInvoiceRef.value.init(id, 2);
   }
 };
-onActivated(() => {
-  handleTabChange();
-});
+const handleChangeTag = (type) => {
+  activeName.value = type;
+};
 </script>

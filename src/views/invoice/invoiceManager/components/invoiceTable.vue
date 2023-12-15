@@ -162,7 +162,7 @@ const router = useRouter();
 const props = defineProps({
   type: { type: String, default: "enterprise" },
 });
-const emits = defineEmits(["on-upload", "on-logistics"]);
+const emits = defineEmits(["on-upload", "on-logistics", "change-tag"]);
 const industryList = reactive([]);
 const pageInfo = reactive({
   page: 1,
@@ -552,12 +552,22 @@ onMounted(() => {
 });
 onActivated(() => {
   const { pullParams } = useRouteParams();
-  const searchParams: any = pullParams("invoiceManager");
+  const searchParams: any = pullParams("invoiceManager1");
   if (searchParams) {
+    formItem.invoice_name = "";
+    formItem.tax_land_id = "";
+    formItem.invoice_type = "";
+    formItem.category_id = [];
+    formItem.timeData = [];
     formItem.status =
       isNumber(searchParams.status) || searchParams.status
         ? searchParams.status + ""
         : "";
+    console.log(searchParams, "2222");
+    emits("change-tag", searchParams.tagType);
+    handleSearch();
+  } else {
+    getList();
   }
 });
 defineExpose({

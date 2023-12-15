@@ -82,7 +82,7 @@ const handleView = (item) => {
   };
   if (item.title === "开票申请") {
     const { pushParams } = useRouteParams();
-    pushParams("invoiceManager", { status: 0 });
+    pushParams("invoiceManager1", { status: 0, tagType: "enterprise" });
   }
   if (item.title === "待审核任务") {
     const { pushParams } = useRouteParams();
