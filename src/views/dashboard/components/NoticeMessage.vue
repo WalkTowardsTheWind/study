@@ -81,10 +81,10 @@ const pageInfo = {
 };
 
 const load = () => {
-  if (pageInfo.page < pageInfo.lastPage) {
-    pageInfo.page++;
-    getList();
-  }
+  // if (pageInfo.page < pageInfo.lastPage) {
+  //   pageInfo.page++;
+  //   getList();
+  // }
 };
 const getList = async () => {
   const params = { status: 0 };

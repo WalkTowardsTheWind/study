@@ -8,7 +8,7 @@
             useUser.nickname
           }}</span>
           <span class="base-info-head-content-time">
-            上次登录时间: 2021/11/2 10:23
+            上次登录时间: {{ useUser.lastTime }}
           </span>
         </div>
       </div>

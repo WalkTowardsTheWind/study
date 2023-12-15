@@ -153,32 +153,32 @@ const handleDateChange = () => {
 const statistics = ref([
   {
     title: "利润总额(元)",
-    num: "48262310.00",
-    rate: "12.7%",
+    num: 0,
+    rate: 0,
     type: "up",
   },
   {
     title: "打款总额(元)",
-    num: "48260.00",
-    rate: "12.7%",
-    type: "down",
+    num: 0,
+    rate: 0,
+    type: "up",
   },
   {
     title: "渠道结算总额(元)",
-    num: "48260.00",
-    rate: "12.7%",
+    num: 0,
+    rate: 0,
     type: "up",
   },
   {
     title: "下发总额(元)",
-    num: "48260.00",
-    rate: "12.7%",
+    num: 0,
+    rate: 0,
     type: "up",
   },
   {
     title: "成本总额(元)",
-    num: "48260.00",
-    rate: "12.7%",
+    num: 0,
+    rate: 0,
     type: "up",
   },
 ]);
@@ -196,6 +196,38 @@ const handleSearch = async () => {
     const { data } = await workbenchChart(params);
     loading.value = false;
     trendData.value = data.income;
+    statistics.value = [
+      {
+        title: "利润总额(元)",
+        num: data.profit,
+        rate: `${data.last_profit}%`,
+        type: data.last_profit_type,
+      },
+      {
+        title: "打款总额(元)",
+        num: data.total_amount,
+        rate: `${data.last_total_amount}%`,
+        type: data.last_total_amount_type,
+      },
+      {
+        title: "渠道结算总额(元)",
+        num: data.commission_total,
+        rate: `${data.last_commission_total}%`,
+        type: data.last_commission_total_type,
+      },
+      {
+        title: "下发总额(元)",
+        num: data.total_settlement_amount,
+        rate: `${data.last_total_settlement_amount}%`,
+        type: data.last_total_settlement_amount_type,
+      },
+      {
+        title: "成本总额(元)",
+        num: data.total_cost_amount,
+        rate: `${data.last_total_cost_amount}%`,
+        type: data.last_total_cost_amount_type,
+      },
+    ];
   } catch (error) {
     loading.value = false;
   }

@@ -41,7 +41,7 @@ watch(
         axisPointer: {
           type: "cross",
           label: {
-            backgroundColor: "#366ff4",
+            backgroundColor: "#356FF3",
           },
         },
       },
@@ -72,6 +72,8 @@ watch(
           axisLabel: {
             color: "#999",
             fontSize: 14,
+            rotate: -15,
+            showMaxLabel: false,
           },
         },
       ],
@@ -98,6 +100,9 @@ watch(
           smooth: true,
           emphasis: {
             focus: "series",
+          },
+          lineStyle: {
+            color: "#356FF3",
           },
           data: profit,
         },
@@ -138,6 +143,9 @@ watch(
           smooth: true,
           emphasis: {
             focus: "series",
+          },
+          lineStyle: {
+            color: "#36C5F3",
           },
           data: totalCostAmount,
         },
