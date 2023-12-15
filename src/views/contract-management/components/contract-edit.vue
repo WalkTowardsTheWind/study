@@ -2,7 +2,7 @@
   <zxn-dialog
     title="合同编辑"
     :visible="visible"
-    top="10"
+    top="5"
     width="80vw"
     :loading="btnLoading"
     @close-dialog="closeEdit(formItemRef)"
@@ -166,7 +166,7 @@ const submit = async (formI) => {
           formItem.contract_url = res.data.url;
           ElMessage.success("更新成功");
           emit("edit-close", true, true);
-        }, 200);
+        }, 2000);
       });
     } else {
       console.log("error submit!", fields);
@@ -182,6 +182,7 @@ defineExpose({
 <style scoped lang="scss">
 .box {
   display: flex;
+  height: 73vh;
   gap: 0 20px;
   .left {
     width: 50%;
