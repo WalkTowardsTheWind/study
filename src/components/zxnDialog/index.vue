@@ -7,6 +7,7 @@
       :close-on-click-modal="false"
       :top="`${top}vh`"
       @close="handleClose"
+      v-bind="$attrs"
     >
       <slot />
       <slot name="bottom-btn" v-if="hasBottomBtn">

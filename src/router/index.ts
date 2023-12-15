@@ -35,6 +35,12 @@ export const constantRoutes: RouteRecordRaw[] = [
         meta: { title: "工作台", affix: true, icon: "dashboard" },
       },
       {
+        path: "datacenter",
+        component: () => import("@/views/datacenter/index.vue"),
+        name: "datacenter",
+        meta: { title: "工作台", affix: true, icon: "datacenter" },
+      },
+      {
         path: "401",
         component: () => import("@/views/error-page/401.vue"),
         meta: { hidden: true },
