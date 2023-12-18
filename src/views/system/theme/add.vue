@@ -70,7 +70,9 @@
             <el-button type="info" class="is-cancel" @click="handlCancel"
               >取消</el-button
             >
-            <el-button type="primary" @click="handleSubmit">保存</el-button>
+            <el-button :loading="isLoading" type="primary" @click="handleSubmit"
+              >保存</el-button
+            >
           </zxn-bottom-btn>
         </div>
       </template>
@@ -87,6 +89,7 @@ const route = useRoute();
 
 const tabsList = [{ name: "1", label: "新建OEM" }];
 const activeName = ref("1");
+const isLoading = ref(false);
 
 const form = ref();
 const rules = reactive<FormRules>({
@@ -129,6 +132,7 @@ const formItem = reactive({
 });
 
 const handleSubmit = () => {
+  isLoading.value = true;
   form.value.validate(async (valid) => {
     if (valid) {
       const params = {
@@ -137,10 +141,14 @@ const handleSubmit = () => {
       };
       try {
         await settingCreate(params);
-        ElMessage({
-          type: "success",
-          message: "保存成功",
-        });
+        setTimeout(() => {
+          ElMessage({
+            type: "success",
+            message: "保存成功",
+          });
+          isLoading.value = true;
+          router.push({ name: "theme" });
+        }, 200);
       } catch (error) {
         console.log(error);
       }
