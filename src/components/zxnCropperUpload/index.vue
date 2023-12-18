@@ -108,7 +108,7 @@ watch(
     &:after {
       width: 2.5px;
       height: 40%;
-      //transform: translate(-50%) rotate(90deg);
+      // transform: translate(-50%) rotate(90deg);
     }
   }
 }

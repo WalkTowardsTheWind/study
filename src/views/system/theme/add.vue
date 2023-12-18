@@ -42,11 +42,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="登录页图标" prop="login_icon">
-                  <zxn-cropper-upload
-                    v-model="formItem.login_icon"
-                    :width="204"
-                    :height="86"
-                  />
+                  <zxn-cropper-upload v-model="formItem.login_icon" />
                 </el-form-item>
                 <el-form-item label="网页图标" prop="web_icon">
                   <zxn-cropper-upload v-model="formItem.web_icon" />
@@ -54,11 +50,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="左上角大图标" prop="left_big_icon">
-                  <zxn-cropper-upload
-                    :width="204"
-                    :height="86"
-                    v-model="formItem.left_big_icon"
-                  />
+                  <zxn-cropper-upload v-model="formItem.left_big_icon" />
                 </el-form-item>
                 <el-form-item label="左上角小图标" prop="left_small_icon">
                   <zxn-cropper-upload v-model="formItem.left_small_icon" />
