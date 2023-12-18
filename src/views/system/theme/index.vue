@@ -48,6 +48,9 @@
 <script setup lang="ts">
 import { settingIndex, settingDelete } from "@/api/system";
 import themeDrawer from "./components/themeDrawer.vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
+
 const formItem = reactive({
   key_word: "",
 });
@@ -128,10 +131,13 @@ const getList = async () => {
 };
 const themeDrawerRef = ref();
 const handleAdd = () => {
-  themeDrawerRef.value.init();
+  router.push({ name: "theme-add" });
+  // themeDrawerRef.value.init();
 };
 const handleEdit = (row) => {
-  themeDrawerRef.value.init(row);
+  console.log(row);
+  router.push({ name: "theme-add", query: { item: JSON.stringify(row) } });
+  // themeDrawerRef.value.init(row);
 };
 const handleDelete = (row) => {
   const { id } = row;

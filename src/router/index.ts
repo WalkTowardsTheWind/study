@@ -38,7 +38,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: "datacenter",
         component: () => import("@/views/datacenter/index.vue"),
         name: "datacenter",
-        meta: { title: "工作台", affix: true, icon: "datacenter" },
+        meta: { title: "数据中心", affix: true, icon: "datacenter" },
       },
       {
         path: "401",
@@ -510,6 +510,18 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/system/theme/index.vue"),
         name: "theme",
         meta: { title: "OEM管理" },
+      },
+      {
+        path: "add",
+        component: () => import("@/views/system/theme/add.vue"),
+        name: "theme-add",
+        meta: { title: "新建OEM", hidden: true },
+      },
+      {
+        path: "edit",
+        component: () => import("@/views/system/theme/add.vue"),
+        name: "theme-add",
+        meta: { title: "新建OEM", hidden: true },
       },
     ],
   },
