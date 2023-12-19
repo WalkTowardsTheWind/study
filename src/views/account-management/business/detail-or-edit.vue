@@ -9,6 +9,7 @@
           :isEdit="isEdit"
           :id="id"
           :taxLandList="formItem.tax_land_list"
+          @update="getAccountDetail"
         />
       </template>
       <template #2>

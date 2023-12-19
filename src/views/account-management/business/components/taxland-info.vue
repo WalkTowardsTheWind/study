@@ -44,7 +44,13 @@
         label-width="auto"
       >
         <el-form-item label="税地名称" prop="tax_land_id">
+          <el-input
+            v-if="state.dialogType == 'edit'"
+            disabled
+            :value="state.formItem.tax_land_name"
+          />
           <el-select
+            v-else
             class="w-full"
             placeholder="请选择"
             v-model="state.formItem.tax_land_id"
@@ -136,6 +142,8 @@ const route = useRoute();
 import { useStore } from "@/store/modules/taxLand";
 import type { FormInstance } from "element-plus";
 
+const emits = defineEmits(["update"]);
+
 const taxPointValidator = (rule, value, callback) => {
   const decimalRegex = /^\d{1,3}(\.\d{1,2})?$/;
   if (value === "") {
@@ -193,6 +201,7 @@ const state = reactive({
     id: "",
     company_id: "",
     tax_land_id: "" as any,
+    tax_land_name: "",
     tax_land_type: 0,
     third_user_name: "",
     third_password: "",
@@ -280,11 +289,13 @@ const taxLandClick = (active: string, item?: any) => {
     state.formItem.company_id = route.query.id as string;
   }
   if (active == "edit") {
+    // console.log(item);
     state.dialogTitle = "编辑税地";
     state.dialogType = active;
     state.formItem.id = item.id;
     state.formItem.company_id = item.company_id;
-    state.formItem.tax_land_id = item.tax_land_name;
+    state.formItem.tax_land_id = item.tax_land_id;
+    state.formItem.tax_land_name = item.tax_land_name;
     selecTaxland({ id: item.tax_land_id, tax_land_type: item.tax_land_type });
     state.formItem.tax_point = item.tax_point;
     state.formItem.sign_type = item.sign_type;
@@ -360,8 +371,9 @@ const taxLandConfirm = async (formEl: FormInstance) => {
     await formEl.validate((valid, fields) => {
       if (valid) {
         let params = {
+          id: state.formItem.id,
           company_id: state.formItem.company_id,
-          tax_land_id: state.formItem.tax_land_id.id,
+          tax_land_id: state.formItem.tax_land_id,
           third_user_name: state.formItem.third_user_name,
           third_password: state.formItem.third_password,
           tax_point: state.formItem.tax_point,
@@ -375,7 +387,8 @@ const taxLandConfirm = async (formEl: FormInstance) => {
           });
           state.dialogVisible = false;
           setTimeout(() => {
-            location.reload();
+            // location.reload();
+            emits("update");
           }, 200);
         });
       }
