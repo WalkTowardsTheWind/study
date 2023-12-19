@@ -69,6 +69,7 @@
     :title="dialogTitle"
     width="452"
     :close-on-click-modal="false"
+    @close="closeDialog"
   >
     <!-- 新增 -->
     <el-form :form="addForm">
@@ -122,8 +123,10 @@
       </template>
     </el-form>
     <div class="btn">
+      <el-button type="info" class="is-cancel" @click="closeDialog"
+        >取消</el-button
+      >
       <el-button type="primary" @click="addSumbit">确认</el-button>
-      <el-button type="info" @click="closeDialog">取消</el-button>
     </div>
   </el-dialog>
 </template>
