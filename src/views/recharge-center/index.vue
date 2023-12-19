@@ -67,7 +67,6 @@
           <zxn-table
             :table-data="tableData"
             :column-list="columnList"
-            hasSelect
             field-total="amount"
             :page-info="pageInfo"
             @page-change="pageChange"
@@ -85,14 +84,14 @@
                   </el-dropdown-menu>
                 </template>
               </el-dropdown> -->
-              <el-dropdown trigger="click" @command="handleExport">
-                <el-button type="primary">导出</el-button>
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item command="1">表格</el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
+              <!--              <el-dropdown trigger="click" @command="handleExport">-->
+              <!--                <el-button type="primary">导出</el-button>-->
+              <!--                <template #dropdown>-->
+              <!--                  <el-dropdown-menu>-->
+              <!--                    <el-dropdown-item command="1">表格</el-dropdown-item>-->
+              <!--                  </el-dropdown-menu>-->
+              <!--                </template>-->
+              <!--              </el-dropdown>-->
             </template>
             <template #certificate="scope">
               <zxn-image

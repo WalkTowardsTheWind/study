@@ -8,6 +8,7 @@
     check-strictly
     :render-after-expand="false"
     filterable
+    clearable
   />
 </template>
 
