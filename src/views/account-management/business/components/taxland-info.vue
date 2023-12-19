@@ -142,6 +142,8 @@ const route = useRoute();
 import { useStore } from "@/store/modules/taxLand";
 import type { FormInstance } from "element-plus";
 
+const emits = defineEmits(["update"]);
+
 const taxPointValidator = (rule, value, callback) => {
   const decimalRegex = /^\d{1,3}(\.\d{1,2})?$/;
   if (value === "") {
@@ -369,6 +371,7 @@ const taxLandConfirm = async (formEl: FormInstance) => {
     await formEl.validate((valid, fields) => {
       if (valid) {
         let params = {
+          id: state.formItem.id,
           company_id: state.formItem.company_id,
           tax_land_id: state.formItem.tax_land_id,
           third_user_name: state.formItem.third_user_name,
@@ -384,7 +387,8 @@ const taxLandConfirm = async (formEl: FormInstance) => {
           });
           state.dialogVisible = false;
           setTimeout(() => {
-            location.reload();
+            // location.reload();
+            emits("update");
           }, 200);
         });
       }
