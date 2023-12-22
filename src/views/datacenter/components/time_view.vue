@@ -39,6 +39,7 @@
 
 <script lang="ts" setup>
 import dayjs from "dayjs";
+const emits = defineEmits(["update"]);
 
 const formItem = ref({
   tax_land_id: "",
@@ -53,12 +54,18 @@ const chooseTime = computed(() => {
   return formItem.value.date;
 });
 
-const handleSearch = async () => {
-  const params = {
-    tax_land_id: formItem.value.tax_land_id,
-    start_time: dayjs(formItem.value.date[0]).unix(),
-    end_time: dayjs(formItem.value.date[1]).unix(),
-  };
+const tax_land_id = ref("");
+const start_time = ref(0);
+const end_time = ref();
+
+const handleSearch = () => {
+  tax_land_id.value = formItem.value.tax_land_id;
+  (start_time.value = dayjs(chooseTime.value[0]).unix()),
+    (end_time.value = dayjs(chooseTime.value[1])
+      .add(1, "d")
+      .subtract(1, "s")
+      .unix()),
+    emits("update", tax_land_id.value, start_time.value, end_time.value);
 };
 const dateTypeMap = [
   {
@@ -142,6 +149,7 @@ const handleDateChange = () => {
   dateType.value = -1;
   handleSearch();
 };
+handleTypeChange(4);
 </script>
 
 <style scoped lang="scss">

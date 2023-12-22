@@ -1,39 +1,50 @@
 <template>
   <div class="title">
-    <div>{{ cardData.title }}</div>
+    <div>{{ cardData.name }}</div>
     <span class="more" @click="$router.push({ name: cardData.route })"
       >查看更多<i-ep-arrow-right class="arrow"
     /></span>
   </div>
   <div class="box">
-    <div class="item" v-for="(item, index) in cardData.subItem" :key="index">
-      <div class="item-name">{{ item.title }}</div>
+    <div
+      class="item"
+      v-for="(item, index) in cardData.subItem"
+      :style="{ width: item.width + 'px' }"
+      :key="index"
+    >
+      <div class="item-name">{{ item.name }}</div>
       <div class="item-val">
-        {{ item.isNeedFormat ? proxy.$moneyFormat(item.val) : item.val }}
+        {{ item.isNeedFormat ? proxy.$moneyFormat(item.value) : item.value }}
       </div>
       <div class="flex justify-between">
-        <div class="item-sub">
-          <div class="item-sub-name">{{ item.sub_title }}</div>
+        <div
+          class="item-sub"
+          v-for="(j, j_index) in item.subItem"
+          :key="j_index"
+        >
+          <div class="item-sub-name">{{ j.name }}</div>
           <div class="item-sub-val">
-            <div>
-              <span>{{ item.sub_val }} {{ item.isPercent ? "%" : "" }}</span>
-              <img
-                v-if="item.sub_val != 0"
-                :src="item.sub_val > 0 ? UPimg : DOWNimg"
-                class="img"
-                alt=""
-              />
-            </div>
+            <span
+              >{{ j.isNeedFormat ? proxy.$moneyFormat(j.value) : j.value }}
+              {{ j.isPercent ? "%" : "" }}</span
+            >
+            <img
+              v-if="j.value !== 0"
+              :src="j.isUpOrDown === 'up' ? UPimg : DOWNimg"
+              class="img"
+              alt=""
+            />
+            <div v-if="j.value == 0 && j.isPercent" class="notype"></div>
           </div>
         </div>
-        <div class="item-sub" v-if="item.sub_title2">
-          <div class="item-sub-name">{{ item.sub_title2 }}</div>
+        <!-- <div class="item-sub" v-if="j.name">
+          <div class="item-sub-name">{{ j.name }}</div>
           <div class="item-sub-val">
             <div>
-              <span>{{ item.sub_val2 }} </span>
+              <span>{{ j.value }} </span>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -46,20 +57,19 @@ import { getCurrentInstance } from "vue";
 const { proxy } = getCurrentInstance() as any;
 
 interface IcardData {
-  title: string;
+  name: string;
   route: string;
   subItem: IsubItem[];
 }
 
 interface IsubItem {
-  title: string;
-  val: number;
-  sub_title: string;
-  sub_val: number;
-  isPercent?: boolean;
+  name: string;
+  value: number;
+  width?: number;
   isNeedFormat?: boolean;
-  sub_title2?: string;
-  sub_val2?: number;
+  isPercent?: boolean;
+  isUpOrDown?: "up" | "down" | string;
+  subItem?: IsubItem[];
 }
 
 defineProps({
@@ -98,7 +108,8 @@ defineProps({
 .box {
   margin-top: 20px;
   display: flex;
-  gap: 0 20px;
+  gap: 20px;
+  flex-wrap: wrap;
   .item {
     padding: 20px 16px;
     width: 180px;
@@ -138,11 +149,18 @@ defineProps({
         font-weight: bold;
         color: #333333;
         display: flex;
-        justify-content: space-between;
+        align-items: center;
         img {
           margin-left: 10px;
           width: 12px;
           height: 16px;
+        }
+        .notype {
+          margin-left: 10px;
+          width: 12px;
+          height: 4px;
+          background-color: rgba(0, 0, 0, 0.6);
+          border-radius: 2px;
         }
       }
     }

@@ -1,6 +1,6 @@
 <template>
   <el-select v-model="taxIdValue" filterable @change="handleTaxChange">
-    <el-option label="全部税地" value="" />
+    <el-option v-if="isShowAll" label="全部税地" value="" />
     <el-option
       v-for="item in useUser.sourceList"
       :key="item.value"
@@ -20,6 +20,10 @@ const props = defineProps({
   adCode: {
     type: [String, Number],
     default: "",
+  },
+  isShowAll: {
+    type: Boolean,
+    default: true,
   },
 });
 const emits = defineEmits(["update:taxId", "change-tax"]);

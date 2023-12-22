@@ -12,7 +12,9 @@
       <slot />
       <slot name="bottom-btn" v-if="hasBottomBtn">
         <div class="btn">
-          <el-button type="primary" plain @click="handleClose">取消</el-button>
+          <el-button type="info" class="is-cancel" plain @click="handleClose"
+            >取消</el-button
+          >
           <el-button :loading="loading" type="primary" @click="handleConfirm"
             >确认</el-button
           >

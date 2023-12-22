@@ -4,7 +4,7 @@
       <SaleView />
     </div>
     <div class="time_view">
-      <TimeView />
+      <TimeView ref="timeRef" @update="getData" />
     </div>
     <div class="chart">
       <ChartView :arr-data="arrData" />
@@ -29,6 +29,8 @@
       <div>
         <CardView :cardData="cardData5"> </CardView>
       </div>
+    </div>
+    <div class="cardbox">
       <div>
         <CardView :cardData="cardData6"> </CardView>
       </div>
@@ -42,186 +44,453 @@ import TimeView from "./components/time_view.vue";
 import ChartView from "./components/chart_view.vue";
 import CardView from "./components/card_view.vue";
 import { reactive } from "vue";
+import { getDataCenter } from "../../api/datacenter";
 
 const arrData = ref([]);
 
 const cardData1 = reactive({
-  title: "利润数据",
+  name: "利润数据",
   route: "asset-management",
   subItem: [
     {
-      title: "利润总额（元）",
-      val: 123213123,
-      sub_title: "环比",
-      sub_val: -12.24,
-      isPercent: true,
+      name: "利润总额（元）",
+      value: 0,
       isNeedFormat: true,
+      subItem: [
+        {
+          name: "环比",
+          value: 0,
+          isPercent: true,
+          isUpOrDown: "",
+        },
+      ],
     },
     {
-      title: "销售总额（元）",
-      val: 123213123,
-      sub_title: "环比",
-      sub_val: 13.44,
-      isPercent: true,
+      name: "销售总额（元）",
+      value: 0,
       isNeedFormat: true,
+      subItem: [
+        {
+          name: "环比",
+          value: 0,
+          isPercent: true,
+          isUpOrDown: "",
+        },
+      ],
     },
     {
-      title: "渠道总额（元）",
-      val: 123213123,
-      sub_title: "环比",
-      sub_val: 22.4,
-      isPercent: true,
+      name: "渠道利润（元）",
+      value: 0,
       isNeedFormat: true,
+      subItem: [
+        {
+          name: "环比",
+          value: 0,
+          isPercent: true,
+          isUpOrDown: "",
+        },
+      ],
     },
   ],
 });
 const cardData2 = reactive({
-  title: "账户数据",
+  name: "账户数据",
   route: "business-account",
   subItem: [
     {
-      title: "总账户数量",
-      val: 9271,
-      sub_title: "新增",
-      sub_val: 123,
+      name: "总账户数量",
+      value: 0,
+      subItem: [
+        {
+          name: "新增",
+          value: 0,
+        },
+      ],
     },
     {
-      title: "企业账户",
-      val: 123312,
-      sub_title: "新增",
-      sub_val: 13,
+      name: "企业账户",
+      value: 0,
+      subItem: [
+        {
+          name: "新增",
+          value: 0,
+        },
+      ],
     },
     {
-      title: "渠道账户",
-      val: 241,
-      sub_title: "新增",
-      sub_val: 22,
+      name: "渠道账户",
+      value: 0,
+      subItem: [
+        {
+          name: "新增",
+          value: 0,
+        },
+      ],
     },
     {
-      title: "自由职业者",
-      val: 24112,
-      sub_title: "新增",
-      sub_val: 111,
-      sub_title2: "下发数量",
-      sub_val2: 1211,
+      name: "自由职业者",
+      value: 0,
+      subItem: [
+        {
+          name: "新增",
+          value: 0,
+        },
+        {
+          name: "下发数量",
+          value: 0,
+        },
+      ],
     },
   ],
 });
 const cardData3 = reactive({
-  title: "税地数据",
+  name: "税地数据",
   route: "taxLandManagement",
   subItem: [
     {
-      title: "总税地",
-      val: 9271,
-      sub_title: "新增",
-      sub_val: 123,
+      name: "总税地",
+      value: 0,
+      subItem: [
+        {
+          name: "新增",
+          value: 0,
+          isUpOrDown: "",
+        },
+      ],
     },
     {
-      title: "自营税地",
-      val: 123312,
-      sub_title: "新增",
-      sub_val: 13,
+      name: "自营税地",
+      value: 0,
+      subItem: [
+        {
+          name: "新增",
+          value: 0,
+          isUpOrDown: "",
+        },
+      ],
     },
     {
-      title: "采购税地",
-      val: 241,
-      sub_title: "新增",
-      sub_val: 22,
+      name: "采购税地",
+      value: 0,
+      subItem: [
+        {
+          name: "新增",
+          value: 0,
+          isUpOrDown: "",
+        },
+      ],
     },
   ],
 });
 const cardData4 = reactive({
-  title: "充值数据",
+  name: "充值数据",
   route: "recharge-center",
   subItem: [
     {
-      title: "充值总额（元）",
-      val: 2100200260,
-      sub_title: "环比",
-      sub_val: -123,
-      isPercent: true,
+      name: "充值总额（元）",
+      value: 0,
       isNeedFormat: true,
+      subItem: [
+        {
+          name: "环比",
+          value: 0,
+          isPercent: true,
+          isUpOrDown: "",
+        },
+      ],
     },
     {
-      title: "充值企业数量",
-      val: 1050,
-      sub_title: "环比",
-      sub_val: 9.1,
-      isPercent: true,
+      name: "充值企业数量",
+      value: 0,
+      subItem: [
+        {
+          name: "环比",
+          value: 0,
+          isPercent: true,
+          isUpOrDown: "",
+        },
+      ],
     },
     {
-      title: "充值次数",
-      val: 2411,
-      sub_title: "新增",
-      sub_val: 1.9,
-      isPercent: true,
+      name: "充值次数",
+      value: 0,
+      subItem: [
+        {
+          name: "环比",
+          value: 0,
+          isPercent: true,
+          isUpOrDown: "",
+        },
+      ],
     },
   ],
 });
 const cardData5 = reactive({
-  title: "结算数据",
+  name: "结算数据",
   route: "settlementCenter",
   subItem: [
     {
-      title: "结算总额（元）",
-      val: 2100200260,
-      sub_title: "环比",
-      sub_val: -123,
-      isPercent: true,
+      name: "结算总额（元）",
+      value: 0,
+      width: 588,
       isNeedFormat: true,
+      subItem: [
+        {
+          name: "环比",
+          value: 0,
+          isPercent: true,
+          isUpOrDown: "",
+        },
+        {
+          name: "企业结算（元）",
+          value: 0,
+          isNeedFormat: true,
+        },
+        {
+          name: "渠道结算（元）",
+          value: 0,
+          isNeedFormat: true,
+        },
+      ],
     },
     {
-      title: "结算企业数量",
-      val: 1050,
-      sub_title: "环比",
-      sub_val: 9.1,
-      isPercent: true,
+      name: "结算企业数量",
+      value: 0,
+      subItem: [
+        {
+          name: "环比",
+          value: 0,
+          isPercent: true,
+          isUpOrDown: "",
+        },
+      ],
     },
     {
-      title: "结算次数",
-      val: 2411,
-      sub_title: "新增",
-      sub_val: 1.9,
-      isPercent: true,
+      name: "企业结算次数",
+      value: 0,
+      subItem: [
+        {
+          name: "环比",
+          value: 0,
+          isPercent: true,
+          isUpOrDown: "",
+        },
+      ],
+    },
+    {
+      name: "渠道结算数量",
+      value: 0,
+      subItem: [
+        {
+          name: "环比",
+          value: 0,
+          isPercent: true,
+          isUpOrDown: "",
+        },
+      ],
+    },
+    {
+      name: "渠道结算次数",
+      value: 0,
+      subItem: [
+        {
+          name: "环比",
+          value: 0,
+          isPercent: true,
+          isUpOrDown: "",
+        },
+      ],
+    },
+    {
+      name: "个人结算笔数",
+      value: 0,
+      subItem: [
+        {
+          name: "环比",
+          value: 0,
+          isPercent: true,
+          isUpOrDown: "",
+        },
+      ],
     },
   ],
 });
 const cardData6 = reactive({
-  title: "开票数据",
+  name: "开票数据",
   route: "invoiceManager",
   subItem: [
     {
-      title: "已开总额（元）",
-      val: 2100200260,
-      sub_title: "环比",
-      sub_val: -123,
-      isPercent: true,
+      name: "已开总额（元）",
+      value: 0,
       isNeedFormat: true,
+      subItem: [
+        {
+          name: "环比",
+          value: 0,
+          isPercent: true,
+          isUpOrDown: "",
+        },
+      ],
     },
     {
-      title: "待开企业数量",
-      val: 1050,
-      sub_title: "环比",
-      sub_val: 9.1,
-      isPercent: true,
+      name: "待开总额（元）",
+      value: 0,
+      isNeedFormat: true,
+      subItem: [
+        {
+          name: "环比",
+          value: 0,
+          isPercent: true,
+          isUpOrDown: "",
+        },
+      ],
     },
     {
-      title: "开票企业数量",
-      val: 2411,
-      sub_title: "新增",
-      sub_val: 1.9,
-      isPercent: true,
+      name: "开票企业数量",
+      value: 0,
+      subItem: [
+        {
+          name: "环比",
+          value: 0,
+          isPercent: true,
+          isUpOrDown: "",
+        },
+      ],
     },
     {
-      title: "开票次数",
-      val: 2411,
-      sub_title: "新增",
-      sub_val: 1.9,
-      isPercent: true,
+      name: "开票次数",
+      value: 0,
+      subItem: [
+        {
+          name: "环比",
+          value: 0,
+          isPercent: true,
+          isUpOrDown: "",
+        },
+      ],
     },
   ],
 });
+
+const timeRef = ref();
+
+const getData = (tax_land_id = "", start_time = 0, end_time = 0) => {
+  const params = {
+    tax_land_id,
+    start_time,
+    end_time,
+  };
+  getDataCenter(params).then((res) => {
+    arrData.value = res.data.income;
+
+    cardData1.subItem[0].value = res.data.profit;
+    cardData1.subItem[0].subItem[0].value = res.data.round_profit;
+    cardData1.subItem[0].subItem[0].isUpOrDown = res.data.round_profit_type;
+
+    cardData1.subItem[1].value = res.data.sale_profit;
+    cardData1.subItem[1].subItem[0].value = res.data.round_sale_profit;
+    cardData1.subItem[1].subItem[0].isUpOrDown =
+      res.data.round_sale_profit_type;
+
+    cardData1.subItem[2].value = res.data.channel_profit;
+    cardData1.subItem[2].subItem[0].value = res.data.round_channel_profit;
+    cardData1.subItem[2].subItem[0].isUpOrDown =
+      res.data.round_channel_profit_type;
+
+    cardData2.subItem[0].value = res.data.total_account;
+    cardData2.subItem[0].subItem[0].value = res.data.new_total_account;
+
+    cardData2.subItem[1].value = res.data.company;
+    cardData2.subItem[1].subItem[0].value = res.data.new_company;
+
+    cardData2.subItem[2].value = res.data.channel;
+    cardData2.subItem[2].subItem[0].value = res.data.new_channel;
+
+    cardData2.subItem[3].value = res.data.user;
+    cardData2.subItem[3].subItem[0].value = res.data.new_user;
+
+    cardData3.subItem[0].value = res.data.all_num;
+    cardData3.subItem[0].subItem[0].value = res.data.new_all_num;
+
+    cardData3.subItem[1].value = res.data.self_num;
+    cardData3.subItem[1].subItem[0].value = res.data.new_self_num;
+
+    cardData3.subItem[2].value = res.data.third_num;
+    cardData3.subItem[2].subItem[0].value = res.data.new_third_num;
+
+    cardData4.subItem[0].value = res.data.total_recharge;
+    cardData4.subItem[0].subItem[0].value = res.data.round_recharge;
+    cardData4.subItem[0].subItem[0].isUpOrDown = res.data.round_recharge_type;
+
+    cardData4.subItem[1].value = res.data.company_num;
+    cardData4.subItem[1].subItem[0].value = res.data.round_company_num;
+    cardData4.subItem[1].subItem[0].isUpOrDown =
+      res.data.round_company_num_type;
+
+    cardData4.subItem[2].value = res.data.recharge_num;
+    cardData4.subItem[2].subItem[0].value = res.data.round_recharge_num;
+    cardData4.subItem[2].subItem[0].isUpOrDown =
+      res.data.round_recharge_num_type;
+
+    cardData5.subItem[0].value = res.data.settlement_total;
+    cardData5.subItem[0].subItem[0].value = res.data.round_settlement_total;
+    cardData5.subItem[0].subItem[0].isUpOrDown =
+      res.data.round_settlement_total_type;
+    cardData5.subItem[0].subItem[1].value = res.data.settlement_company_total;
+    cardData5.subItem[0].subItem[2].value = res.data.settlement_channel_total;
+
+    cardData5.subItem[1].value = res.data.settlement_company_num;
+    cardData5.subItem[1].subItem[0].value =
+      res.data.round_settlement_company_num;
+    cardData5.subItem[1].subItem[0].isUpOrDown =
+      res.data.round_settlement_company_num_type;
+
+    cardData5.subItem[2].value = res.data.settlement_num;
+    cardData5.subItem[2].subItem[0].value =
+      res.data.round_settlement_company_count;
+    cardData5.subItem[2].subItem[0].isUpOrDown =
+      res.data.round_settlement_company_count_type;
+
+    cardData5.subItem[3].value = res.data.settlement_channel_num;
+    cardData5.subItem[3].subItem[0].value =
+      res.data.round_settlement_channel_num;
+    cardData5.subItem[3].subItem[0].isUpOrDown =
+      res.data.round_settlement_channel_num_type;
+
+    cardData5.subItem[4].value = res.data.settlement_channel_count;
+    cardData5.subItem[4].subItem[0].value =
+      res.data.round_settlement_channel_count;
+    cardData5.subItem[4].subItem[0].isUpOrDown =
+      res.data.round_settlement_channel_count_type;
+
+    cardData5.subItem[5].value = res.data.settlement_user_num;
+    cardData5.subItem[5].subItem[0].value = res.data.round_settlement_user_num;
+    cardData5.subItem[5].subItem[0].isUpOrDown =
+      res.data.round_settlement_user_num_type;
+
+    cardData6.subItem[0].value = res.data.apply_amount;
+    cardData6.subItem[0].subItem[0].value = res.data.round_invoice_amount;
+    cardData6.subItem[0].subItem[0].isUpOrDown =
+      res.data.round_invoice_amount_type;
+
+    cardData6.subItem[1].value = res.data.wait_apply_amount;
+    cardData6.subItem[1].subItem[0].value = res.data.round_wait_invoice_amount;
+    cardData6.subItem[1].subItem[0].isUpOrDown =
+      res.data.round_wait_invoice_amount_type;
+
+    cardData6.subItem[2].value = res.data.apply_company_num;
+    cardData6.subItem[2].subItem[0].value = res.data.round_invoice_company_num;
+    cardData6.subItem[2].subItem[0].isUpOrDown =
+      res.data.round_invoice_company_num_type;
+
+    cardData6.subItem[3].value = res.data.apply_num;
+    cardData6.subItem[3].subItem[0].value = res.data.round_invoice_apply_num;
+    cardData6.subItem[3].subItem[0].isUpOrDown =
+      res.data.round_invoice_apply_num_type;
+  });
+};
+
+getData();
 </script>
 
 <style lang="scss">
@@ -247,7 +516,8 @@ $border-radius: 16px;
 }
 .chart {
   width: 100%;
-  height: 400px;
+  height: 420px;
+  padding: 20px;
   background: $backgound;
   border-radius: $border-radius;
 }
@@ -257,7 +527,6 @@ $border-radius: 16px;
   display: flex;
   gap: 24px;
   & > div {
-    height: 252px;
     flex: 1;
     background: $backgound;
     border-radius: $border-radius;
