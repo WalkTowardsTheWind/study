@@ -50,7 +50,7 @@ watch(
         right: 0,
       },
       grid: {
-        left: "0",
+        left: "1%",
         right: "1%",
         bottom: "0",
         containLabel: true,

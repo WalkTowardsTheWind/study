@@ -18,6 +18,11 @@ const baseRouter = [
         name: "Dashboard",
         meta: { title: "工作台", icon: "dashboard", affix: true },
       },
+      {
+        path: "datacenter",
+        name: "datacenter",
+        meta: { title: "数据中心", affix: true, icon: "datacenter" },
+      },
     ],
   },
 ];
