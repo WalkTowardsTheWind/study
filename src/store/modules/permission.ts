@@ -21,7 +21,7 @@ const baseRouter = [
       {
         path: "datacenter",
         name: "datacenter",
-        meta: { title: "数据中心", affix: true, icon: "asset" },
+        meta: { title: "数据中心", icon: "statics" },
       },
     ],
   },
