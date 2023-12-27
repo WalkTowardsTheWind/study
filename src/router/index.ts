@@ -487,19 +487,19 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
-  //   {
-  //     path: "/message",
-  //     component: Layout,
-  //     meta: { title: " 消息管理", icon: "message" },
-  //     children: [
-  //       {
-  //         path: "manager",
-  //         component: () => import("@/views/message/manager/index.vue"),
-  //         name: "messageManager",
-  //         meta: { title: "消息中心", icon: "message" },
-  //       },
-  //     ],
-  //   },
+  {
+    path: "/message",
+    component: Layout,
+    meta: { title: " 消息管理", icon: "message" },
+    children: [
+      {
+        path: "manager",
+        component: () => import("@/views/message/manager/index.vue"),
+        name: "messageManager",
+        meta: { title: "消息中心", keepAlive: true, icon: "message" },
+      },
+    ],
+  },
   {
     path: "/oem",
     component: Layout,
