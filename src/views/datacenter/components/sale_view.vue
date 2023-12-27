@@ -122,7 +122,12 @@
         </el-col>
         <el-col :span="11">
           <el-form-item label-width="140" label="年度经营目标￥">
-            <el-input v-model="form.amount" placeholder="请输入" />
+            <el-input
+              v-model="form.amount"
+              placeholder="请输入"
+              @input="checkNumber(form.amount)"
+              maxlength="12"
+            />
           </el-form-item>
           <el-form-item label-width="140" label="平均每月经营目标￥">
             <el-input disabled v-model="form.month_amount" />
@@ -195,18 +200,20 @@ const handleConfirm = () => {
     amount: form.value.amount,
     plan_time: form.value.plan_time,
   };
-  if (!form.value.tax_land_id || !form.value.amount || !form.value.plan_time) {
-    return ElMessage.error("表单必填");
-  }
   savePlan(params).then((res) => {
     ElMessage.success("设置成功");
     visible.value = false;
+    tax_land_id.value = form.value.tax_land_id;
+    getPlan();
   });
 };
 
 const clean = () => {
   if (!form.value.tax_land_id) {
     return ElMessage.error("先选择税地");
+  }
+  if (!form.value.amount) {
+    return false;
   }
   cleanPlan({ tax_land_id: form.value.tax_land_id }).then(() => {
     ElMessage.success("操作成功");
@@ -246,6 +253,14 @@ const changeTax = (tax_land_id) => {
     form.value.amount = res.data.total_amount;
     form.value.month_amount = res.data.month_amount;
   });
+};
+
+const checkNumber = (val) => {
+  const regex = /^\d+$/;
+  if (!regex.test(val)) {
+    form.value.amount = "";
+    ElMessage.error("请输入数字");
+  }
 };
 </script>
 
