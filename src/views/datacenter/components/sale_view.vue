@@ -41,9 +41,9 @@
           <div class="money-item">
             <div class="title">
               目标（元）
-              <span v-if="tax_land_id != ''" class="set" @click="setMonth"
+              <!-- <span v-if="tax_land_id != ''" class="set" @click="setMonth"
                 >设置</span
-              >
+              > -->
             </div>
             <div class="money-num">{{ plan.month_plan }}</div>
           </div>
