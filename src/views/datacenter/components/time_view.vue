@@ -3,7 +3,7 @@
     <div class="title">数据统计</div>
     <div class="select">
       <tax-source-select
-        class="w-340px"
+        class="w-240px"
         v-model:taxId="formItem.tax_land_id"
         @change-tax="handleSearch"
       />
@@ -20,6 +20,7 @@
       </div>
       <div class="time">
         <el-date-picker
+          class="w-full"
           v-model="formItem.date"
           type="daterange"
           start-placeholder="开始日期"
