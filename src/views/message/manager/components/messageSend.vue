@@ -29,7 +29,6 @@
     >
       <template #operation="{ row }">
         <el-button link type="primary" @click="handleView(row)">查看</el-button>
-        <el-button link type="primary" @click="handleRead(row)">已读</el-button>
       </template>
     </zxn-table>
   </div>
@@ -38,7 +37,7 @@
   <send-dialog ref="sendDialogRef" />
 </template>
 <script setup lang="ts">
-import { sendIndex } from "@/api/message";
+import { sendIndex, read } from "@/api/message";
 import { transformTimeRange } from "@/utils";
 import noticeDialog from "./noticeDialog.vue";
 import sendDialog from "./sendDialog.vue";
@@ -56,7 +55,7 @@ const pageInfo = reactive({
 });
 const tableData = reactive([]) as any;
 const columnList = [
-  { label: "发布账户", prop: "source", minWidth: 180 },
+  { label: "发布账户", prop: "account", minWidth: 180 },
   {
     label: "消息状态",
     type: "enum",
@@ -72,9 +71,9 @@ const columnList = [
   { label: "信息类型", prop: "type", minWidth: 120 },
   { label: "信息标题", prop: "title", minWidth: 120 },
   { label: "信息内容", prop: "content", minWidth: 300 },
-  { label: "消息来源", prop: "from", minWidth: 180 },
+  // { label: "消息来源", prop: "from", minWidth: 180 },
   { label: "通知时间", prop: "add_time", minWidth: 180 },
-  { label: "操作", slot: "operation", fixed: "right", width: 140 },
+  { label: "操作", slot: "operation", fixed: "right", width: 70 },
 ];
 
 const handleReset = () => {
@@ -114,8 +113,7 @@ const getList = async () => {
     console.log(e);
   }
 };
-// 已读
-const handleRead = (row: any) => {};
+
 const emit = defineEmits(["send", "notice", "view"]);
 // 查看
 const sendViewDialogRef = ref();

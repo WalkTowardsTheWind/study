@@ -29,6 +29,7 @@
     >
       <template #operation="{ row }">
         <el-button link type="primary" @click="handleView(row)">查看</el-button>
+        <el-button link type="primary" @click="handleRead(row)">已读</el-button>
       </template>
     </zxn-table>
   </div>
@@ -37,7 +38,7 @@
   <send-dialog ref="sendDialogRef" />
 </template>
 <script setup lang="ts">
-import { notifyIndex } from "@/api/message";
+import { notifyIndex, read } from "@/api/message";
 import { transformTimeRange } from "@/utils";
 import noticeDialog from "./noticeDialog.vue";
 import sendDialog from "./sendDialog.vue";
@@ -74,7 +75,7 @@ const columnList = [
   { label: "信息内容", prop: "content", minWidth: 300 },
   { label: "发送对象", prop: "from", minWidth: 180 },
   { label: "通知时间", prop: "add_time", minWidth: 180 },
-  { label: "操作", slot: "operation", fixed: "right", width: 70 },
+  { label: "操作", slot: "operation", fixed: "right", width: 140 },
 ];
 
 const handleReset = () => {
@@ -112,6 +113,22 @@ const getList = async () => {
   } catch (e) {
     loading.value = false;
     console.log(e);
+  }
+};
+// 已读
+const handleRead = async (row: any) => {
+  try {
+    await read(row.id);
+    ElMessage({
+      type: "success",
+      message: "已读成功",
+    });
+    getList();
+  } catch (error) {
+    ElMessage({
+      type: "error",
+      message: "已读失败",
+    });
   }
 };
 const emit = defineEmits(["send", "notice", "view"]);

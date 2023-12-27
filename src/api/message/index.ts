@@ -43,6 +43,15 @@ export function sendView(id: number): AxiosPromise {
   });
 }
 /**
+ * 消息已读
+ */
+export function read(id: number): AxiosPromise {
+  return request({
+    url: `/adminapi/notify/seen/${id}`,
+    method: "GET",
+  });
+}
+/**
  * 消息置顶
  */
 export function topPing(id: number): AxiosPromise {
