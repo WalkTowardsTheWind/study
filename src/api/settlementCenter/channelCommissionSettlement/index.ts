@@ -146,11 +146,10 @@ export function deleteChannelSettlementDoc(id: number) {
 /**
  * 获取渠道列表
  */
-export function getChannelList(data: ChannelList): AxiosPromise {
+export function getChannelList(): AxiosPromise {
   return request({
     url: "/adminapi/finance/channel/getChannel",
     method: "GET",
-    params: data,
   });
 }
 /**

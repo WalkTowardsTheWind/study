@@ -26,8 +26,8 @@ export enum channelCommissionSettlementList {
   "驳回",
 }
 export enum settlement_type {
-  "企业" = 1,
-  "渠道",
+  "渠道自营" = 1,
+  "渠道分销",
 }
 // 渠道结算状态
 export enum channelSettlementStatus {

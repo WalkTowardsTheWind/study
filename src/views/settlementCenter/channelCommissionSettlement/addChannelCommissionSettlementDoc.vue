@@ -6,11 +6,19 @@
           <zxn-search
             class="m-t-[20px]"
             :formItem="formItem"
+            :labelWidth="100"
             @on-search="handleSearch"
             @on-reset="handleReset"
           >
+            <el-form-item>
+              <el-input v-model="formItem.keywords" placeholder="请输入关键字">
+                <template #prefix>
+                  <el-icon><i-ep-Search /></el-icon>
+                </template>
+              </el-input>
+            </el-form-item>
             <el-form-item label="结算类型">
-              <el-select
+              <zxn-select
                 v-model="formItem.settlement_type"
                 @change="handleUpdata"
               >
@@ -22,9 +30,9 @@
                   :label="item.label"
                   :value="item.value"
                 />
-              </el-select>
+              </zxn-select>
             </el-form-item>
-            <el-form-item label="税地名称">
+            <!-- <el-form-item label="税地名称">
               <el-select
                 v-model="formItem.tax_land_id"
                 filterable
@@ -39,7 +47,7 @@
                   :value="item.value"
                 />
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="渠道名称">
               <el-select
                 ref="channelSelect"
@@ -48,7 +56,6 @@
                 clearable
                 placeholder="请选择渠道"
                 @change="handleUpdata"
-                @focus="handleIsSelectChannel"
               >
                 <el-option
                   v-for="item in optionsChannel"
@@ -58,7 +65,7 @@
                 />
               </el-select>
             </el-form-item>
-            <el-form-item label="企业名称">
+            <!-- <el-form-item label="企业名称">
               <el-select
                 ref="companySelect"
                 v-model="formItem.company_id"
@@ -75,18 +82,12 @@
                   :value="item.value"
                 />
               </el-select>
-            </el-form-item>
-            <el-form-item v-show="IsSearch">
-              <el-input v-model="formItem.keywords" placeholder="请输入关键字">
-                <template #prefix>
-                  <el-icon><i-ep-Search /></el-icon>
-                </template>
-              </el-input>
-            </el-form-item>
+            </el-form-item> -->
+
             <el-form-item prop="date" label="结算时间">
               <zxn-date-range v-model="formItem.timeData" />
             </el-form-item>
-            <el-form-item label="结算状态">
+            <el-form-item label="渠道结算状态">
               <el-select v-model="formItem.status" @change="handleSearch">
                 <el-option
                   v-for="item in proxy.$const[
@@ -114,21 +115,36 @@
             rowKey="id"
             :selectable="selectable"
           >
+            <template #tableTop>
+              <el-dropdown trigger="click" @command="handleCommand">
+                <el-button type="primary" plain>批量操作</el-button>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command="1"
+                      >生成佣金结算单</el-dropdown-item
+                    >
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+              <el-dropdown class="ml-4" trigger="click" @command="handleExport">
+                <el-button type="primary">导出</el-button>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command="1">资料包</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </template>
           </zxn-table>
         </div>
         <!-- <zxn-bottom-btn> -->
-        <div class="bottom-btn">
+        <!-- <div class="bottom-btn">
           <el-button color="#ACACAC" @click="handleClose" plain>取消</el-button>
           <el-button type="primary" @click="handleSave">保存</el-button>
           <el-button type="primary" @click="handleSend" plain>发送</el-button>
-        </div>
+        </div> -->
 
         <!-- </zxn-bottom-btn> -->
-      </template>
-      <template #right>
-        <div @click="handleIsSearch">
-          <el-icon><i-ep-Search /></el-icon>
-        </div>
       </template>
     </zxn-tabs>
     <viewDialog
@@ -166,34 +182,34 @@ interface ListItem {
   value: string;
   label: string;
 }
-const optionsTaxLand = ref<ListItem[]>([]);
-const getTaxLand = async () => {
-  const { data } = await getLandList();
-  const newData = data.tax_land_list.map((item: any) => {
-    return {
-      label: item.tax_land_name,
-      value: item.id,
-    };
-  });
-  optionsTaxLand.value = [];
-  optionsTaxLand.value.push(...newData);
-};
+// const optionsTaxLand = ref<ListItem[]>([]);
+// const getTaxLand = async () => {
+//   const { data } = await getLandList();
+//   const newData = data.tax_land_list.map((item: any) => {
+//     return {
+//       label: item.tax_land_name,
+//       value: item.id,
+//     };
+//   });
+//   optionsTaxLand.value = [];
+//   optionsTaxLand.value.push(...newData);
+// };
 // getTaxLand();
 //获取渠道列表
 const channelSelect = ref();
 const optionsChannel = ref<ListItem[]>([]);
 const getChannel = async () => {
-  if (!formItem.value.tax_land_id) {
-    ElMessage({
-      type: "warning",
-      message: `请先选择税地名称`,
-    });
-    return;
-  }
-  let params = {
-    tax_land_id: formItem.value.tax_land_id,
-  };
-  const { data } = await getChannelList(params);
+  // if (!formItem.value.tax_land_id) {
+  //   ElMessage({
+  //     type: "warning",
+  //     message: `请先选择税地名称`,
+  //   });
+  //   return;
+  // }
+  // let params = {
+  //   tax_land_id: formItem.value.tax_land_id,
+  // };
+  const { data } = await getChannelList();
   const newData = data.map((item: any) => {
     return {
       label: item.channel_name,
@@ -203,38 +219,34 @@ const getChannel = async () => {
   optionsChannel.value = [];
   optionsChannel.value.push(...newData);
 };
+getChannel();
 //获取企业列表
-const companySelect = ref();
-const optionsCompany = ref<ListItem[]>([]);
-const getCompany = async () => {
-  if (!formItem.value.channel_id) {
-    ElMessage({
-      type: "warning",
-      message: `请先选择渠道名称`,
-    });
-    return;
-  }
+// const companySelect = ref();
+// const optionsCompany = ref<ListItem[]>([]);
+// const getCompany = async () => {
+//   if (!formItem.value.channel_id) {
+//     ElMessage({
+//       type: "warning",
+//       message: `请先选择渠道名称`,
+//     });
+//     return;
+//   }
 
-  let params = {
-    tax_land_id: formItem.value.tax_land_id,
-    channel_id: formItem.value.channel_id,
-    settlement_type: formItem.value.settlement_type,
-  };
-  const { data } = await getCompanyList(params);
-  const newData = data.map((item: any) => {
-    return {
-      label: item.company_name,
-      value: item.id,
-    };
-  });
-  optionsCompany.value = [];
-  optionsCompany.value.push(...newData);
-};
-// 查询重置
-const IsSearch = ref(false);
-const handleIsSearch = () => {
-  IsSearch.value = !IsSearch.value;
-};
+//   let params = {
+//     tax_land_id: formItem.value.tax_land_id,
+//     channel_id: formItem.value.channel_id,
+//     settlement_type: formItem.value.settlement_type,
+//   };
+//   const { data } = await getCompanyList(params);
+//   const newData = data.map((item: any) => {
+//     return {
+//       label: item.company_name,
+//       value: item.id,
+//     };
+//   });
+//   optionsCompany.value = [];
+//   optionsCompany.value.push(...newData);
+// };
 const pageInfo = reactive({
   page: 1,
   total: 0,
@@ -244,8 +256,8 @@ const handleReset = () => {
   formItem.value = {
     keywords: "",
     settlement_type: "1",
-    company_id: "",
-    tax_land_id: "",
+    // company_id: "",
+    // tax_land_id: "",
     channel_id: "",
     status: "5",
     timeData: [],
@@ -254,35 +266,24 @@ const handleReset = () => {
   };
   handleSearch();
 };
-const handleUpdataTaxLand = () => {
-  formItem.value.channel_id = "";
-  formItem.value.company_id = "";
-  getChannel();
-};
+// const handleUpdataTaxLand = () => {
+//   formItem.value.channel_id = "";
+//   formItem.value.company_id = "";
+//   getChannel();
+// };
 const handleUpdata = () => {
-  formItem.value.company_id = "";
-  getCompany();
+  getTableData();
 };
-const handleIsSelectChannel = () => {
-  if (!formItem.value.tax_land_id) {
-    channelSelect.value.blur();
-    ElMessage({
-      type: "warning",
-      message: `请先选择税地名称`,
-    });
-  }
-  return;
-};
-const handleIsSelect = () => {
-  if (!formItem.value.channel_id) {
-    companySelect.value.blur();
-    ElMessage({
-      type: "warning",
-      message: `请先选择渠道名称`,
-    });
-  }
-  return;
-};
+// const handleIsSelect = () => {
+//   if (!formItem.value.channel_id) {
+//     companySelect.value.blur();
+//     ElMessage({
+//       type: "warning",
+//       message: `请先选择渠道名称`,
+//     });
+//   }
+//   return;
+// };
 const handleSearch = () => {
   console.log("查询");
   pageInfo.page = 1;
@@ -315,8 +316,8 @@ var total_pay_money = ref();
 const formItem = ref({
   keywords: "",
   settlement_type: "1",
-  company_id: "",
-  tax_land_id: "",
+  // company_id: "",
+  // tax_land_id: "",
   channel_id: "",
   status: "5",
   timeData: [],
@@ -327,22 +328,9 @@ const formItem = ref({
 const tableData = reactive([] as any);
 const columnList = [
   { label: "企业名称", prop: "company_name" },
-  { label: "结算类型", prop: "settlement_type" },
+  { label: "结算类型", prop: "settlement_type", width: 120 },
   { label: "发票类型", prop: "invoice_type", width: 180 },
-  { label: "成本点位", prop: "cost_tax_point" },
-  { label: "企业点位", prop: "tax_point" },
-  { label: "渠道点位", prop: "channel_point" },
   { label: "渠道名称", prop: "channel_name" },
-  { label: "渠道管理员", prop: "channel_admin", width: 100 },
-  { label: "所属税地", prop: "tax_land_name", width: 150 },
-  { label: "打款金额", prop: "payment_amount" },
-  { label: "下发金额", prop: "settlement_amount" },
-  { label: "服务费", prop: "commission" },
-  { label: "成本费用", prop: "cost_amount" },
-  // { label: "供应商结算", prop: "supplier_amount", width: 100 },
-  { label: "渠道结算税前", prop: "channel_amount", width: 110 },
-  { label: "渠道结算税后", prop: "after_channel_amount", width: 110 },
-  { label: "结算时间", prop: "settlement_time" },
   {
     label: "渠道结算状态",
     type: "enum",
@@ -355,15 +343,27 @@ const columnList = [
       2: { color: "#36C5F4", backgroundColor: "#DFF6FD" },
       3: { color: "#366FF4", backgroundColor: "#DFE8FD" },
       4: { color: "#F45136", backgroundColor: "#FDE3DF" },
+      5: { color: "#FFFFFF", backgroundColor: "#96AEF6" },
     },
     width: 120,
   },
+  { label: "成本点位", prop: "cost_tax_point" },
+  { label: "企业点位", prop: "tax_point" },
+  { label: "渠道点位", prop: "channel_point" },
+  { label: "渠道管理员", prop: "channel_admin", width: 100 },
+  { label: "所属税地", prop: "tax_land_name", width: 150 },
+  { label: "打款金额", prop: "payment_amount" },
+  { label: "下发金额", prop: "settlement_amount" },
+  { label: "服务费", prop: "commission" },
+  { label: "成本费用", prop: "cost_amount" },
+  // { label: "供应商结算", prop: "supplier_amount", width: 100 },
+  { label: "渠道结算税前", prop: "channel_amount", width: 110 },
+  { label: "渠道结算税后", prop: "after_channel_amount", width: 110 },
+  { label: "结算时间", prop: "settlement_time" },
 ];
 // 是否勾选
 const selectable = (row: any) => {
-  console.log(row);
-
-  return row.channel_settlement_id === 0;
+  return row.status === 5;
 };
 //取消
 const handleClose = () => {
@@ -381,10 +381,15 @@ const handleSave = () => {
     });
 
     return;
+  } else if (!formItem.value.channel_id) {
+    ElMessage({
+      type: "warning",
+      message: `请选择渠道`,
+    });
+    return;
   }
   const params = {
     ids: selectionData.value,
-    status: 0,
   };
 
   addChannelSettlementDoc(params)
@@ -452,6 +457,19 @@ const selectionData = ref([]);
 const handleSelect = (data: any) => {
   selectionData.value = data.map((item: any) => item.id);
 };
+const handleCommand = (command: string | number | object) => {
+  if (command == 1) {
+    handleSave();
+  }
+};
+/**
+ * 导出批量操作
+ */
+const handleExport = (command: string | number | object) => {
+  if (command == 1) {
+    // handleDownloadInformationPack(selectionData.value);
+  }
+};
 /**
  * 获取勾选id
  */
@@ -461,12 +479,12 @@ const getCheckStatusData = async () => {
     const data = JSON.parse(route.query.params as string);
     checkStatusData.value = data.checkStatusData;
     formItem.value.channel_id = data.channel_id;
-    formItem.value.company_id = data.company_id;
+    // formItem.value.company_id = data.company_id;
     formItem.value.settlement_type = data.settlement_type + "";
     console.log(checkStatusData.value, "checkStatusData.value");
 
-    getChannel();
-    getCompany();
+    // getChannel();
+    // getCompany();
   } catch (error) {
     console.log(error);
   }
@@ -494,13 +512,13 @@ const toggleRowSelection = () => {
 
 //获取数据
 const getTableData = async () => {
-  if (!(formItem.value.channel_id && formItem.value.company_id)) {
-    ElMessage({
-      type: "warning",
-      message: `请先选择结算类型、税地、渠道和企业`,
-    });
-    return;
-  }
+  // if (!(formItem.value.channel_id && formItem.value.company_id)) {
+  //   ElMessage({
+  //     type: "warning",
+  //     message: `请先选择结算类型、税地、渠道和企业`,
+  //   });
+  //   return;
+  // }
   const params = transformTimeRanges({ ...formItem.value }) as any;
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
@@ -514,7 +532,7 @@ const getTableData = async () => {
     console.log(data, "=======>");
     total_pay_money.value = data.total_pay_money;
 
-    var newData = data.map((item: any) => {
+    var newData = data.data.map((item: any) => {
       return {
         id: item.id,
         company_name: item.company_name,
@@ -557,7 +575,7 @@ const get = async () => {
   if (route.query.params) {
     await getCheckStatusData();
   } else {
-    await getTaxLand();
+    // await getTaxLand();
   }
   await getTableData();
 };
