@@ -136,9 +136,14 @@
               </el-dropdown>
             </template>
             <template #operation="{ row }">
-              <el-button link type="primary" @click="handleOnly(row)"
+              <el-button
+                link
+                type="primary"
+                @click="handleOnly(row)"
+                v-if="[5].includes(row.status)"
                 >生成佣金结算单</el-button
               >
+              <span v-else>---</span>
             </template>
           </zxn-table>
         </div>
