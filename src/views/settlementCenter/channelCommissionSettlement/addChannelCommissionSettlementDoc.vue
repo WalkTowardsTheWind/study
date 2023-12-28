@@ -126,14 +126,14 @@
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
-              <el-dropdown class="ml-4" trigger="click" @command="handleExport">
+              <!-- <el-dropdown class="ml-4" trigger="click" @command="handleExport">
                 <el-button type="primary">导出</el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
                     <el-dropdown-item command="1">资料包</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
-              </el-dropdown>
+              </el-dropdown> -->
             </template>
             <template #operation="{ row }">
               <el-button link type="primary" @click="handleOnly(row)"
@@ -465,13 +465,11 @@ const istaxland = () => {
   let newdata = tableData.filter((it: any) => {
     return selectionData.value.includes(it.id);
   });
-  if (newdata.length > 1) {
+  if (newdata.length >= 1) {
     let is = newdata.every((item: any) => {
       return item.settlement_type == newdata[0].settlement_type;
     });
     return is;
-  } else {
-    return false;
   }
 };
 
