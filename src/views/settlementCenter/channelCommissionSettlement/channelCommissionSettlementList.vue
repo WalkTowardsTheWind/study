@@ -76,12 +76,11 @@
       @selection-change="handleSelect"
       fieldTotal="settlement_amount"
     >
-      <template #tableTop>
-        <el-button type="primary" @click="handleAdd">新建佣金结算单</el-button>
-        <!-- <el-button class="ml-4" type="primary" plain @click="handleExport"
+      <!-- <template #tableTop>
+        <el-button class="ml-4" type="primary" plain @click="handleExport"
           >导出EXCEL</el-button
-        > -->
-      </template>
+        >
+      </template> -->
       <template #operation="scope">
         <el-button
           link
