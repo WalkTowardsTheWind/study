@@ -212,8 +212,8 @@ const clean = () => {
   if (!form.value.tax_land_id) {
     return ElMessage.error("先选择税地");
   }
-  if (!form.value.amount) {
-    return false;
+  if (!form.value.month_amount) {
+    return ElMessage.info("当前税地暂无计划清除");
   }
   cleanPlan({ tax_land_id: form.value.tax_land_id }).then(() => {
     ElMessage.success("操作成功");
