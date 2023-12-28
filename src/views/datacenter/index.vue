@@ -3,9 +3,11 @@
     <div class="sale">
       <SaleView />
     </div>
-    <div class="time_view">
-      <TimeView ref="timeRef" @update="getData" />
-    </div>
+    <el-affix :offset="60">
+      <div class="time_view">
+        <TimeView ref="timeRef" @update="getData" />
+      </div>
+    </el-affix>
     <div class="chart">
       <ChartView :arr-data="arrData" />
     </div>
