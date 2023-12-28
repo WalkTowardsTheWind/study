@@ -350,6 +350,7 @@ const color = {
   0: { color: "#1AB66B", backgroundColor: "#DAF3E7" },
   1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
   2: { color: "#333333", backgroundColor: "#DEDEDE" },
+  3: { color: "#1AB66B", backgroundColor: "#DAF3E7" },
 };
 const columnList = [
   { label: "账户ID", prop: "account" },
@@ -365,6 +366,7 @@ const columnList = [
       0: { color: "#1AB66B", backgroundColor: "#DAF3E7" },
       1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
       2: { color: "#333333", backgroundColor: "#DEDEDE" },
+      3: { color: "#1AB66B", backgroundColor: "#DAF3E7" },
     },
   },
   { label: "姓名", prop: "real_name" },
