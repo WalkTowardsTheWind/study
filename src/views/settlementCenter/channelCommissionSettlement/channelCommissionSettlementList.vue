@@ -21,6 +21,7 @@
     <zxn-search
       class="m-t-[20px]"
       :formItem="formItem"
+      :labelWidth="120"
       @on-search="handleSearch"
       @on-reset="handleReset"
     >
@@ -43,7 +44,7 @@
           />
         </zxn-select>
       </el-form-item>
-      <el-form-item label="收入类型">
+      <el-form-item label="结算类型">
         <zxn-select v-model="formItem.settlement_type" @change="handleSearch">
           <el-option
             v-for="item in proxy.$const['settlementCenterEnum.settlement_type']"
@@ -53,16 +54,16 @@
           />
         </zxn-select>
       </el-form-item>
-      <el-form-item prop="tax_land_id" label="税地名称">
+      <!-- <el-form-item prop="tax_land_id" label="税地名称">
         <tax-source-select
           v-model:taxId="formItem.tax_land_id"
           @change-tax="handleSearch"
         />
-      </el-form-item>
-      <el-form-item prop="date" label="创建日期">
+      </el-form-item> -->
+      <el-form-item prop="date" label="佣金单创建时间">
         <zxn-date-range v-model="formItem.createTimeData" />
       </el-form-item>
-      <el-form-item prop="date" label="打款日期">
+      <el-form-item prop="date" label="佣金单确认时间">
         <zxn-date-range v-model="formItem.paymentTimeData" />
       </el-form-item>
     </zxn-search>
@@ -218,7 +219,7 @@ const formItem = ref({
 const tableData = reactive([] as any);
 const columnList = [
   { label: "发佣单号", prop: "channel_order_no", width: 110, fixed: "left" },
-  { label: "税地名称", prop: "tax_land_name", width: 120, fixed: "left" },
+  // { label: "税地名称", prop: "tax_land_name", width: 120, fixed: "left" },
   {
     label: "状态",
     type: "enum",
@@ -234,12 +235,12 @@ const columnList = [
     },
     width: 100,
   },
-  { label: "收入类型", prop: "settlement_type", width: 110, fixed: "left" },
+  { label: "结算类型", prop: "settlement_type", width: 110, fixed: "left" },
   { label: "渠道名称", prop: "channel_name", width: 110, fixed: "left" },
-  { label: "结算金额", prop: "settlement_amount", minWidth: 120 },
+  { label: "企业结算金额", prop: "settlement_amount", minWidth: 120 },
   { label: "渠道佣金（税后）", prop: "after_commission", minWidth: 140 },
-  { label: "创建时间", prop: "add_time", width: 180 },
-  { label: "下发时间（打款日）", prop: "settlement_time", width: 180 },
+  { label: "佣金单创建时间", prop: "add_time", width: 180 },
+  { label: "佣金单确认时间", prop: "settlement_time", width: 180 },
   { label: "驳回原因", prop: "reason", minWidth: 180 },
   {
     label: "操作",

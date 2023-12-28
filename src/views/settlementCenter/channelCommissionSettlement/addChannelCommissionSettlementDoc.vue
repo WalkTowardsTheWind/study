@@ -135,6 +135,11 @@
                 </template>
               </el-dropdown>
             </template>
+            <template #operation="{ row }">
+              <el-button link type="primary" @click="handleOnly(row)"
+                >生成佣金结算单</el-button
+              >
+            </template>
           </zxn-table>
         </div>
         <!-- <zxn-bottom-btn> -->
@@ -174,7 +179,7 @@ const activeName = ref("channelCommissionSettlementDoc");
 const tabsList = reactive([
   {
     name: "channelCommissionSettlementDoc",
-    label: "新建渠道佣金结算单",
+    label: "渠道待结算列表",
   },
 ]);
 //获取税地列表
@@ -255,7 +260,7 @@ const pageInfo = reactive({
 const handleReset = () => {
   formItem.value = {
     keywords: "",
-    settlement_type: "1",
+    settlement_type: "",
     // company_id: "",
     // tax_land_id: "",
     channel_id: "",
@@ -315,7 +320,7 @@ const handlePageChange = (cur: any) => {
 var total_pay_money = ref();
 const formItem = ref({
   keywords: "",
-  settlement_type: "1",
+  settlement_type: "",
   // company_id: "",
   // tax_land_id: "",
   channel_id: "",
@@ -329,8 +334,8 @@ const tableData = reactive([] as any);
 const columnList = [
   { label: "企业名称", prop: "company_name" },
   { label: "结算类型", prop: "settlement_type", width: 120 },
-  { label: "发票类型", prop: "invoice_type", width: 180 },
-  { label: "渠道名称", prop: "channel_name" },
+  { label: "发票类型", prop: "invoice_type", width: 100 },
+  { label: "渠道名称", prop: "channel_name", width: 200 },
   {
     label: "渠道结算状态",
     type: "enum",
@@ -355,11 +360,19 @@ const columnList = [
   { label: "打款金额", prop: "payment_amount" },
   { label: "下发金额", prop: "settlement_amount" },
   { label: "服务费", prop: "commission" },
-  { label: "成本费用", prop: "cost_amount" },
+  // { label: "成本费用", prop: "cost_amount" },
   // { label: "供应商结算", prop: "supplier_amount", width: 100 },
   { label: "渠道结算税前", prop: "channel_amount", width: 110 },
   { label: "渠道结算税后", prop: "after_channel_amount", width: 110 },
   { label: "结算时间", prop: "settlement_time" },
+  {
+    label: "操作",
+    slot: "operation",
+    fixed: "right",
+    width: 150,
+    align: "right",
+    headerAlign: "right",
+  },
 ];
 // 是否勾选
 const selectable = (row: any) => {
@@ -372,24 +385,14 @@ const handleClose = () => {
     query: { activeName: "channelCommission" },
   });
 };
+// 单笔生成佣金结算单
+const handleOnly = (row: any) => {
+  handleSave([row.id]);
+};
 //保存
-const handleSave = () => {
-  if (selectionData.value.length === 0) {
-    ElMessage({
-      type: "warning",
-      message: `请选择任务`,
-    });
-
-    return;
-  } else if (!formItem.value.channel_id) {
-    ElMessage({
-      type: "warning",
-      message: `请选择渠道`,
-    });
-    return;
-  }
+const handleSave = (ids: any) => {
   const params = {
-    ids: selectionData.value,
+    ids,
   };
 
   addChannelSettlementDoc(params)
@@ -399,8 +402,8 @@ const handleSave = () => {
         message: `新建渠道佣金结算单保存成功`,
       });
       router.push({
-        name: "settlementCenter",
-        query: { activeName: "channelCommission" },
+        name: "channelCommissionSettlementList",
+        // query: { activeName: "channelCommission" },
       });
     })
     .catch((error) => {
@@ -453,13 +456,42 @@ const up = () => {
  * 批量
  */
 //选中的数据
-const selectionData = ref([]);
+const selectionData = ref([]) as any;
 const handleSelect = (data: any) => {
   selectionData.value = data.map((item: any) => item.id);
 };
+// 判断是否存在多税地
+const istaxland = () => {
+  let newdata = tableData.filter((it: any) => {
+    return selectionData.value.includes(it.id);
+  });
+  if (newdata.length > 1) {
+    let is = newdata.every((item: any) => {
+      return item.settlement_type == newdata[0].settlement_type;
+    });
+    return is;
+  } else {
+    return false;
+  }
+};
+
 const handleCommand = (command: string | number | object) => {
   if (command == 1) {
-    handleSave();
+    if (selectionData.value.length === 0) {
+      ElMessage({
+        type: "warning",
+        message: `请选择任务`,
+      });
+      return;
+    }
+    if (istaxland()) {
+      handleSave(selectionData.value);
+    } else {
+      ElMessage({
+        type: "warning",
+        message: `请选择相同渠道`,
+      });
+    }
   }
 };
 /**
