@@ -126,14 +126,14 @@
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
-              <!-- <el-dropdown class="ml-4" trigger="click" @command="handleExport">
+              <el-dropdown class="ml-4" trigger="click" @command="handleExport">
                 <el-button type="primary">导出</el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item command="1">资料包</el-dropdown-item>
+                    <el-dropdown-item command="1">表格</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
-              </el-dropdown> -->
+              </el-dropdown>
             </template>
             <template #operation="{ row }">
               <el-button link type="primary" @click="handleOnly(row)"
@@ -142,14 +142,6 @@
             </template>
           </zxn-table>
         </div>
-        <!-- <zxn-bottom-btn> -->
-        <!-- <div class="bottom-btn">
-          <el-button color="#ACACAC" @click="handleClose" plain>取消</el-button>
-          <el-button type="primary" @click="handleSave">保存</el-button>
-          <el-button type="primary" @click="handleSend" plain>发送</el-button>
-        </div> -->
-
-        <!-- </zxn-bottom-btn> -->
       </template>
     </zxn-tabs>
     <viewDialog
@@ -162,13 +154,12 @@
 </template>
 <script setup lang="ts">
 import { transformTimeRanges } from "@/utils";
+import { downloadByOnlineUrl } from "@/utils/download";
 import { useRouter, useRoute } from "vue-router";
 import {
   getChannelList,
-  getCompanyList,
   getAddChannelSettlementDocList,
   addChannelSettlementDoc,
-  getSendDocDetails,
 } from "@/api/settlementCenter/channelCommissionSettlement";
 import { getSelectLandList, getLandList } from "@/api/common";
 import viewDialog from "../components/viewDialog.vue";
@@ -378,13 +369,78 @@ const columnList = [
 const selectable = (row: any) => {
   return row.status === 5;
 };
-//取消
-const handleClose = () => {
-  router.push({
-    name: "settlementCenter",
-    query: { activeName: "channelCommission" },
-  });
+
+//导出表格
+const handleExportDoc = () => {
+  if (Object.keys(selectionData.value).length == 0) {
+    ElMessage({
+      type: "error",
+      message: `请选择结算单`,
+    });
+  } else {
+    ElMessageBox({
+      title: "",
+      message: h("p", null, `确定批量导出表格`),
+      showCancelButton: true,
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      beforeClose: async (
+        action: string,
+        instance: { confirmButtonLoading: boolean },
+        done: () => void
+      ) => {
+        if (action === "confirm") {
+          instance.confirmButtonLoading = true;
+          await handleExcel(selectionData.value);
+
+          instance.confirmButtonLoading = false;
+          done();
+        } else {
+          done();
+        }
+      },
+    })
+      .then(() => {
+        ElMessage({
+          type: "success",
+          message: "导出成功",
+        });
+      })
+      .catch((action) => {
+        if (action === "cancel") {
+          ElMessage({
+            type: "warning",
+            message: "取消操作",
+          });
+        } else {
+          ElMessage({
+            type: "error",
+            message: "导出失败",
+          });
+        }
+      });
+  }
 };
+/**
+ * 导出批量操作
+ */
+const handleExport = (command: string | number | object) => {
+  if (command == 1) {
+    handleExportDoc();
+  }
+};
+/**
+ * 下载Excel
+ */
+const handleExcel = (ids: Array<string>) => {
+  const params = {
+    ids,
+    page: 1,
+    limit: pageInfo.limit,
+  };
+  downloadByOnlineUrl("/adminapi/finance/channel/get_list_excel", params);
+};
+
 // 单笔生成佣金结算单
 const handleOnly = (row: any) => {
   handleSave([row.id]);
@@ -413,25 +469,7 @@ const handleSave = (ids: any) => {
 //发佣确认
 const dialogVisible = ref(false);
 const formData = ref([]);
-//发送
-const handleSend = () => {
-  if (selectionData.value.length === 0) {
-    ElMessage({
-      type: "warning",
-      message: `请选择任务`,
-    });
 
-    return;
-  }
-  getSendDocDetails({ ids: selectionData.value })
-    .then((res: any) => {
-      formData.value = res.data;
-      dialogVisible.value = true;
-    })
-    .catch((error: any) => {
-      console.log(error);
-    });
-};
 const up = () => {
   const params = {
     ids: selectionData.value,
@@ -492,14 +530,7 @@ const handleCommand = (command: string | number | object) => {
     }
   }
 };
-/**
- * 导出批量操作
- */
-const handleExport = (command: string | number | object) => {
-  if (command == 1) {
-    // handleDownloadInformationPack(selectionData.value);
-  }
-};
+
 /**
  * 获取勾选id
  */
