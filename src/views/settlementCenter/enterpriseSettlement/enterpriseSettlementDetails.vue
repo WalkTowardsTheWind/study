@@ -90,11 +90,11 @@
             @selection-change="handleSelect"
             :hasPagination="false"
           >
-            <template #download="scope">
+            <!-- <template #download="scope">
               <el-button link type="primary" @click="handleDownload(scope)"
                 >下载</el-button
               >
-            </template>
+            </template> -->
             <template #operation="scope">
               <el-button link type="primary" @click="handleInspect(scope)"
                 >查看</el-button
