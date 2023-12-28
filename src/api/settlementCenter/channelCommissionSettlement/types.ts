@@ -48,7 +48,6 @@ export interface ids {
  */
 export interface idsStatus {
   ids: Array<string>;
-  status: number;
 }
 /**
  * 新建保存渠道结算单
