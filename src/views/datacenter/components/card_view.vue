@@ -29,7 +29,7 @@
               {{ j.isPercent ? "%" : "" }}</span
             >
             <img
-              v-if="j.value !== 0"
+              v-if="j.value !== 0 && j.isUpOrDown"
               :src="j.isUpOrDown === 'up' ? UPimg : DOWNimg"
               class="img"
               alt=""
