@@ -29,10 +29,13 @@
           /> </el-select
       ></el-form-item>
       <el-form-item label="通知时间">
-        <zxn-date-range
-          class="w-[100%]"
+        <el-date-picker
           v-model="formItem.add_time"
-          valueFormat=""
+          value-format="YYYY-MM-DD"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
         />
       </el-form-item>
       <el-form-item label="信息标题">
@@ -65,7 +68,7 @@ const formItem = reactive({
   add_time: [],
   title: "",
   content: "",
-});
+}) as any;
 //税地
 interface ListItem {
   value: string;
@@ -87,7 +90,14 @@ const getTaxLandOption = async () => {
 getTaxLandOption();
 //
 const send = async () => {
-  let params = transformTimeRange({ ...formItem }, "add_time", true) as any;
+  let params = {
+    tax_land_id: formItem.tax_land_id,
+    start_time: formItem.add_time[0],
+    end_time: formItem.add_time[1],
+    title: formItem.title,
+    content: formItem.content,
+  };
+
   try {
     await sendNotice(params);
     visible.value = false;
