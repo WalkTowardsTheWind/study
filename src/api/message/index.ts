@@ -100,3 +100,23 @@ export function getCompanyList(params?: any): AxiosPromise {
     params,
   });
 }
+
+/**
+ * 消息置顶
+ */
+export function notifyTop(id: any): AxiosPromise {
+  return request({
+    url: `/adminapi/notify/top/${id}`,
+    method: "GET",
+  });
+}
+
+/**
+ * 消息标记已读
+ */
+export function notifyRead(id: any): AxiosPromise {
+  return request({
+    url: `/adminapi/notify/seen/${id}`,
+    method: "GET",
+  });
+}
