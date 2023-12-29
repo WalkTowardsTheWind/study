@@ -1,101 +1,127 @@
 <template>
   <dashboard-card title="系统通知">
     <template #header-right>
-      <div class="look-more">
+      <div class="look-more" @click="handleMore">
         <span class="look-more-text">查看更多</span>
         <el-icon size="14" color="#808080">
           <i-ep-arrow-right />
         </el-icon>
       </div>
     </template>
-    <div class="notice-message">
-      <div class="notice-message-switch">
-        <div
-          class="notice-message-switch-item"
-          :class="{ active: type === 1 }"
-          @click="type = 1"
-        >
-          <div class="notice-message-switch-item-text">待办通知</div>
-          <!--          <span class="notice-message-switch-item-tip"></span>-->
-        </div>
-        <div
-          class="notice-message-switch-item"
-          :class="{ active: type === 2 }"
-          @click="type = 2"
-        >
-          <div class="notice-message-switch-item-text">通知消息</div>
-          <!--          <span class="notice-message-switch-item-tip">2</span>-->
-        </div>
-        <span class="selection"></span>
-      </div>
-    </div>
-    <div
-      ref="noticeMessage"
-      class="message-box"
-      :style="{
-        height: `${boxHeight}px`,
-        position: 'relative',
-      }"
-    >
-      <el-scrollbar
-        ref="scrollbar"
-        wrap-class="scrollbar-wrapper"
-        v-loading="false"
-      >
-        <TransitionGroup name="message-list" v-infinite-scroll="load" tag="div">
+    <div class="bg-#fff pt-10px">
+      <div class="notice-message">
+        <div class="notice-message-switch">
           <div
-            class="notice-message-item"
-            v-for="item in tableData"
-            :key="item.id"
+            class="notice-message-switch-item"
+            :class="{ active: type === 1 }"
+            @click="handleTypeChange(1)"
           >
-            <div class="notice-message-item-head">
-              <div class="notice-message-item-head-title text-ellipsis">
-                {{ item.title }}
-              </div>
-              <div class="notice-message-item-head-btn">
-                <span @click="handleGoRouter">稍后提醒</span>
-                <span>立刻处理</span>
-              </div>
-            </div>
-            <div class="notice-message-item-content text-ellipsis-3">
-              {{ item.content }}
-            </div>
+            <div class="notice-message-switch-item-text">待办通知</div>
+            <!--          <span class="notice-message-switch-item-tip"></span>-->
           </div>
-        </TransitionGroup>
-      </el-scrollbar>
+          <div
+            class="notice-message-switch-item"
+            :class="{ active: type === 2 }"
+            @click="handleTypeChange(2)"
+          >
+            <div class="notice-message-switch-item-text">通知消息</div>
+            <!--          <span class="notice-message-switch-item-tip">2</span>-->
+          </div>
+          <span class="selection"></span>
+        </div>
+      </div>
+      <div
+        ref="noticeMessage"
+        class="message-box"
+        :style="{
+          height: `${boxHeight}px`,
+          position: 'relative',
+        }"
+      >
+        <el-scrollbar
+          ref="scrollbar"
+          wrap-class="scrollbar-wrapper"
+          v-loading="false"
+        >
+          <TransitionGroup v-if="type === 1" name="list" tag="div">
+            <div
+              class="notice-message-item"
+              v-for="(item, index) in tableData"
+              :key="item.id"
+            >
+              <div class="notice-message-item-head">
+                <div class="notice-message-item-head-title text-ellipsis">
+                  {{ item.title }}
+                </div>
+                <div class="notice-message-item-head-btn">
+                  <span @click="handleTop(item, index)">置顶</span>
+                  <span @click="handleRead(item, index)">立刻处理</span>
+                </div>
+              </div>
+              <div class="notice-message-item-content text-ellipsis-3">
+                {{ item.content }}
+              </div>
+            </div>
+          </TransitionGroup>
+          <TransitionGroup v-else name="list" tag="div">
+            <div
+              class="notice-message-item"
+              v-for="(item, index) in tableData"
+              :key="item.id"
+            >
+              <div class="notice-message-item-head">
+                <div class="notice-message-item-head-title text-ellipsis">
+                  {{ item.title }}
+                </div>
+                <div class="notice-message-item-head-btn">
+                  <span @click="handleTop(item, index)">置顶</span>
+                  <span @click="handleRead(item, index)">立刻处理</span>
+                </div>
+              </div>
+              <div class="notice-message-item-content text-ellipsis-3">
+                {{ item.content }}
+              </div>
+            </div>
+          </TransitionGroup>
+        </el-scrollbar>
+      </div>
     </div>
   </dashboard-card>
 </template>
 <script setup lang="ts">
 import DashboardCard from "@/views/dashboard/components/DashboardCard.vue";
-import { notifyIndex, notifyView } from "@/api/message";
+import { notifyIndex, notifyTop, notifyRead } from "@/api/message";
 import { useRouter } from "vue-router";
 import { useRouteParams } from "@/store/modules/routeParams";
 const type = ref(1);
 
 const tableData = reactive([]);
-const pageInfo = {
-  page: 0,
-  limit: 10,
-  lastPage: 1,
+const handleTypeChange = (cur: number) => {
+  type.value = cur;
+  tableData.length = 0;
+  load();
 };
-
 const load = () => {
-  // if (pageInfo.page < pageInfo.lastPage) {
-  //   pageInfo.page++;
-  //   getList();
-  // }
+  getList();
 };
 const getList = async () => {
-  const params = { status: 0 };
-  params.page = pageInfo.page;
-  params.limit = pageInfo.limit;
+  const params = { type: type.value, limit: 20, status: 0 };
   try {
     const { data } = await notifyIndex(params);
-    pageInfo.lastPage = data.last_page;
     tableData.push(...data.data);
   } catch (e) {
     console.log(e);
+  }
+};
+const handleTop = (cur, rank) => {
+  tableData.unshift(...tableData.splice(rank, 1));
+  notifyTop(cur.id);
+};
+const handleRead = (cur, rank) => {
+  tableData.splice(rank, 1);
+  notifyRead(cur.id);
+  if (type.value === 1) {
+    handleGoRouter(cur);
   }
 };
 const router = useRouter();
@@ -114,7 +140,9 @@ let boxHeight = ref(0);
 const handleGoRouter = (item: { type: number; target_id: number }) => {
   pushParams(routerName[item.type], { status: item.target_id });
   router.push({ name: routerName[item.type] });
-  notifyView(item.id);
+};
+const handleMore = () => {
+  router.push({ name: "messageManager" });
 };
 onMounted(() => {
   setTimeout(() => {
@@ -145,6 +173,7 @@ onMounted(() => {
 }
 .notice-message {
   padding: 0 24px 16px 24px;
+  background-color: #ffffff;
   &-switch {
     display: flex;
     justify-content: space-between;
@@ -285,5 +314,20 @@ onMounted(() => {
   //  filter: blur(5px) brightness(120%) grayscale(0.7);
   //  z-index: 999;
   //}
+}
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.list-leave-active {
+  position: absolute;
 }
 </style>
