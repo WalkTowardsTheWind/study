@@ -3,9 +3,11 @@
     <div class="sale">
       <SaleView />
     </div>
-    <div class="time_view">
-      <TimeView ref="timeRef" @update="getData" />
-    </div>
+    <el-affix :offset="60">
+      <div class="time_view">
+        <TimeView ref="timeRef" @update="getData" />
+      </div>
+    </el-affix>
     <div class="chart">
       <ChartView :arr-data="arrData" />
     </div>
@@ -490,6 +492,27 @@ const getData = (tax_land_id = "", start_time = 0, end_time = 0) => {
   });
 };
 
+// const scrollFun = () => {
+//   const stickyDiv = document.querySelector(".time_view") as HTMLElement;
+//   const initialPosition = stickyDiv.getBoundingClientRect().top;
+//   if (window.scrollY > initialPosition) {
+//     stickyDiv.style.position = "fixed";
+//     stickyDiv.style.top = "0";
+//     stickyDiv.style.width = `89vw`;
+//     stickyDiv.style.zIndex = "9999";
+//   } else {
+//     stickyDiv.style.position = "static";
+//   }
+// };
+
+// onMounted(() => {
+//   window.addEventListener("scroll", scrollFun);
+// });
+
+// onBeforeMount(() => {
+//   window.removeEventListener("scroll", scrollFun);
+// });
+
 getData();
 </script>
 
@@ -508,12 +531,15 @@ $border-radius: 16px;
 }
 
 .time_view {
+  position: static;
   margin: 24px 0;
   width: 100%;
   height: 120px;
   background: $backgound;
   border-radius: $border-radius;
+  overflow: hidden;
 }
+
 .chart {
   width: 100%;
   height: 420px;

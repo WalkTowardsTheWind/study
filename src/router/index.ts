@@ -291,6 +291,15 @@ export const constantRoutes: RouteRecordRaw[] = [
         meta: { title: "结算中心", icon: "fail" },
       },
       {
+        path: "channelCommissionSettlementList",
+        component: () =>
+          import(
+            "@/views/settlementCenter/channelCommissionSettlement/index.vue"
+          ),
+        name: "channelCommissionSettlementList",
+        meta: { title: "渠道待结算列表", icon: "fail" },
+      },
+      {
         path: "enterpriseSettlementDetails",
         component: () =>
           import(
