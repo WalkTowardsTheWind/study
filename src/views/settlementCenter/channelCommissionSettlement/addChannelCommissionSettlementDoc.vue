@@ -184,33 +184,10 @@ interface ListItem {
   value: string;
   label: string;
 }
-// const optionsTaxLand = ref<ListItem[]>([]);
-// const getTaxLand = async () => {
-//   const { data } = await getLandList();
-//   const newData = data.tax_land_list.map((item: any) => {
-//     return {
-//       label: item.tax_land_name,
-//       value: item.id,
-//     };
-//   });
-//   optionsTaxLand.value = [];
-//   optionsTaxLand.value.push(...newData);
-// };
-// getTaxLand();
 //获取渠道列表
 const channelSelect = ref();
 const optionsChannel = ref<ListItem[]>([]);
 const getChannel = async () => {
-  // if (!formItem.value.tax_land_id) {
-  //   ElMessage({
-  //     type: "warning",
-  //     message: `请先选择税地名称`,
-  //   });
-  //   return;
-  // }
-  // let params = {
-  //   tax_land_id: formItem.value.tax_land_id,
-  // };
   const { data } = await getChannelList();
   const newData = data.map((item: any) => {
     return {
@@ -222,33 +199,7 @@ const getChannel = async () => {
   optionsChannel.value.push(...newData);
 };
 getChannel();
-//获取企业列表
-// const companySelect = ref();
-// const optionsCompany = ref<ListItem[]>([]);
-// const getCompany = async () => {
-//   if (!formItem.value.channel_id) {
-//     ElMessage({
-//       type: "warning",
-//       message: `请先选择渠道名称`,
-//     });
-//     return;
-//   }
 
-//   let params = {
-//     tax_land_id: formItem.value.tax_land_id,
-//     channel_id: formItem.value.channel_id,
-//     settlement_type: formItem.value.settlement_type,
-//   };
-//   const { data } = await getCompanyList(params);
-//   const newData = data.map((item: any) => {
-//     return {
-//       label: item.company_name,
-//       value: item.id,
-//     };
-//   });
-//   optionsCompany.value = [];
-//   optionsCompany.value.push(...newData);
-// };
 const pageInfo = reactive({
   page: 1,
   total: 0,
@@ -258,8 +209,6 @@ const handleReset = () => {
   formItem.value = {
     keywords: "",
     settlement_type: "",
-    // company_id: "",
-    // tax_land_id: "",
     channel_id: "",
     status: "5",
     timeData: [],
@@ -268,44 +217,13 @@ const handleReset = () => {
   };
   handleSearch();
 };
-// const handleUpdataTaxLand = () => {
-//   formItem.value.channel_id = "";
-//   formItem.value.company_id = "";
-//   getChannel();
-// };
 const handleUpdata = () => {
   getTableData();
 };
-// const handleIsSelect = () => {
-//   if (!formItem.value.channel_id) {
-//     companySelect.value.blur();
-//     ElMessage({
-//       type: "warning",
-//       message: `请先选择渠道名称`,
-//     });
-//   }
-//   return;
-// };
 const handleSearch = () => {
   console.log("查询");
   pageInfo.page = 1;
   get();
-  // 时间选择判断
-  // if (!formItem.value.timeData[0] && !formItem.value.timeData[1]) {
-  //   getTableData();
-  // } else if (formItem.value.timeData[0] && formItem.value.timeData[1]) {
-  //   getTableData();
-  // } else if (!formItem.value.timeData[0] && formItem.value.timeData[1]) {
-  //   ElMessage({
-  //     type: "warning",
-  //     message: `请选择开始时间`,
-  //   });
-  // } else if (formItem.value.timeData[0] && !formItem.value.timeData[1]) {
-  //   ElMessage({
-  //     type: "warning",
-  //     message: `请选择结束时间`,
-  //   });
-  // }
 };
 const handlePageChange = (cur: any) => {
   const { page, limit } = cur;
@@ -318,8 +236,6 @@ var total_pay_money = ref();
 const formItem = ref({
   keywords: "",
   settlement_type: "",
-  // company_id: "",
-  // tax_land_id: "",
   channel_id: "",
   status: "5",
   timeData: [],
@@ -357,8 +273,6 @@ const columnList = [
   { label: "打款金额", prop: "payment_amount" },
   { label: "下发金额", prop: "settlement_amount" },
   { label: "服务费", prop: "commission" },
-  // { label: "成本费用", prop: "cost_amount" },
-  // { label: "供应商结算", prop: "supplier_amount", width: 100 },
   { label: "渠道结算税前", prop: "channel_amount", width: 110 },
   { label: "渠道结算税后", prop: "after_channel_amount", width: 110 },
   { label: "结算时间", prop: "settlement_time" },
@@ -465,7 +379,6 @@ const handleSave = (ids: any) => {
       });
       router.push({
         name: "channelCommissionSettlementList",
-        // query: { activeName: "channelCommission" },
       });
     })
     .catch((error) => {
@@ -511,7 +424,7 @@ const istaxland = () => {
   });
   if (newdata.length >= 1) {
     let is = newdata.every((item: any) => {
-      return item.settlement_type == newdata[0].settlement_type;
+      return item.channel_name == newdata[0].channel_name;
     });
     return is;
   }
@@ -546,12 +459,8 @@ const getCheckStatusData = async () => {
     const data = JSON.parse(route.query.params as string);
     checkStatusData.value = data.checkStatusData;
     formItem.value.channel_id = data.channel_id;
-    // formItem.value.company_id = data.company_id;
     formItem.value.settlement_type = data.settlement_type + "";
     console.log(checkStatusData.value, "checkStatusData.value");
-
-    // getChannel();
-    // getCompany();
   } catch (error) {
     console.log(error);
   }
@@ -579,13 +488,6 @@ const toggleRowSelection = () => {
 
 //获取数据
 const getTableData = async () => {
-  // if (!(formItem.value.channel_id && formItem.value.company_id)) {
-  //   ElMessage({
-  //     type: "warning",
-  //     message: `请先选择结算类型、税地、渠道和企业`,
-  //   });
-  //   return;
-  // }
   const params = transformTimeRanges({ ...formItem.value }) as any;
   params.page = pageInfo.page;
   params.limit = pageInfo.limit;
