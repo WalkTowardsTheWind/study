@@ -451,21 +451,6 @@ const handleCommand = (command: string | number | object) => {
 };
 
 /**
- * 获取勾选id
- */
-//
-const getCheckStatusData = async () => {
-  try {
-    const data = JSON.parse(route.query.params as string);
-    checkStatusData.value = data.checkStatusData;
-    formItem.value.channel_id = data.channel_id;
-    formItem.value.settlement_type = data.settlement_type + "";
-    console.log(checkStatusData.value, "checkStatusData.value");
-  } catch (error) {
-    console.log(error);
-  }
-};
-/**
  * 批量
  */
 //选中的数据
@@ -541,11 +526,6 @@ const getTableData = async () => {
 };
 
 const get = async () => {
-  if (route.query.params) {
-    await getCheckStatusData();
-  } else {
-    // await getTaxLand();
-  }
   await getTableData();
 };
 onMounted(() => {
