@@ -2,7 +2,7 @@
   <div class="p-[24px] p-b-[0]">
     <div class="recharge">
       <div class="item">
-        <div class="title">渠道佣金累计下发</div>
+        <div class="title">渠道佣金累计下发 (税前)</div>
         <div>
           <span class="logo">￥</span>
           <span class="money">{{ proxy.$moneyFormat(total_money) }}</span>
@@ -215,6 +215,7 @@ const columnList = [
   // { label: "结算类型", prop: "settlement_type", width: 110, fixed: "left" },
   { label: "渠道名称", prop: "channel_name", width: 110, fixed: "left" },
   { label: "企业结算金额", prop: "settlement_amount", minWidth: 120 },
+  { label: "渠道佣金（税前）", prop: "commission", minWidth: 140 },
   { label: "渠道佣金（税后）", prop: "after_commission", minWidth: 140 },
   { label: "佣金单创建时间", prop: "add_time", width: 180 },
   { label: "佣金单确认时间", prop: "settlement_time", width: 180 },
@@ -438,6 +439,7 @@ const getTableData = async () => {
           ],
         channel_name: item.channel_name,
         settlement_amount: item.settlement_amount,
+        commission: item.commission,
         after_commission: item.after_commission,
         add_time: item.add_time,
         settlement_time: item.settlement_time,
