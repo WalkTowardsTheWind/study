@@ -2,7 +2,7 @@
   <el-dialog
     v-model="dialogVisible"
     title="发佣确认"
-    modal-class="enterprise-dialog"
+    :before-close="handleClose"
     width="800px"
   >
     <div class="enterprise-dialog-box">
