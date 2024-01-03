@@ -53,11 +53,6 @@
           <template #task_money="scope">
             {{ scope.row.salary_min }}-{{ scope.row.salary_max }}
           </template>
-          <template #operation="scope">
-            <el-button link type="primary" @click="toDetail(scope.row.id)"
-              >详情</el-button
-            >
-          </template>
         </zxn-table>
       </div>
       <div>
@@ -188,7 +183,6 @@ const columnList1 = [
   { label: "申请时间", prop: "add_time", width: 200 },
   { label: "结算金额", prop: "settlement_amount" },
   { label: "服务费", prop: "commission" },
-  { label: "操作", slot: "operation", width: 150, fixed: "right" },
 ];
 const userData = reactive([] as any);
 
@@ -300,10 +294,6 @@ function filterTask(name: string, index: number) {
   filterUserData.length = 0;
 
   filterUserData.push(...userData.filter((item: any) => item.task_no === name));
-}
-
-function toDetail(id: string) {
-  router.push({ name: "taskView", params: { id } });
 }
 
 getSettleDetail();
