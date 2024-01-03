@@ -1,12 +1,13 @@
 <template>
   <dashboard-card title="系统通知">
     <template #header-right>
-      <div class="look-more" @click="handleMore">
-        <span class="look-more-text">查看更多</span>
-        <el-icon size="14" color="#808080">
-          <i-ep-arrow-right />
-        </el-icon>
-      </div>
+      <!--			TODO-->
+      <!--      <div class="look-more" @click="handleMore">-->
+      <!--        <span class="look-more-text">查看更多</span>-->
+      <!--        <el-icon size="14" color="#808080">-->
+      <!--          <i-ep-arrow-right />-->
+      <!--        </el-icon>-->
+      <!--      </div>-->
     </template>
     <div class="bg-#fff pt-10px">
       <div class="notice-message">
@@ -99,7 +100,9 @@ const tableData = reactive([]);
 const handleTypeChange = (cur: number) => {
   type.value = cur;
   tableData.length = 0;
+  /** TODO
   load();
+		**/
 };
 const load = () => {
   getList();
@@ -151,7 +154,8 @@ onMounted(() => {
       window.innerHeight - bottom - 24 < 356
         ? 356
         : window.innerHeight - bottom - 24;
-    load();
+    // TODO
+    // load();
   });
 });
 </script>

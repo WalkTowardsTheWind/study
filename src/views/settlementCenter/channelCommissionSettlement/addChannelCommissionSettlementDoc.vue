@@ -17,6 +17,23 @@
                 </template>
               </el-input>
             </el-form-item>
+            <el-form-item label="渠道名称">
+              <el-select
+                ref="channelSelect"
+                v-model="formItem.channel_id"
+                filterable
+                clearable
+                placeholder="请选择渠道"
+                @change="handleUpdata"
+              >
+                <el-option
+                  v-for="item in optionsChannel"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
             <el-form-item label="结算类型">
               <zxn-select
                 v-model="formItem.settlement_type"
@@ -48,23 +65,7 @@
                 />
               </el-select>
             </el-form-item> -->
-            <el-form-item label="渠道名称">
-              <el-select
-                ref="channelSelect"
-                v-model="formItem.channel_id"
-                filterable
-                clearable
-                placeholder="请选择渠道"
-                @change="handleUpdata"
-              >
-                <el-option
-                  v-for="item in optionsChannel"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-            </el-form-item>
+
             <!-- <el-form-item label="企业名称">
               <el-select
                 ref="companySelect"
