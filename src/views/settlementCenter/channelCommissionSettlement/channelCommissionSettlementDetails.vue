@@ -57,7 +57,7 @@
                   placeholder="请输入"
                 />
               </el-form-item>
-              <el-form-item
+              <!-- <el-form-item
                 v-if="!['3'].includes(formData.status)"
                 label="所属供应商"
               >
@@ -66,7 +66,7 @@
                   v-model="formData.tax_land_name"
                   placeholder="请输入"
                 />
-              </el-form-item>
+              </el-form-item> -->
               <el-form-item label="创建时间">
                 <el-input
                   readonly
