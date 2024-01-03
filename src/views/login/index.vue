@@ -67,7 +67,7 @@
             <!-- <el-checkbox v-model="checked1" label="记住密码" size="large" /> -->
           </div>
           <div class="text-black text-sm" style="text-align: right">
-            <span style="cursor: pointer" @click="handle">忘记密码</span>
+            <!-- <span style="cursor: pointer" @click="handle">忘记密码</span> -->
           </div>
         </div>
 
