@@ -44,7 +44,7 @@
           />
         </zxn-select>
       </el-form-item>
-      <el-form-item label="结算类型">
+      <!-- <el-form-item label="结算类型">
         <zxn-select v-model="formItem.settlement_type" @change="handleSearch">
           <el-option
             v-for="item in proxy.$const['settlementCenterEnum.settlement_type']"
@@ -53,7 +53,7 @@
             :value="item.value"
           />
         </zxn-select>
-      </el-form-item>
+      </el-form-item> -->
       <!-- <el-form-item prop="tax_land_id" label="税地名称">
         <tax-source-select
           v-model:taxId="formItem.tax_land_id"
@@ -235,7 +235,7 @@ const columnList = [
     },
     width: 100,
   },
-  { label: "结算类型", prop: "settlement_type", width: 110, fixed: "left" },
+  // { label: "结算类型", prop: "settlement_type", width: 110, fixed: "left" },
   { label: "渠道名称", prop: "channel_name", width: 110, fixed: "left" },
   { label: "企业结算金额", prop: "settlement_amount", minWidth: 120 },
   { label: "渠道佣金（税后）", prop: "after_commission", minWidth: 140 },
