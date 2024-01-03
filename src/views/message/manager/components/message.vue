@@ -29,7 +29,13 @@
     >
       <template #operation="{ row }">
         <el-button link type="primary" @click="handleView(row)">查看</el-button>
-        <el-button link type="primary" @click="handleRead(row)">已读</el-button>
+        <el-button
+          v-if="[0].includes(row.status)"
+          link
+          type="primary"
+          @click="handleRead(row)"
+          >已读</el-button
+        >
       </template>
     </zxn-table>
   </div>
