@@ -107,13 +107,6 @@
         <el-button
           link
           type="primary"
-          @click="handleRebuild(scope)"
-          v-if="[4].includes(scope.row.status)"
-          >重新生成</el-button
-        >
-        <el-button
-          link
-          type="primary"
           @click="handleDelete(scope)"
           v-if="[0, 4].includes(scope.row.status)"
           >删除</el-button
@@ -179,22 +172,6 @@ const handleSearch = () => {
   console.log("查询");
   pageInfo.page = 1;
   getTableData();
-  // 时间选择判断
-  // if (!formItem.value.timeData[0] && !formItem.value.timeData[1]) {
-  //   getTableData();
-  // } else if (formItem.value.timeData[0] && formItem.value.timeData[1]) {
-  //   getTableData();
-  // } else if (!formItem.value.timeData[0] && formItem.value.timeData[1]) {
-  //   ElMessage({
-  //     type: "warning",
-  //     message: `请选择开始时间`,
-  //   });
-  // } else if (formItem.value.timeData[0] && !formItem.value.timeData[1]) {
-  //   ElMessage({
-  //     type: "warning",
-  //     message: `请选择结束时间`,
-  //   });
-  // }
 };
 const handlePageChange = (cur: any) => {
   const { page, limit } = cur;
@@ -314,38 +291,7 @@ const params = ref({
   company_id: "",
   settlement_type: "",
 });
-const handleRebuild = async (scope: any) => {
-  ElMessageBox({
-    title: "",
-    message: h("p", null, `重新生成操作将删除当前发佣单，是否继续？`),
-    showCancelButton: true,
-    confirmButtonText: "是",
-    cancelButtonText: "否",
-    beforeClose: async (
-      action: string,
-      instance: { confirmButtonLoading: boolean },
-      done: () => void
-    ) => {
-      if (action === "confirm") {
-        instance.confirmButtonLoading = true;
-        const { data } = await rebuild({ id: scope.row.id + "" });
-        params.value.checkStatusData = data.ids;
-        params.value.channel_id = data.channel_id;
-        params.value.company_id = data.company_id;
-        params.value.settlement_type = data.settlement_type;
-        instance.confirmButtonLoading = false;
-        done();
-      } else {
-        done();
-      }
-    },
-  }).then(() => {
-    router.push({
-      name: "addChannelCommissionSettlementDoc",
-      query: { params: JSON.stringify(params.value) },
-    });
-  });
-};
+
 // 删除
 const handleDelete = (scope: any) => {
   ElMessageBox({
