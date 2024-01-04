@@ -36,8 +36,14 @@
       :column-list="columnList"
       :pageInfo="pageInfo"
       @page-change="pageChange"
+      hasSelect
       @selection-change="handleSelect"
     >
+      <template #tableTop>
+        <el-button type="primary" plain @click="handleExport"
+          >批量下载</el-button
+        >
+      </template>
       <template #type>
         <span>个人合同</span>
       </template>
@@ -69,6 +75,7 @@ import { getPerContractList } from "@/api/contract-m/index";
 const route = useRoute();
 import { contract_status, percolor } from "./options";
 import { useRoute } from "vue-router";
+import { downloadByOnlineUrl } from "@/utils/download";
 
 const formItem = reactive({
   keyword: "",
@@ -124,9 +131,10 @@ const columnList = [
     fixed: "right",
   },
 ];
-
+const ids = ref([] as any);
 const handleSelect = (val: any) => {
   console.log(val);
+  ids.value = val.map((i) => i.id);
 };
 
 const checkUrl = (url: string) => {
@@ -151,5 +159,14 @@ if (route.query.company_name && route.query.type == "5") {
 } else {
   handleSearch();
 }
+
+const handleExport = async () => {
+  if (ids.value.length == 0) {
+    return ElMessage.warning("请先选择要下载的合同");
+  }
+  await downloadByOnlineUrl("/adminapi/contract/get_sign_download", {
+    ids: ids.value,
+  });
+};
 // handleSearch();
 </script>

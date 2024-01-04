@@ -131,12 +131,3 @@ export function updateContract(data) {
     data,
   });
 }
-
-// 合同导出
-export function exportContract(data) {
-  return request({
-    url: `/adminapi/contract/update`,
-    method: "post",
-    data,
-  });
-}

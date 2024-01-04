@@ -35,6 +35,7 @@
       :table-data="tableData"
       :column-list="columnList"
       :pageInfo="pageInfo"
+      hasSelect
       @page-change="pageChange"
       @selection-change="handleSelect"
     >
@@ -42,6 +43,9 @@
         <el-button type="primary" @click="addClick">合同归档</el-button>
         <el-button type="primary" plain @click="onlineSignClick"
           >在线签署</el-button
+        >
+        <el-button type="primary" plain @click="handleExport"
+          >批量下载</el-button
         >
       </template>
       <template #type>
@@ -196,6 +200,7 @@ import {
 import { contract_status, color } from "./options";
 
 import { useRoute } from "vue-router";
+import { downloadByOnlineUrl } from "@/utils/download";
 
 const route = useRoute();
 
@@ -271,8 +276,9 @@ const detailClose = (visible: boolean) => {
   detailShow.value = visible;
 };
 
+const ids = ref([] as any);
 const handleSelect = (val) => {
-  console.log(val);
+  ids.value = val.map((item) => item.id);
 };
 
 const pageChange = (cur) => {
@@ -452,5 +458,14 @@ const edit = (id) => {
   detailId.value = id;
   editDialog.value.getDetailById(id);
   editShow.value = true;
+};
+
+const handleExport = async () => {
+  if (ids.value.length == 0) {
+    return ElMessage.warning("请先选择要下载的合同");
+  }
+  await downloadByOnlineUrl("/adminapi/contract/get_contract_download", {
+    ids: ids.value,
+  });
 };
 </script>

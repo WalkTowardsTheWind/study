@@ -36,10 +36,14 @@
       :column-list="columnList"
       :pageInfo="pageInfo"
       @page-change="pageChange"
+      hasSelect
       @selection-change="handleSelect"
     >
       <template #tableTop>
         <el-button type="primary" @click="addClick">合同归档</el-button>
+        <el-button type="primary" plain @click="handleExport"
+          >批量下载</el-button
+        >
       </template>
       <template #type>
         <span>委托代签协议</span>
@@ -109,6 +113,7 @@ import {
 } from "@/api/contract-m/index";
 
 import { contract_status, color } from "./options";
+import { downloadByOnlineUrl } from "@/utils/download";
 
 const formItem = reactive({
   keyword: "",
@@ -179,8 +184,9 @@ const detailClose = (visible: boolean) => {
   detailShow.value = visible;
 };
 
+const ids = ref([] as any);
 const handleSelect = (val) => {
-  console.log(val);
+  ids.value = val.map((i) => i.id);
 };
 
 const addClick = () => {
@@ -244,5 +250,15 @@ const toDetail = (id) => {
   detailId.value = id;
   detailShow.value = true;
 };
+
+const handleExport = async () => {
+  if (ids.value.length == 0) {
+    return ElMessage.warning("请先选择要下载的合同");
+  }
+  await downloadByOnlineUrl("/adminapi/contract/get_contract_download", {
+    ids: ids.value,
+  });
+};
+
 handleSearch();
 </script>

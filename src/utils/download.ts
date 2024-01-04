@@ -20,6 +20,9 @@ export function downloadByOnlineUrl(
       .then((res) => {
         const { data, headers } = res;
         const disposition = headers["content-disposition"];
+        if (!disposition) {
+          return ElMessage.error("无可下载凭证");
+        }
         console.log(disposition, "2222");
         // 省略代码
         const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
