@@ -100,9 +100,7 @@ const tableData = reactive([]);
 const handleTypeChange = (cur: number) => {
   type.value = cur;
   tableData.length = 0;
-  /** TODO
   load();
-		**/
 };
 const load = () => {
   getList();
@@ -154,8 +152,7 @@ onMounted(() => {
       window.innerHeight - bottom - 24 < 356
         ? 356
         : window.innerHeight - bottom - 24;
-    // TODO
-    // load();
+    load();
   });
 });
 </script>
