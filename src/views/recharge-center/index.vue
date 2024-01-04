@@ -331,10 +331,9 @@ const refund = (id: number) => {
 /**
  * 导出批量操作
  */
-const handleExport = (command: string | number | object) => {
-  // if (command == 1) {
-  // }
-};
+// const handleExport = (command: string | number | object) => {
+
+// };
 
 function handleSearch() {
   let params = {
@@ -398,7 +397,7 @@ onMounted(() => {
   }
   handleSearch();
   getTaxLand();
-  getCategory();
+  // getCategory();
 });
 </script>
 
