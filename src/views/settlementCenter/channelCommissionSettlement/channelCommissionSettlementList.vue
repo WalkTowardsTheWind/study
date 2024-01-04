@@ -26,7 +26,10 @@
       @on-reset="handleReset"
     >
       <el-form-item>
-        <el-input v-model="formItem.keywords" placeholder="请输入关键字">
+        <el-input
+          v-model="formItem.keywords"
+          placeholder="请输入发佣单号、渠道名称"
+        >
           <template #prefix>
             <el-icon><i-ep-Search /></el-icon>
           </template>

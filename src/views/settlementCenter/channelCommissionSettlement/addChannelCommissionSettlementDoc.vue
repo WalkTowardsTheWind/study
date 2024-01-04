@@ -11,7 +11,10 @@
             @on-reset="handleReset"
           >
             <el-form-item>
-              <el-input v-model="formItem.keywords" placeholder="请输入关键字">
+              <el-input
+                v-model="formItem.keywords"
+                placeholder="请输入企业名称、渠道名称、渠道管理员或所属税地"
+              >
                 <template #prefix>
                   <el-icon><i-ep-Search /></el-icon>
                 </template>
