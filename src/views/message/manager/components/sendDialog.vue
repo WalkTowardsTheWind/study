@@ -38,7 +38,7 @@
           v-model="formItem.content"
           :rows="5"
           type="textarea"
-          placeholder="Please input"
+          placeholder="请输入信息内容"
         />
       </el-form-item>
     </el-form>
