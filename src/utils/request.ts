@@ -26,7 +26,6 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response: AxiosResponse) => {
-    // console.log(response);
     const { status, msg } = response.data;
     if (status === 200) {
       return response.data;
