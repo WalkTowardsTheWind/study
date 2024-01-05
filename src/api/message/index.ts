@@ -130,16 +130,6 @@ export function notifyTop(id: any): AxiosPromise {
 }
 
 /**
- * 取消置顶
- */
-export function notifyUnTop(id: any): AxiosPromise {
-  return request({
-    url: `/adminapi/notify/top/cancel/${id}`,
-    method: "GET",
-  });
-}
-
-/**
  * 消息标记已读
  */
 export function notifyRead(id: any): AxiosPromise {

@@ -94,7 +94,12 @@
 </template>
 <script setup lang="ts">
 import DashboardCard from "@/views/dashboard/components/DashboardCard.vue";
-import { notifyIndex, notifyTop, notifyRead, notifyUnTop } from "@/api/message";
+import {
+  notifyIndex,
+  notifyTop,
+  notifyRead,
+  cancelTopPing,
+} from "@/api/message";
 import { useRouter } from "vue-router";
 import { useRouteParams } from "@/store/modules/routeParams";
 const type = ref(2);
@@ -121,7 +126,7 @@ const handleTop = (cur, rank) => {
   if (cur.is_top) {
     tableData.push(...tableData.splice(rank, 1));
     cur.is_top = 0;
-    notifyUnTop(cur.id);
+    cancelTopPing(cur.id);
   } else {
     tableData.unshift(...tableData.splice(rank, 1));
     cur.is_top = 1;
