@@ -20,7 +20,6 @@ export function downloadByOnlineUrl(
       .then((res) => {
         const { data, headers } = res;
         const disposition = headers["content-disposition"];
-        console.log(disposition, "2222");
         // 省略代码
         const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
         const matches = filenameRegex.exec(disposition);
