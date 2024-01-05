@@ -94,7 +94,7 @@
 </template>
 <script setup lang="ts">
 import DashboardCard from "@/views/dashboard/components/DashboardCard.vue";
-import { notifyIndex, notifyTop, notifyRead } from "@/api/message";
+import { notifyIndex, notifyTop, notifyRead, notifyUnTop } from "@/api/message";
 import { useRouter } from "vue-router";
 import { useRouteParams } from "@/store/modules/routeParams";
 const type = ref(2);
@@ -118,9 +118,15 @@ const getList = async () => {
   }
 };
 const handleTop = (cur, rank) => {
-  tableData.unshift(...tableData.splice(rank, 1));
-  cur.is_top = 1;
-  notifyTop(cur.id);
+  if (cur.is_top) {
+    tableData.push(...tableData.splice(rank, 1));
+    cur.is_top = 0;
+    notifyUnTop(cur.id);
+  } else {
+    tableData.unshift(...tableData.splice(rank, 1));
+    cur.is_top = 1;
+    notifyTop(cur.id);
+  }
 };
 const handleRead = (cur, rank) => {
   tableData.splice(rank, 1);
