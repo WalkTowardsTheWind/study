@@ -54,9 +54,6 @@
       <zxn-title class="m-35px" ref="activeRef1">公司信息</zxn-title>
       <el-row :gutter="50">
         <el-col :span="7">
-          <el-form-item label="统一社会信用代码" prop="credit_code" required>
-            <el-input placeholder="请输入" v-model="addForm.credit_code" />
-          </el-form-item>
           <el-form-item label="选择行业">
             <el-select
               class="w-full"
@@ -89,9 +86,9 @@
           </el-form-item>
         </el-col>
         <el-col :span="7">
-          <el-form-item label="营业地址">
+          <!-- <el-form-item label="营业地址">
             <el-input placeholder="请输入" v-model="addForm.company_address" />
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="营业执照到期时间">
             <div class="w-full">
               <el-date-picker
@@ -126,6 +123,12 @@
       <zxn-title class="m-35px" ref="activeRef2">纳税信息</zxn-title>
       <el-row :gutter="50">
         <el-col :span="7">
+          <el-form-item label="统一社会信用代码" prop="credit_code" required>
+            <el-input
+              placeholder="请输入纳税人识别号"
+              v-model="addForm.credit_code"
+            />
+          </el-form-item>
           <el-form-item label="开户行">
             <el-input placeholder="请输入" v-model="addForm.bank" />
           </el-form-item>
@@ -145,6 +148,12 @@
                 :value="item.value"
               ></el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="开票地址">
+            <el-input placeholder="请输入" v-model="addForm.invoice_address" />
+          </el-form-item>
+          <el-form-item label="开票电话">
+            <el-input placeholder="请输入" v-model="addForm.invoice_phone" />
           </el-form-item>
         </el-col>
         <el-col :span="7">
@@ -406,7 +415,7 @@ const addForm = reactive({
   legal_person_idcard: "",
   legal_person_mobile: "",
   category_id: "",
-  company_address: "",
+  // company_address: "",
   license: [],
   idcard_img: [],
   seal: [], // 企业印章
@@ -437,6 +446,8 @@ const addForm = reactive({
   sign_type: "",
   auth_type: "",
   tax_land_type: "",
+  invoice_address: "",
+  invoice_phone: "",
 } as any);
 
 const isTaxLandListValid = computed(() => {
@@ -475,7 +486,7 @@ const requiredComputed = computed(() => {
     !!addForm.legal_person_idcard &&
     !!addForm.legal_person_mobile &&
     !!addForm.category_id &&
-    !!addForm.company_address &&
+    // !!addForm.company_address &&
     !!addForm.license.length &&
     !!addForm.idcard_img.length &&
     !!addForm.seal.length &&
@@ -493,6 +504,8 @@ const requiredComputed = computed(() => {
     !!addForm.consignee &&
     !!addForm.consignee_mobile &&
     !!addForm.address &&
+    !!addForm.invoice_address &&
+    !!addForm.invoice_phone &&
     isTaxLandListValid.value
   );
 });

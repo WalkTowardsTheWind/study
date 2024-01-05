@@ -126,6 +126,15 @@
             <el-form-item label="快递地址" label-width="130px">
               <el-input :readonly="!isEdit" v-model="formItem.address" />
             </el-form-item>
+            <el-form-item label="开票地址" label-width="130px">
+              <el-input
+                :readonly="!isEdit"
+                v-model="formItem.invoice_address"
+              />
+            </el-form-item>
+            <el-form-item label="开票电话" label-width="130px">
+              <el-input :readonly="!isEdit" v-model="formItem.invoice_phone" />
+            </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="银行账户">
