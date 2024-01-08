@@ -56,18 +56,18 @@ const pageInfo = reactive({
 const tableData = reactive([]) as any;
 const columnList = [
   { label: "发布账户", prop: "account", minWidth: 180 },
-  {
-    label: "消息状态",
-    type: "enum",
-    path: "messageEnum.messageStatus",
-    prop: "status",
-    width: 100,
-    // fixed: "left",
-    color: {
-      0: { color: "#36C5F4", backgroundColor: "#DFF6FD" },
-      1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
-    },
-  },
+  // {
+  //   label: "消息状态",
+  //   type: "enum",
+  //   path: "messageEnum.messageStatus",
+  //   prop: "status",
+  //   width: 100,
+  //   // fixed: "left",
+  //   color: {
+  //     0: { color: "#36C5F4", backgroundColor: "#DFF6FD" },
+  //     1: { color: "#366FF4", backgroundColor: "#DFE8FD" },
+  //   },
+  // },
   { label: "信息类型", prop: "type", minWidth: 120 },
   { label: "信息标题", prop: "title", minWidth: 120 },
   { label: "信息内容", prop: "content", minWidth: 300 },
