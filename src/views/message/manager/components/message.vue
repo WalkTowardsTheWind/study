@@ -84,7 +84,7 @@ const pageInfo = reactive({
 });
 const tableData = reactive([]) as any;
 const columnList = [
-  { label: "发布账户", prop: "source", minWidth: 180 },
+  { label: "发布账户", prop: "account", minWidth: 180 },
   {
     label: "消息状态",
     type: "enum",
