@@ -14,16 +14,16 @@
         <div class="notice-message-switch">
           <div
             class="notice-message-switch-item"
-            :class="{ active: type === 1 }"
-            @click="handleTypeChange(1)"
+            :class="{ active: type === 2 }"
+            @click="handleTypeChange(2)"
           >
             <div class="notice-message-switch-item-text">待办通知</div>
             <!--          <span class="notice-message-switch-item-tip"></span>-->
           </div>
           <div
             class="notice-message-switch-item"
-            :class="{ active: type === 2 }"
-            @click="handleTypeChange(2)"
+            :class="{ active: type === 1 }"
+            @click="handleTypeChange(1)"
           >
             <div class="notice-message-switch-item-text">通知消息</div>
             <!--          <span class="notice-message-switch-item-tip">2</span>-->
@@ -55,8 +55,10 @@
                   {{ item.title }}
                 </div>
                 <div class="notice-message-item-head-btn">
-                  <span @click="handleTop(item, index)">置顶</span>
-                  <span @click="handleRead(item, index)">立刻处理</span>
+                  <span @click="handleTop(item, index)">{{
+                    item.is_top ? "取消置顶" : "置顶"
+                  }}</span>
+                  <span @click="handleRead(item, index)">已读</span>
                 </div>
               </div>
               <div class="notice-message-item-content text-ellipsis-3">
@@ -75,8 +77,10 @@
                   {{ item.title }}
                 </div>
                 <div class="notice-message-item-head-btn">
-                  <span @click="handleTop(item, index)">置顶</span>
-                  <span @click="handleRead(item, index)">立刻处理</span>
+                  <span @click="handleTop(item, index)">{{
+                    item.is_top ? "取消置顶" : "置顶"
+                  }}</span>
+                  <span @click="handleRead(item, index)">已读</span>
                 </div>
               </div>
               <div class="notice-message-item-content text-ellipsis-3">
@@ -91,10 +95,15 @@
 </template>
 <script setup lang="ts">
 import DashboardCard from "@/views/dashboard/components/DashboardCard.vue";
-import { notifyIndex, notifyTop, notifyRead } from "@/api/message";
+import {
+  notifyIndex,
+  notifyTop,
+  notifyRead,
+  cancelTopPing,
+} from "@/api/message";
 import { useRouter } from "vue-router";
 import { useRouteParams } from "@/store/modules/routeParams";
-const type = ref(1);
+const type = ref(2);
 
 const tableData = reactive([]);
 const handleTypeChange = (cur: number) => {
@@ -117,15 +126,22 @@ const getList = async () => {
   }
 };
 const handleTop = (cur, rank) => {
-  tableData.unshift(...tableData.splice(rank, 1));
-  notifyTop(cur.id);
+  if (cur.is_top) {
+    tableData.push(...tableData.splice(rank, 1));
+    cur.is_top = 0;
+    cancelTopPing(cur.id);
+  } else {
+    tableData.unshift(...tableData.splice(rank, 1));
+    cur.is_top = 1;
+    notifyTop(cur.id);
+  }
 };
 const handleRead = (cur, rank) => {
   tableData.splice(rank, 1);
   notifyRead(cur.id);
-  if (type.value === 1) {
-    handleGoRouter(cur);
-  }
+  // if (type.value === 1) {
+  //   handleGoRouter(cur);
+  // }
 };
 const router = useRouter();
 

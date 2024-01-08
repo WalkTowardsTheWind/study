@@ -52,11 +52,29 @@ export function read(id: number): AxiosPromise {
   });
 }
 /**
+ * 消息全部已读
+ */
+export function allRead(): AxiosPromise {
+  return request({
+    url: "/adminapi/notify/all/read",
+    method: "GET",
+  });
+}
+/**
  * 消息置顶
  */
 export function topPing(id: number): AxiosPromise {
   return request({
     url: `/adminapi/notify/top/${id}`,
+    method: "GET",
+  });
+}
+/**
+ * 消息取消置顶
+ */
+export function cancelTopPing(id: number): AxiosPromise {
+  return request({
+    url: `/adminapi/notify/top/cancel/${id}`,
     method: "GET",
   });
 }
