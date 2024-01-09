@@ -143,8 +143,7 @@
       <zxn-table
         :table-data="pointData"
         :column-list="pointColumnList"
-        :page-info="pointPageInfo"
-        @page-change="pointPageChange"
+        :hasPagination="false"
       ></zxn-table>
     </zxn-dialog>
   </div>
@@ -434,7 +433,7 @@ const cancelClick = () => {
 const pointVisible = ref(false);
 const pointPageInfo = reactive({
   page: 1,
-  limit: 10,
+  limit: 1000,
   total: 0,
 });
 const pointId = ref("");
