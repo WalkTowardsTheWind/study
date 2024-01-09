@@ -42,7 +42,7 @@
           @change-tax="handleSearch"
         />
       </el-form-item>
-      <el-form-item prop="date" label="申请日期">
+      <el-form-item prop="date" label="结算时间">
         <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>
     </zxn-search>
