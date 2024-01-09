@@ -114,6 +114,7 @@
             :column-list="columnList"
             :page-info="pageInfo"
             @page-change="handlePageChange"
+            :pageSizes="[10, 20, 30, 50, 200, 1000]"
             hasSelect
             @selection-change="handleSelect"
             rowKey="id"
