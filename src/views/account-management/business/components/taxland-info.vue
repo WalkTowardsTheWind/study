@@ -434,12 +434,14 @@ const cancelClick = () => {
 const pointVisible = ref(false);
 const pointPageInfo = reactive({
   page: 1,
-  limit: 20,
+  limit: 10,
   total: 0,
 });
+const pointId = ref("");
 const pointPageChange = (cur) => {
   pointPageInfo.page = cur.page;
   pointPageInfo.limit = cur.limit;
+  check(pointId.value);
 };
 const pointData = ref([] as any);
 const pointColumnList = [
@@ -450,7 +452,12 @@ const pointColumnList = [
   { label: "修改账户", prop: "account" },
 ];
 const check = (id) => {
-  getPointListById({ id }).then((res) => {
+  pointId.value = id;
+  getPointListById({
+    id: pointId.value,
+    limit: pointPageInfo.limit,
+    page: pointPageInfo.page,
+  }).then((res) => {
     pointData.value = res.data.data;
     pointPageInfo.total = res.data.total;
     pointVisible.value = true;
