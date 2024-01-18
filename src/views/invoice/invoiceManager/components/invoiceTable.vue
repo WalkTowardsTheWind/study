@@ -186,9 +186,9 @@ const columnList: any[] = reactive([
   { label: "发票任务编号", prop: "invoice_no", width: 110, fixed: "left" },
   { label: "税地名称", prop: "tax_land_name", width: 120, fixed: "left" },
   {
-    label: "发票类目",
+    label: "发票类目数量",
     prop: "category_num",
-    width: 100,
+    width: 120,
     fixed: "left",
   },
   { label: "申请开票企业", prop: "company_name", width: 120, fixed: "left" },

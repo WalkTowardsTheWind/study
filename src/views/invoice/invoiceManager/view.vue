@@ -114,7 +114,7 @@
           <div class="flex justify-between items-center mb20px">
             <zxn-title> 开票类目 </zxn-title>
             <div class="table-right-in">
-              <span>预计开票：{{ tableData.length }}张</span>
+              <span>预计开票：{{ formItem.invoice_num }}张</span>
               <span>合计金额：¥{{ totalValue }}</span>
             </div>
           </div>
@@ -173,6 +173,7 @@ const formItem = reactive({
   address: "",
   invoice_form: "",
   invoice_denomination: "",
+  invoice_num: "",
 });
 const tableData = reactive([]);
 const getView = async () => {
@@ -201,6 +202,7 @@ const getView = async () => {
     formItem.address = data.address;
     formItem.invoice_form = data.invoice_form;
     formItem.invoice_denomination = data.invoice_denomination;
+    formItem.invoice_num = data.invoice_num;
     tableData.length = 0;
     tableData.push(...(Object.values(data.category) as []));
     getTotalNum();
