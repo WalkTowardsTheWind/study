@@ -21,19 +21,31 @@
               </el-select>
             </el-form-item>
             <el-form-item label="管理员联系号码">
-              <el-input v-model="formItem.admin_phone" :readonly="!isEdit" />
+              <el-input
+                v-model.trim="formItem.admin_phone"
+                :readonly="!isEdit"
+              />
             </el-form-item>
             <el-form-item label="账号名称" prop="username">
-              <el-input v-model="formItem.username" :readonly="!isEdit" />
+              <el-input v-model.trim="formItem.username" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="统一社会信用代码">
-              <el-input v-model="formItem.credit_code" :readonly="!isEdit" />
+              <el-input
+                v-model.trim="formItem.credit_code"
+                :readonly="!isEdit"
+              />
             </el-form-item>
             <el-form-item label="联系号码">
-              <el-input v-model="formItem.contact_phone" :readonly="!isEdit" />
+              <el-input
+                v-model.trim="formItem.contact_phone"
+                :readonly="!isEdit"
+              />
             </el-form-item>
             <el-form-item label="银行账号" prop="bank_account">
-              <el-input v-model="formItem.bank_account" :readonly="!isEdit" />
+              <el-input
+                v-model.trim="formItem.bank_account"
+                :readonly="!isEdit"
+              />
             </el-form-item>
             <el-form-item label="渠道佣金结算时间" prop="settlement_type">
               <el-select
@@ -52,10 +64,16 @@
           </el-col>
           <el-col :span="7">
             <el-form-item label="渠道管理员" prop="channel_admin">
-              <el-input v-model="formItem.channel_admin" :readonly="!isEdit" />
+              <el-input
+                v-model.trim="formItem.channel_admin"
+                :readonly="!isEdit"
+              />
             </el-form-item>
             <el-form-item label="企业名称" prop="company_name">
-              <el-input v-model="formItem.company_name" :readonly="!isEdit" />
+              <el-input
+                v-model.trim="formItem.company_name"
+                :readonly="!isEdit"
+              />
             </el-form-item>
             <el-form-item label="密码">
               <el-input value="********" readonly />
@@ -64,10 +82,10 @@
               >
             </el-form-item>
             <el-form-item label="联系人">
-              <el-input v-model="formItem.contact" :readonly="!isEdit" />
+              <el-input v-model.trim="formItem.contact" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="开户行" prop="bank">
-              <el-input v-model="formItem.bank" :readonly="!isEdit" />
+              <el-input v-model.trim="formItem.bank" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="收款方式" prop="collection_type">
               <el-select
@@ -124,16 +142,19 @@
               </el-select>
             </el-form-item>
             <el-form-item label="管理员联系号码">
-              <el-input v-model="formItem.admin_phone" :readonly="!isEdit" />
+              <el-input
+                v-model.trim="formItem.admin_phone"
+                :readonly="!isEdit"
+              />
             </el-form-item>
             <el-form-item label="账号名称" prop="username">
-              <el-input v-model="formItem.username" :readonly="!isEdit" />
+              <el-input v-model.trim="formItem.username" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="联系人">
-              <el-input v-model="formItem.contact" :readonly="!isEdit" />
+              <el-input v-model.trim="formItem.contact" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="开户行" prop="bank">
-              <el-input v-model="formItem.bank" :readonly="!isEdit" />
+              <el-input v-model.trim="formItem.bank" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="收款方式" prop="collection_type">
               <el-select
@@ -155,7 +176,7 @@
               <el-input v-model="formItem.channel_admin" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="真实姓名" prop="realname">
-              <el-input v-model="formItem.realname" :readonly="!isEdit" />
+              <el-input v-model.trim="formItem.realname" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="密码">
               <el-input value="********" readonly />
@@ -164,10 +185,16 @@
               >
             </el-form-item>
             <el-form-item label="联系号码">
-              <el-input v-model="formItem.contact_phone" :readonly="!isEdit" />
+              <el-input
+                v-model.trim="formItem.contact_phone"
+                :readonly="!isEdit"
+              />
             </el-form-item>
             <el-form-item label="银行账号" prop="bank_account">
-              <el-input v-model="formItem.bank_account" :readonly="!isEdit" />
+              <el-input
+                v-model.trim="formItem.bank_account"
+                :readonly="!isEdit"
+              />
             </el-form-item>
             <el-form-item label="渠道佣金结算时间" prop="settlement_type">
               <el-select

@@ -13,18 +13,21 @@
               <el-input v-model="formItem.company_name" disabled />
             </el-form-item>
             <el-form-item label="统一社会信用代码" label-width="130px">
-              <el-input v-model="formItem.credit_code" :readonly="!isEdit" />
+              <el-input
+                v-model.trim="formItem.credit_code"
+                :readonly="!isEdit"
+              />
             </el-form-item>
             <el-form-item label="电话" label-width="130px">
               <el-input
-                v-model="formItem.contacts_mobile"
+                v-model.trim="formItem.contacts_mobile"
                 placeholder="请输入手机号或座机号"
                 :readonly="!isEdit"
               />
             </el-form-item>
             <el-form-item label="法人身份证号" label-width="130px">
               <el-input
-                v-model="formItem.legal_person_idcard"
+                v-model.trim="formItem.legal_person_idcard"
                 :readonly="!isEdit"
               />
             </el-form-item>
@@ -72,11 +75,11 @@
               >
             </el-form-item>
             <el-form-item label="联系人">
-              <el-input v-model="formItem.contacts" :readonly="!isEdit" />
+              <el-input v-model.trim="formItem.contacts" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="法人电话">
               <el-input
-                v-model="formItem.legal_person_mobile"
+                v-model.trim="formItem.legal_person_mobile"
                 placeholder="请输入手机号或座机号"
                 :readonly="!isEdit"
               />
@@ -92,7 +95,7 @@
         <el-row :gutter="50">
           <el-col :span="8">
             <el-form-item label="开户行" label-width="130px">
-              <el-input v-model="formItem.bank" :readonly="!isEdit" />
+              <el-input v-model.trim="formItem.bank" :readonly="!isEdit" />
             </el-form-item>
             <el-form-item label="纳税人类型" label-width="130px">
               <el-select
@@ -138,7 +141,10 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="银行账户">
-              <el-input v-model="formItem.bank_account" :readonly="!isEdit" />
+              <el-input
+                v-model.trim="formItem.bank_account"
+                :readonly="!isEdit"
+              />
             </el-form-item>
             <el-form-item label="企业邮箱">
               <el-input v-model="formItem.company_email" :readonly="!isEdit" />
@@ -166,7 +172,7 @@
             </el-form-item>
             <el-form-item label="接收人号码">
               <el-input
-                v-model="formItem.consignee_mobile"
+                v-model.trim="formItem.consignee_mobile"
                 :readonly="!isEdit"
                 placeholder="请输入手机号或座机号"
               />

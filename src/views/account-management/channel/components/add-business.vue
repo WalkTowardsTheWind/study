@@ -10,16 +10,22 @@
         <el-row :gutter="50">
           <el-col :span="7">
             <el-form-item label="账号名称" prop="username">
-              <el-input placeholder="请输入" v-model="form.username"></el-input>
+              <el-input
+                placeholder="请输入"
+                v-model.trim="form.username"
+              ></el-input>
             </el-form-item>
             <el-form-item label="联系人">
-              <el-input placeholder="请输入" v-model="form.contact"></el-input>
+              <el-input
+                placeholder="请输入"
+                v-model.trim="form.contact"
+              ></el-input>
             </el-form-item>
 
             <el-form-item label="联系号码">
               <el-input
                 placeholder="请输入"
-                v-model="form.contact_phone"
+                v-model.trim="form.contact_phone"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -44,17 +50,20 @@
             <el-form-item label="企业名称" prop="company_name">
               <el-input
                 placeholder="请输入"
-                v-model="form.company_name"
+                v-model.trim="form.company_name"
               ></el-input>
             </el-form-item>
             <el-form-item label="开户行" prop="bank">
-              <el-input placeholder="请输入" v-model="form.bank"></el-input>
+              <el-input
+                placeholder="请输入"
+                v-model.trim="form.bank"
+              ></el-input>
             </el-form-item>
             <el-form-item label="渠道管理员" prop="channel_admin">
               <el-input
                 placeholder="请输入"
                 class="w-full"
-                v-model="form.channel_admin"
+                v-model.trim="form.channel_admin"
               ></el-input>
             </el-form-item>
             <el-form-item label="收款方式" prop="collection_type">
@@ -76,19 +85,19 @@
             <el-form-item label="统一社会信用代码">
               <el-input
                 placeholder="请输入"
-                v-model="form.credit_code"
+                v-model.trim="form.credit_code"
               ></el-input>
             </el-form-item>
             <el-form-item label="银行账号" prop="bank_account">
               <el-input
                 placeholder="请输入"
-                v-model="form.bank_account"
+                v-model.trim="form.bank_account"
               ></el-input>
             </el-form-item>
             <el-form-item label="管理员联系号码">
               <el-input
                 placeholder="请输入"
-                v-model="form.admin_phone"
+                v-model.trim="form.admin_phone"
               ></el-input>
             </el-form-item>
             <el-form-item label="渠道佣金结算时间" prop="settlement_type">

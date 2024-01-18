@@ -24,7 +24,7 @@
           <el-form-item label="企业登录名称" prop="account" required>
             <el-input
               placeholder="请输入6位以上英文字母和数字组合"
-              v-model="addForm.account"
+              v-model.trim="addForm.account"
             />
           </el-form-item>
           <el-form-item label="密码" prop="pwd" required>
@@ -36,17 +36,20 @@
         </el-col>
         <el-col :span="7">
           <el-form-item label="企业联系人" prop="contacts" required>
-            <el-input placeholder="请输入" v-model="addForm.contacts" />
+            <el-input placeholder="请输入" v-model.trim="addForm.contacts" />
           </el-form-item>
           <el-form-item label="联系方式" prop="mobile" required>
             <el-input
               maxlength="11"
               placeholder="请输入手机号或座机号"
-              v-model="addForm.mobile"
+              v-model.trim="addForm.mobile"
             />
           </el-form-item>
           <el-form-item label="企业名称" prop="company_name" required>
-            <el-input placeholder="请输入" v-model="addForm.company_name" />
+            <el-input
+              placeholder="请输入"
+              v-model.trim="addForm.company_name"
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -70,18 +73,21 @@
             </el-select>
           </el-form-item>
           <el-form-item label="法人姓名">
-            <el-input placeholder="请输入" v-model="addForm.legal_person" />
+            <el-input
+              placeholder="请输入"
+              v-model.trim="addForm.legal_person"
+            />
           </el-form-item>
           <el-form-item label="法人身份证号">
             <el-input
               placeholder="请输入"
-              v-model="addForm.legal_person_idcard"
+              v-model.trim="addForm.legal_person_idcard"
             />
           </el-form-item>
           <el-form-item label="法人电话">
             <el-input
               placeholder="请输入手机号或座机号"
-              v-model="addForm.legal_person_mobile"
+              v-model.trim="addForm.legal_person_mobile"
             />
           </el-form-item>
         </el-col>
@@ -101,7 +107,7 @@
           </el-form-item>
 
           <el-form-item label="法人身份证">
-            <MultiUpload v-model="addForm.idcard_img">
+            <MultiUpload v-model.trim="addForm.idcard_img">
               <i-ep-Plus />
             </MultiUpload>
           </el-form-item>
@@ -126,14 +132,17 @@
           <el-form-item label="统一社会信用代码" prop="credit_code" required>
             <el-input
               placeholder="请输入纳税人识别号"
-              v-model="addForm.credit_code"
+              v-model.trim="addForm.credit_code"
             />
           </el-form-item>
           <el-form-item label="开户行">
-            <el-input placeholder="请输入" v-model="addForm.bank" />
+            <el-input placeholder="请输入" v-model.trim="addForm.bank" />
           </el-form-item>
           <el-form-item label="银行账号">
-            <el-input placeholder="请输入" v-model="addForm.bank_account" />
+            <el-input
+              placeholder="请输入"
+              v-model.trim="addForm.bank_account"
+            />
           </el-form-item>
           <el-form-item label="纳税人类型">
             <el-select
