@@ -37,7 +37,10 @@
               <el-input v-model="formItem.account" disabled />
             </el-form-item>
             <el-form-item label="法定代表人">
-              <el-input v-model="formItem.legal_person" :readonly="!isEdit" />
+              <el-input
+                v-model.trim="formItem.legal_person"
+                :readonly="!isEdit"
+              />
             </el-form-item>
             <el-form-item label="行业">
               <!-- <tree-select v-model.selecVal="formItem.category_id" :options="cateGoryOptions" /> -->

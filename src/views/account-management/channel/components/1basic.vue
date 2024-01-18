@@ -173,7 +173,10 @@
           </el-col>
           <el-col :span="7">
             <el-form-item label="渠道管理员" prop="channel_admin">
-              <el-input v-model="formItem.channel_admin" :readonly="!isEdit" />
+              <el-input
+                v-model.trim="formItem.channel_admin"
+                :readonly="!isEdit"
+              />
             </el-form-item>
             <el-form-item label="真实姓名" prop="realname">
               <el-input v-model.trim="formItem.realname" :readonly="!isEdit" />
