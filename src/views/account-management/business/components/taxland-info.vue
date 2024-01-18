@@ -17,15 +17,23 @@
       <template #tax_point="scope">
         <div>{{ scope.row.tax_point }}%</div>
       </template>
-      <template #operation="scope" v-if="isEdit">
+      <template #operation="scope">
         <el-button
           link
           type="primary"
+          v-if="isEdit"
           @click="handleStatus(scope.row.id, scope.row.status)"
           >{{ scope.row.status == 1 ? "禁用" : "启用" }}</el-button
         >
-        <el-button link type="primary" @click="taxLandClick('edit', scope.row)"
+        <el-button
+          v-if="isEdit"
+          link
+          type="primary"
+          @click="taxLandClick('edit', scope.row)"
           >编辑</el-button
+        >
+        <el-button link type="primary" @click="check(scope.row.id)"
+          >查看</el-button
         >
       </template>
     </zxn-table>
@@ -124,6 +132,20 @@
         </div>
       </el-form>
     </el-dialog>
+    <zxn-dialog
+      title="查看点位"
+      :visible="pointVisible"
+      width="1200px"
+      top="10"
+      :hasBottomBtn="false"
+      @close-dialog="pointClose"
+    >
+      <zxn-table
+        :table-data="pointData"
+        :column-list="pointColumnList"
+        :hasPagination="false"
+      ></zxn-table>
+    </zxn-dialog>
   </div>
 </template>
 
@@ -133,6 +155,7 @@ import {
   setTaxLandStatus,
   editAccountTaxLand,
   createAccountTaxLand,
+  getPointListById,
 } from "@/api/account/business";
 
 import { useRoute } from "vue-router";
@@ -269,7 +292,7 @@ const columnList = [
     slot: "operation",
     align: "right",
     fixed: "right",
-    minWidth: 120,
+    minWidth: 180,
   },
 ];
 
@@ -407,10 +430,43 @@ const cancelClick = () => {
   state.formItem.auth_type = "";
 };
 
-const checkImg = (url) => {
-  window.open(url, "_blank");
+const pointVisible = ref(false);
+const pointPageInfo = reactive({
+  page: 1,
+  limit: 1000,
+  total: 0,
+});
+const pointId = ref("");
+const pointPageChange = (cur) => {
+  pointPageInfo.page = cur.page;
+  pointPageInfo.limit = cur.limit;
+  check(pointId.value);
+};
+const pointData = ref([] as any);
+const pointColumnList = [
+  { label: "税地名称", prop: "tax_land_name" },
+  { label: "成本点位", prop: "cost_point" },
+  { label: "企业点位", prop: "tax_point" },
+  { label: "修改时间", prop: "add_time" },
+  { label: "修改账户", prop: "account" },
+];
+const check = (id) => {
+  pointId.value = id;
+  getPointListById({
+    id: pointId.value,
+    limit: pointPageInfo.limit,
+    page: pointPageInfo.page,
+  }).then((res) => {
+    pointData.value = res.data.data;
+    pointPageInfo.total = res.data.total;
+    pointVisible.value = true;
+  });
 };
 
+const pointClose = () => {
+  pointVisible.value = false;
+  pointData.value = [];
+};
 getTaxLandOption();
 </script>
 

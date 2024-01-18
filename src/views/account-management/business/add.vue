@@ -24,7 +24,7 @@
           <el-form-item label="企业登录名称" prop="account" required>
             <el-input
               placeholder="请输入6位以上英文字母和数字组合"
-              v-model="addForm.account"
+              v-model.trim="addForm.account"
             />
           </el-form-item>
           <el-form-item label="密码" prop="pwd" required>
@@ -36,17 +36,20 @@
         </el-col>
         <el-col :span="7">
           <el-form-item label="企业联系人" prop="contacts" required>
-            <el-input placeholder="请输入" v-model="addForm.contacts" />
+            <el-input placeholder="请输入" v-model.trim="addForm.contacts" />
           </el-form-item>
           <el-form-item label="联系方式" prop="mobile" required>
             <el-input
               maxlength="11"
               placeholder="请输入手机号或座机号"
-              v-model="addForm.mobile"
+              v-model.trim="addForm.mobile"
             />
           </el-form-item>
           <el-form-item label="企业名称" prop="company_name" required>
-            <el-input placeholder="请输入" v-model="addForm.company_name" />
+            <el-input
+              placeholder="请输入"
+              v-model.trim="addForm.company_name"
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -54,9 +57,6 @@
       <zxn-title class="m-35px" ref="activeRef1">公司信息</zxn-title>
       <el-row :gutter="50">
         <el-col :span="7">
-          <el-form-item label="统一社会信用代码" prop="credit_code" required>
-            <el-input placeholder="请输入" v-model="addForm.credit_code" />
-          </el-form-item>
           <el-form-item label="选择行业">
             <el-select
               class="w-full"
@@ -73,25 +73,28 @@
             </el-select>
           </el-form-item>
           <el-form-item label="法人姓名">
-            <el-input placeholder="请输入" v-model="addForm.legal_person" />
+            <el-input
+              placeholder="请输入"
+              v-model.trim="addForm.legal_person"
+            />
           </el-form-item>
           <el-form-item label="法人身份证号">
             <el-input
               placeholder="请输入"
-              v-model="addForm.legal_person_idcard"
+              v-model.trim="addForm.legal_person_idcard"
             />
           </el-form-item>
           <el-form-item label="法人电话">
             <el-input
               placeholder="请输入手机号或座机号"
-              v-model="addForm.legal_person_mobile"
+              v-model.trim="addForm.legal_person_mobile"
             />
           </el-form-item>
         </el-col>
         <el-col :span="7">
-          <el-form-item label="营业地址">
+          <!-- <el-form-item label="营业地址">
             <el-input placeholder="请输入" v-model="addForm.company_address" />
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="营业执照到期时间">
             <div class="w-full">
               <el-date-picker
@@ -104,7 +107,7 @@
           </el-form-item>
 
           <el-form-item label="法人身份证">
-            <MultiUpload v-model="addForm.idcard_img">
+            <MultiUpload v-model.trim="addForm.idcard_img">
               <i-ep-Plus />
             </MultiUpload>
           </el-form-item>
@@ -126,11 +129,20 @@
       <zxn-title class="m-35px" ref="activeRef2">纳税信息</zxn-title>
       <el-row :gutter="50">
         <el-col :span="7">
+          <el-form-item label="统一社会信用代码" prop="credit_code" required>
+            <el-input
+              placeholder="请输入纳税人识别号"
+              v-model.trim="addForm.credit_code"
+            />
+          </el-form-item>
           <el-form-item label="开户行">
-            <el-input placeholder="请输入" v-model="addForm.bank" />
+            <el-input placeholder="请输入" v-model.trim="addForm.bank" />
           </el-form-item>
           <el-form-item label="银行账号">
-            <el-input placeholder="请输入" v-model="addForm.bank_account" />
+            <el-input
+              placeholder="请输入"
+              v-model.trim="addForm.bank_account"
+            />
           </el-form-item>
           <el-form-item label="纳税人类型">
             <el-select
@@ -145,6 +157,12 @@
                 :value="item.value"
               ></el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="开票地址">
+            <el-input placeholder="请输入" v-model="addForm.invoice_address" />
+          </el-form-item>
+          <el-form-item label="开票电话">
+            <el-input placeholder="请输入" v-model="addForm.invoice_phone" />
           </el-form-item>
         </el-col>
         <el-col :span="7">
@@ -406,7 +424,7 @@ const addForm = reactive({
   legal_person_idcard: "",
   legal_person_mobile: "",
   category_id: "",
-  company_address: "",
+  // company_address: "",
   license: [],
   idcard_img: [],
   seal: [], // 企业印章
@@ -437,6 +455,8 @@ const addForm = reactive({
   sign_type: "",
   auth_type: "",
   tax_land_type: "",
+  invoice_address: "",
+  invoice_phone: "",
 } as any);
 
 const isTaxLandListValid = computed(() => {
@@ -475,7 +495,7 @@ const requiredComputed = computed(() => {
     !!addForm.legal_person_idcard &&
     !!addForm.legal_person_mobile &&
     !!addForm.category_id &&
-    !!addForm.company_address &&
+    // !!addForm.company_address &&
     !!addForm.license.length &&
     !!addForm.idcard_img.length &&
     !!addForm.seal.length &&
@@ -493,6 +513,8 @@ const requiredComputed = computed(() => {
     !!addForm.consignee &&
     !!addForm.consignee_mobile &&
     !!addForm.address &&
+    !!addForm.invoice_address &&
+    !!addForm.invoice_phone &&
     isTaxLandListValid.value
   );
 });
