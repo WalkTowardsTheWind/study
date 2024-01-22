@@ -542,7 +542,6 @@ $border-radius: 16px;
 
 .chart {
   width: 100%;
-  height: 420px;
   padding: 20px;
   background: $backgound;
   border-radius: $border-radius;
