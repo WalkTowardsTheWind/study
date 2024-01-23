@@ -68,6 +68,7 @@
             </el-form-item>
             <el-form-item label="收款方式" prop="collection_type">
               <el-select
+								filterable
                 placeholder="请选择"
                 class="w-full"
                 v-model="form.collection_type"
@@ -103,6 +104,7 @@
             </el-form-item>
             <el-form-item label="渠道佣金结算时间" prop="settlement_type">
               <el-select
+								filterable
                 placeholder="请选择"
                 class="w-full"
                 v-model="form.settlement_type"

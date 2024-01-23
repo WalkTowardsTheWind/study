@@ -71,6 +71,7 @@
                 placeholder="请选择"
                 class="w-full"
                 v-model="form.collection_type"
+								filterable
               >
                 <el-option
                   v-for="i in collection_type"

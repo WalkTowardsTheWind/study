@@ -17,6 +17,8 @@
           v-model="formItem.express_id"
           class="w-100%"
           placeholder="请选择"
+					filterable
+					clearable
         >
           <el-option
             v-for="item in logisticsCompany"

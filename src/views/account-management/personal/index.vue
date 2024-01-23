@@ -21,6 +21,7 @@
           v-model="formItem.status"
           placeholder="请选择"
           @change="handleSearch"
+					filterable
         >
           <el-option
             v-for="item in statusOptions"

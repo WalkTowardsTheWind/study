@@ -15,6 +15,8 @@
                 v-model="formItem.channel_type"
                 disabled
                 class="w-full"
+								filterable
+								clearable
               >
                 <el-option label="企业" :value="1"></el-option>
                 <el-option label="个人" :value="2"></el-option>

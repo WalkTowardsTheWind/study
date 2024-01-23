@@ -38,6 +38,8 @@
                 v-model="formItem.status"
                 placeholder="请选择"
                 @change="handleSearch"
+								filterable
+								clearable
               >
                 <el-option
                   v-for="item in taskStatus"

@@ -17,6 +17,8 @@
                   class="w-[100%]"
                   disabled
                   v-model="formData.status"
+									filterable
+									clearable
                   placeholder="请选择"
                 >
                   <el-option

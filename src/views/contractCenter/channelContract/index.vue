@@ -16,12 +16,14 @@
         </el-input>
       </el-form-item>
       <el-form-item label="合同状态">
-        <el-select v-model="formItem.status" placeholder="全部">
+        <el-select v-model="formItem.status" filterable clearable placeholder="全部">
           <el-option
             v-for="item in proxy.$const['contractCenterEnum.contractStatus']"
             :key="item.value"
             :label="item.label"
             :value="item.value"
+						filterable
+						clearable
           />
         </el-select>
       </el-form-item>

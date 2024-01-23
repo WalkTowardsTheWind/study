@@ -132,6 +132,8 @@
                 <el-select
                   class="w-full"
                   placeholder="请选择"
+									filterable
+									clearable
                   v-model="addForm.roles"
                 >
                   <el-option

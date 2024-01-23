@@ -39,6 +39,8 @@
                         v-model="(formData as any)[(item as any)].data"
                         placeholder="Select"
                         @change="(val)=>changeOptions(val,(item as any).data)"
+												filterable
+												clearable
                       >
                         <el-option
                           v-for="optionsItem in (item as any).stateOptions"

@@ -34,7 +34,7 @@
         <el-row>
           <el-col :span="22">
             <el-form-item label="企业名称" prop="tax_land_name">
-              <el-select class="w-full" placeholder="请选择"></el-select>
+              <el-select class="w-full" placeholder="请选择" filterable clearable></el-select>
             </el-form-item>
             <el-form-item label="税地名称" prop="channel_point">
               <el-select class="w-full" placeholder="请选择"></el-select>

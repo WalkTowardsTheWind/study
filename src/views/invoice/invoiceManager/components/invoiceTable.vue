@@ -24,7 +24,7 @@
         </zxn-select>
       </el-form-item>
       <el-form-item label="开票类型" prop="invoice_type">
-        <el-select v-model="formItem.invoice_type" placeholder="请选择">
+        <el-select filterable clearable v-model="formItem.invoice_type" placeholder="请选择">
           <el-option
             v-for="item in proxy.$const['statusEnum.applyInvoiceType']"
             :key="item.value"

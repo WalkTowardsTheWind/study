@@ -30,6 +30,8 @@
                     class="w-[100%]"
                     v-model="formItem.contract_kind"
                     placeholder="请选择"
+										filterable
+										clearable
                   >
                     <el-option
                       v-for="item in proxy.$const[
@@ -68,6 +70,8 @@
                     class="w-[100%]"
                     v-model="formItem.contract_term"
                     placeholder="请选择"
+										filterable
+										clearable
                   >
                     <el-option
                       v-for="item in proxy.$const[

@@ -19,6 +19,7 @@
         </el-form-item>
         <el-form-item label="认证状态">
           <el-select
+						filterable
             v-model="formItem.status"
             placeholder="请选择"
             @change="handleChange"

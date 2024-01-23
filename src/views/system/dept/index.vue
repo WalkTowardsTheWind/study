@@ -195,6 +195,7 @@ onMounted(() => {
         <el-form-item label="部门状态" prop="status">
           <el-select
             v-model="queryParams.status"
+						filterable
             placeholder="部门状态"
             clearable
           >

@@ -110,6 +110,8 @@
                   placeholder="请选择"
                   v-model="newForm.tax_land_id"
                   @change="handleSelectTaxland"
+									filterable
+									clearable
                 >
                   <el-option
                     v-for="i in taxlandList"
@@ -132,6 +134,8 @@
                     class="w-full"
                     placeholder="请选择"
                     v-model="newForm.bind_channel_id"
+										filterable
+										clearable
                   >
                     <el-option
                       v-for="i in channelList"

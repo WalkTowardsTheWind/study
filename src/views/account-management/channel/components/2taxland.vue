@@ -51,6 +51,8 @@
                 class="w-full"
                 placeholder="请选择"
                 v-model="newForm.tax_land_id"
+								filterable
+								clearable
               >
                 <el-option
                   v-for="(item, index) in taxLandOption"

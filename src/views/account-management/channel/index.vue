@@ -21,6 +21,8 @@
           v-model="formItem.status"
           placeholder="请选择"
           @change="handleSelect"
+					filterable
+					clearable
         >
           <el-option
             v-for="item in statusOptions"
@@ -34,6 +36,8 @@
         <el-select
           v-model="formItem.channel_type"
           placeholder="请选择"
+					filterable
+					clearable
           @change="handleSelectChannel"
         >
           <el-option

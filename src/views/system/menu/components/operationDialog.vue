@@ -29,7 +29,7 @@
         </el-tree-select>
       </el-form-item>
       <el-form-item label="类型" prop="auth_type">
-        <el-select v-model="formItem.auth_type" class="w-100%">
+        <el-select v-model="formItem.auth_type" filterable clearable class="w-100%">
           <el-option
             v-for="item in proxy.$const['system.authType']"
             :key="item.value"

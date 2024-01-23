@@ -19,6 +19,8 @@
             placeholder="请选择"
             v-model="formItem.status"
             @change="handleSelectChange"
+						filterable
+						clearable
           >
             <el-option value="" label="全部"></el-option>
             <el-option value="1" label="已开票"></el-option>

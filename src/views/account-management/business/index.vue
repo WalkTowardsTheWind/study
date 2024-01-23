@@ -20,6 +20,8 @@
           v-model="formItem.status"
           placeholder="请选择"
           @change="handleChange"
+					filterable
+					clearable
         >
           <el-option
             v-for="item in options"
@@ -48,7 +50,7 @@
         </div>
       </el-form-item>
       <el-form-item prop=" calculation_type" label="计费方式">
-        <el-select v-model="formItem.calculation_type" placeholder="请选择">
+        <el-select filterable v-model="formItem.calculation_type" placeholder="请选择">
           <el-option label="全部" value="" />
           <el-option label="内扣" value="0" />
           <el-option label="外扣" value="1" />

@@ -92,7 +92,7 @@
               <zxn-date-range v-model="formItem.timeData" />
             </el-form-item>
             <el-form-item label="渠道结算状态">
-              <el-select v-model="formItem.status" @change="handleSearch">
+              <el-select v-model="formItem.status" filterable clearable @change="handleSearch">
                 <el-option
                   v-for="item in proxy.$const[
                     'settlementCenterEnum.channelSettlementStatus'

@@ -18,6 +18,8 @@
                 <el-form-item label="税地类型" prop="tax_land_type">
                   <el-select
                     class="w-[100%] bg"
+										filterable
+										clearable
                     disabled
                     v-model="formItem.tax_land_type"
                     placeholder=" "
@@ -163,6 +165,8 @@
                 <el-form-item label="税地发票类型">
                   <el-select
                     class="w-[100%]"
+										filterable
+										clearable
                     disabled
                     v-model="formItem.invoice_type"
                   >
@@ -192,6 +196,8 @@
                 <el-form-item class="mt-25px" label="发票面额">
                   <el-select
                     class="w-[100%]"
+										filterable
+										clearable
                     disabled
                     v-model="formItem.invoice_denomination"
                     placeholder=" "
@@ -220,6 +226,8 @@
                 >
                   <el-select
                     class="w-[100%]"
+										filterable
+										clearable
                     disabled
                     v-model="formItem.payment_type"
                     placeholder=" "
@@ -252,6 +260,8 @@
                 <el-form-item class="mt-25px" label="开票方式">
                   <el-select
                     class="w-[100%]"
+										filterable
+										clearable
                     disabled
                     v-model="formItem.invoice_form"
                     placeholder=" "
@@ -280,6 +290,8 @@
                 <el-form-item class="mt-25px" label="余额计算规则">
                   <el-select
                     class="w-[100%]"
+										filterable
+										clearable
                     disabled
                     placeholder=" "
                     v-model="formItem.balance_type"
@@ -297,6 +309,8 @@
                 <el-form-item class="mt-25px" label="服务费计算规则">
                   <el-select
                     class="w-[100%]"
+										filterable
+										clearable
                     disabled
                     placeholder=" "
                     v-model="formItem.commission_rule"
@@ -360,6 +374,8 @@
                 <el-form-item label="认证规则" prop="certification_rules">
                   <el-select
                     class="w-[100%]"
+										filterable
+										clearable
                     disabled
                     v-model="formItem.certification_rules"
                     multiple
@@ -382,6 +398,8 @@
                 >
                   <el-select
                     class="w-[100%]"
+										filterable
+										clearable
                     disabled
                     v-model="formItem.signing_rules"
                     multiple
@@ -402,6 +420,8 @@
                 <el-form-item label="委托代征年限" prop="tax_contract_term">
                   <el-select
                     class="w-[100%]"
+										filterable
+										clearable
                     disabled
                     v-model="formItem.tax_contract_term"
                     placeholder=" "

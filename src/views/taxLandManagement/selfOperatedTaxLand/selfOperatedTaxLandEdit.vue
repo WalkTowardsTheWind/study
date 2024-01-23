@@ -15,6 +15,8 @@
                 <el-form-item label="税地类型" prop="tax_land_type">
                   <el-select
                     class="w-[100%]"
+										filterable
+										clearable
                     disabled
                     v-model="formItem.tax_land_type"
                     placeholder="请选择"
@@ -140,6 +142,7 @@
                 <el-form-item label="税地发票类型">
                   <el-select
                     class="w-[100%]"
+										filterable
                     clearable
                     v-model="formItem.invoice_type"
                     placeholder="请选择"
@@ -169,6 +172,7 @@
                 <el-form-item class="mt-25px" label="发票面额">
                   <el-select
                     class="w-[100%]"
+										filterable
                     clearable
                     v-model="formItem.invoice_denomination"
                     placeholder="请选择"
@@ -194,6 +198,7 @@
                 <el-form-item label="支付方式" prop="payment_type">
                   <el-select
                     class="w-[100%]"
+										filterable
                     clearable
                     v-model="formItem.payment_type"
                     placeholder="请选择"
@@ -229,6 +234,7 @@
                 >
                   <el-select
                     class="w-[100%]"
+										filterable
                     clearable
                     v-model="formItem.invoice_form"
                     placeholder="请选择"
@@ -276,6 +282,7 @@
                 <el-form-item label="认证规则" prop="certification_rules">
                   <el-select
                     class="w-[100%]"
+										filterable
                     clearable
                     v-model="formItem.certification_rules"
                     multiple
@@ -298,6 +305,7 @@
                 >
                   <el-select
                     class="w-[100%]"
+										filterable
                     clearable
                     v-model="formItem.signing_rules"
                     multiple
@@ -328,6 +336,7 @@
                 <el-form-item label="委托代征年限" prop="tax_contract_term">
                   <el-select
                     class="w-[100%]"
+										filterable
                     clearable
                     v-model="formItem.tax_contract_term"
                     placeholder="请选择"

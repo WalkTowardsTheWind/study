@@ -1,5 +1,5 @@
 <template>
-  <el-select v-model="taxIdValue" filterable @change="handleTaxChange">
+  <el-select v-model="taxIdValue" clearable filterable @change="handleTaxChange">
     <el-option v-if="isShowAll" label="全部税地" value="" />
     <el-option
       v-for="item in useUser.sourceList"
