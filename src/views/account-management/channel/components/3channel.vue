@@ -155,6 +155,8 @@
                     class="w-full"
                     placeholder="请选择"
                     v-model="newForm.bind_channel_id"
+                    filterable
+                    clearable
                   >
                     <el-option
                       v-for="i in channelList"

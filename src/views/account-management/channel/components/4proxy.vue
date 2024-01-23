@@ -58,6 +58,7 @@
                 placeholder="请选择"
                 v-model="newForm.tax_land_id"
                 @change="handleSelect"
+                filterable
               >
                 <el-option
                   v-for="i of taxlandList"
@@ -72,6 +73,8 @@
                 class="w-full"
                 placeholder="请选择"
                 v-model="newForm.company_id"
+                filterable
+                clearable
               >
                 <el-option
                   v-for="i of companyList"
