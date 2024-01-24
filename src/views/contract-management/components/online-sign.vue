@@ -113,16 +113,10 @@
           :key="index"
         >
           <el-form-item
-            required
             label-width="200px"
             :key="item.field_name"
             :label="item.label"
             :prop="'fields.' + index + '.field_value'"
-            :rules="{
-              required: true,
-              message: '必填',
-              trigger: 'blur',
-            }"
           >
             <el-input
               clearable
