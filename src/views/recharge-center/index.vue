@@ -417,8 +417,8 @@ const columnList = computed(() => {
           background: "#999999",
         },
         5: {
-          color: "#fff",
-          background: "#333",
+          color: "#333",
+          background: "#f1f3f4",
         },
       },
       width: 120,
