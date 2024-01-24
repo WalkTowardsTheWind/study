@@ -151,7 +151,6 @@ const submit = async (formI) => {
         effective_end_time: formItem.date[1] ?? "",
         fields: formItem.fields,
       };
-      formItem.contract_url = "";
       if (!params.fields.every((item) => item.field_value !== "")) {
         ElMessageBox.confirm("注意：参与方信息选项未填写完整，是否继续？", {
           confirmButtonText: "是",
@@ -159,6 +158,7 @@ const submit = async (formI) => {
           center: true,
         })
           .then(() => {
+            formItem.contract_url = "";
             updateContract(params).then((res) => {
               setTimeout(() => {
                 btnLoading.value = false;
@@ -172,6 +172,7 @@ const submit = async (formI) => {
             btnLoading.value = false;
           });
       } else {
+        formItem.contract_url = "";
         updateContract(params).then((res) => {
           setTimeout(() => {
             btnLoading.value = false;
