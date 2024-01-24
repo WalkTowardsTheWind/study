@@ -98,6 +98,11 @@
               <!--                </template>-->
               <!--              </el-dropdown>-->
             </template>
+            <template #recharge_order_no="scope">
+              <span>{{
+                scope.row.recharge_order_no ? scope.row.recharge_order_no : "--"
+              }}</span>
+            </template>
             <template #certificate="scope">
               <zxn-image
                 :imgList="scope.row.certificate"
@@ -173,7 +178,7 @@
   >
     <el-form
       label-width="auto"
-      label-position="left"
+      label-position="right"
       :model="refundModel"
       :rules="refundRules"
       ref="refundRef"
@@ -185,6 +190,8 @@
               class="w-full"
               v-model="refundModel.company_id"
               @change="selectTaxlandByCompany"
+              filterable
+              clearable
             >
               <el-option
                 v-for="item of allBusiness"
@@ -199,6 +206,8 @@
               class="w-full"
               v-model="refundModel.tax_land_id"
               @change="getMoneyByTaxland"
+              filterable
+              clearable
             >
               <el-option
                 v-for="item of refundTaxland"
@@ -212,12 +221,17 @@
             <el-input readonly v-model="refundModel.money" />
           </el-form-item>
           <el-form-item label="退款金额" prop="amount">
-            <el-input placeholder="请输入" v-model="refundModel.amount" />
+            <el-input
+              placeholder="请输入"
+              v-model="refundModel.amount"
+              @input="validateAmount"
+            />
           </el-form-item>
           <el-form-item label="退款回单号" prop="recharge_order_no">
             <el-input
               placeholder="请输入"
               v-model="refundModel.recharge_order_no"
+              @input="validateNumber"
             />
           </el-form-item>
           <el-form-item label="退款凭证" prop="refund_url">
@@ -268,6 +282,7 @@ function dialogClose() {
 }
 function dialogClose2() {
   visible2.value = false;
+  refundTaxland.value = [];
   resetRefundModel();
 }
 function gotoUpload() {
@@ -374,7 +389,7 @@ const pageInfo = reactive({
 const tableData = reactive([] as any);
 const columnList = computed(() => {
   return [
-    { label: "充值单号", prop: "recharge_order_no", width: 110, fixed: "left" },
+    { label: "充值单号", slot: "recharge_order_no", width: 110, fixed: "left" },
     {
       label: "状态",
       prop: "status",
@@ -545,6 +560,9 @@ const dialog2Click = async (formEl) => {
       if (parseFloat(refundModel.amount) > parseFloat(refundModel.money)) {
         return ElMessage.error("退款金额不能大于企业余额");
       }
+      if (refundModel.amount == 0) {
+        return ElMessage.error("退款金额不能为0");
+      }
       businessReturnMoney(refundModel).then((res) => {
         ElMessage.success("操作成功");
         visible2.value = false;
@@ -579,6 +597,24 @@ const getMoneyByTaxland = (tax_land_id) => {
       refundModel.money = res.data.balance;
     }
   );
+};
+const validateAmount = () => {
+  const reg = /^\d+(\.\d{0,2})?$/;
+  if (!reg.test(refundModel.amount)) {
+    refundModel.amount = refundModel.amount
+      .replace(/[^\d.]/g, "")
+      .replace(/^(\d+\.?\d{0,2}).*$/, "$1");
+  }
+};
+
+const validateNumber = () => {
+  const reg = /^\d+$/;
+  if (!reg.test(refundModel.recharge_order_no)) {
+    refundModel.recharge_order_no = refundModel.recharge_order_no.replace(
+      /[^\d]/g,
+      ""
+    );
+  }
 };
 
 const resetRefundModel = () => {
