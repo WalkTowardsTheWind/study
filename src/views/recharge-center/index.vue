@@ -38,8 +38,8 @@
                 v-model="formItem.status"
                 placeholder="请选择"
                 @change="handleSearch"
-								filterable
-								clearable
+                filterable
+                clearable
               >
                 <el-option
                   v-for="item in taskStatus"
@@ -75,6 +75,9 @@
             @selection-change="handleSelect"
           >
             <template #tableTop>
+              <el-button type="primary" @click="refundByBusiness"
+                >退款</el-button
+              >
               <!-- <el-dropdown class="" trigger="click">
                 <el-button type="primary" plain>批量操作</el-button>
                 <template #dropdown>
@@ -159,6 +162,46 @@
       >开始上传</el-button
     >
   </el-dialog>
+  <!-- 企业退款 -->
+  <el-dialog
+    v-model="visible2"
+    title="企业退款"
+    :before-close="dialogClose2"
+    width="25%"
+    :close-on-click-modal="false"
+  >
+    <el-form :model="refundModel" :rules="refundRules" ref="refundRef">
+      <el-row>
+        <el-col>
+          <el-form-item label="企业名称">
+            <el-select class="w-full">
+              <el-option></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="税地名称">
+            <el-select class="w-full">
+              <el-option></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="企业余额">
+            <el-input readonly />
+          </el-form-item>
+          <el-form-item label="退款金额">
+            <el-input />
+          </el-form-item>
+          <el-form-item label="退款凭证">
+            <multi-upload v-model="fileList2" :limit="3"></multi-upload>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+    <div class="flex justify-center">
+      <el-button class="is-cancel" type="info" @click="dialogClose2"
+        >取消</el-button
+      >
+      <el-button class="" type="primary" @click="dialog2Click">确认</el-button>
+    </div>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
@@ -174,11 +217,17 @@ import { isNumber } from "@/utils/is";
 const { proxy } = getCurrentInstance() as any;
 // 上传退款凭证
 const visible = ref(false);
+const visible2 = ref(false);
 const fileList = ref([]);
+const fileList2 = ref([]);
 const upload_id = ref("");
 function dialogClose() {
   fileList.value = [];
   visible.value = false;
+}
+function dialogClose2() {
+  fileList2.value = [];
+  visible2.value = false;
 }
 function gotoUpload() {
   let params = {
@@ -311,6 +360,10 @@ const columnList = computed(() => {
           color: "#fff",
           background: "#999999",
         },
+        5: {
+          color: "#fff",
+          background: "#333",
+        },
       },
       width: 120,
       fixed: "left",
@@ -401,6 +454,14 @@ onMounted(() => {
   getTaxLand();
   // getCategory();
 });
+
+const refundModel = reactive({});
+const refundRules = [];
+
+const dialog2Click = () => {};
+const refundByBusiness = () => {
+  visible2.value = true;
+};
 </script>
 
 <style lang="scss" scoped>

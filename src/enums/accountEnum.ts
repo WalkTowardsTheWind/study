@@ -37,7 +37,8 @@ export enum taskType {
   "已到账",
   "异常充值",
   "服务费退回",
-  "已退款",
+  "财务退款",
+  "退款",
 }
 
 export enum settleStatus {
