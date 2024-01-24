@@ -65,7 +65,7 @@
       <div class="flex m-t-20px">
         <template v-if="contract_type == 1">
           <el-form-item label="甲方" prop="part_a">
-            <el-select v-model="addForm.part_a" filterable>
+            <el-select v-model="addForm.part_a" filterable clearable>
               <el-option
                 v-for="item of optionsListA"
                 :key="item.company_id"
@@ -75,7 +75,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="乙方" prop="part_b">
-            <el-select v-model="addForm.part_b" filterable>
+            <el-select v-model="addForm.part_b" filterable clearable>
               <el-option
                 v-for="item of optionsListB"
                 :key="item.id"
@@ -87,12 +87,12 @@
         </template>
         <template v-if="contract_type == 2">
           <el-form-item label="甲方" prop="part_a">
-            <el-select v-model="addForm.part_a">
+            <el-select v-model="addForm.part_a" filterable clearable>
               <el-option label="武汉中新能科技有限公司" value="0"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="乙方" prop="part_b">
-            <el-select v-model="addForm.part_b" filterable>
+            <el-select v-model="addForm.part_b" filterable clearable>
               <el-option
                 v-for="item of optionsListB"
                 :key="item.id"

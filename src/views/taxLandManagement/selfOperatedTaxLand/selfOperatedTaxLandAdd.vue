@@ -111,6 +111,7 @@
                     :options="optionsTaxLang"
                     :props="propsTaxLang"
                     clearable
+										filterable
                   />
                 </el-form-item>
               </el-col>

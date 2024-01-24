@@ -122,7 +122,8 @@
                     v-model="formItem.tax_land_city_id"
                     :options="optionsTaxLang"
                     :props="propsTaxLang"
-                    clearable
+										clearable
+										filterable
                   />
                 </el-form-item>
               </el-col>

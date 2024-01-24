@@ -65,6 +65,8 @@
             :disabled="state.dialogType == 'edit'"
             value-key="id"
             @change="selecTaxland"
+						filterable
+						clearable
           >
             <el-option
               v-for="(item, index) in taxLandOption"
@@ -96,7 +98,9 @@
           </el-input>
         </el-form-item>
         <el-form-item label="认证规则" prop="auth_type">
-          <el-select class="w-full" v-model="state.formItem.auth_type">
+          <el-select class="w-full"
+										 filterable
+										 clearable v-model="state.formItem.auth_type">
             <el-option
               v-for="(item, index) in auth_type"
               :key="index"
@@ -110,6 +114,8 @@
             class="w-full"
             placeholder="请选择（单选）"
             v-model="state.formItem.sign_type"
+						filterable
+						clearable
           >
             <el-option
               v-for="(item, index) in sign_type"

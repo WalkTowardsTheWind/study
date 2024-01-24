@@ -15,7 +15,7 @@
       <el-row>
         <el-col>
           <el-form-item label="合同类型" required prop="type">
-            <el-select disabled class="w-full" v-model="addForm.type">
+            <el-select disabled filterable clearable class="w-full" v-model="addForm.type">
               <el-option
                 v-for="item of contract_types"
                 :key="item.value"
@@ -39,7 +39,8 @@
                 value-key="id"
                 @change="handleSelectChange1A"
                 placeholder="请选择签署的企业"
-                filterable
+								filterable
+								clearable
               >
                 <el-option
                   v-for="item of busOptions"
@@ -56,7 +57,8 @@
                 v-model="addForm.part_b.name"
                 @change="handleSelectChange1B"
                 placeholder="请选择签署的税地"
-                filterable
+								filterable
+								clearable
               >
                 <el-option
                   v-for="item of taxlandOptions"
@@ -75,7 +77,8 @@
                 value-key="value"
                 v-model="addForm.part_a.name"
                 @change="handleSelectChange2A"
-                filterable
+								filterable
+								clearable
               >
                 <el-option
                   label="武汉中新能科技有限公司"
@@ -90,7 +93,8 @@
                 v-model="addForm.part_b.name"
                 @change="handleSelectChange2B"
                 placeholder="请选择签署的渠道"
-                filterable
+								filterable
+								clearable
               >
                 <el-option
                   v-for="item of channelOptions"
@@ -110,7 +114,8 @@
                 v-model="addForm.part_a.name"
                 @change="handleSelectChange3A"
                 placeholder="请选择签署的税地"
-                filterable
+								filterable
+								clearable
               >
                 <el-option
                   v-for="item of taxlandOptions"
@@ -126,7 +131,8 @@
                 value-key="value"
                 v-model="addForm.part_b.name"
                 @change="handleSelectChange3B"
-                filterable
+								filterable
+								clearable
               >
                 <el-option
                   label="武汉中新能科技有限公司"
@@ -150,7 +156,8 @@
                 v-model="addForm.part_b.name"
                 @change="handleSelectChange4B"
                 placeholder="请选择签署的税地"
-                filterable
+								filterable
+								clearable
               >
                 <el-option
                   v-for="item of taxlandOptions"

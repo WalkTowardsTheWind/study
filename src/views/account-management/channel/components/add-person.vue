@@ -138,6 +138,8 @@
                 class="w-full"
                 placeholder="请选择"
                 v-model="form.tax_land_id"
+								filterable
+								clearable
               >
                 <el-option
                   v-for="(item, index) in taxLandOption"

@@ -62,7 +62,8 @@
               class="w-full"
               placeholder="请选择"
               v-model="addForm.category_id"
-              filterable
+							filterable
+							clearable
             >
               <el-option
                 v-for="item in cateGoryOptions"
@@ -146,6 +147,8 @@
           </el-form-item>
           <el-form-item label="纳税人类型">
             <el-select
+							filterable
+							clearable
               class="w-full"
               placeholder="请输入"
               v-model="addForm.taxpayer_type"
@@ -225,7 +228,7 @@
           <template v-if="addForm.company_source == '1'">
             <el-form-item label="上级ID绑定" class="w-full">
               <div style="display: flex; gap: 0 10px">
-                <el-select placeholder="请选择" v-model="addForm.channel_type">
+                <el-select placeholder="请选择" filterable clearable v-model="addForm.channel_type">
                   <el-option label="个人" :value="1"></el-option>
                   <el-option label="企业" :value="2"></el-option>
                 </el-select>
@@ -250,6 +253,8 @@
               class="w-full"
               v-model="addForm.calculation_type"
               placeholder="请选择"
+							filterable
+							clearable
             >
               <el-option label="内扣" value="0" />
               <el-option label="外扣" value="1" />
@@ -290,7 +295,8 @@
               v-model="addForm.tax_land_id"
               @change="addSelecTaxland"
               value-key="id"
-              filterable
+							filterable
+							clearable
             >
               <el-option
                 v-for="(item, index) in taxLandOption"
@@ -334,6 +340,8 @@
               class="w-full"
               placeholder="请选择（单选）"
               v-model="addForm.auth_type"
+							filterable
+							clearable
             >
               <el-option
                 v-for="(item, index) in auth_type"
@@ -348,6 +356,8 @@
               class="w-full"
               placeholder="请选择（单选）"
               v-model="addForm.sign_type"
+							filterable
+							clearable
             >
               <el-option
                 v-for="(item, index) in sign_type"

@@ -67,6 +67,8 @@
           </el-form-item>
           <el-form-item label="模板类型" required prop="type">
             <el-select
+							filterable
+							clearable
               class="w-full"
               placeholder="请选择"
               v-model="addForm.type"
@@ -77,6 +79,8 @@
           </el-form-item>
           <el-form-item v-if="isAdd" label="签署形式" required prop="seal_type">
             <el-select
+							filterable
+							clearable
               class="w-full"
               placeholder="请选择"
               v-model="addForm.seal_type"

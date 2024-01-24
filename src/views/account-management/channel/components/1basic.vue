@@ -53,6 +53,8 @@
               <el-select
                 v-model="formItem.settlement_type"
                 class="w-full"
+								filterable
+								clearable
                 :disabled="!isEdit"
               >
                 <el-option
@@ -94,6 +96,8 @@
                 v-model="formItem.collection_type"
                 class="w-full"
                 :disabled="!isEdit"
+								filterable
+								clearable
               >
                 <el-option
                   v-for="i in collection_type"
@@ -138,6 +142,8 @@
                 v-model="formItem.channel_type"
                 disabled
                 class="w-full"
+								filterable
+								clearable
               >
                 <el-option label="企业" :value="1"></el-option>
                 <el-option label="个人" :value="2"></el-option>
@@ -163,6 +169,8 @@
                 v-model="formItem.collection_type"
                 class="w-full"
                 :disabled="!isEdit"
+								filterable
+								clearable
               >
                 <el-option
                   v-for="i in collection_type"
@@ -206,6 +214,8 @@
                 v-model="formItem.settlement_type"
                 class="w-full"
                 :disabled="!isEdit"
+								filterable
+								clearable
               >
                 <el-option
                   v-for="i in settlement_type"

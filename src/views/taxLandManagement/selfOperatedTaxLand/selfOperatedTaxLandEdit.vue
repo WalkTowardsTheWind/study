@@ -102,7 +102,8 @@
                     v-model="formItem.tax_land_city_id"
                     :options="optionsTaxLang"
                     :props="propsTaxLang"
-                    clearable
+										clearable
+										filterable
                   />
                 </el-form-item>
               </el-col>
@@ -166,7 +167,8 @@
                     :props="propsInvoicingCategory"
                     collapse-tags
                     collapse-tags-tooltip
-                    clearable
+										clearable
+										filterable
                   />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="发票面额">

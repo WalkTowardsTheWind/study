@@ -49,6 +49,8 @@
                 placeholder="请选择"
                 v-model="formItem.category_id"
                 :readonly="!isEdit"
+								filterable
+								clearable
               >
                 <el-option
                   v-for="item in cateGoryOptions"
@@ -105,6 +107,8 @@
                 class="w-full"
                 v-model="formItem.taxpayer_type"
                 :disabled="!isEdit"
+								filterable
+								clearable
               >
                 <el-option
                   v-for="item in options"
@@ -124,6 +128,8 @@
                 class="w-full"
                 v-model="formItem.calculation_type"
                 :disabled="!isEdit"
+								filterable
+								clearable
               >
                 <el-option :value="0" label="内扣"></el-option>
                 <el-option :value="1" label="外扣"></el-option>
@@ -168,6 +174,8 @@
                 class="w-full"
                 v-model="formItem.company_source"
                 :disabled="!isEdit"
+								filterable
+								clearable
               >
                 <el-option :value="0" label="销售"></el-option>
                 <el-option :value="1" label="渠道推广"></el-option>

@@ -13,7 +13,9 @@
         </el-input>
       </el-form-item>
       <el-form-item label="账户状态">
-        <el-select v-model="formItem.status" placeholder="请选择">
+        <el-select
+					filterable
+					clearable v-model="formItem.status" placeholder="请选择">
           <el-option
             v-for="item in statusOption"
             :key="item.value"
@@ -23,7 +25,9 @@
         </el-select>
       </el-form-item>
       <el-form-item label="角色">
-        <el-select v-model="formItem.roles" placeholder="请选择">
+        <el-select
+					filterable
+					clearable v-model="formItem.roles" placeholder="请选择">
           <el-option
             v-for="item in roleOption"
             :key="item.id"
@@ -121,6 +125,8 @@
             class="w-full"
             placeholder="请选择"
             v-model="addForm.roles"
+						filterable
+						clearable
           >
             <el-option
               v-for="item in roleOption"
@@ -136,7 +142,8 @@
             v-model="area"
             :options="options"
             :props="props2"
-            clearable
+						clearable
+						filterable
             placeholder="请选择"
             :show-all-levels="false"
           />

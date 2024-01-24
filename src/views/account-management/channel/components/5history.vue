@@ -37,7 +37,7 @@
               <el-select class="w-full" placeholder="请选择" filterable clearable></el-select>
             </el-form-item>
             <el-form-item label="税地名称" prop="channel_point">
-              <el-select class="w-full" placeholder="请选择"></el-select>
+              <el-select class="w-full" filterable clearable placeholder="请选择"></el-select>
             </el-form-item>
           </el-col>
         </el-row>

@@ -106,6 +106,8 @@
                 placeholder="请选择"
                 class="w-full"
                 v-model="form.settlement_type"
+								filterable
+								clearable
               >
                 <el-option
                   v-for="i in settlement_type"
@@ -136,6 +138,8 @@
                 class="w-full"
                 placeholder="请选择"
                 v-model="form.tax_land_id"
+								filterable
+								clearable
               >
                 <el-option
                   v-for="(item, index) in taxLandOption"

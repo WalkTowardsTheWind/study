@@ -16,7 +16,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="合同状态">
-        <el-select v-model="formItem.status" @change="handleSearch">
+        <el-select v-model="formItem.status" filterable clearable @change="handleSearch">
           <el-option
             v-for="item of contract_status"
             :key="item.status"
