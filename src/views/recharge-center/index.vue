@@ -38,8 +38,8 @@
                 v-model="formItem.status"
                 placeholder="请选择"
                 @change="handleSearch"
-								filterable
-								clearable
+                filterable
+                clearable
               >
                 <el-option
                   v-for="item in taskStatus"
@@ -75,6 +75,7 @@
             @selection-change="handleSelect"
           >
             <template #tableTop>
+              <el-button type="primary" @click="tuikuan">退款</el-button>
               <!-- <el-dropdown class="" trigger="click">
                 <el-button type="primary" plain>批量操作</el-button>
                 <template #dropdown>
@@ -311,6 +312,10 @@ const columnList = computed(() => {
           color: "#fff",
           background: "#999999",
         },
+        5: {
+          color: "#fff",
+          background: "#333",
+        },
       },
       width: 120,
       fixed: "left",
@@ -401,6 +406,8 @@ onMounted(() => {
   getTaxLand();
   // getCategory();
 });
+
+const tuikuan = () => {};
 </script>
 
 <style lang="scss" scoped>

@@ -116,7 +116,6 @@
             label-width="200px"
             :key="item.field_name"
             :label="item.label"
-            :prop="'fields.' + index + '.field_value'"
           >
             <el-input
               clearable

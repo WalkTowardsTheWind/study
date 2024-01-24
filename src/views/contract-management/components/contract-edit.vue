@@ -54,12 +54,7 @@
             >
               <el-form-item
                 :label="item.label"
-                :prop="'fields.' + index + '.field_value'"
-                :rules="{
-                  required: true,
-                  message: '必填',
-                  trigger: 'blur',
-                }"
+
               >
                 <el-input clearable v-model="item.field_value" />
               </el-form-item>
