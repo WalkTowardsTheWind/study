@@ -52,10 +52,7 @@
               v-for="(item, index) of formItem.fields"
               :key="index"
             >
-              <el-form-item
-                :label="item.label"
-
-              >
+              <el-form-item :label="item.label">
                 <el-input clearable v-model="item.field_value" />
               </el-form-item>
             </div>
@@ -155,14 +152,43 @@ const submit = async (formI) => {
         fields: formItem.fields,
       };
       formItem.contract_url = "";
-      updateContract(params).then((res) => {
-        setTimeout(() => {
-          btnLoading.value = false;
-          formItem.contract_url = res.data.url;
-          ElMessage.success("更新成功");
-          emit("edit-close", true, true);
-        }, 2000);
-      });
+      if (!params.fields.every((item) => item.field_value !== "")) {
+        ElMessageBox.confirm("注意：参与方信息选项未填写完整，是否继续？", {
+          confirmButtonText: "是",
+          cancelButtonText: "否",
+          center: true,
+        })
+          .then(() => {
+            updateContract(params).then((res) => {
+              setTimeout(() => {
+                btnLoading.value = false;
+                formItem.contract_url = res.data.url;
+                ElMessage.success("更新成功");
+                emit("edit-close", true, true);
+              }, 2000);
+            });
+          })
+          .catch(() => {
+            btnLoading.value = false;
+          });
+      } else {
+        updateContract(params).then((res) => {
+          setTimeout(() => {
+            btnLoading.value = false;
+            formItem.contract_url = res.data.url;
+            ElMessage.success("更新成功");
+            emit("edit-close", true, true);
+          }, 2000);
+        });
+      }
+      // updateContract(params).then((res) => {
+      //   setTimeout(() => {
+      //     btnLoading.value = false;
+      //     formItem.contract_url = res.data.url;
+      //     ElMessage.success("更新成功");
+      //     emit("edit-close", true, true);
+      //   }, 2000);
+      // });
     } else {
       console.log("error submit!", fields);
     }

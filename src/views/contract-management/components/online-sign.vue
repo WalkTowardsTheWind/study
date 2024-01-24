@@ -217,10 +217,23 @@ const onlineConfirm = async (formI) => {
         fields: addForm.fields,
         remark: addForm.remark,
       };
-      signContractOnline(params).then(() => {
-        ElMessage.success("操作成功！");
-        emit("online-confirm", false);
-      });
+      if (!params.fields.every((item) => item.field_value !== "")) {
+        ElMessageBox.confirm("注意：参与方信息选项未填写完整，是否继续？", {
+          confirmButtonText: "是",
+          cancelButtonText: "否",
+          center: true,
+        }).then(() => {
+          signContractOnline(params).then(() => {
+            ElMessage.success("操作成功！");
+            emit("online-confirm", false);
+          });
+        });
+      } else {
+        signContractOnline(params).then(() => {
+          ElMessage.success("操作成功！");
+          emit("online-confirm", false);
+        });
+      }
     } else {
       console.log("error submit!", fields);
     }
