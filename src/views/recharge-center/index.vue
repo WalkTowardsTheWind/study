@@ -75,7 +75,7 @@
             @selection-change="handleSelect"
           >
             <template #tableTop>
-              <el-button type="primary" @click="refundByBusiness"
+              <el-button type="primary" @click="refundByBusiness()"
                 >退款</el-button
               >
               <!-- <el-dropdown class="" trigger="click">
@@ -109,7 +109,7 @@
             <template #refundCertificate="scope">
               <div
                 class="flex align-items"
-                v-if="[2, 4].includes(scope.row.status)"
+                v-if="[2, 4, 5].includes(scope.row.status)"
               >
                 <zxn-image
                   v-if="scope.row.refund_url.length"
@@ -166,31 +166,65 @@
   <el-dialog
     v-model="visible2"
     title="企业退款"
-    :before-close="dialogClose2"
     width="25%"
     :close-on-click-modal="false"
+    @close="dialogClose2"
+    :destroy-on-close="true"
   >
-    <el-form :model="refundModel" :rules="refundRules" ref="refundRef">
+    <el-form
+      label-width="auto"
+      label-position="left"
+      :model="refundModel"
+      :rules="refundRules"
+      ref="refundRef"
+    >
       <el-row>
         <el-col>
-          <el-form-item label="企业名称">
-            <el-select class="w-full">
-              <el-option></el-option>
+          <el-form-item label="企业名称" prop="company_id">
+            <el-select
+              class="w-full"
+              v-model="refundModel.company_id"
+              @change="selectTaxlandByCompany"
+            >
+              <el-option
+                v-for="item of allBusiness"
+                :key="item.id"
+                :label="item.company_name"
+                :value="item.id"
+              ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="税地名称">
-            <el-select class="w-full">
-              <el-option></el-option>
+          <el-form-item label="税地名称" prop="tax_land_id">
+            <el-select
+              class="w-full"
+              v-model="refundModel.tax_land_id"
+              @change="getMoneyByTaxland"
+            >
+              <el-option
+                v-for="item of refundTaxland"
+                :key="item.tax_land_id"
+                :value="item.tax_land_id"
+                :label="item.tax_land_name"
+              ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="企业余额">
-            <el-input readonly />
+          <el-form-item label="企业余额" prop="money">
+            <el-input readonly v-model="refundModel.money" />
           </el-form-item>
-          <el-form-item label="退款金额">
-            <el-input />
+          <el-form-item label="退款金额" prop="amount">
+            <el-input placeholder="请输入" v-model="refundModel.amount" />
           </el-form-item>
-          <el-form-item label="退款凭证">
-            <multi-upload v-model="fileList2" :limit="3"></multi-upload>
+          <el-form-item label="退款回单号" prop="recharge_order_no">
+            <el-input
+              placeholder="请输入"
+              v-model="refundModel.recharge_order_no"
+            />
+          </el-form-item>
+          <el-form-item label="退款凭证" prop="refund_url">
+            <multi-upload
+              v-model="refundModel.refund_url"
+              :limit="3"
+            ></multi-upload>
           </el-form-item>
         </el-col>
       </el-row>
@@ -199,7 +233,9 @@
       <el-button class="is-cancel" type="info" @click="dialogClose2"
         >取消</el-button
       >
-      <el-button class="" type="primary" @click="dialog2Click">确认</el-button>
+      <el-button class="" type="primary" @click="dialog2Click(refundRef)"
+        >确认</el-button
+      >
     </div>
   </el-dialog>
 </template>
@@ -211,7 +247,13 @@ import {
   deleteRechargeCert,
 } from "@/api/category";
 import { getLandList } from "@/api/common";
-import { getRechargeTaskList } from "@/api/recharge";
+import {
+  businessReturnMoney,
+  getBusinessMoney,
+  getBusinessRefund,
+  getRechargeTaskList,
+  getTaxlandByCompanyId,
+} from "@/api/recharge";
 import { useRouteParams } from "@/store/modules/routeParams";
 import { isNumber } from "@/utils/is";
 const { proxy } = getCurrentInstance() as any;
@@ -219,15 +261,14 @@ const { proxy } = getCurrentInstance() as any;
 const visible = ref(false);
 const visible2 = ref(false);
 const fileList = ref([]);
-const fileList2 = ref([]);
 const upload_id = ref("");
 function dialogClose() {
   fileList.value = [];
   visible.value = false;
 }
 function dialogClose2() {
-  fileList2.value = [];
   visible2.value = false;
+  resetRefundModel();
 }
 function gotoUpload() {
   let params = {
@@ -294,7 +335,7 @@ const taskStatus = [
     value: "3",
   },
   {
-    label: "已退款 ",
+    label: "财务退款 ",
     value: "4",
   },
 ];
@@ -455,12 +496,103 @@ onMounted(() => {
   // getCategory();
 });
 
-const refundModel = reactive({});
-const refundRules = [];
+const allBusiness = ref([] as any);
+const refundTaxland = ref([] as any);
+const refundRef = ref();
+const refundModel = reactive({
+  company_id: "",
+  refund_url: [],
+  amount: "",
+  tax_land_id: "",
+  recharge_order_no: "",
+  money: "",
+} as any);
+const refundRules = {
+  company_id: [
+    {
+      required: true,
+      message: "必填",
+      trigger: "change",
+    },
+  ],
+  refund_url: [
+    {
+      required: true,
+      message: "必填",
+      trigger: "change",
+    },
+  ],
+  amount: [
+    {
+      required: true,
+      message: "必填",
+      trigger: "blur",
+    },
+  ],
+  tax_land_id: [
+    {
+      required: true,
+      message: "必填",
+      trigger: "change",
+    },
+  ],
+};
 
-const dialog2Click = () => {};
+const dialog2Click = async (formEl) => {
+  if (!formEl) return;
+  await formEl.validate((valid, fields) => {
+    if (valid) {
+      if (parseFloat(refundModel.amount) > parseFloat(refundModel.money)) {
+        return ElMessage.error("退款金额不能大于企业余额");
+      }
+      businessReturnMoney(refundModel).then((res) => {
+        ElMessage.success("操作成功");
+        visible2.value = false;
+        resetRefundModel();
+        handleSearch();
+      });
+
+      console.log("submit!");
+    } else {
+      console.log("error submit!", fields);
+    }
+  });
+};
+
+const getAllBusiness = () => {
+  getBusinessRefund().then((res) => {
+    allBusiness.value = res.data;
+  });
+};
+
+const selectTaxlandByCompany = (company_id) => {
+  refundModel.tax_land_id = "";
+  refundModel.money = "";
+  getTaxlandByCompanyId({ company_id }).then((res) => {
+    refundTaxland.value = res.data;
+  });
+};
+
+const getMoneyByTaxland = (tax_land_id) => {
+  getBusinessMoney({ company_id: refundModel.company_id, tax_land_id }).then(
+    (res) => {
+      refundModel.money = res.data.balance;
+    }
+  );
+};
+
+const resetRefundModel = () => {
+  refundModel.company_id = "";
+  refundModel.refund_url = [];
+  refundModel.tax_land_id = "";
+  refundModel.money = "";
+  refundModel.amount = "";
+  refundModel.recharge_order_no = "";
+};
+
 const refundByBusiness = () => {
   visible2.value = true;
+  getAllBusiness();
 };
 </script>
 
