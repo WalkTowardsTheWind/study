@@ -5,52 +5,55 @@
       <div class="head-title">企业基本信息</div>
       <div class="tag">{{ businessType[formItem.status] }}</div>
     </div>
-    <el-form :form="formItem" label-width="150px">
+    <el-form :form="formItem" label-width="130">
       <div class="main">
         <el-row :gutter="50">
           <el-col :span="8">
-            <el-form-item label="企业名称" align="right" label-width="130px">
-              <el-input v-model="formItem.company_name" disabled />
-            </el-form-item>
-            <el-form-item label="统一社会信用代码" label-width="130px">
+            <el-form-item label="企业名称">
               <el-input
-                v-model.trim="formItem.credit_code"
-                :readonly="!isEdit"
+                v-if="isEdit"
+                v-model="formItem.company_name"
+                disabled
               />
+              <span v-else>{{ formItem.company_name }}</span>
             </el-form-item>
-            <el-form-item label="电话" label-width="130px">
+            <el-form-item label="统一社会信用代码">
+              <el-input v-if="isEdit" v-model.trim="formItem.credit_code" />
+              <span v-else>{{ formItem.credit_code }}</span>
+            </el-form-item>
+            <el-form-item label="电话">
               <el-input
+                v-if="isEdit"
                 v-model.trim="formItem.contacts_mobile"
                 placeholder="请输入手机号或座机号"
-                :readonly="!isEdit"
               />
+              <span v-else>{{ formItem.contacts_mobile }}</span>
             </el-form-item>
-            <el-form-item label="法人身份证号" label-width="130px">
+            <el-form-item label="法人身份证号">
               <el-input
+                v-if="isEdit"
                 v-model.trim="formItem.legal_person_idcard"
-                :readonly="!isEdit"
               />
+              <span v-else>{{ formItem.legal_person_idcard }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="企业登录名称">
-              <el-input v-model="formItem.account" disabled />
+              <el-input v-if="isEdit" v-model="formItem.account" disabled />
+              <span v-else>{{ formItem.account }}</span>
             </el-form-item>
             <el-form-item label="法定代表人">
-              <el-input
-                v-model.trim="formItem.legal_person"
-                :readonly="!isEdit"
-              />
+              <el-input v-if="isEdit" v-model.trim="formItem.legal_person" />
+              <span v-else>{{ formItem.legal_person }}</span>
             </el-form-item>
             <el-form-item label="行业">
-              <!-- <tree-select v-model.selecVal="formItem.category_id" :options="cateGoryOptions" /> -->
               <el-select
                 class="w-full"
                 placeholder="请选择"
                 v-model="formItem.category_id"
-                :readonly="!isEdit"
-								filterable
-								clearable
+                filterable
+                clearable
+                v-if="isEdit"
               >
                 <el-option
                   v-for="item in cateGoryOptions"
@@ -59,35 +62,41 @@
                   :value="item.id"
                 ></el-option>
               </el-select>
+              <span v-else> {{ formItem.category }}</span>
             </el-form-item>
             <el-form-item label="营业执照有效期">
               <div style="width: 100%">
                 <el-date-picker
+                  v-if="isEdit"
                   style="width: 100%"
                   :readonly="!isEdit"
                   v-model="formItem.license_end_date"
                   unlink-panels
                   value-format="YYYY-MM-DD"
                 />
+                <span v-else>{{ formItem.license_end_date }}</span>
               </div>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="密码">
-              <el-input class="w-[100%]" value="********" :readonly="!isEdit" />
-              <span v-if="isEdit" class="resetPWD" @click="resetPWD"
-                >重置密码</span
-              >
+              <div v-if="isEdit">
+                <el-input class="w-[100%]" value="********" />
+                <span class="resetPWD" @click="resetPWD">重置密码</span>
+              </div>
+              <span v-else>********</span>
             </el-form-item>
             <el-form-item label="联系人">
-              <el-input v-model.trim="formItem.contacts" :readonly="!isEdit" />
+              <el-input v-if="isEdit" v-model.trim="formItem.contacts" />
+              <span v-else>{{ formItem.contacts }}</span>
             </el-form-item>
             <el-form-item label="法人电话">
               <el-input
+                v-if="isEdit"
                 v-model.trim="formItem.legal_person_mobile"
                 placeholder="请输入手机号或座机号"
-                :readonly="!isEdit"
               />
+              <span v-else>{{ formItem.legal_person_mobile }}</span>
             </el-form-item>
           </el-col>
         </el-row>
@@ -99,16 +108,18 @@
       <div class="main">
         <el-row :gutter="50">
           <el-col :span="8">
-            <el-form-item label="开户行" label-width="130px">
-              <el-input v-model.trim="formItem.bank" :readonly="!isEdit" />
+            <el-form-item label="开户行">
+              <el-input v-if="isEdit" v-model.trim="formItem.bank" />
+              <span v-else>{{ formItem.bank }}</span>
             </el-form-item>
-            <el-form-item label="纳税人类型" label-width="130px">
+            <el-form-item label="纳税人类型">
               <el-select
+                v-if="isEdit"
                 class="w-full"
                 v-model="formItem.taxpayer_type"
                 :disabled="!isEdit"
-								filterable
-								clearable
+                filterable
+                clearable
               >
                 <el-option
                   v-for="item in options"
@@ -117,83 +128,93 @@
                   :value="item.value"
                 />
               </el-select>
+              <span v-else>{{
+                options.find((i) => i.value === formItem.taxpayer_type)?.label
+              }}</span>
             </el-form-item>
-            <el-form-item label="渠道点位" label-width="130px">
-              <el-input :readonly="!isEdit" v-model="formItem.channel_point">
+            <el-form-item label="渠道点位">
+              <el-input v-if="isEdit" v-model="formItem.channel_point">
                 <template #append>%</template>
               </el-input>
+              <span v-else>{{ formItem.channel_point }}%</span>
             </el-form-item>
-            <el-form-item label="计费方式" label-width="130px">
+            <el-form-item label="计费方式">
               <el-select
+                v-if="isEdit"
                 class="w-full"
                 v-model="formItem.calculation_type"
-                :disabled="!isEdit"
-								filterable
-								clearable
+                filterable
+                clearable
               >
                 <el-option :value="0" label="内扣"></el-option>
                 <el-option :value="1" label="外扣"></el-option>
               </el-select>
+              <span v-else>{{
+                ["内扣", "外扣"][formItem.calculation_type]
+              }}</span>
             </el-form-item>
-            <el-form-item label="快递地址" label-width="130px">
-              <el-input :readonly="!isEdit" v-model="formItem.address" />
+            <el-form-item label="快递地址">
+              <el-input v-if="isEdit" v-model="formItem.address" />
+              <span v-else>{{ formItem.address }}</span>
             </el-form-item>
-            <el-form-item label="开票地址" label-width="130px">
-              <el-input
-                :readonly="!isEdit"
-                v-model="formItem.invoice_address"
-              />
+            <el-form-item label="开票地址">
+              <el-input v-if="isEdit" v-model="formItem.invoice_address" />
+              <span v-else>{{ formItem.invoice_address }}</span>
             </el-form-item>
-            <el-form-item label="开票电话" label-width="130px">
-              <el-input :readonly="!isEdit" v-model="formItem.invoice_phone" />
+            <el-form-item label="开票电话">
+              <el-input v-if="isEdit" v-model="formItem.invoice_phone" />
+              <span v-else>{{ formItem.invoice_phone }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="银行账户">
-              <el-input
-                v-model.trim="formItem.bank_account"
-                :readonly="!isEdit"
-              />
+              <el-input v-if="isEdit" v-model.trim="formItem.bank_account" />
+              <span v-else>{{ formItem.bank_account }}</span>
             </el-form-item>
             <el-form-item label="企业邮箱">
-              <el-input v-model="formItem.company_email" :readonly="!isEdit" />
+              <el-input v-if="isEdit" v-model.trim="formItem.company_email" />
+              <span v-else>{{ formItem.company_email }}</span>
             </el-form-item>
             <el-form-item label="企业地址">
-              <el-input
-                v-model="formItem.company_address"
-                :readonly="!isEdit"
-              />
+              <el-input v-if="isEdit" v-model.trim="formItem.company_address" />
+              <span v-else>{{ formItem.company_address }}</span>
             </el-form-item>
             <el-form-item label="发票接收人">
-              <el-input v-model="formItem.consignee" :readonly="!isEdit" />
+              <el-input v-if="isEdit" v-model.trim="formItem.consignee" />
+              <span v-else>{{ formItem.consignee }}</span>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="企业来源">
               <el-select
+                v-if="isEdit"
                 class="w-full"
                 v-model="formItem.company_source"
-                :disabled="!isEdit"
-								filterable
-								clearable
+                filterable
+                clearable
               >
                 <el-option :value="0" label="销售"></el-option>
                 <el-option :value="1" label="渠道推广"></el-option>
               </el-select>
+              <span v-else>{{
+                ["销售", "渠道推广"][formItem.company_source]
+              }}</span>
             </el-form-item>
             <el-form-item label="接收人号码">
               <el-input
+                v-if="isEdit"
                 v-model.trim="formItem.consignee_mobile"
-                :readonly="!isEdit"
                 placeholder="请输入手机号或座机号"
               />
+              <span v-else>{{ formItem.consignee_mobile }}</span>
             </el-form-item>
             <el-form-item label="企业来源备注">
               <el-input
+                v-if="isEdit"
                 v-model="formItem.company_source_remark"
-                :readonly="!isEdit"
                 placeholder="请输入"
               />
+              <span v-else>{{ formItem.company_source_remark }}</span>
             </el-form-item>
           </el-col>
         </el-row>
@@ -206,15 +227,13 @@
 import { getCategoryList, resetAccountPwd } from "@/api/account/business";
 
 import { businessType, taxpayerType } from "@/enums/accountEnum";
-import router from "@/router";
-import TreeSelect from "@/views/category-management/components/tree-select.vue";
 
 const cateGoryOptions = ref([] as any);
 
 const options = Object.entries(taxpayerType)
   .map(([label, value]) => ({ label, value }))
   .filter((i) => typeof i.value !== "string");
-
+console.log(options);
 const props = defineProps({
   isEdit: {
     type: Boolean,

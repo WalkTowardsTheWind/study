@@ -9,7 +9,11 @@
       @selection-change="handleSelect"
     >
       <template #tableTop>
-        <el-button :disabled="isDisabled" type="primary" @click="toRoute"
+        <el-button
+          v-if="isEdit"
+          :disabled="isDisabled"
+          type="primary"
+          @click="toRoute"
           >编辑合同</el-button
         >
       </template>
