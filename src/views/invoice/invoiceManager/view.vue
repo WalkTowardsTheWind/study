@@ -4,7 +4,7 @@
       <template #info>
         <div class="pl-36px pr-36px mt-32px">
           <el-form
-            class="zxn-view-form"
+            class="zxn-view-form is-view"
             label-position="right"
             label-width="130"
           >
@@ -22,7 +22,7 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <zxn-title class="mb20px">开票信息</zxn-title>
+            <zxn-title class="mb20px mt20px">开票信息</zxn-title>
             <el-row :gutter="16">
               <el-col :span="8">
                 <el-form-item label="税源地">
@@ -65,7 +65,7 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <zxn-title class="mb20px">收件信息</zxn-title>
+            <zxn-title class="mb20px mt20px">收件信息</zxn-title>
             <el-row>
               <el-col :span="8">
                 <el-form-item label="收件人">
@@ -83,7 +83,7 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <zxn-title class="mb20px">发票信息</zxn-title>
+            <zxn-title class="mb20px mt20px">发票信息</zxn-title>
             <el-row>
               <el-col :span="8">
                 <el-form-item label="发票形式">
@@ -112,7 +112,7 @@
             </el-row>
           </el-form>
           <div class="flex justify-between items-center mb20px">
-            <zxn-title> 开票类目 </zxn-title>
+            <zxn-title class="mt20px"> 开票类目 </zxn-title>
             <div class="table-right-in">
               <span>预计开票：{{ formItem.invoice_num }}张</span>
               <span>合计金额：¥{{ totalValue }}</span>

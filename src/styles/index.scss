@@ -90,9 +90,9 @@
         font-family: SourceHanSansSC, SourceHanSansSC, sans-serif;
         font-weight: 500;
         color: #999999;
-        &:after {
-          content: ":";
-        }
+        //&:after {
+        //  content: ":";
+        //}
       }
       .el-form-item__content {
         font-size: 14px;
@@ -103,8 +103,29 @@
       .el-input {
         box-shadow: none;
         .el-input__wrapper {
+          background-color: transparent;
           box-shadow: none;
           padding: 0;
+          &:hover {
+            box-shadow: none !important;
+          }
+        }
+        .el-input__suffix {
+          display: none;
+        }
+        .el-input__inner {
+          font-family: SourceHanSansSC, SourceHanSansSC, sans-serif;
+          font-weight: 500;
+          color: #333333 !important;
+          -webkit-text-fill-color: #333333 !important;
+        }
+      }
+      .el-tag {
+        .el-tag__content {
+          font-size: 12px;
+          font-family: SourceHanSansSC, SourceHanSansSC, sans-serif;
+          font-weight: 500;
+          color: #333333;
         }
       }
       .el-textarea {

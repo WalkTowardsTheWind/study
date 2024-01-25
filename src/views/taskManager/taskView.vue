@@ -15,7 +15,7 @@
         </template>
       </zxn-title>
       <el-form
-        class="mt-34px zxn-view-form"
+        class="mt-34px zxn-view-form is-view"
         label-position="right"
         label-width="80"
       >
@@ -85,7 +85,7 @@
               <el-input
                 :model-value="formItem.task_desc"
                 type="textarea"
-                :autosize="{ minRows: 4, maxRows: 4 }"
+                :autosize="true"
                 readonly
                 resize="none"
               />
