@@ -19,7 +19,7 @@
         <el-button link type="primary">详情</el-button>
       </template>
     </zxn-table>
-    <bind-dialog ref="BindDialogRef" />
+    <bind-dialog ref="BindDialogRef" @up="getList" />
   </zxn-plan>
 </template>
 
@@ -94,7 +94,7 @@ const columnList = [
 ];
 // 是否勾选
 const selectable = (row: any) => {
-  return row.company_id !== 0 && (row.status === 1 || row.status === 2);
+  return row.company_id === 0 && (row.status === 1 || row.status === 2);
 };
 //选中的数据
 //返回id数组

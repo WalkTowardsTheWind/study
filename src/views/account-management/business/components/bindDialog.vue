@@ -21,6 +21,7 @@
 </template>
 <script setup lang="ts">
 import { getBindList, bind } from "@/api/account/business";
+const emit = defineEmits(["up"]);
 const visible = ref(false);
 const ids = ref([]);
 const tableData = reactive([] as any);
@@ -60,6 +61,7 @@ const handleConfirm = async () => {
       type: "success",
       message: `绑定成功`,
     });
+    emit("up");
   } catch (error) {
     ElMessage({
       type: "error",
