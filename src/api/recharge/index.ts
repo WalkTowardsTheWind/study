@@ -38,3 +38,10 @@ export function businessReturnMoney(data) {
     data,
   });
 }
+
+export function delRefundById(id) {
+  return request({
+    url: `/adminapi/finance/recharge/del/${id}`,
+    method: "delete",
+  });
+}
