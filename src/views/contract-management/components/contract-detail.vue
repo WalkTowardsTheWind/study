@@ -8,29 +8,38 @@
   >
     <el-form label-width="auto">
       <el-form-item label="合同类型">
-        <el-input :value="formItem.type_name" />
+        <!-- <el-input :value="formItem.type_name" /> -->
+        <span>{{ formItem.type_name }}</span>
       </el-form-item>
       <el-form-item label="合同名称">
-        <el-input :value="formItem.contract_name" />
+        <!-- <el-input :value="formItem.contract_name" /> -->
+        <span>{{ formItem.contract_name }}</span>
       </el-form-item>
       <el-form-item label="合同编号">
-        <el-input :value="formItem.contract_no" />
+        <!-- <el-input :value="formItem.contract_no" /> -->
+        <span>{{ formItem.contract_no }}</span>
       </el-form-item>
       <el-form-item label="合同期限">
-        <el-input
+        <!-- <el-input
           :value="
             formItem.effective_start_time + ' - ' + formItem.effective_end_time
           "
-        />
+        /> -->
+        <span>{{
+          formItem.effective_start_time + " - " + formItem.effective_end_time
+        }}</span>
       </el-form-item>
       <el-form-item label="甲方">
-        <el-input :value="formItem.part_a_name" />
+        <!-- <el-input :value="formItem.part_a_name" /> -->
+        <span>{{ formItem.part_a_name }}</span>
       </el-form-item>
       <el-form-item label="乙方">
-        <el-input :value="formItem.part_b_name" />
+        <!-- <el-input :value="formItem.part_b_name" /> -->
+        <span>{{ formItem.part_b_name }}</span>
       </el-form-item>
       <el-form-item label="备注要求">
-        <el-input :value="formItem.remark" type="textarea" />
+        <!-- <el-input :value="formItem.remark" type="textarea" /> -->
+        <span>{{ formItem.remark }}</span>
       </el-form-item>
       <el-form-item label="合同文件">
         <el-button

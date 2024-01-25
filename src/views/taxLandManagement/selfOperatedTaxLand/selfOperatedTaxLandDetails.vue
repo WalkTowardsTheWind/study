@@ -7,19 +7,23 @@
       :hasUpdate="false"
     >
       <template #1>
-        <div class="p-[24px] p-b-[0]">
+        <div class="p-[36px] p-b-[0] p-t-[6px]">
           <div class="title">
             <div class="line"></div>
             <div>税地基本信息</div>
           </div>
-          <el-form class="zxn-box" :model="formItem" label-width="130px">
+          <el-form
+            class="zxn-view-form is-view"
+            :model="formItem"
+            label-width="120px"
+          >
             <el-row>
               <el-col :span="8">
                 <el-form-item label="税地类型" prop="tax_land_type">
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     placeholder=" "
                     v-model="formItem.tax_land_type"
@@ -113,17 +117,13 @@
                     v-model="formItem.tax_land_city_id"
                     :options="optionsTaxLang"
                     :props="propsTaxLang"
-										clearable
-										filterable
+                    clearable
+                    filterable
                   />
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item
-                  class="mb-[0]"
-                  label="税地营业执照"
-                  prop="tax_land_license"
-                >
+                <el-form-item label="税地营业执照" prop="tax_land_license">
                   <zxn-image
                     v-if="formItem.tax_land_license.length"
                     :imgList="formItem.tax_land_license"
@@ -147,7 +147,7 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <div class="title">
+            <div class="title m-t-[30]">
               <div class="line"></div>
               <div>发票厂家信息</div>
             </div>
@@ -156,8 +156,8 @@
                 <el-form-item label="税地发票类型">
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     v-model="formItem.invoice_type"
                     placeholder=" "
@@ -183,15 +183,15 @@
                     :props="propsInvoicingCategory"
                     collapse-tags
                     collapse-tags-tooltip
-										clearable
-										filterable
+                    clearable
+                    filterable
                   />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="发票面额">
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     placeholder=" "
                     v-model="formItem.invoice_denomination"
@@ -218,8 +218,8 @@
                 <el-form-item label="支付方式" prop="payment_type">
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     placeholder=" "
                     v-model="formItem.payment_type"
@@ -256,8 +256,8 @@
                 >
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     placeholder=" "
                     v-model="formItem.invoice_form"
@@ -274,7 +274,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item class="mb-[0]" label="发票票样">
+                <el-form-item label="发票票样">
                   <zxn-image
                     v-if="formItem.invoice_sample.length"
                     :imgList="formItem.invoice_sample"
@@ -285,7 +285,7 @@
                   />
                   <span v-else>--</span>
                 </el-form-item>
-                <el-form-item class="mb-[0]" label="行业限制">
+                <el-form-item class="mt-13px" label="行业限制">
                   <zxn-image
                     v-if="formItem.industry_limit.length"
                     :imgList="formItem.industry_limit"
@@ -307,8 +307,8 @@
                 <el-form-item label="认证规则" prop="certification_rules">
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     placeholder=" "
                     v-model="formItem.certification_rules"
@@ -331,8 +331,8 @@
                 >
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     placeholder=" "
                     v-model="formItem.signing_rules"
@@ -364,8 +364,8 @@
                 <el-form-item label="委托代征年限" prop="tax_contract_term">
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     placeholder=" "
                     v-model="formItem.tax_contract_term"
@@ -390,7 +390,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item class="mb-[0]" label="结算确认函">
+                <el-form-item label="结算确认函">
                   <zxn-image
                     v-if="formItem.settlement_confirmation_letter.length"
                     :imgList="formItem.settlement_confirmation_letter"
@@ -401,7 +401,7 @@
                   />
                   <span v-else>--</span>
                 </el-form-item>
-                <el-form-item class="mb-[0]" label="资料包">
+                <el-form-item class="mt-13px" label="资料包">
                   <zxn-image
                     v-if="formItem.materials_zip_url"
                     :imgList="[zipImg]"
@@ -722,26 +722,6 @@ onMounted(() => {
 });
 </script>
 <style lang="scss" scoped>
-.zxn-box {
-  :deep(.el-input) {
-    width: 100%;
-
-    .el-input__wrapper {
-      width: 100%;
-    }
-  }
-
-  :deep(.el-input.is-disabled .el-input__wrapper) {
-    background-color: #fff;
-  }
-
-  :deep(.el-input.is-disabled .el-input__inner) {
-    color: #333;
-    // cursor: pointer;
-    -webkit-text-fill-color: #333;
-  }
-}
-
 .but {
   :deep(.el-button) {
     min-width: 80px;
@@ -753,8 +733,7 @@ onMounted(() => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 30px;
-  margin-left: 29px;
+  margin: 30px 0;
   font-family: sans-serif;
   font-size: 14px;
   color: #356ff3;

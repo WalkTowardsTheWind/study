@@ -19,7 +19,7 @@
         </el-form-item>
         <el-form-item label="认证状态">
           <el-select
-						filterable
+            filterable
             v-model="formItem.status"
             placeholder="请选择"
             @change="handleChange"
@@ -83,22 +83,28 @@
   >
     <el-form label-position="right" label-width="auto" class="pr-20px">
       <el-form-item readonly label="姓名">
-        <el-input :value="dialogForm.real_name" />
+        <!-- <el-input :value="dialogForm.real_name" /> -->
+        <span>{{ dialogForm.real_name }}</span>
       </el-form-item>
       <el-form-item readonly label="联系方式">
-        <el-input :value="dialogForm.phone" />
+        <!-- <el-input :value="dialogForm.phone" /> -->
+        <span>{{ dialogForm.phone }}</span>
       </el-form-item>
       <el-form-item readonly label="证件类型">
-        <el-input value="身份证" />
+        <!-- <el-input value="身份证" /> -->
+        <span>身份证</span>
       </el-form-item>
       <el-form-item readonly label="证件号">
-        <el-input :value="dialogForm.idcard" />
+        <!-- <el-input :value="dialogForm.idcard" /> -->
+        <span>{{ dialogForm.idcard }}</span>
       </el-form-item>
       <el-form-item readonly label="银行账号">
-        <el-input :value="dialogForm.bank_account" />
+        <!-- <el-input :value="dialogForm.bank_account" /> -->
+        <span>{{ dialogForm.bank_account }}</span>
       </el-form-item>
       <el-form-item readonly label="认证企业">
-        <el-input :value="dialogForm.company_name" />
+        <!-- <el-input :value="dialogForm.company_name" /> -->
+        <span>{{ dialogForm.company_name }}</span>
       </el-form-item>
     </el-form>
   </zxn-dialog>
@@ -156,7 +162,7 @@ const columnList = [
     prop: "status",
     type: "enum",
     path: "personManagementEnum.personCheckStatus",
-    width: 80,
+    width: 100,
     color: {
       0: {
         color: "#36C5F3",

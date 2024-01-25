@@ -7,19 +7,23 @@
       :hasUpdate="false"
     >
       <template #1>
-        <div class="p-[24px] p-b-[0]">
+        <div class="p-[36px] p-b-[0] p-t-[6px]">
           <div class="title">
             <div class="line"></div>
             <div>税地基本信息</div>
           </div>
-          <el-form class="zxn-box" :model="formItem" label-width="130px">
+          <el-form
+            class="zxn-view-form is-view"
+            :model="formItem"
+            label-width="120px"
+          >
             <el-row>
               <el-col :span="8">
                 <el-form-item label="税地类型" prop="tax_land_type">
                   <el-select
                     class="w-[100%] bg"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     v-model="formItem.tax_land_type"
                     placeholder=" "
@@ -124,7 +128,7 @@
                     :options="optionsTaxLang"
                     :props="propsTaxLang"
                     clearable
-										filterable
+                    filterable
                   />
                 </el-form-item>
               </el-col>
@@ -166,8 +170,8 @@
                 <el-form-item label="税地发票类型">
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     v-model="formItem.invoice_type"
                   >
@@ -191,15 +195,15 @@
                     :props="propsInvoicingCategory"
                     collapse-tags
                     collapse-tags-tooltip
-										clearable
-										filterable
+                    clearable
+                    filterable
                   />
                 </el-form-item>
                 <el-form-item class="mt-25px" label="发票面额">
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     v-model="formItem.invoice_denomination"
                     placeholder=" "
@@ -228,8 +232,8 @@
                 >
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     v-model="formItem.payment_type"
                     placeholder=" "
@@ -262,8 +266,8 @@
                 <el-form-item class="mt-25px" label="开票方式">
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     v-model="formItem.invoice_form"
                     placeholder=" "
@@ -292,8 +296,8 @@
                 <el-form-item class="mt-25px" label="余额计算规则">
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     placeholder=" "
                     v-model="formItem.balance_type"
@@ -311,8 +315,8 @@
                 <el-form-item class="mt-25px" label="服务费计算规则">
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     placeholder=" "
                     v-model="formItem.commission_rule"
@@ -354,7 +358,7 @@
                   />
                   <span v-else>--</span>
                 </el-form-item>
-                <el-form-item class="mb-[0]" label="行业限制">
+                <el-form-item class="mt-13px" label="行业限制">
                   <zxn-image
                     v-if="formItem.industry_limit.length"
                     :imgList="formItem.industry_limit"
@@ -376,8 +380,8 @@
                 <el-form-item label="认证规则" prop="certification_rules">
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     v-model="formItem.certification_rules"
                     multiple
@@ -400,8 +404,8 @@
                 >
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     v-model="formItem.signing_rules"
                     multiple
@@ -422,8 +426,8 @@
                 <el-form-item label="委托代征年限" prop="tax_contract_term">
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     v-model="formItem.tax_contract_term"
                     placeholder=" "
@@ -459,7 +463,7 @@
                   />
                   <span v-else>--</span>
                 </el-form-item>
-                <el-form-item class="mb-[0]" label="资料包">
+                <el-form-item class="mt-13px" label="资料包">
                   <zxn-image
                     v-if="formItem.materials_zip_url"
                     :imgList="[zipImg]"
@@ -828,26 +832,6 @@ const getData = async () => {
 onMounted(() => {});
 </script>
 <style lang="scss" scoped>
-.zxn-box {
-  :deep(.el-input) {
-    width: 100%;
-
-    .el-input__wrapper {
-      width: 100%;
-    }
-  }
-
-  :deep(.el-input.is-disabled .el-input__wrapper) {
-    background-color: #fff;
-  }
-
-  :deep(.el-input.is-disabled .el-input__inner) {
-    color: #333;
-    // cursor: pointer;
-    -webkit-text-fill-color: #333;
-  }
-}
-
 .but {
   :deep(.el-button) {
     min-width: 80px;
@@ -859,8 +843,7 @@ onMounted(() => {});
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 30px;
-  margin-left: 29px;
+  margin: 30px 0;
   font-family: sans-serif;
   font-size: 14px;
   color: #356ff3;

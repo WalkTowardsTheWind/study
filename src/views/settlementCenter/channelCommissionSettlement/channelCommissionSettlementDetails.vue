@@ -2,65 +2,84 @@
   <zxn-plan>
     <zxn-tabs v-model:activeName="activeName" :tabsList="tabsList">
       <template #channelCommissionSettlementDetails>
-        <div class="p-[24px] p-b-[0]">
-          <el-form class="zxn-box" :model="formData" label-width="130px">
-            <div class="head">
-              <el-form-item label="结算单号">
-                <el-input
-                  readonly
-                  v-model="formData.channel_order_no"
-                  placeholder="请输入"
-                />
-              </el-form-item>
-              <el-form-item label="结算状态">
-                <el-select
-                  class="w-[100%]"
-                  disabled
-                  v-model="formData.status"
-									filterable
-									clearable
-                  placeholder="请选择"
-                >
-                  <el-option
-                    v-for="item in proxy.$const[
-                      'settlementCenterEnum.channelCommissionSettlementList'
-                    ]"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
+        <div class="p-[36px] p-b-[0]">
+          <el-form
+            class="zxn-view-form is-view"
+            :model="formData"
+            label-width="130px"
+          >
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="结算单号">
+                  <el-input
+                    readonly
+                    v-model="formData.channel_order_no"
+                    placeholder="请输入"
                   />
-                </el-select>
-              </el-form-item>
-              <el-form-item label="渠道">
-                <el-input
-                  readonly
-                  v-model="formData.channel_name"
-                  placeholder="请输入"
-                />
-              </el-form-item>
-              <el-form-item label="企业结算总额">
-                <el-input
-                  readonly
-                  v-model="formData.settlement_amount"
-                  placeholder="请输入"
-                />
-              </el-form-item>
-              <el-form-item label="渠道结算税前">
-                <el-input
-                  readonly
-                  v-model="formData.commission"
-                  placeholder="请输入"
-                />
-              </el-form-item>
-              <el-form-item label="渠道结算税后">
-                <el-input
-                  readonly
-                  v-model="formData.after_commission"
-                  placeholder="请输入"
-                />
-              </el-form-item>
-              <!-- <el-form-item
-                v-if="!['3'].includes(formData.status)"
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="结算状态">
+                  {{
+                    proxy.$enumSet[
+                      "settlementCenterEnum.channelCommissionSettlementList"
+                    ][formData.status]
+                  }}
+                  <!-- <el-select
+                    class="w-[100%]"
+                    disabled
+                    v-model="formData.status"
+                    filterable
+                    clearable
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in proxy.$const[
+                        'settlementCenterEnum.channelCommissionSettlementList'
+                      ]"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select> -->
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="渠道">
+                  <el-input
+                    readonly
+                    v-model="formData.channel_name"
+                    placeholder="请输入"
+                  />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="企业结算总额">
+                  <el-input
+                    readonly
+                    v-model="formData.settlement_amount"
+                    placeholder="请输入"
+                  /> </el-form-item
+              ></el-col>
+              <el-col :span="8">
+                <el-form-item label="渠道结算税前">
+                  <el-input
+                    readonly
+                    v-model="formData.commission"
+                    placeholder="请输入"
+                  /> </el-form-item
+              ></el-col>
+              <el-col :span="8">
+                <el-form-item label="渠道结算税后">
+                  <el-input
+                    readonly
+                    v-model="formData.after_commission"
+                    placeholder="请输入"
+                  /> </el-form-item
+              ></el-col>
+              <!-- <el-col :span="8" v-if="!['3'].includes(formData.status)">
+                <el-form-item
+                
                 label="所属供应商"
               >
                 <el-input
@@ -68,51 +87,47 @@
                   v-model="formData.tax_land_name"
                   placeholder="请输入"
                 />
-              </el-form-item> -->
-              <el-form-item label="创建时间">
-                <el-input
-                  readonly
-                  v-model="formData.add_time"
-                  placeholder="请输入"
-                />
               </el-form-item>
-              <el-form-item
-                v-if="['2', '3'].includes(formData.status)"
-                label="确认时间"
+              </el-col> -->
+              <el-col :span="8">
+                <el-form-item label="创建时间">
+                  <el-input
+                    readonly
+                    v-model="formData.add_time"
+                    placeholder="请输入"
+                  /> </el-form-item
+              ></el-col>
+              <el-col :span="8" v-if="['2', '3'].includes(formData.status)">
+                <el-form-item label="确认时间">
+                  <el-input
+                    readonly
+                    v-model="formData.confirm_time"
+                    placeholder="请输入"
+                  /> </el-form-item
+              ></el-col>
+              <el-col :span="8" v-if="['3'].includes(formData.status)">
+                <el-form-item label="打款时间">
+                  <el-input
+                    readonly
+                    v-model="formData.settlement_time"
+                    placeholder="请输入"
+                  /> </el-form-item
+              ></el-col>
+              <el-col :span="8" v-if="['3'].includes(formData.status)">
+                <el-form-item label="打款凭证">
+                  <el-button link type="primary" @click="handleInspect"
+                    >查看</el-button
+                  >
+                </el-form-item></el-col
               >
-                <el-input
-                  readonly
-                  v-model="formData.confirm_time"
-                  placeholder="请输入"
-                />
-              </el-form-item>
-              <el-form-item
-                v-if="['3'].includes(formData.status)"
-                label="打款时间"
-              >
-                <el-input
-                  readonly
-                  v-model="formData.settlement_time"
-                  placeholder="请输入"
-                />
-              </el-form-item>
-              <el-form-item
-                v-if="['3'].includes(formData.status)"
-                label="打款凭证"
-              >
-                <el-button link type="primary" @click="handleInspect"
-                  >查看</el-button
-                >
-              </el-form-item>
-              <el-form-item
-                v-if="!['0'].includes(formData.status)"
-                label="佣金确认单"
-              >
-                <el-button link type="primary" @click="handleInspectDoc"
-                  >查看</el-button
-                >
-              </el-form-item>
-            </div>
+              <el-col :span="8" v-if="!['0'].includes(formData.status)">
+                <el-form-item label="佣金确认单">
+                  <el-button link type="primary" @click="handleInspectDoc"
+                    >查看</el-button
+                  >
+                </el-form-item>
+              </el-col>
+            </el-row>
           </el-form>
 
           <div class="title">
@@ -394,11 +409,6 @@ getTableData();
 onMounted(() => {});
 </script>
 <style lang="scss" scoped>
-.head {
-  width: 90%;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-}
 // 蓝色标题样式
 .title {
   display: flex;

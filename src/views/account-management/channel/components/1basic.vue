@@ -9,53 +9,48 @@
         :rules="rules1"
       >
         <el-row :gutter="50">
-          <el-col :span="7">
+          <el-col :span="8">
             <el-form-item label="渠道类型">
               <el-select
+                v-if="isEdit"
                 v-model="formItem.channel_type"
                 disabled
                 class="w-full"
-								filterable
-								clearable
+                filterable
+                clearable
               >
                 <el-option label="企业" :value="1"></el-option>
                 <el-option label="个人" :value="2"></el-option>
               </el-select>
+              <span v-else>企业 </span>
             </el-form-item>
             <el-form-item label="管理员联系号码">
-              <el-input
-                v-model.trim="formItem.admin_phone"
-                :readonly="!isEdit"
-              />
+              <el-input v-if="isEdit" v-model.trim="formItem.admin_phone" />
+              <span v-else>{{ formItem.admin_phone }}</span>
             </el-form-item>
             <el-form-item label="账号名称" prop="username">
-              <el-input v-model.trim="formItem.username" :readonly="!isEdit" />
+              <el-input v-if="isEdit" v-model.trim="formItem.username" />
+              <span v-else>{{ formItem.username }}</span>
             </el-form-item>
             <el-form-item label="统一社会信用代码">
-              <el-input
-                v-model.trim="formItem.credit_code"
-                :readonly="!isEdit"
-              />
+              <el-input v-model.trim="formItem.credit_code" v-if="isEdit" />
+              <span v-else>{{ formItem.credit_code }}</span>
             </el-form-item>
             <el-form-item label="联系号码">
-              <el-input
-                v-model.trim="formItem.contact_phone"
-                :readonly="!isEdit"
-              />
+              <el-input v-if="isEdit" v-model.trim="formItem.contact_phone" />
+              <span v-else>{{ formItem.contact_phone }}</span>
             </el-form-item>
             <el-form-item label="银行账号" prop="bank_account">
-              <el-input
-                v-model.trim="formItem.bank_account"
-                :readonly="!isEdit"
-              />
+              <el-input v-if="isEdit" v-model.trim="formItem.bank_account" />
+              <span v-else>{{ formItem.bank_account }}</span>
             </el-form-item>
             <el-form-item label="渠道佣金结算时间" prop="settlement_type">
               <el-select
+                v-if="isEdit"
                 v-model="formItem.settlement_type"
                 class="w-full"
-								filterable
-								clearable
-                :disabled="!isEdit"
+                filterable
+                clearable
               >
                 <el-option
                   v-for="i in settlement_type"
@@ -64,40 +59,45 @@
                   :value="i.value"
                 ></el-option>
               </el-select>
+              <span v-else>{{
+                settlement_type.find((i) => i.value == formItem.settlement_type)
+                  ?.label
+              }}</span>
             </el-form-item>
           </el-col>
-          <el-col :span="7">
+          <el-col :span="8">
             <el-form-item label="渠道管理员" prop="channel_admin">
-              <el-input
-                v-model.trim="formItem.channel_admin"
-                :readonly="!isEdit"
-              />
+              <el-input v-if="isEdit" v-model.trim="formItem.channel_admin" />
+              <span v-else> {{ formItem.channel_admin }}</span>
             </el-form-item>
             <el-form-item label="企业名称" prop="company_name">
-              <el-input
-                v-model.trim="formItem.company_name"
-                :readonly="!isEdit"
-              />
+              <el-input v-if="isEdit" v-model.trim="formItem.company_name" />
+              <span v-else> {{ formItem.company_name }}</span>
             </el-form-item>
             <el-form-item label="密码">
-              <el-input value="********" readonly />
-              <span v-if="isEdit" class="resetPWD" @click="resetPWD"
-                >重置密码</span
-              >
+              <div v-if="isEdit" class="w-full">
+                <el-input value="********" readonly />
+                <span v-if="isEdit" class="resetPWD" @click="resetPWD"
+                  >重置密码</span
+                >
+              </div>
+              <span v-else>********</span>
             </el-form-item>
             <el-form-item label="联系人">
-              <el-input v-model.trim="formItem.contact" :readonly="!isEdit" />
+              <el-input v-if="isEdit" v-model.trim="formItem.contact" />
+              <span v-else> {{ formItem.contact }}</span>
             </el-form-item>
             <el-form-item label="开户行" prop="bank">
-              <el-input v-model.trim="formItem.bank" :readonly="!isEdit" />
+              <el-input v-if="isEdit" v-model.trim="formItem.bank" />
+              <span v-else> {{ formItem.bank }}</span>
             </el-form-item>
             <el-form-item label="收款方式" prop="collection_type">
               <el-select
+                v-if="isEdit"
                 v-model="formItem.collection_type"
                 class="w-full"
-                :disabled="!isEdit"
-								filterable
-								clearable
+                filterable
+                clearable
               >
                 <el-option
                   v-for="i in collection_type"
@@ -106,13 +106,13 @@
                   :value="i.value"
                 ></el-option>
               </el-select>
+              <span v-else>{{
+                collection_type.find((i) => i.value == formItem.collection_type)
+                  ?.label
+              }}</span>
             </el-form-item>
           </el-col>
-          <el-col :span="10">
-            <!-- <el-form-item label="合伙人协议" prop="agreement_img">
-              <MultiUpload v-if="isEdit" v-model="formItem.agreement_img" />
-              <PicturePreview v-else :image-list="formItem.agreement_img" />
-            </el-form-item> -->
+          <el-col :span="8">
             <el-form-item label="营业执照">
               <MultiUpload v-if="isEdit" v-model="formItem.license_img" />
               <PicturePreview v-else :image-list="formItem.license_img" />
@@ -121,7 +121,9 @@
         </el-row>
       </el-form>
       <zxn-bottom-btn v-if="isEdit">
-        <el-button type="info" plain @click="$router.go(-1)">取消</el-button>
+        <el-button type="info" class="is-cancel" @click="$router.go(-1)"
+          >取消</el-button
+        >
         <el-button type="primary" @click="debouncedF(formRef1, 1)"
           >保存</el-button
         >
@@ -136,41 +138,44 @@
         :rules="rules2"
       >
         <el-row :gutter="50">
-          <el-col :span="7">
+          <el-col :span="8">
             <el-form-item label="渠道类型">
               <el-select
+                v-if="isEdit"
                 v-model="formItem.channel_type"
                 disabled
                 class="w-full"
-								filterable
-								clearable
+                filterable
+                clearable
               >
                 <el-option label="企业" :value="1"></el-option>
                 <el-option label="个人" :value="2"></el-option>
               </el-select>
+              <span v-else>个人</span>
             </el-form-item>
             <el-form-item label="管理员联系号码">
-              <el-input
-                v-model.trim="formItem.admin_phone"
-                :readonly="!isEdit"
-              />
+              <el-input v-if="isEdit" v-model.trim="formItem.admin_phone" />
+              <span v-else>{{ formItem.admin_phone }}</span>
             </el-form-item>
             <el-form-item label="账号名称" prop="username">
-              <el-input v-model.trim="formItem.username" :readonly="!isEdit" />
+              <el-input v-if="isEdit" v-model.trim="formItem.username" />
+              <span v-else>{{ formItem.username }}</span>
             </el-form-item>
             <el-form-item label="联系人">
-              <el-input v-model.trim="formItem.contact" :readonly="!isEdit" />
+              <el-input v-if="isEdit" v-model.trim="formItem.contact" />
+              <span v-else>{{ formItem.contact }}</span>
             </el-form-item>
             <el-form-item label="开户行" prop="bank">
-              <el-input v-model.trim="formItem.bank" :readonly="!isEdit" />
+              <el-input v-if="isEdit" v-model.trim="formItem.bank" />
+              <span v-else>{{ formItem.bank }}</span>
             </el-form-item>
             <el-form-item label="收款方式" prop="collection_type">
               <el-select
+                v-if="isEdit"
                 v-model="formItem.collection_type"
                 class="w-full"
-                :disabled="!isEdit"
-								filterable
-								clearable
+                filterable
+                clearable
               >
                 <el-option
                   v-for="i in collection_type"
@@ -179,59 +184,60 @@
                   :value="i.value"
                 ></el-option>
               </el-select>
+              <span v-else>{{
+                collection_type.find((i) => i.value == formItem.collection_type)
+                  ?.label
+              }}</span>
             </el-form-item>
           </el-col>
-          <el-col :span="7">
+          <el-col :span="8">
             <el-form-item label="渠道管理员" prop="channel_admin">
-              <el-input
-                v-model.trim="formItem.channel_admin"
-                :readonly="!isEdit"
-              />
+              <el-input v-if="isEdit" v-model.trim="formItem.channel_admin" />
+              <span v-else>{{ formItem.channel_admin }}</span>
             </el-form-item>
             <el-form-item label="真实姓名" prop="realname">
-              <el-input v-model.trim="formItem.realname" :readonly="!isEdit" />
+              <el-input v-if="isEdit" v-model.trim="formItem.realname" />
+              <span v-else>{{ formItem.realname }}</span>
             </el-form-item>
             <el-form-item label="密码">
-              <el-input value="********" readonly />
-              <span v-if="isEdit" class="resetPWD" @click="resetPWD"
-                >重置密码</span
-              >
+              <div v-if="isEdit" class="w-full">
+                <el-input value="********" readonly />
+                <span v-if="isEdit" class="resetPWD" @click="resetPWD"
+                  >重置密码</span
+                >
+              </div>
+              <span v-else>********</span>
             </el-form-item>
             <el-form-item label="联系号码">
-              <el-input
-                v-model.trim="formItem.contact_phone"
-                :readonly="!isEdit"
-              />
+              <el-input v-if="isEdit" v-model.trim="formItem.contact_phone" />
+              <span v-else>{{ formItem.contact_phone }}</span>
             </el-form-item>
             <el-form-item label="银行账号" prop="bank_account">
-              <el-input
-                v-model.trim="formItem.bank_account"
-                :readonly="!isEdit"
-              />
+              <el-input v-if="isEdit" v-model.trim="formItem.bank_account" />
+              <span v-else>{{ formItem.bank_account }}</span>
             </el-form-item>
             <el-form-item label="渠道佣金结算时间" prop="settlement_type">
               <el-select
+                v-if="isEdit"
                 v-model="formItem.settlement_type"
                 class="w-full"
-                :disabled="!isEdit"
-								filterable
-								clearable
+                filterable
+                clearable
               >
                 <el-option
                   v-for="i in settlement_type"
-                  :label="i.label"
                   :key="i.value"
+                  :label="i.label"
                   :value="i.value"
                 ></el-option>
               </el-select>
+              <span v-else>{{
+                settlement_type.find((i) => i.value == formItem.settlement_type)
+                  ?.label
+              }}</span>
             </el-form-item>
           </el-col>
-          <el-col :span="10">
-            <!-- <el-form-item label="合伙人协议" prop="agreement_img">
-              <MultiUpload v-if="isEdit" v-model="formItem.agreement_img" />
-              <PicturePreview v-else :image-list="formItem.agreement_img" />
-            </el-form-item> -->
-
+          <el-col :span="8">
             <el-form-item label="身份证">
               <MultiUpload v-if="isEdit" v-model="formItem.idcard_img" />
               <PicturePreview v-else :image-list="formItem.idcard_img" />
@@ -244,7 +250,9 @@
         </el-row>
       </el-form>
       <zxn-bottom-btn v-if="isEdit">
-        <el-button type="info" plain @click="$router.go(-1)">取消</el-button>
+        <el-button type="info" class="is-cancel" @click="$router.go(-1)"
+          >取消</el-button
+        >
         <el-button type="primary" @click="debouncedF(formRef2, 2)"
           >保存</el-button
         >
