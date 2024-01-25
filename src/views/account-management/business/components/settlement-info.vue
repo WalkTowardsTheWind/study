@@ -1,10 +1,16 @@
 <template>
   <zxn-plan>
+    <div class="but">
+      <el-button type="primary" @click="handleBinding">绑定渠道</el-button>
+    </div>
     <zxn-table
       :table-data="tableData"
       :column-list="columnList"
       :page-info="pageInfo"
       @page-change="pageChange"
+      hasSelect
+      @selection-change="handleSelect"
+      :selectable="selectable"
     >
       <template #operation="scope" v-if="isEdit">
         <el-button v-if="scope" link type="primary">解冻</el-button>
@@ -13,10 +19,12 @@
         <el-button link type="primary">详情</el-button>
       </template>
     </zxn-table>
+    <bind-dialog ref="BindDialogRef" />
   </zxn-plan>
 </template>
 
 <script lang="ts" setup>
+import BindDialog from "./bindDialog.vue";
 import { getBusinessAccountSettlementList } from "@/api/account/business";
 
 const props = defineProps({
@@ -84,6 +92,27 @@ const columnList = [
 
   // { label: "操作", slot: "operation", fixed: "right", width: 250 },
 ];
+// 是否勾选
+const selectable = (row: any) => {
+  return row.company_id !== 0;
+};
+//选中的数据
+//返回id数组
+const selectionData = ref([]);
+const handleSelect = (data: any) => {
+  selectionData.value = data.map((item: any) => item.id);
+};
+const BindDialogRef = ref();
+const handleBinding = async () => {
+  if (!selectionData.value.length) {
+    ElMessage({
+      type: "error",
+      message: `请选择数据`,
+    });
+    return;
+  }
+  BindDialogRef.value.init(selectionData.value);
+};
 
 async function getList() {
   if (props.id) {
@@ -107,3 +136,10 @@ function pageChange(current: any) {
 
 getList();
 </script>
+<style lang="scss" scoped>
+.but {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+</style>
