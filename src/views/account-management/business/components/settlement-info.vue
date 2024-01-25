@@ -94,7 +94,7 @@ const columnList = [
 ];
 // 是否勾选
 const selectable = (row: any) => {
-  return row.company_id === 0 && (row.status === 1 || row.status === 2);
+  return row.channel_id === 0 && (row.status === 1 || row.status === 2);
 };
 //选中的数据
 //返回id数组
