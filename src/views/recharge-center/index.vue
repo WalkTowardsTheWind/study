@@ -144,11 +144,11 @@
             </template>
             <template #operation="scope">
               <el-button
-                v-if="[2].includes(scope.row.status)"
+                v-if="[5].includes(scope.row.status)"
                 link
                 type="primary"
-                @click="refund(scope.row.recharge_id)"
-                >退款</el-button
+                @click="delRefund(scope.row.recharge_id)"
+                >删除</el-button
               >
             </template>
           </zxn-table>
@@ -263,6 +263,7 @@ import {
 import { getLandList } from "@/api/common";
 import {
   businessReturnMoney,
+  delRefundById,
   getBusinessMoney,
   getBusinessRefund,
   getRechargeTaskList,
@@ -389,7 +390,12 @@ const pageInfo = reactive({
 const tableData = reactive([] as any);
 const columnList = computed(() => {
   return [
-    { label: "充值单号", slot: "recharge_order_no", width: 110, fixed: "left" },
+    {
+      label: "充值单号",
+      slot: "recharge_order_no",
+      minWidth: 110,
+      fixed: "left",
+    },
     {
       label: "状态",
       prop: "status",
@@ -431,7 +437,7 @@ const columnList = computed(() => {
     { label: "充值时间", prop: "add_time", width: 200 },
     { label: "充值凭证", slot: "certificate", minWidth: 200 },
     { label: "退款凭证", slot: "refundCertificate", minWidth: 250 },
-    // { label: "操作", slot: "operation", fixed: "right", width: 100 },
+    { label: "操作", slot: "operation", fixed: "right", width: 100 },
   ];
 });
 // 退款
@@ -629,6 +635,19 @@ const resetRefundModel = () => {
 const refundByBusiness = () => {
   visible2.value = true;
   getAllBusiness();
+};
+
+const delRefund = (id) => {
+  ElMessageBox.confirm("是否删除退款？", "", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    center: true,
+  }).then(() => {
+    delRefundById(id).then((res: any) => {
+      ElMessage.success("操作成功");
+      handleSearch();
+    });
+  });
 };
 </script>
 
