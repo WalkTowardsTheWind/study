@@ -28,20 +28,20 @@
             <span> {{ formData.bank_account }}</span>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <!-- <el-col :span="8">
           <el-form-item label="身份证">
             <span>--</span>
-            <!-- <PicturePreview :image-list="formData.idcard_img" /> -->
+            <PicturePreview :image-list="formData.idcard_img" />
           </el-form-item>
           <el-form-item label="银行卡">
             <span>--</span>
-            <!-- <PicturePreview :image-list="formData.bank_card_img" /> -->
+            <PicturePreview :image-list="formData.bank_card_img" />
           </el-form-item>
           <el-form-item label="认证视频">
             <span>--</span>
-            <!-- <PicturePreview :image-list="formData.attestation_video_url" /> -->
+            <PicturePreview :image-list="formData.attestation_video_url" />
           </el-form-item>
-        </el-col>
+        </el-col> -->
       </el-row>
     </el-form>
   </div>
