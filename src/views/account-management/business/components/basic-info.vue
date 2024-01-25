@@ -80,7 +80,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="密码">
-              <div v-if="isEdit">
+              <div v-if="isEdit" class="w-full">
                 <el-input class="w-[100%]" value="********" />
                 <span class="resetPWD" @click="resetPWD">重置密码</span>
               </div>
