@@ -16,7 +16,12 @@
         </el-input>
       </el-form-item>
       <el-form-item label="合同状态">
-        <el-select v-model="formItem.status" filterable clearable @change="handleSearch">
+        <el-select
+          v-model="formItem.status"
+          filterable
+          clearable
+          @change="handleSearch"
+        >
           <el-option
             v-for="item of contract_status"
             :key="item.status"
@@ -147,7 +152,7 @@
       <template #default>
         <el-form v-if="signStep == 1" label-width="auto">
           <el-form-item required label="姓名">
-            <el-input v-model="signForm.name" />
+            <el-input v-model.trim="signForm.name" />
           </el-form-item>
           <el-form-item required label="身份证号">
             <el-input maxlength="18" v-model="signForm.id_card" />
