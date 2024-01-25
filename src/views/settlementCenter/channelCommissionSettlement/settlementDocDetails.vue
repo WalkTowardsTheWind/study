@@ -2,7 +2,7 @@
   <zxn-plan>
     <zxn-tabs :tabs-list="tabsList" v-model:activeName="activeName"></zxn-tabs>
     <div class="p-[24px]">
-      <el-form label-width="100px">
+      <el-form class="zxn-view-form is-view" label-width="100px">
         <el-row :gutter="150">
           <el-col :span="8">
             <el-form-item label="结算状态">
