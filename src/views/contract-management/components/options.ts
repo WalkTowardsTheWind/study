@@ -23,6 +23,10 @@ export const contract_status = [
     status: 4,
     label: "已拒签",
   },
+  {
+    status: 5,
+    label: "已发送",
+  },
 ];
 export const contract_types = [
   {
