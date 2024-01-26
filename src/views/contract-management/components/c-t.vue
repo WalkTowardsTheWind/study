@@ -47,8 +47,8 @@
     <!-- 新建/编辑/详情-->
     <zxn-dialog
       :title="title"
-      width="35vw"
-      top="15"
+      width="700px"
+      top="10"
       :visible="isVisible"
       :hasBottomBtn="isHasBtn"
       @close-dialog="closeAdd(addFormRef)"
@@ -67,8 +67,8 @@
           </el-form-item>
           <el-form-item label="模板类型" required prop="type">
             <el-select
-							filterable
-							clearable
+              filterable
+              clearable
               class="w-full"
               placeholder="请选择"
               v-model="addForm.type"
@@ -79,8 +79,8 @@
           </el-form-item>
           <el-form-item v-if="isAdd" label="签署形式" required prop="seal_type">
             <el-select
-							filterable
-							clearable
+              filterable
+              clearable
               class="w-full"
               placeholder="请选择"
               v-model="addForm.seal_type"
@@ -188,18 +188,41 @@
               </template>
             </el-upload>
           </el-form-item>
-          <div class="flex flex-wrap gap-x-10px">
+          <el-form-item class="" label="甲方必填字段">
+            <svg
+              t="1706269653250"
+              class="icon"
+              viewBox="0 0 1024 1024"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              p-id="3401"
+              width="16"
+              height="16"
+            >
+              <path
+                d="M950.856 0H73.144A73.144 73.144 0 0 0 0 73.144v877.712A73.144 73.144 0 0 0 73.144 1024h877.712A73.144 73.144 0 0 0 1024 950.856V73.144A73.144 73.144 0 0 0 950.856 0z m-85.467 336.764L462.882 750.69a45.41 45.41 0 0 1-18.214 11.51 46.303 46.303 0 0 1-50.113-9.061L159.87 529.768a46.406 46.406 0 0 1 63.968-67.24l202.443 192.66 372.6-383.124a46.395 46.395 0 0 1 79.654 32.436 45.983 45.983 0 0 1-13.135 32.264z"
+                fill="#366ff3"
+                p-id="3402"
+              ></path>
+            </svg>
+          </el-form-item>
+          <div class="flex flex-wrap gap-x-50px">
             <div
               class="flex gap-x-10px"
               v-for="(item, index) of addForm.fields"
               :key="index"
             >
               <el-form-item>
-                <el-input class="w-80px" disabled v-model="item.field_name" />
+                <el-checkbox v-model="item.checked" size="large"></el-checkbox>
+                <el-input
+                  class="w-80px ml-10px"
+                  disabled
+                  v-model="item.field_name"
+                />
               </el-form-item>
               <el-form-item>
                 <el-input
-                  class="w-100px"
+                  class="w-150px"
                   placeholder="label"
                   v-model="item['label']"
                 />

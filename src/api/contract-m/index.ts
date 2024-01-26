@@ -131,3 +131,20 @@ export function updateContract(data) {
     data,
   });
 }
+
+// 合同发送
+export function sendContract(id) {
+  return request({
+    url: `/adminapi/contract/send/${id}`,
+    method: "get",
+  });
+}
+
+// 合同拒签
+export function rejectContract(data) {
+  return request({
+    url: `/adminapi/contract/refund`,
+    method: "post",
+    data,
+  });
+}

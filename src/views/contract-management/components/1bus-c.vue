@@ -61,7 +61,7 @@
       </template>
       <template #caozuo="{ row }">
         <el-button
-          v-if="row.status == 0"
+          v-if="row.status == 1"
           type="primary"
           link
           @click="goToSign(row.id)"
@@ -71,24 +71,37 @@
           v-if="row.status == 0"
           type="primary"
           link
+          @click="sendById(row.id)"
+          >发送文件</el-button
+        >
+        <el-button
+          v-if="row.status == 0"
+          type="primary"
+          link
           @click="edit(row.id)"
           >编辑</el-button
         >
         <el-button
-          v-if="row.status == 1"
+          v-if="row.status == 5"
           type="primary"
           link
           @click="setStatus(row.id, 0)"
           >撤回</el-button
         >
         <el-button
-          v-if="row.status != 1 && row.status != 2"
+          v-if="row.status == 1"
+          type="primary"
+          link
+          @click="backSend(row.id)"
+          >拒签</el-button
+        >
+        <el-button
+          v-if="row.status != 1 && row.status != 2 && row.status != 5"
           type="primary"
           link
           @click="delClick(row.id)"
           >删除</el-button
         >
-
         <el-button
           :disabled="!row.cert_url"
           v-if="row.status == 2 || row.status == 3"
@@ -200,6 +213,8 @@ import {
   delContract,
   createContractSeal,
   goContractOnline,
+  sendContract,
+  rejectContract,
 } from "@/api/contract-m/index";
 
 import { contract_status, color } from "./options";
@@ -264,6 +279,7 @@ const columnList = [
   { label: "乙方", prop: "part_b_name" },
   { label: "签约时间", prop: "sign_time", minWidth: 150 },
   { label: "到期时间", prop: "effective_end_time", minWidth: 150 },
+  { label: "拒签原因", prop: "reason", minWidth: 150 },
   {
     label: "操作",
     slot: "caozuo",
@@ -472,5 +488,40 @@ const handleExport = async () => {
   await downloadByOnlineUrl("/adminapi/contract/get_contract_download", {
     ids: ids.value,
   });
+};
+
+const sendById = (id) => {
+  ElMessageBox.confirm("是否发送文件?", {
+    confirmButtonText: "是",
+    cancelButtonText: "否",
+  })
+    .then(() => {
+      sendContract(id).then(() => {
+        ElMessage.success("操作成功！");
+        handleSearch();
+      });
+    })
+    .catch(() => {
+      ElMessage.info("取消操作");
+    });
+};
+
+const backSend = (id) => {
+  ElMessageBox.prompt("请输入拒签原因", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+  })
+    .then(({ value }) => {
+      rejectContract({ id, reason: value }).then(() => {
+        ElMessage.success("操作成功");
+        handleSearch();
+      });
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "取消操作",
+      });
+    });
 };
 </script>

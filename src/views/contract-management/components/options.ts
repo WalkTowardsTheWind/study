@@ -64,6 +64,10 @@ export const color = {
     color: "#f35036",
     background: "#fde3df",
   },
+  5: {
+    color: "#fff",
+    background: "#fcab57",
+  },
 };
 
 export const percolor = {

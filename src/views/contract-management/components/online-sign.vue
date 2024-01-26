@@ -1,137 +1,174 @@
 <template>
-  <zxn-dialog
-    width="55vw"
-    :top="15"
+  <el-dialog
+    class="zxn-dialog"
+    width="80vw"
+    top="5vh"
     title="在线签署"
-    :visible="visible"
-    @close-dialog="onlineClose(addFormRef)"
-    @confirm-dialog="onlineConfirm(addFormRef)"
+    :model-value="visible"
+    @close="onlineClose(addFormRef)"
   >
-    <el-form :model="addForm" ref="addFormRef" :rules="rules" label-width="100">
-      <el-row :gutter="50">
-        <el-col :span="8">
-          <el-form-item label="合同名称" prop="contract_name" required>
-            <el-input placeholder="请输入" v-model="addForm.contract_name" />
-          </el-form-item>
-          <el-form-item label="合同期限" prop="date" required>
-            <zxn-date-range class="w-full" v-model="addForm.date" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="选择模板" prop="template_id" required>
-            <el-select
-              v-model="addForm.template_id"
-              filterable
-              clearable
-              class="w-full"
-              placeholder="请选择"
-              value-key="id"
-              @change="handleSelectChange"
-            >
-              <el-option
-                v-for="item of tempList"
-                :key="item.id"
-                :value="item"
-                :label="item.template_name"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="备注要求" prop="remark">
-            <el-input
-              placeholder="请输入"
-              type="textarea"
-              v-model="addForm.remark"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="合同类型" prop="type">
-            <el-select disabled class="w-100" v-model="addForm.type">
-              <el-option
-                v-for="item of contract_types"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <!-- 设置签署方 -->
-      <div class="sign">
-        <div class="title">设置签署方</div>
-      </div>
-
-      <div class="flex m-t-20px">
-        <template v-if="contract_type == 1">
-          <el-form-item label="甲方" prop="part_a">
-            <el-select v-model="addForm.part_a" filterable clearable>
-              <el-option
-                v-for="item of optionsListA"
-                :key="item.company_id"
-                :label="item.company_name"
-                :value="item.company_id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="乙方" prop="part_b">
-            <el-select v-model="addForm.part_b" filterable clearable>
-              <el-option
-                v-for="item of optionsListB"
-                :key="item.id"
-                :label="item.tax_land_name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </template>
-        <template v-if="contract_type == 2">
-          <el-form-item label="甲方" prop="part_a">
-            <el-select v-model="addForm.part_a" filterable clearable>
-              <el-option label="武汉中新能科技有限公司" value="0"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="乙方" prop="part_b">
-            <el-select v-model="addForm.part_b" filterable clearable>
-              <el-option
-                v-for="item of optionsListB"
-                :key="item.id"
-                :label="item.channel_name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </template>
-      </div>
-      <div class="head p-x-20px m-y-20px">
-        <div class="">参与方信息</div>
-      </div>
-      <div class="flex flex-wrap gap-x-40px">
-        <div
-          class="w-400px"
-          v-for="(item, index) in addForm.fields"
-          :key="index"
+    <el-row :gutter="50">
+      <el-col :span="12">
+        <el-form
+          :model="addForm"
+          ref="addFormRef"
+          :rules="rules"
+          label-width="100"
         >
-          <el-form-item
-            label-width="200px"
-            :key="item.field_name"
-            :label="item.label"
-          >
-            <el-input
-              clearable
-              v-model="item.field_value"
-              placeholder="请输入"
-              class="w-full"
-            />
-          </el-form-item>
-        </div>
-      </div>
-    </el-form>
-  </zxn-dialog>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="合同名称" prop="contract_name" required>
+                <el-input
+                  placeholder="请输入"
+                  v-model="addForm.contract_name"
+                />
+              </el-form-item>
+              <el-form-item label="合同期限" prop="date" required>
+                <zxn-date-range class="w-full" v-model="addForm.date" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="选择模板" prop="template_id" required>
+                <el-select
+                  v-model="addForm.template_id"
+                  filterable
+                  clearable
+                  class="w-full"
+                  placeholder="请选择"
+                  value-key="id"
+                  @change="handleSelectChange"
+                >
+                  <el-option
+                    v-for="item of tempList"
+                    :key="item.id"
+                    :value="item"
+                    :label="item.template_name"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="合同类型" prop="type">
+                <el-select disabled class="w-100" v-model="addForm.type">
+                  <el-option
+                    v-for="item of contract_types"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="备注要求" prop="remark">
+                <el-input
+                  placeholder="请输入"
+                  type="textarea"
+                  v-model="addForm.remark"
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <!-- 设置签署方 -->
+          <div class="sign">
+            <div class="title">设置签署方</div>
+          </div>
+
+          <div class="flex m-t-20px">
+            <template v-if="contract_type == 1">
+              <el-form-item label="甲方" prop="part_a">
+                <el-select v-model="addForm.part_a" filterable clearable>
+                  <el-option
+                    v-for="item of optionsListA"
+                    :key="item.company_id"
+                    :label="item.company_name"
+                    :value="item.company_id"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="乙方" prop="part_b">
+                <el-select v-model="addForm.part_b" filterable clearable>
+                  <el-option
+                    v-for="item of optionsListB"
+                    :key="item.id"
+                    :label="item.tax_land_name"
+                    :value="item.id"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </template>
+            <template v-if="contract_type == 2">
+              <el-form-item label="甲方" prop="part_a">
+                <el-select v-model="addForm.part_a" filterable clearable>
+                  <el-option
+                    label="武汉中新能科技有限公司"
+                    value="0"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="乙方" prop="part_b">
+                <el-select v-model="addForm.part_b" filterable clearable>
+                  <el-option
+                    v-for="item of optionsListB"
+                    :key="item.id"
+                    :label="item.channel_name"
+                    :value="item.id"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </template>
+          </div>
+          <div class="head p-l-20px m-y-20px">
+            <div class="">参与方信息</div>
+          </div>
+          <div class="flex flex-wrap">
+            <div
+              class="w-350px"
+              v-for="(item, index) in addForm.fields"
+              :key="index"
+            >
+              <el-form-item
+                label-width="100"
+                :key="item.field_name"
+                :label="item.label"
+              >
+                <el-input
+                  clearable
+                  v-model="item.field_value"
+                  placeholder="请输入"
+                  class="w-full"
+                />
+              </el-form-item>
+            </div>
+          </div>
+        </el-form>
+      </el-col>
+      <el-col :span="12">
+        <iframe :src="FILE_URL" class="w-full h-full"></iframe>
+      </el-col>
+    </el-row>
+    <div class="flex justify-center mt-20px">
+      <el-button class="is-cancel" type="info" @click="onlineClose(addFormRef)"
+        >取消</el-button
+      >
+      <el-button type="primary" @click="onlineConfirm(addFormRef)"
+        >保存文件</el-button
+      >
+      <el-button
+        v-if="contract_type == 1"
+        type="primary"
+        plain
+        @click="saveSend(addFormRef)"
+        >保存文件并发送</el-button
+      >
+    </div>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
-import { getContractTempList, signContractOnline } from "@/api/contract-m";
+import {
+  getContractTempList,
+  sendContract,
+  signContractOnline,
+} from "@/api/contract-m";
 import { getBusinessAccountList } from "@/api/account/business";
 import { getChannelAccountList } from "@/api/account/channel";
 import { contract_types } from "./options";
@@ -201,6 +238,7 @@ const onlineClose = (formI) => {
     formI.resetFields();
   }
   addForm.fields = [];
+  FILE_URL.value = [];
   emit("online-close", false);
 };
 const onlineConfirm = async (formI) => {
@@ -217,25 +255,34 @@ const onlineConfirm = async (formI) => {
         fields: addForm.fields,
         remark: addForm.remark,
       };
-      if (!params.fields.every((item) => item.field_value !== "")) {
-        ElMessageBox.confirm("注意：参与方信息选项未填写完整，是否继续？", {
-          confirmButtonText: "是",
-          cancelButtonText: "否",
-          center: true,
-        }).then(() => {
-          signContractOnline(params).then(() => {
-            ElMessage.success("操作成功！");
-            emit("online-confirm", false);
-          });
-        });
-      } else {
-        signContractOnline(params).then(() => {
+      signContractOnline(params).then(() => {
+        ElMessage.success("操作成功！");
+        emit("online-confirm", false);
+      });
+    }
+  });
+};
+
+const saveSend = async (formI) => {
+  if (!formI) return;
+  await formI.validate((valid, fields) => {
+    if (valid) {
+      let params = {
+        contract_name: addForm.contract_name,
+        template_id: addForm.template_id.id,
+        part_a: addForm.part_a,
+        part_b: addForm.part_b,
+        effective_start_time: addForm.date[0] ?? "",
+        effective_end_time: addForm.date[1] ?? "",
+        fields: addForm.fields,
+        remark: addForm.remark,
+      };
+      signContractOnline(params).then((res) => {
+        sendContract(res.data.id).then(() => {
           ElMessage.success("操作成功！");
           emit("online-confirm", false);
         });
-      }
-    } else {
-      console.log("error submit!", fields);
+      });
     }
   });
 };
@@ -252,10 +299,13 @@ const getTempList = () => {
 };
 getTempList();
 
+const FILE_URL = ref("");
+
 const handleSelectChange = (val: any) => {
   addForm.type = val.type;
   addForm.fields = val.fields;
   addForm.part_b = "";
+  FILE_URL.value = val.file_url;
 };
 
 const optionsListA = ref([] as any);
