@@ -8,7 +8,7 @@
       <el-form-item>
         <el-input
           v-model="formItem.company_name"
-          placeholder="请输入企业、账户名称、企业联系人、联系电话"
+          placeholder="请输入企业、账户名称、企业联系人、联系电话、企业来源备注"
         >
           <template #prefix>
             <i-ep-Search />
@@ -20,8 +20,8 @@
           v-model="formItem.status"
           placeholder="请选择"
           @change="handleChange"
-					filterable
-					clearable
+          filterable
+          clearable
         >
           <el-option
             v-for="item in options"
@@ -50,7 +50,11 @@
         </div>
       </el-form-item>
       <el-form-item prop=" calculation_type" label="计费方式">
-        <el-select filterable v-model="formItem.calculation_type" placeholder="请选择">
+        <el-select
+          filterable
+          v-model="formItem.calculation_type"
+          placeholder="请选择"
+        >
           <el-option label="全部" value="" />
           <el-option label="内扣" value="0" />
           <el-option label="外扣" value="1" />
@@ -196,16 +200,21 @@ const columnList = [
     width: 100,
     fixed: "left",
   },
-  { label: "企业", prop: "company_name", minWidth: 200, fixed: "left" },
-  { label: "税地名称", prop: "tax_land_name", width: 150 },
-  { label: "企业联系人", prop: "contacts", width: 150 },
-  { label: "联系号码", prop: "mobile", width: 150 },
+  { label: "企业", prop: "company_name", minWidth: 220, fixed: "left" },
+  { label: "税地名称", prop: "tax_land_name", minWidth: 200 },
+  { label: "企业联系人", prop: "contacts", minWidth: 100 },
+  { label: "联系号码", prop: "mobile", minWidth: 150 },
   { label: "客户点位", prop: "tax_point", width: 100 },
   {
     label: "计费方式",
     prop: "calculation_type",
     slot: "calculation_type",
     width: 100,
+  },
+  {
+    label: "企业来源备注",
+    prop: "company_source_remark",
+    minWidth: 120,
   },
   { label: "创建时间", prop: "add_time", width: 200 },
   {
