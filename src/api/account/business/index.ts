@@ -236,3 +236,23 @@ export function getPointListById(params: any) {
     params,
   });
 }
+/**
+ * 获取结算单绑定渠道信息列表
+ * @param params
+ * @returns
+ */
+export function getBindList(params: any) {
+  return request({
+    url: "/adminapi/finance/getBindChannelList",
+    method: "get",
+    params,
+  });
+}
+// 结算单绑定
+export function bind(data: any) {
+  return request({
+    url: `/adminapi/finance/bindChannel`,
+    method: "post",
+    data,
+  });
+}
