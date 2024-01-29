@@ -65,7 +65,7 @@
           type="primary"
           link
           @click="goToSign(row.id)"
-          >发起签署</el-button
+          >签署</el-button
         >
         <el-button
           v-if="row.status == 0"

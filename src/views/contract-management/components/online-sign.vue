@@ -152,11 +152,7 @@
       <el-button type="primary" @click="onlineConfirm(addFormRef)"
         >保存文件</el-button
       >
-      <el-button
-        v-if="contract_type == 1"
-        type="primary"
-        plain
-        @click="saveSend(addFormRef)"
+      <el-button type="primary" plain @click="saveSend(addFormRef)"
         >保存文件并发送</el-button
       >
     </div>
