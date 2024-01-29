@@ -167,22 +167,6 @@
           <el-form-item label="开票电话">
             <el-input placeholder="请输入" v-model="addForm.invoice_phone" />
           </el-form-item>
-          <el-form-item label="开票要求">
-            <el-select
-              filterable
-              clearable
-              class="w-full"
-              placeholder="请选择"
-              v-model="addForm.invoice_require"
-            >
-              <el-option
-                v-for="item in invoice_requireOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
         </el-col>
         <el-col :span="7">
           <el-form-item label="开户许可证">
@@ -385,6 +369,22 @@
                 :key="index"
                 :value="item.value"
                 :label="item.label"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="开票要求" prop="invoice_require">
+            <el-select
+              filterable
+              clearable
+              class="w-full"
+              placeholder="请选择"
+              v-model="addForm.invoice_require"
+            >
+              <el-option
+                v-for="item in invoice_requireOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -593,6 +593,7 @@ const rules = reactive<FormRules>({
   credit_code: [{ required: true, message: "必填", trigger: "blur" }],
   license: [{ required: true, message: "必填", trigger: "change" }],
   calculation_type: [{ required: true, message: "必填", trigger: "change" }],
+  invoice_require: [{ required: true, message: "必填", trigger: "change" }],
 });
 
 /**
