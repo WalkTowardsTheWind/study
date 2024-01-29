@@ -280,6 +280,8 @@ const columnList = [
   { label: "乙方", prop: "part_b_name" },
   { label: "签约时间", prop: "sign_time", minWidth: 150 },
   { label: "到期时间", prop: "effective_end_time", minWidth: 150 },
+  { label: "拒签原因", prop: "reason", minWidth: 150 },
+
   {
     label: "操作",
     slot: "caozuo",
