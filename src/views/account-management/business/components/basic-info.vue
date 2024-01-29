@@ -165,28 +165,6 @@
               <el-input v-if="isEdit" v-model="formItem.invoice_phone" />
               <span v-else>{{ formItem.invoice_phone }}</span>
             </el-form-item>
-            <el-form-item label="开票要求">
-              <el-select
-                v-if="isEdit"
-                class="w-full"
-                v-model="formItem.invoice_require"
-                :disabled="!isEdit"
-                filterable
-                clearable
-              >
-                <el-option
-                  v-for="item in invoice_requireOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-              <span v-else>{{
-                invoice_requireOptions.find(
-                  (i) => i.value === formItem.invoice_require
-                )?.label
-              }}</span>
-            </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="银行账户">
@@ -248,11 +226,7 @@
 <script lang="ts" setup>
 import { getCategoryList, resetAccountPwd } from "@/api/account/business";
 
-import {
-  businessType,
-  taxpayerType,
-  invoice_requireType,
-} from "@/enums/accountEnum";
+import { businessType, taxpayerType } from "@/enums/accountEnum";
 
 const cateGoryOptions = ref([] as any);
 
@@ -260,9 +234,6 @@ const options = Object.entries(taxpayerType)
   .map(([label, value]) => ({ label, value }))
   .filter((i) => typeof i.value !== "string");
 console.log(options);
-const invoice_requireOptions = Object.entries(invoice_requireType)
-  .map(([label, value]) => ({ label, value }))
-  .filter((i) => typeof i.value !== "string");
 const props = defineProps({
   isEdit: {
     type: Boolean,
