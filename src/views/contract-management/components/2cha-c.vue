@@ -160,15 +160,60 @@
     <zxn-dialog
       :visible="signVisible"
       :title="signTitle"
+      width="50vw"
+      top="5"
       @close-dialog="closeSign"
     >
       <template #default>
+        <el-form label-width="100" label-position="right">
+          <el-row :gutter="50">
+            <el-col :span="12">
+              <el-form-item label="合同类型">
+                <el-input readonly value="渠道合同" />
+              </el-form-item>
+              <el-form-item label="合同名称">
+                <el-input readonly :value="signFormDetail.contract_name" />
+              </el-form-item>
+              <el-form-item label="合同模板">
+                <el-input readonly :value="signFormDetail.template_name" />
+              </el-form-item>
+              <el-form-item label="合同编号">
+                <el-input readonly :value="signFormDetail.contract_no" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="合同期限">
+                <el-input
+                  readonly
+                  :value="
+                    signFormDetail.effective_start_time +
+                    ' - ' +
+                    signFormDetail.effective_end_time
+                  "
+                />
+              </el-form-item>
+              <el-form-item label="甲方">
+                <el-input readonly :value="signFormDetail.part_a" />
+              </el-form-item>
+              <el-form-item label="乙方">
+                <el-input readonly :value="signFormDetail.part_b" />
+              </el-form-item>
+              <el-form-item label="备注要求">
+                <el-input readonly :value="signFormDetail.remark" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <iframe
+          class="iframe-url w-full h-100vh p-x-20px mb-20px"
+          :src="signFormDetail.contract_url"
+        ></iframe>
         <el-form v-if="signStep == 1" label-width="auto">
           <el-form-item required label="姓名">
             <el-input v-model.trim="signForm.name" />
           </el-form-item>
           <el-form-item required label="身份证号">
-            <el-input maxlength="18" v-model="signForm.id_card" />
+            <el-input maxlength="18" v-model.trim="signForm.id_card" />
           </el-form-item>
         </el-form>
         <template v-if="signStep == 2">
@@ -215,6 +260,7 @@ import {
   goContractOnline,
   sendContract,
   rejectContract,
+  contractDetail,
 } from "@/api/contract-m/index";
 import { useRoute } from "vue-router";
 import { contract_status, color } from "./options";
@@ -392,6 +438,18 @@ const signForm = reactive({
   name: "",
   id_card: "",
 });
+
+const signFormDetail = reactive({
+  contract_name: "",
+  template_name: "",
+  contract_no: "",
+  effective_start_time: "",
+  effective_end_time: "",
+  part_a: "",
+  part_b: "",
+  remark: "",
+  contract_url: "",
+});
 const closeSign = () => {
   signVisible.value = false;
   signStep.value = 1;
@@ -404,9 +462,21 @@ const closeSign = () => {
 const goToSign = (id) => {
   // 1 生成印章
   // createContractSeal();
-  signVisible.value = true;
   signTitle.value = "填写负责人信息";
-  cfi.id = id;
+  contractDetail(id).then((res) => {
+    signFormDetail.contract_name = res.data.contract_name;
+    signFormDetail.template_name = res.data.template_name;
+    signFormDetail.contract_no = res.data.contract_no;
+    signFormDetail.contract_url = res.data.contract_url;
+    signFormDetail.effective_start_time = res.data.effective_start_time;
+    signFormDetail.effective_end_time = res.data.effective_end_time;
+    signFormDetail.part_a = res.data.part_a_name;
+    signFormDetail.part_b = res.data.part_b_name;
+    signFormDetail.remark = res.data.remark;
+
+    signVisible.value = true;
+    cfi.id = id;
+  });
 };
 
 const scgrdzqm = () => {
