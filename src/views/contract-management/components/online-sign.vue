@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     class="zxn-dialog"
-    width="80vw"
+    width="90vw"
     top="5vh"
     title="在线签署"
     :model-value="visible"
@@ -119,22 +119,21 @@
           <div class="head p-l-20px m-y-20px">
             <div class="">参与方信息</div>
           </div>
-          <div class="flex flex-wrap">
+          <div class="fields">
             <div
-              class="w-350px"
+              class="w-49%"
               v-for="(item, index) in addForm.fields"
               :key="index"
             >
               <el-form-item
-                label-width="100"
                 :key="item.field_name"
                 :label="item.label"
+                label-width="150"
               >
                 <el-input
                   clearable
                   v-model="item.field_value"
                   placeholder="请输入"
-                  class="w-full"
                 />
               </el-form-item>
             </div>
@@ -364,5 +363,13 @@ getOptionsList();
 .form {
   display: flex;
   align-items: center;
+}
+.fields {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: space-between;
+  gap: 0 15px;
 }
 </style>
