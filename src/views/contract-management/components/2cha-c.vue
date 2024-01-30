@@ -160,68 +160,75 @@
     <zxn-dialog
       :visible="signVisible"
       :title="signTitle"
-      width="50vw"
+      width="80vw"
       top="5"
       @close-dialog="closeSign"
     >
       <template #default>
-        <el-form label-width="100" label-position="right">
-          <el-row :gutter="50">
-            <el-col :span="12">
-              <el-form-item label="合同类型">
-                <el-input readonly value="渠道合同" />
+        <div class="flex justify-between">
+          <div class="left flex-1">
+            <el-form label-width="100" label-position="right">
+              <el-row :gutter="50">
+                <el-col :span="12">
+                  <el-form-item label="合同类型">
+                    <el-input disabled value="企业合同" />
+                  </el-form-item>
+                  <el-form-item label="合同名称">
+                    <el-input disabled :value="signFormDetail.contract_name" />
+                  </el-form-item>
+                  <el-form-item label="合同模板">
+                    <el-input disabled :value="signFormDetail.template_name" />
+                  </el-form-item>
+                  <el-form-item label="合同编号">
+                    <el-input disabled :value="signFormDetail.contract_no" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="合同期限">
+                    <el-input
+                      disabled
+                      :value="
+                        signFormDetail.effective_start_time.substring(0, 10) +
+                        ' - ' +
+                        signFormDetail.effective_end_time.substring(0, 10)
+                      "
+                    />
+                  </el-form-item>
+                  <el-form-item label="甲方">
+                    <el-input disabled :value="signFormDetail.part_a" />
+                  </el-form-item>
+                  <el-form-item label="乙方">
+                    <el-input disabled :value="signFormDetail.part_b" />
+                  </el-form-item>
+                  <el-form-item label="备注要求">
+                    <el-input disabled :value="signFormDetail.remark" />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+
+            <el-form v-if="signStep == 1" label-width="100px">
+              <el-form-item required label="姓名">
+                <el-input v-model.trim="signForm.name" />
               </el-form-item>
-              <el-form-item label="合同名称">
-                <el-input readonly :value="signFormDetail.contract_name" />
+              <el-form-item required label="身份证号">
+                <el-input maxlength="18" v-model.trim="signForm.id_card" />
               </el-form-item>
-              <el-form-item label="合同模板">
-                <el-input readonly :value="signFormDetail.template_name" />
-              </el-form-item>
-              <el-form-item label="合同编号">
-                <el-input readonly :value="signFormDetail.contract_no" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="合同期限">
-                <el-input
-                  readonly
-                  :value="
-                    signFormDetail.effective_start_time +
-                    ' - ' +
-                    signFormDetail.effective_end_time
-                  "
-                />
-              </el-form-item>
-              <el-form-item label="甲方">
-                <el-input readonly :value="signFormDetail.part_a" />
-              </el-form-item>
-              <el-form-item label="乙方">
-                <el-input readonly :value="signFormDetail.part_b" />
-              </el-form-item>
-              <el-form-item label="备注要求">
-                <el-input readonly :value="signFormDetail.remark" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-        <iframe
-          class="iframe-url w-full h-100vh p-x-20px mb-20px"
-          :src="signFormDetail.contract_url"
-        ></iframe>
-        <el-form v-if="signStep == 1" label-width="auto">
-          <el-form-item required label="姓名">
-            <el-input v-model.trim="signForm.name" />
-          </el-form-item>
-          <el-form-item required label="身份证号">
-            <el-input maxlength="18" v-model.trim="signForm.id_card" />
-          </el-form-item>
-        </el-form>
-        <template v-if="signStep == 2">
-          <p class="font-size-8">
-            已成功生成您的个人电子签名，是否签署合同并推送给对方？
-          </p>
-          <zxn-image :imgList="[signImage]"></zxn-image>
-        </template>
+            </el-form>
+            <template v-if="signStep == 2">
+              <p class="font-size-8">
+                已成功生成您的个人电子签名，是否签署合同并推送给对方？
+              </p>
+              <zxn-image :imgList="[signImage]"></zxn-image>
+            </template>
+          </div>
+          <div class="right flex-1">
+            <iframe
+              class="iframe-url w-full h-70vh p-x-20px mb-20px"
+              :src="signFormDetail.contract_url"
+            ></iframe>
+          </div>
+        </div>
       </template>
       <template #bottom-btn>
         <div class="flex justify-center">
