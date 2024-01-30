@@ -96,6 +96,17 @@
                     readonly
                   />
                 </el-form-item>
+                <el-form-item label="备注">
+                  <el-input
+                    v-model="formItem.remark"
+                    maxlength="150"
+                    show-word-limit
+                    :autosize="{ minRows: 2, maxRows: 4 }"
+                    type="textarea"
+                    placeholder=" "
+                    readonly
+                  />
+                </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="规格型号">
@@ -172,6 +183,7 @@ const formItem = reactive({
   consignee_mobile: "",
   address: "",
   invoice_form: "",
+  remark: "",
   invoice_denomination: "",
   invoice_num: "",
 });
@@ -201,6 +213,7 @@ const getView = async () => {
     formItem.consignee_mobile = data.consignee_mobile;
     formItem.address = data.address;
     formItem.invoice_form = data.invoice_form;
+    formItem.remark = data.remark;
     formItem.invoice_denomination = data.invoice_denomination;
     formItem.invoice_num = data.invoice_num;
     tableData.length = 0;
