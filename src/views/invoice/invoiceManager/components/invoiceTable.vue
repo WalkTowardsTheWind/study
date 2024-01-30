@@ -67,6 +67,7 @@
           clearable
           v-model="formItem.invoice_require"
           placeholder="请选择"
+          @change="handleSearch"
         >
           <el-option
             v-for="item in proxy.$const['invoiceEnum.invoice_requireType']"
