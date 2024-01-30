@@ -338,9 +338,13 @@ const handleDelete = (row: { id: number }) => {
     ) => {
       if (action === "confirm") {
         instance.confirmButtonLoading = true;
-        await removeTask(row.id);
-        instance.confirmButtonLoading = false;
-        done();
+        try {
+          await removeTask(row.id);
+          instance.confirmButtonLoading = false;
+          done();
+        } catch {
+          instance.confirmButtonLoading = false;
+        }
       } else {
         done();
       }
