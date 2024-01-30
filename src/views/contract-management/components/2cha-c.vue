@@ -206,7 +206,9 @@
                 </el-col>
               </el-row>
             </el-form>
-
+            <div class="bg-#f0f4ff h-55px flex items-center p-20px mb-20px">
+              合同签署信息
+            </div>
             <el-form v-if="signStep == 1" label-width="100px">
               <el-form-item required label="姓名">
                 <el-input v-model.trim="signForm.name" />
