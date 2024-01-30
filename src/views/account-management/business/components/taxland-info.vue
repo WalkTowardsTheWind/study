@@ -65,8 +65,8 @@
             :disabled="state.dialogType == 'edit'"
             value-key="id"
             @change="selecTaxland"
-						filterable
-						clearable
+            filterable
+            clearable
           >
             <el-option
               v-for="(item, index) in taxLandOption"
@@ -98,9 +98,12 @@
           </el-input>
         </el-form-item>
         <el-form-item label="认证规则" prop="auth_type">
-          <el-select class="w-full"
-										 filterable
-										 clearable v-model="state.formItem.auth_type">
+          <el-select
+            class="w-full"
+            filterable
+            clearable
+            v-model="state.formItem.auth_type"
+          >
             <el-option
               v-for="(item, index) in auth_type"
               :key="index"
@@ -114,8 +117,8 @@
             class="w-full"
             placeholder="请选择（单选）"
             v-model="state.formItem.sign_type"
-						filterable
-						clearable
+            filterable
+            clearable
           >
             <el-option
               v-for="(item, index) in sign_type"
@@ -123,6 +126,22 @@
               :value="item.value"
               :label="item.label"
             ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="开票要求" prop="invoice_require">
+          <el-select
+            class="w-full"
+            placeholder="请选择（单选）"
+            v-model="state.formItem.invoice_require"
+            filterable
+            clearable
+          >
+            <el-option
+              v-for="item in invoice_requireOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
           </el-select>
         </el-form-item>
         <!-- <el-form-item label="上传合同" prop="contract_img">
@@ -192,6 +211,10 @@ const taxLandStore = useStore();
 
 const auth_type = ref([] as any);
 const sign_type = ref([] as any);
+import { invoice_requireType } from "@/enums/accountEnum";
+const invoice_requireOptions = Object.entries(invoice_requireType)
+  .map(([label, value]) => ({ label, value }))
+  .filter((i) => typeof i.value !== "string");
 
 const taxLandOption = ref([] as any);
 function getTaxLandOption() {
@@ -237,6 +260,7 @@ const state = reactive({
     tax_point: "",
     auth_type: "",
     sign_type: "",
+    invoice_require: "",
   },
 });
 
@@ -247,6 +271,7 @@ const rules = reactive({
   ],
   auth_type: [{ required: true, message: "必填", trigger: "change" }],
   sign_type: [{ required: true, message: "必填", trigger: "change" }],
+  invoice_require: [{ required: true, message: "必填", trigger: "change" }],
   contract_img: [{ required: true, message: "必填", trigger: "change" }],
 });
 
@@ -278,6 +303,13 @@ const columnList = [
   { label: "税地银行", prop: "bank", minWidth: 250 },
   { label: "银行账户", prop: "sub_account_no", minWidth: 200 },
   { label: "账户余额", prop: "balance", type: "money", minWidth: 200 },
+  {
+    label: "开票要求",
+    prop: "invoice_require",
+    type: "enum",
+    path: "accountEnum.invoice_requireType",
+    minWidth: 100,
+  },
   {
     label: "认证规则",
     prop: "sign_type",
@@ -314,6 +346,7 @@ const taxLandClick = (active: string, item?: any) => {
     state.formItem.company_id = "";
     state.formItem.tax_point = "";
     state.formItem.sign_type = "";
+    state.formItem.invoice_require = "";
     state.formItem.auth_type = "";
     state.formItem.company_id = route.query.id as string;
   }
@@ -328,6 +361,7 @@ const taxLandClick = (active: string, item?: any) => {
     selecTaxland({ id: item.tax_land_id, tax_land_type: item.tax_land_type });
     state.formItem.tax_point = item.tax_point;
     state.formItem.sign_type = item.sign_type;
+    state.formItem.invoice_require = item.invoice_require;
     state.formItem.auth_type = item.auth_type;
   }
 };
@@ -382,6 +416,7 @@ const taxLandConfirm = async (formEl: FormInstance) => {
           tax_point: state.formItem.tax_point,
           auth_type: state.formItem.auth_type,
           sign_type: state.formItem.sign_type,
+          invoice_require: state.formItem.invoice_require,
         };
         createAccountTaxLand(params).then((res) => {
           ElMessage({
@@ -408,6 +443,7 @@ const taxLandConfirm = async (formEl: FormInstance) => {
           tax_point: state.formItem.tax_point,
           auth_type: state.formItem.auth_type,
           sign_type: state.formItem.sign_type,
+          invoice_require: state.formItem.invoice_require,
         };
         editAccountTaxLand(params).then((res) => {
           ElMessage({
@@ -433,6 +469,7 @@ const cancelClick = () => {
   state.formItem.tax_land_id = "";
   state.formItem.tax_point = "";
   state.formItem.sign_type = "";
+  state.formItem.invoice_require = "";
   state.formItem.auth_type = "";
 };
 

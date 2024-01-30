@@ -62,8 +62,8 @@
               class="w-full"
               placeholder="请选择"
               v-model="addForm.category_id"
-							filterable
-							clearable
+              filterable
+              clearable
             >
               <el-option
                 v-for="item in cateGoryOptions"
@@ -147,8 +147,8 @@
           </el-form-item>
           <el-form-item label="纳税人类型">
             <el-select
-							filterable
-							clearable
+              filterable
+              clearable
               class="w-full"
               placeholder="请输入"
               v-model="addForm.taxpayer_type"
@@ -228,7 +228,12 @@
           <template v-if="addForm.company_source == '1'">
             <el-form-item label="上级ID绑定" class="w-full">
               <div style="display: flex; gap: 0 10px">
-                <el-select placeholder="请选择" filterable clearable v-model="addForm.channel_type">
+                <el-select
+                  placeholder="请选择"
+                  filterable
+                  clearable
+                  v-model="addForm.channel_type"
+                >
                   <el-option label="个人" :value="1"></el-option>
                   <el-option label="企业" :value="2"></el-option>
                 </el-select>
@@ -253,8 +258,8 @@
               class="w-full"
               v-model="addForm.calculation_type"
               placeholder="请选择"
-							filterable
-							clearable
+              filterable
+              clearable
             >
               <el-option label="内扣" value="0" />
               <el-option label="外扣" value="1" />
@@ -295,8 +300,8 @@
               v-model="addForm.tax_land_id"
               @change="addSelecTaxland"
               value-key="id"
-							filterable
-							clearable
+              filterable
+              clearable
             >
               <el-option
                 v-for="(item, index) in taxLandOption"
@@ -340,8 +345,8 @@
               class="w-full"
               placeholder="请选择（单选）"
               v-model="addForm.auth_type"
-							filterable
-							clearable
+              filterable
+              clearable
             >
               <el-option
                 v-for="(item, index) in auth_type"
@@ -356,14 +361,30 @@
               class="w-full"
               placeholder="请选择（单选）"
               v-model="addForm.sign_type"
-							filterable
-							clearable
+              filterable
+              clearable
             >
               <el-option
                 v-for="(item, index) in sign_type"
                 :key="index"
                 :value="item.value"
                 :label="item.label"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="开票要求" prop="invoice_require">
+            <el-select
+              filterable
+              clearable
+              class="w-full"
+              placeholder="请选择"
+              v-model="addForm.invoice_require"
+            >
+              <el-option
+                v-for="item in invoice_requireOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -408,6 +429,16 @@ const taxpayerOptions = [
   {
     label: "一般人",
     value: "2",
+  },
+];
+const invoice_requireOptions = [
+  {
+    label: "下发开票",
+    value: "0",
+  },
+  {
+    label: "预开票/充值开票",
+    value: "1",
   },
 ];
 
@@ -467,6 +498,7 @@ const addForm = reactive({
   tax_land_type: "",
   invoice_address: "",
   invoice_phone: "",
+  invoice_require: "",
 } as any);
 
 const isTaxLandListValid = computed(() => {
@@ -525,6 +557,7 @@ const requiredComputed = computed(() => {
     !!addForm.address &&
     !!addForm.invoice_address &&
     !!addForm.invoice_phone &&
+    !!addForm.invoice_require &&
     isTaxLandListValid.value
   );
 });
@@ -560,12 +593,15 @@ const rules = reactive<FormRules>({
   credit_code: [{ required: true, message: "必填", trigger: "blur" }],
   license: [{ required: true, message: "必填", trigger: "change" }],
   calculation_type: [{ required: true, message: "必填", trigger: "change" }],
+  invoice_require: [{ required: true, message: "必填", trigger: "change" }],
 });
 
 /**
  * 提交
  */
 async function submit(formEl: FormInstance | undefined) {
+  console.log(888);
+
   if (!formEl) return;
 
   await formEl.validate(async (valid, fields) => {
