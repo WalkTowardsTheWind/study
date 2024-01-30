@@ -244,7 +244,7 @@
             v-if="signStep == 2"
             type="primary"
             @click="qshtfswj"
-            >签署合同并发送文件</el-button
+            >签署合同</el-button
           >
           <el-button type="primary" plain @click="closeSign">取消</el-button>
         </div>
