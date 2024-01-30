@@ -61,7 +61,7 @@
       <el-form-item prop="timeData" label="申请日期">
         <zxn-date-range v-model="formItem.timeData" />
       </el-form-item>
-      <el-form-item label="开票要求">
+      <el-form-item label="开票要求" prop="invoice_require">
         <el-select
           filterable
           clearable
