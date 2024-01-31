@@ -21,6 +21,10 @@ export enum taxpayerType {
   "小规模" = 1,
   "一般人",
 }
+export enum invoice_requireType {
+  "下发开票" = 0,
+  "预开票/充值开票",
+}
 
 export enum statusType {
   "关闭" = 0,

@@ -24,7 +24,12 @@
         </zxn-select>
       </el-form-item>
       <el-form-item label="开票类型" prop="invoice_type">
-        <el-select filterable clearable v-model="formItem.invoice_type" placeholder="请选择">
+        <el-select
+          filterable
+          clearable
+          v-model="formItem.invoice_type"
+          placeholder="请选择"
+        >
           <el-option
             v-for="item in proxy.$const['statusEnum.applyInvoiceType']"
             :key="item.value"
@@ -55,6 +60,22 @@
       </el-form-item>
       <el-form-item prop="timeData" label="申请日期">
         <zxn-date-range v-model="formItem.timeData" />
+      </el-form-item>
+      <el-form-item label="开票要求" prop="invoice_require">
+        <el-select
+          filterable
+          clearable
+          v-model="formItem.invoice_require"
+          placeholder="请选择"
+          @change="handleSearch"
+        >
+          <el-option
+            v-for="item in proxy.$const['invoiceEnum.invoice_requireType']"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
       </el-form-item>
     </zxn-search>
     <!-- 111 -->
@@ -178,6 +199,7 @@ const formItem = reactive({
   invoice_name: "",
   tax_land_id: "",
   invoice_type: "",
+  invoice_require: "",
   category_id: [],
   timeData: [],
   status: "",
@@ -239,7 +261,8 @@ const columnList: any[] = reactive([
     prop: "is_excel",
     minWidth: 120,
   },
-  { label: "备注", prop: "reject_reason", minWidth: 180 },
+  { label: "驳回原因", prop: "reject_reason", minWidth: 180 },
+  { label: "备注", prop: "remark", minWidth: 180 },
   {
     label: "操作",
     slot: "operation",
@@ -557,6 +580,7 @@ onActivated(() => {
     formItem.invoice_name = "";
     formItem.tax_land_id = "";
     formItem.invoice_type = "";
+    formItem.invoice_require = "";
     formItem.category_id = [];
     formItem.timeData = [];
     formItem.status =
