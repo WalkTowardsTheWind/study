@@ -80,7 +80,7 @@
       @selection-change="handleSelect"
     >
       <template #tableTop>
-        <el-dropdown class="ml-4" trigger="click" @command="handleAdd">
+        <el-dropdown trigger="click" @command="handleAdd">
           <el-button type="primary">+ 新建</el-button>
           <template #dropdown>
             <el-dropdown-menu>
@@ -252,9 +252,9 @@ const columnList = [
   {
     label: "行业限制",
     slot: "IndustryRestrictions",
-    width: 100,
-    fixed: "right",
-    headerAlign: "center",
+    minWidth: 80,
+    // fixed: "right",
+    // headerAlign: "center",
   },
   {
     label: "操作",

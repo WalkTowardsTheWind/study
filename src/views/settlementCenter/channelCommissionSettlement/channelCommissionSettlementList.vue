@@ -216,7 +216,7 @@ const columnList = [
     width: 100,
   },
   // { label: "结算类型", prop: "settlement_type", width: 110, fixed: "left" },
-  { label: "渠道名称", prop: "channel_name", width: 110, fixed: "left" },
+  { label: "渠道名称", prop: "channel_name", width: 200, fixed: "left" },
   { label: "企业结算金额", prop: "settlement_amount", minWidth: 120 },
   { label: "渠道佣金（税前）", prop: "commission", minWidth: 140 },
   { label: "渠道佣金（税后）", prop: "after_commission", minWidth: 140 },
