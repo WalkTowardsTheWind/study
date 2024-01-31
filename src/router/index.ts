@@ -507,6 +507,12 @@ export const constantRoutes: RouteRecordRaw[] = [
         name: "messageManager",
         meta: { title: "消息中心", keepAlive: true, icon: "message" },
       },
+      {
+        path: "consult",
+        component: () => import("@/views/message/consult/index.vue"),
+        name: "consult",
+        meta: { title: "在线咨询", keepAlive: true, icon: "message" },
+      },
     ],
   },
   {

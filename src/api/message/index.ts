@@ -138,3 +138,14 @@ export function notifyRead(id: any): AxiosPromise {
     method: "GET",
   });
 }
+
+/**
+ * 官网咨询
+ */
+export function officialMsg(params: any): AxiosPromise {
+  return request({
+    url: `/adminapi/notify/official/msg`,
+    method: "GET",
+    params,
+  });
+}
