@@ -430,13 +430,13 @@ const columnList = computed(() => {
       width: 120,
       fixed: "left",
     },
-    { label: "企业名称", prop: "company_name", minWidth: 120, fixed: "left" },
-    { label: "税地名称", prop: "tax_land_name", width: 120 },
+    { label: "企业名称", prop: "company_name", minWidth: 200, fixed: "left" },
+    { label: "税地名称", prop: "tax_land_name", width: 150 },
     { label: "税地账户", prop: "bank_account", width: 200 },
     { label: "充值金额", prop: "amount", type: "money", minWidth: 100 },
     { label: "充值时间", prop: "add_time", width: 200 },
-    { label: "充值凭证", slot: "certificate", minWidth: 200 },
-    { label: "退款凭证", slot: "refundCertificate", minWidth: 250 },
+    { label: "充值凭证", slot: "certificate", minWidth: 150 },
+    { label: "退款凭证", slot: "refundCertificate", minWidth: 150 },
     { label: "操作", slot: "operation", fixed: "right", width: 100 },
   ];
 });

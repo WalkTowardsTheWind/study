@@ -320,8 +320,8 @@ const pageChange = (cur) => {
 const detailId = ref(0);
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "合同编号", prop: "contract_no" },
-  { label: "合同名称", prop: "contract_name" },
+  { label: "合同编号", prop: "contract_no", minWidth: 120 },
+  { label: "合同名称", prop: "contract_name", minWidth: 100 },
   { label: "合同类型", slot: "type" },
   {
     label: "状态",

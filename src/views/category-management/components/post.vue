@@ -41,7 +41,7 @@
         </el-table-column>
         <el-table-column label="岗位分类名称" prop="name"></el-table-column>
         <el-table-column label="创建时间" prop="add_time"></el-table-column>
-        <el-table-column label="操作" fixed="right" align="left">
+        <el-table-column label="操作" fixed="right" align="right">
           <template #default="scope">
             <el-button
               v-if="scope.row.level !== 3"

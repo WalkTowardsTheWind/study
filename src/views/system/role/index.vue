@@ -81,7 +81,7 @@ const columnList = [
     label: "功能权限",
     prop: "rules",
     showOverflowTooltip: true,
-    minWidth: 150,
+    minWidth: 500,
   },
   {
     label: "状态",
@@ -96,11 +96,11 @@ const columnList = [
   },
   {
     label: "账号数量",
-    minWidth: 120,
+    minWidth: 100,
     prop: "role_num",
   },
 
-  { label: "创建时间", prop: "update_time", width: 180 },
+  { label: "创建时间", prop: "update_time", minWidth: 180 },
   {
     label: "操作",
     slot: "operation",

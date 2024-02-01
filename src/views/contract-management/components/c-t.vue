@@ -1,5 +1,5 @@
 <template>
-  <div class="p-37px">
+  <div class="p-y-24px p-x-37px">
     <zxn-table
       :table-data="tableData"
       :column-list="columnList"
@@ -35,11 +35,11 @@
         {{ row.seal_type == 1 ? "单页签署" : "多页签署" }}</template
       >
       <template #caozuo="{ row }">
+        <el-button link type="primary" @click="toEdit(row.id)">编辑</el-button>
+        <el-button link type="primary" @click="delById(row.id)">删除</el-button>
         <el-button link type="primary" @click="toDetail(row.id)"
           >详情</el-button
         >
-        <el-button link type="primary" @click="toEdit(row.id)">编辑</el-button>
-        <el-button link type="primary" @click="delById(row.id)">删除</el-button>
         <!-- <el-button link type="primary">下载</el-button> -->
       </template>
     </zxn-table>

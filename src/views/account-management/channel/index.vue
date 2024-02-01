@@ -21,8 +21,8 @@
           v-model="formItem.status"
           placeholder="请选择"
           @change="handleSelect"
-					filterable
-					clearable
+          filterable
+          clearable
         >
           <el-option
             v-for="item in statusOptions"
@@ -36,8 +36,8 @@
         <el-select
           v-model="formItem.channel_type"
           placeholder="请选择"
-					filterable
-					clearable
+          filterable
+          clearable
           @change="handleSelectChannel"
         >
           <el-option
@@ -202,8 +202,8 @@ const columnList = [
     fixed: "left",
   },
   { label: "渠道名称", prop: "channel_name", minWidth: 120, fixed: "left" },
-  { label: "税地名称", prop: "tax_land_name", width: 150 },
-  { label: "联系人", prop: "contact", minWidth: 200 },
+  { label: "税地名称", prop: "tax_land_name", width: 200 },
+  { label: "联系人", prop: "contact", minWidth: 120 },
   { label: "联系号码", prop: "contact_phone", minWidth: 150 },
   { label: "渠道等级", prop: "level", minWidth: 120, slot: "level" },
   { label: "渠道管理员", prop: "channel_admin", minWidth: 200 },
