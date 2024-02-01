@@ -268,7 +268,7 @@ const columnList: any[] = reactive([
     slot: "operation",
     fixed: "right",
     align: "right",
-    width: 230,
+    width: 180,
   },
 ]);
 const tableData: any[] = reactive([]);

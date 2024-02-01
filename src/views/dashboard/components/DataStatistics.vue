@@ -2,13 +2,13 @@
   <dashboard-card title="数据汇总">
     <template #header-right>
       <div class="data-statistics-head-time">
-        {{ chooseTime[0] }}-{{ chooseTime[1] }}
+        统计时间: "{{ chooseTime[0] }}-{{ chooseTime[1] }}"
       </div>
     </template>
     <div class="data-statistics">
       <div class="data-statistics-head">
         <tax-source-select
-          class="w-[120px] data-statistics-head-source"
+          class="w-[240px] data-statistics-head-source"
           v-model:taxId="formItem.tax_land_id"
           @change-tax="handleSearch"
         />
@@ -39,7 +39,7 @@
         </div>
       </div>
       <div v-loading="loading">
-        <div class="data-statistics-card mb-[12px]">
+        <div class="data-statistics-card mb-[20px]">
           <statistics-card
             v-for="item in statistics"
             :key="item.title"

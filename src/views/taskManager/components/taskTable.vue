@@ -116,10 +116,10 @@
         <!--        >-->
         <!--          关闭-->
         <!--        </el-button>-->
-        <el-button link type="primary" @click="handleView(row)">详情</el-button>
         <el-button link type="primary" @click="handleDelete(row)"
           >删除</el-button
         >
+        <el-button link type="primary" @click="handleView(row)">详情</el-button>
       </template>
     </zxn-table>
   </div>
@@ -182,7 +182,7 @@ const columnList = [
   { label: "关联企业", prop: "company_name", minWidth: 120, fixed: "left" },
   { label: "需求人数", prop: "task_attribute.person_count", type: "deep" },
   { label: "行业", prop: "category_name", minWidth: 80 },
-  { label: "金额", slot: "salary", minWidth: 220 },
+  { label: "金额", slot: "salary", width: 180 },
   {
     label: "申请时间",
     minWidth: 180,

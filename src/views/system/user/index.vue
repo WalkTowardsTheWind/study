@@ -132,8 +132,8 @@
                 <el-select
                   class="w-full"
                   placeholder="请选择"
-									filterable
-									clearable
+                  filterable
+                  clearable
                   v-model="addForm.roles"
                 >
                   <el-option
@@ -296,8 +296,14 @@ const columnList = [
   { label: "联系号码", prop: "mobile" },
   { label: "角色", prop: "roles" },
   { label: "功能权限", prop: "role_menus" },
-  { label: "创建时间", prop: "add_time" },
-  { label: "操作", slot: "operation", fixed: "right", width: 200 },
+  { label: "创建时间", prop: "add_time", width: 180 },
+  {
+    label: "操作",
+    slot: "operation",
+    fixed: "right",
+    align: "right",
+    width: 180,
+  },
 ];
 
 const add = (str: string, item?: any) => {

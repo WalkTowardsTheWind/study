@@ -101,7 +101,13 @@ const columnList = [
   },
 
   { label: "创建时间", prop: "update_time", width: 180 },
-  { label: "操作", slot: "operation", fixed: "right", width: 150 },
+  {
+    label: "操作",
+    slot: "operation",
+    fixed: "right",
+    align: "right",
+    width: 150,
+  },
 ];
 const handleSearch = () => {
   getList();

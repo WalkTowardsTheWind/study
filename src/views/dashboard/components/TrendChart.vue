@@ -35,6 +35,7 @@ watch(
     const option = {
       title: {
         text: "数据趋势",
+        top: "0",
       },
       tooltip: {
         trigger: "axis",

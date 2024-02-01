@@ -8,7 +8,7 @@
         </el-icon>
       </div>
     </template>
-    <div class="bg-#fff pt-10px">
+    <div class="bg-#fff">
       <div class="notice-message">
         <div class="notice-message-switch">
           <div
