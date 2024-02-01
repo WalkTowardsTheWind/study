@@ -250,8 +250,8 @@ const pageChange = (cur) => {
 const detailId = ref(0);
 const tableData = reactive([] as any);
 const columnList = [
-  { label: "合同编号", prop: "contract_no" },
-  { label: "合同名称", prop: "contract_name" },
+  { label: "合同编号", prop: "contract_no", minWidth: 120 },
+  { label: "合同名称", prop: "contract_name", minWidth: 100 },
   { label: "合同类型", slot: "type" },
   {
     label: "状态",
@@ -261,10 +261,10 @@ const columnList = [
     color: color,
   },
   { label: "签署形式", slot: "is_online" },
-  { label: "甲方", prop: "part_a_name" },
-  { label: "乙方", prop: "part_b_name" },
-  { label: "签约时间", prop: "sign_time", minWidth: 150 },
-  { label: "到期时间", prop: "effective_end_time", minWidth: 150 },
+  { label: "甲方", prop: "part_a_name", minWidth: 150 },
+  { label: "乙方", prop: "part_b_name", minWidth: 150 },
+  { label: "签约时间", prop: "sign_time", minWidth: 100 },
+  { label: "到期时间", prop: "effective_end_time", minWidth: 100 },
   {
     label: "操作",
     slot: "caozuo",

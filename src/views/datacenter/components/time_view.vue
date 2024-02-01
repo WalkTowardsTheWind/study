@@ -177,6 +177,9 @@ handleTypeChange(4);
   .time {
     height: 100%;
   }
+  :deep(.el-range-editor.el-input__wrapper) {
+    width: 220px;
+  }
   .week {
     display: flex;
     width: 481px;

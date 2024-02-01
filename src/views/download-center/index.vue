@@ -87,34 +87,43 @@ const columnList = [
   {
     label: "任务标题",
     prop: "title",
+    width: 100,
   },
   {
     label: "文件名",
     prop: "file_name",
+    width: 250,
   },
   {
     label: "文件类型",
     prop: "file_type",
+    width: 100,
   },
   {
     label: "模块类型",
     prop: "module_type",
+    width: 100,
   },
   {
     label: "下载账户",
     prop: "real_name",
+    width: 100,
   },
   {
     label: "创建时间",
     prop: "add_time",
+    width: 200,
   },
   {
     label: "最后下载时间",
     prop: "update_time",
+    width: 200,
   },
   {
     label: "操作",
     slot: "operation",
+    fixed: "right",
+    align: "right",
   },
 ];
 
