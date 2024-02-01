@@ -45,8 +45,8 @@
           v-model="formItem.tax_land_city_id"
           :options="optionsTaxLang"
           :props="propsTaxLang"
-					clearable
-					filterable
+          clearable
+          filterable
         />
       </el-form-item>
 
@@ -73,7 +73,7 @@
       @selection-change="handleSelect"
     >
       <template #tableTop>
-        <el-dropdown class="ml-4" trigger="click" @command="handleAdd">
+        <el-dropdown trigger="click" @command="handleAdd">
           <el-button type="primary">+ 新建</el-button>
           <template #dropdown>
             <el-dropdown-menu>
@@ -290,7 +290,7 @@ const columnList = [
     label: "行业限制",
     slot: "IndustryRestrictions",
     minWidth: 80,
-    fixed: "right",
+    // fixed: "right",
   },
   {
     label: "操作",

@@ -17,9 +17,15 @@
       </el-form-item>
     </zxn-search>
     <div class="operation">
-      <el-button type="primary" @click="handleAllRead()">全部已读</el-button>
-      <el-button type="primary" @click="handleNotice()">公告通知</el-button>
-      <el-button type="primary" @click="handleSend()">消息发送</el-button>
+      <div class="operation-left">
+        <el-button type="primary" @click="handleNotice()">公告通知</el-button>
+        <el-button type="primary" plain @click="handleSend()"
+          >消息发送</el-button
+        >
+      </div>
+      <el-button type="primary" plain @click="handleAllRead()"
+        >全部已读</el-button
+      >
     </div>
     <zxn-table
       :table-data="tableData"
@@ -230,7 +236,11 @@ defineExpose({
 .operation {
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin: 0 10px 10px 0;
+  &-left {
+    display: flex;
+    align-items: center;
+  }
 }
 </style>
