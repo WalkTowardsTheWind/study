@@ -213,8 +213,26 @@
               <el-form-item required label="姓名">
                 <el-input v-model.trim="signForm.name" />
               </el-form-item>
-              <el-form-item required label="身份证号">
-                <el-input maxlength="18" v-model.trim="signForm.id_card" />
+              <el-form-item label="证据类型" required>
+                <el-select
+                  class="w-full"
+                  v-model="signForm.card_type"
+                  @change="
+                    () => {
+                      signForm.id_card = '';
+                    }
+                  "
+                >
+                  <el-option
+                    v-for="item of card_type"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item required label="证件号">
+                <el-input v-model.trim="signForm.id_card" />
               </el-form-item>
             </el-form>
             <template v-if="signStep == 2">
@@ -261,6 +279,7 @@ import ContractAdd from "./contract-add.vue";
 import OnlineSign from "./online-sign.vue";
 import ContractDetail from "./contract-detail.vue";
 import ContractEdit from "./contract-edit.vue";
+import { card_type } from "./options";
 
 import {
   getContractList,
@@ -454,6 +473,7 @@ const isLoading = ref(false);
 const signForm = reactive({
   name: "",
   id_card: "",
+  card_type: 19,
 });
 const signFormDetail = reactive({
   contract_name: "",
@@ -471,6 +491,7 @@ const closeSign = () => {
   signStep.value = 1;
   signForm.name = "";
   signForm.id_card = "";
+  signForm.card_type = 19;
   cfi.psn_id = "";
   cfi.seal = "";
   isLoading.value = false;

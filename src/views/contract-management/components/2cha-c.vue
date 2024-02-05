@@ -171,7 +171,7 @@
               <el-row :gutter="50">
                 <el-col :span="12">
                   <el-form-item label="合同类型">
-                    <el-input disabled value="企业合同" />
+                    <el-input disabled value="渠道合同" />
                   </el-form-item>
                   <el-form-item label="合同名称">
                     <el-input disabled :value="signFormDetail.contract_name" />
@@ -213,8 +213,26 @@
               <el-form-item required label="姓名">
                 <el-input v-model.trim="signForm.name" />
               </el-form-item>
-              <el-form-item required label="身份证号">
-                <el-input maxlength="18" v-model.trim="signForm.id_card" />
+              <el-form-item label="证据类型" required>
+                <el-select
+                  class="w-full"
+                  v-model="signForm.card_type"
+                  @change="
+                    () => {
+                      signForm.id_card = '';
+                    }
+                  "
+                >
+                  <el-option
+                    v-for="item of card_type"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item required label="证件号">
+                <el-input v-model.trim="signForm.id_card" />
               </el-form-item>
             </el-form>
             <template v-if="signStep == 2">
@@ -274,6 +292,7 @@ import {
 import { useRoute } from "vue-router";
 import { contract_status, color } from "./options";
 import { downloadByOnlineUrl } from "@/utils/download";
+import { card_type } from "./options";
 
 const formItem = reactive({
   keyword: "",
@@ -445,6 +464,7 @@ const signImage = ref("");
 const isLoading = ref(false);
 const signForm = reactive({
   name: "",
+  card_type: 19,
   id_card: "",
 });
 
@@ -463,6 +483,7 @@ const closeSign = () => {
   signVisible.value = false;
   signStep.value = 1;
   signForm.name = "";
+  signForm.card_type = 19;
   signForm.id_card = "";
   cfi.psn_id = "";
   cfi.seal = "";
