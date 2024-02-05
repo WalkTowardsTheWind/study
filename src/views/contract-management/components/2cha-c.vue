@@ -340,7 +340,7 @@ const columnList = [
   {
     label: "操作",
     slot: "caozuo",
-    minWidth: 250,
+    minWidth: 300,
     align: "right",
     fixed: "right",
   },
