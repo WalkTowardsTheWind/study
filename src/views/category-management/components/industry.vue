@@ -39,6 +39,11 @@
           </template>
         </el-table-column>
         <el-table-column label="行业分类名称" prop="name"></el-table-column>
+        <el-table-column label="类目级别" prop="level_name"></el-table-column>
+        <el-table-column
+          label="所属类目"
+          prop="all_category_name"
+        ></el-table-column>
         <el-table-column label="创建时间" prop="add_time"></el-table-column>
         <el-table-column label="操作" fixed="right" align="left">
           <template #default="scope">
