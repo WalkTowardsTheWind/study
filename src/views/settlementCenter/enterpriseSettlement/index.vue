@@ -58,7 +58,8 @@
           <el-button type="primary">导出</el-button>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="1">表格</el-dropdown-item>
+              <el-dropdown-item command="1">表格(全部数据)</el-dropdown-item>
+              <el-dropdown-item command="2">表格(成功数据)</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -392,16 +393,22 @@ const handleSelect = (data: any) => {
 };
 
 // 导出
-const handleExportDoc = () => {
+const handleExportDoc = (i) => {
   const params = transformTimeRange({ ...formItem.value }) as any;
-  downloadByOnlineUrl("/adminapi/finance/company/get_excel", params);
+  if (i === 1) {
+    downloadByOnlineUrl("/adminapi/finance/company/get_all_excel", params);
+  } else if (i === 2) {
+    downloadByOnlineUrl("/adminapi/finance/company/get_excel", params);
+  }
 };
 /**
  * 导出批量操作
  */
 const handleExport = (command: string | number | object) => {
   if (command == 1) {
-    handleExportDoc();
+    handleExportDoc(1);
+  } else if (command == 2) {
+    handleExportDoc(2);
   }
 };
 
