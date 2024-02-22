@@ -30,6 +30,7 @@ export function downloadByOnlineUrl(
         const _name =
           filename ||
           decodeURIComponent(escape(matches[1].replace(/['"]/g, "")));
+        console.log(_name, "_name_name_name");
         downloadByData(data, _name, headers["content-type"]);
         resolve("下载成功");
       })
@@ -79,11 +80,11 @@ export function downloadByData(
   const tempLink = document.createElement("a");
   tempLink.style.display = "none";
   tempLink.href = blobURL;
-  const fileNameArr = filename.split(".");
-  const _filename = `${fileNameArr[0]}${dateUtil().format("YYYY/MM/DD")}.${
-    fileNameArr[1]
-  }`;
-  tempLink.setAttribute("download", _filename);
+  // const fileNameArr = filename.split(".");
+  // const _filename = `${fileNameArr[0]}${dateUtil().format("YYYY/MM/DD")}.${
+  //   fileNameArr[1]
+  // }`;
+  tempLink.setAttribute("download", filename);
   if (typeof tempLink.download === "undefined") {
     tempLink.setAttribute("target", "_blank");
   }
