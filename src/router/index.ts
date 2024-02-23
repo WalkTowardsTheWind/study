@@ -604,6 +604,26 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
+  // 招聘业务
+  {
+    path: "/recruit",
+    component: Layout,
+    meta: { title: "招聘业务", icon: "download", code: "zpyw" },
+    children: [
+      {
+        path: "position",
+        component: () => import("@/views/position/index.vue"),
+        name: "position",
+        meta: { title: "职位管理", icon: "download", code: "zwgl" },
+      },
+      {
+        path: "detail/:id",
+        component: () => import("@/views/position/detail.vue"),
+        name: "position-detail",
+        meta: { title: "职位详情", icon: "download", code: "zwxq" },
+      },
+    ],
+  },
 ];
 
 /**
