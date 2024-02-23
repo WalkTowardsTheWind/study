@@ -209,7 +209,12 @@ function handleSearch() {
     tableData.value = res.data.data;
   });
 }
-function handleReset() {}
+function handleReset() {
+  formItem.keyword = "";
+  formItem.status = "";
+  formItem.date = [];
+  handleSearch();
+}
 
 handleSearch();
 </script>
