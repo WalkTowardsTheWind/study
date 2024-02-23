@@ -54,10 +54,10 @@
           <span>{{ formItem.benefits_desc }}</span>
         </el-form-item>
         <el-form-item label="岗位职责">
-          <span>{{ formItem.job_ask }}</span>
+          <span>{{ formItem.job_desc }}</span>
         </el-form-item>
         <el-form-item label="岗位要求">
-          <span>{{ formItem.job_desc }}</span>
+          <span>{{ formItem.job_ask }}</span>
         </el-form-item>
       </el-form>
     </div>
