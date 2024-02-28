@@ -47,9 +47,9 @@
             "薪"
           }}</span>
         </el-form-item>
-        <el-form-item label="职位标签">
+        <!-- <el-form-item label="职位标签">
           <span>{{ formItem.job_label }}</span>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="福利待遇">
           <span>{{ formItem.benefits_desc }}</span>
         </el-form-item>
