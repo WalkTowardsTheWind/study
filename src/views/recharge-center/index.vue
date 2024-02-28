@@ -393,7 +393,7 @@ const columnList = computed(() => {
     {
       label: "充值单号",
       slot: "recharge_order_no",
-      minWidth: 110,
+      Width: 110,
       fixed: "left",
     },
     {
@@ -430,13 +430,21 @@ const columnList = computed(() => {
       width: 120,
       fixed: "left",
     },
-    { label: "企业名称", prop: "company_name", minWidth: 120, fixed: "left" },
+    { label: "企业名称", prop: "company_name", minWidth: 120 },
     { label: "税地名称", prop: "tax_land_name", width: 120 },
     { label: "税地账户", prop: "bank_account", width: 200 },
     { label: "充值金额", prop: "amount", type: "money", minWidth: 100 },
     { label: "充值时间", prop: "add_time", width: 200 },
-    { label: "充值凭证", slot: "certificate", minWidth: 200 },
-    { label: "退款凭证", slot: "refundCertificate", minWidth: 250 },
+    { label: "充值人姓名", prop: "pay_name", minWidth: 120 },
+    { label: "充值人银行", prop: "pay_bank", minWidth: 120 },
+    { label: "充值人银行帐号", prop: "pay_bank_account", minWidth: 200 },
+    { label: "充值凭证", slot: "certificate", fixed: "right", width: 80 },
+    {
+      label: "退款凭证",
+      slot: "refundCertificate",
+      fixed: "right",
+      width: 120,
+    },
     { label: "操作", slot: "operation", fixed: "right", width: 100 },
   ];
 });
