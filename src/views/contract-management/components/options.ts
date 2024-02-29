@@ -23,10 +23,6 @@ export const contract_status = [
     status: 4,
     label: "已拒签",
   },
-  {
-    status: 5,
-    label: "已发送",
-  },
 ];
 export const contract_types = [
   {
@@ -68,10 +64,6 @@ export const color = {
     color: "#f35036",
     background: "#fde3df",
   },
-  5: {
-    color: "#fff",
-    background: "#fcab57",
-  },
 };
 
 export const percolor = {
@@ -84,17 +76,3 @@ export const percolor = {
     background: "#DEDEDE",
   },
 };
-
-export const card_type = [
-  { label: "护照", value: 13 },
-  { label: "军人身份证", value: 14 },
-  { label: "社会保障卡", value: 15 },
-  { label: "武装警察身份证件", value: 16 },
-  { label: "港澳居民往来内地通行证", value: 17 },
-  { label: "台湾居民来往大陆通行证", value: 18 },
-  { label: "大陆身份证", value: 19 },
-  { label: "户口簿", value: 20 },
-  { label: "临时居民身份证", value: 21 },
-  { label: "外国人永久居留证", value: 22 },
-  { label: "其他", value: 23 },
-];

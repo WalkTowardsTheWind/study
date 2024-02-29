@@ -52,7 +52,7 @@
               v-for="(item, index) of formItem.fields"
               :key="index"
             >
-              <el-form-item :label="item.label" label-width="150">
+              <el-form-item :label="item.label">
                 <el-input clearable v-model="item.field_value" />
               </el-form-item>
             </div>
