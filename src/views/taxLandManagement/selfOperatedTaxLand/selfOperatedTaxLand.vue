@@ -242,7 +242,7 @@ const columnList = [
   // { label: "计算方式", prop: "calculation_type" },
   { label: "对接人", prop: "tax_land_head", minWidth: 120 },
   { label: "税地发票类型", prop: "invoice_type", minWidth: 120 },
-  { label: "发票面额", prop: "invoice_denomination", minWidth: 120 },
+  // { label: "发票面额", prop: "invoice_denomination", minWidth: 120 },
   {
     label: "上架时间",
     prop: "ground_time",
