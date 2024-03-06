@@ -187,25 +187,25 @@
                     filterable
                   />
                 </el-form-item>
-                <el-form-item class="mt-25px" label="发票面额">
-                  <el-select
-                    class="w-[100%]"
-                    filterable
-                    clearable
-                    disabled
-                    placeholder=" "
-                    v-model="formItem.invoice_denomination"
-                  >
-                    <el-option
-                      v-for="item in proxy.$const[
-                        'taxLandManagementEnum.invoice_denomination'
-                      ]"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    />
-                  </el-select>
-                </el-form-item>
+                <!--                <el-form-item class="mt-25px" label="发票面额">-->
+                <!--                  <el-select-->
+                <!--                    class="w-[100%]"-->
+                <!--                    filterable-->
+                <!--                    clearable-->
+                <!--                    disabled-->
+                <!--                    placeholder=" "-->
+                <!--                    v-model="formItem.invoice_denomination"-->
+                <!--                  >-->
+                <!--                    <el-option-->
+                <!--                      v-for="item in proxy.$const[-->
+                <!--                        'taxLandManagementEnum.invoice_denomination'-->
+                <!--                      ]"-->
+                <!--                      :key="item.value"-->
+                <!--                      :label="item.label"-->
+                <!--                      :value="item.value"-->
+                <!--                    />-->
+                <!--                  </el-select>-->
+                <!--                </el-form-item>-->
                 <el-form-item class="mt-25px" label="发票金额上限">
                   <zxn-money-input
                     readonly

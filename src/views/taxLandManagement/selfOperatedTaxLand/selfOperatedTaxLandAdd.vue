@@ -111,7 +111,7 @@
                     :options="optionsTaxLang"
                     :props="propsTaxLang"
                     clearable
-										filterable
+                    filterable
                   />
                 </el-form-item>
               </el-col>
@@ -171,29 +171,51 @@
                     filterable
                   />
                 </el-form-item>
-                <el-form-item class="mt-25px" label="发票面额">
+                <!--                <el-form-item class="mt-25px" label="发票面额">-->
+                <!--                  <el-select-->
+                <!--                    class="w-[100%]"-->
+                <!--                    filterable-->
+                <!--                    clearable-->
+                <!--                    v-model="formItem.invoice_denomination"-->
+                <!--                    placeholder="请选择"-->
+                <!--                  >-->
+                <!--                    <el-option-->
+                <!--                      v-for="item in proxy.$const[-->
+                <!--                        'taxLandManagementEnum.invoice_denomination'-->
+                <!--                      ]"-->
+                <!--                      :key="item.value"-->
+                <!--                      :label="item.label"-->
+                <!--                      :value="item.value"-->
+                <!--                    />-->
+                <!--                  </el-select>-->
+                <!--                </el-form-item>-->
+                <el-form-item class="mt-25px" label="发票金额上限">
+                  <zxn-money-input
+                    v-model="formItem.max_money"
+                    placeholder="请输入"
+                  />
+                </el-form-item>
+                <el-form-item
+                  class="mt-25px"
+                  label="开票方式"
+                  prop="invoice_form"
+                >
                   <el-select
                     class="w-[100%]"
                     filterable
                     clearable
-                    v-model="formItem.invoice_denomination"
+                    v-model="formItem.invoice_form"
                     placeholder="请选择"
                   >
                     <el-option
                       v-for="item in proxy.$const[
-                        'taxLandManagementEnum.invoice_denomination'
+                        'taxLandManagementEnum.invoiceForm'
                       ]"
                       :key="item.value"
                       :label="item.label"
                       :value="item.value"
                     />
                   </el-select>
-                </el-form-item>
-                <el-form-item class="mt-25px" label="发票金额上限">
-                  <zxn-money-input
-                    v-model="formItem.max_money"
-                    placeholder="请输入"
-                  />
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -228,28 +250,6 @@
                     v-model="formItem.bank_account"
                     placeholder="请输入"
                   />
-                </el-form-item>
-                <el-form-item
-                  class="mt-25px"
-                  label="开票方式"
-                  prop="invoice_form"
-                >
-                  <el-select
-                    class="w-[100%]"
-                    filterable
-                    clearable
-                    v-model="formItem.invoice_form"
-                    placeholder="请选择"
-                  >
-                    <el-option
-                      v-for="item in proxy.$const[
-                        'taxLandManagementEnum.invoiceForm'
-                      ]"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    />
-                  </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -596,7 +596,7 @@ const formItem = ref({
   payment_type: "",
   bank: "",
   bank_account: "",
-  invoice_form: "",
+  invoice_form: "2",
   invoice_sample: [],
   industry_limit: [],
   certification_rules: [],

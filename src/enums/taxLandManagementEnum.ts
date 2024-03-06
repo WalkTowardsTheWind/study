@@ -10,9 +10,7 @@ export enum InvoiceType {
   "普通发票/6%增值税发票",
 }
 export enum invoiceForm {
-  "不限",
-  "纸质发票",
-  "电子发票",
+  "电子发票" = 2,
 }
 export enum invoice_denomination {
   "万元版",

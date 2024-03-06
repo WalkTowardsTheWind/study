@@ -24,8 +24,8 @@
                 <el-form-item label="税地类型" prop="tax_land_type">
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     disabled
                     v-model="formItem.tax_land_type"
                     placeholder="请选择"
@@ -122,8 +122,8 @@
                     v-model="formItem.tax_land_city_id"
                     :options="optionsTaxLang"
                     :props="propsTaxLang"
-										clearable
-										filterable
+                    clearable
+                    filterable
                   />
                 </el-form-item>
               </el-col>
@@ -155,8 +155,8 @@
                 <el-form-item label="税地发票类型">
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     v-model="formItem.invoice_type"
                     placeholder="请选择"
                   >
@@ -183,24 +183,24 @@
                     filterable
                   />
                 </el-form-item>
-                <el-form-item class="mt-25px" label="发票面额">
-                  <el-select
-                    class="w-[100%]"
-										filterable
-										clearable
-                    v-model="formItem.invoice_denomination"
-                    placeholder="请选择"
-                  >
-                    <el-option
-                      v-for="item in proxy.$const[
-                        'taxLandManagementEnum.invoice_denomination'
-                      ]"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    />
-                  </el-select>
-                </el-form-item>
+                <!--                <el-form-item class="mt-25px" label="发票面额">-->
+                <!--                  <el-select-->
+                <!--                    class="w-[100%]"-->
+                <!--										filterable-->
+                <!--										clearable-->
+                <!--                    v-model="formItem.invoice_denomination"-->
+                <!--                    placeholder="请选择"-->
+                <!--                  >-->
+                <!--                    <el-option-->
+                <!--                      v-for="item in proxy.$const[-->
+                <!--                        'taxLandManagementEnum.invoice_denomination'-->
+                <!--                      ]"-->
+                <!--                      :key="item.value"-->
+                <!--                      :label="item.label"-->
+                <!--                      :value="item.value"-->
+                <!--                    />-->
+                <!--                  </el-select>-->
+                <!--                </el-form-item>-->
                 <el-form-item class="mt-25px" label="发票金额上限">
                   <zxn-money-input
                     v-model="formItem.max_money"
@@ -232,8 +232,8 @@
                 >
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     v-model="formItem.payment_type"
                     placeholder="请选择"
                   >
@@ -268,8 +268,8 @@
                 >
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     v-model="formItem.invoice_form"
                     placeholder="请选择"
                   >
@@ -306,8 +306,8 @@
                 <el-form-item class="mt-25px" label="余额计算规则">
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     v-model="formItem.balance_type"
                     placeholder="请选择"
                   >
@@ -324,8 +324,8 @@
                 <el-form-item class="mt-25px" label="服务费计算规则">
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     v-model="formItem.commission_rule"
                     placeholder="请选择"
                   >
@@ -381,8 +381,8 @@
                 <el-form-item label="认证规则" prop="certification_rules">
                   <el-select
                     class="w-[100%]"
-										filterable
-										clearable
+                    filterable
+                    clearable
                     v-model="formItem.certification_rules"
                     multiple
                     collapse-tags
@@ -720,7 +720,7 @@ const formItem = ref({
   payment_type: "",
   bank: "",
   bank_account: "",
-  invoice_form: "",
+  invoice_form: "2",
   audit_web_url: "",
   audit_account: "",
   audit_password: "",

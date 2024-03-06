@@ -108,18 +108,18 @@
                   />
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="规格型号">
-                  <el-input
-                    :model-value="
-                      proxy.$enumSet[
-                        'taxLandManagementEnum.invoice_denomination'
-                      ][formItem.invoice_denomination]
-                    "
-                    readonly
-                  />
-                </el-form-item>
-              </el-col>
+              <!--              <el-col :span="8">-->
+              <!--                <el-form-item label="规格型号">-->
+              <!--                  <el-input-->
+              <!--                    :model-value="-->
+              <!--                      proxy.$enumSet[-->
+              <!--                        'taxLandManagementEnum.invoice_denomination'-->
+              <!--                      ][formItem.invoice_denomination]-->
+              <!--                    "-->
+              <!--                    readonly-->
+              <!--                  />-->
+              <!--                </el-form-item>-->
+              <!--              </el-col>-->
             </el-row>
           </el-form>
           <div class="flex justify-between items-center mb20px">
