@@ -42,8 +42,11 @@
         @page-change="pageChange"
       >
         <template #money="{ row }">
-          {{ row.job_attribute.salary_min }}-{{
-            row.job_attribute.salary_max
+          {{
+            conversionSalary(
+              row.job_attribute.salary_min,
+              row.job_attribute.salary_max
+            )
           }}*{{ row.job_attribute.salary_type }}薪
         </template>
         <template #caozuo="{ row }">
@@ -73,6 +76,8 @@
 <script lang="ts" setup>
 import { getPositionList, setPositionStatus } from "@/api/position";
 import { useRouter } from "vue-router";
+import { conversionSalary } from "@/utils/moneyToK";
+
 const router = useRouter();
 const tabsList = [{ name: "1", label: "职位管理" }];
 const activeName = ref("1");
