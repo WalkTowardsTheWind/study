@@ -4,6 +4,7 @@ export enum messageType {
   "结算",
   "发票",
   "税地",
+  "招聘" = 7,
 }
 export enum messageStatus {
   "未读",
