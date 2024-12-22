@@ -7,68 +7,43 @@
       :label-position="labelPosition"
     >
       <el-row gutter="20">
-        <!-- 使用v-for来动态生成每一行的内容 -->
+        <!-- 动态渲染表单项 -->
         <template v-for="(item, index) in option" :key="index">
-          <el-col v-if="!item.span" :span="8">
-            <el-form-item
-              class="mt-12px"
-              :label="item.label"
-              :prop="item?.prop"
+          <template v-if="!Array.isArray(formData[item?.prop])">
+            <el-col :span="item.span || 8">
+              <el-form-item
+                class="mt-12px"
+                :label="item.label"
+                :prop="item?.prop"
+              >
+                <!-- 动态渲染控件 -->
+                <BaseText
+                  v-if="item.type === 'text'"
+                  :content="formData[item?.prop]"
+                />
+                <!-- 你可以在这里加其他控件，比如 select 或 input -->
+              </el-form-item>
+            </el-col>
+          </template>
+
+          <!-- 处理 Array 类型的数据 -->
+          <template v-if="Array.isArray(formData[item?.prop])">
+            <template
+              v-for="(arrayItem, arrayIndex) in formData[item?.prop]"
+              :key="arrayIndex"
             >
-              <!-- <el-input
-                  v-if="item.type === 'input'"
-                  class="w-full"
-                  v-model="formData[item?.prop]"
-                  :placeholder="item.placeholder || ''"
-                /> -->
-              <BaseText v-if="item.type === 'text'" :content="s"></BaseText>
-              <!-- <el-select
-                  v-if="item.type === 'select'"
-                  class="w-full"
-                  filterable
-                  clearable
-                  v-model="formData[item?.prop]"
-                  :placeholder="item.placeholder || ''"
+              <el-col :span="item.span || 8">
+                <el-form-item
+                  class="mt-12px"
+                  :label="item.label"
+                  :prop="item?.prop"
                 >
-                  <el-option
-                    v-for="selectItem in item.options"
-                    :key="selectItem.value"
-                    :label="selectItem.label"
-                    :value="selectItem.value"
-                  />
-                </el-select> -->
-            </el-form-item>
-          </el-col>
-          <el-col v-else-if="item.span" :span="item.span">
-            <el-form-item
-              class="mt-12px"
-              :label="item.label"
-              :prop="item?.prop"
-            >
-              <!-- <el-input
-                  v-if="item.type === 'input'"
-                  class="w-full"
-                  v-model="formData[item?.prop]"
-                  :placeholder="item.placeholder || ''"
-                /> -->
-              <BaseText v-if="item.type === 'text'" :content="s"></BaseText>
-              <!-- <el-select
-                  v-if="item.type === 'select'"
-                  class="w-full"
-                  filterable
-                  clearable
-                  v-model="formData[item?.prop]"
-                  :placeholder="item.placeholder || ''"
-                >
-                  <el-option
-                    v-for="selectItem in item.options"
-                    :key="selectItem.value"
-                    :label="selectItem.label"
-                    :value="selectItem.value"
-                  />
-                </el-select> -->
-            </el-form-item>
-          </el-col>
+                  <BaseText v-if="item.type === 'text'" :content="arrayItem" />
+                  <!-- 你可以在这里加其他控件，比如 select 或 input -->
+                </el-form-item>
+              </el-col>
+            </template>
+          </template>
         </template>
       </el-row>
     </el-form>
@@ -76,34 +51,27 @@
 </template>
 
 <script setup>
-const { proxy } = getCurrentInstance();
-
-// label prop(字段名)
-// select：type: "select",options:[],
-// input: "input",placeholder:"请输入",
-// text: "text",
+// Props
 const props = defineProps({
   labelWidth: {
     type: String,
-    required: false,
-    default: () => "120px",
+    default: "120px",
   },
   labelPosition: {
     type: String,
-    required: false,
-    default: () => "right",
+    default: "right",
   },
   formData: {
-    type: Array,
+    type: Object,
     required: true,
-    default: () => {},
   },
   option: {
     type: Array,
     required: true,
-    default: () => [],
   },
 });
+
+// 以下是给表单项提供的示例数据
 // const option = [
 //   {
 //     label: "选择框",
@@ -122,3 +90,10 @@ const props = defineProps({
 //   // 更多对象...
 // ];
 </script>
+
+<style scoped>
+/* 你可以根据需要调整样式 */
+.mt-12px {
+  margin-top: 12px;
+}
+</style>
