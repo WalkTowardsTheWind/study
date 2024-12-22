@@ -1,8 +1,10 @@
-<template>
-  <div
-    ref="dateTrend"
-    :style="{ height: `${boxHeight}px`, width: '100%' }"
-  ></div>
+<!-- <template>
+  <el-scrollbar wrap-class="scrollbar" :min-size="20" :always="true">
+    <div
+      ref="dateTrend"
+      :style="{ height: `${boxHeight}px`, width: '2500px' }"
+    ></div>
+  </el-scrollbar>
 </template>
 
 <script setup lang="ts">
@@ -26,6 +28,9 @@ const props = defineProps({
 
 // Store chart instance
 let chart: echarts.ECharts | null = null;
+// 字体大小
+const fontSize = 14;
+const itemLength = computed(() => props.arrData[0]?.date_time?.length);
 
 // Watch for changes in arrData and threshold
 watch(
@@ -35,32 +40,44 @@ watch(
       const { XData, YData } = processData(val);
       const option = getChartOption(XData, YData, props.threshold, props.range);
       chart.setOption(option);
+      // 获取容器宽度
+      const containerWidth = chart.getWidth();
+
+      // 获取 X 轴的数量
+      const xAxisDataCount = option.xAxis.data.length;
+
+      // 计算每个 X 轴项的宽度
+      const xAxisItemWidth = containerWidth / xAxisDataCount;
+
+      // 计算总宽度
+      const totalWidth = xAxisItemWidth * xAxisDataCount;
+
+      console.log("X轴总宽度1:", totalWidth);
     }
   },
   { immediate: true }
 );
 function processData(arrData: Array<any>) {
   const XData: string[] = [];
-  const YData: number[] = [];
+  const YData: {}[] = [];
 
   arrData.forEach((it) => {
     XData.push(it.date_time);
-    YData.push(it.amount);
+    YData.push(it.val);
   });
 
   return { XData, YData };
 }
 
-// Get chart options with dynamic threshold
 function getChartOption(
   XData: string[],
   YData: number[],
   threshold: number | null,
-  range: [] | null
+  range: {}[] | null
 ) {
   const option: echarts.EChartOption = {
     title: {
-      text: "健康数据趋势",
+      text: "健康数据趋势22",
       top: "0",
     },
     tooltip: {
@@ -75,7 +92,7 @@ function getChartOption(
     grid: {
       left: "0",
       right: "0",
-      bottom: "0",
+      bottom: "15",
       containLabel: true,
     },
     xAxis: [
@@ -95,7 +112,7 @@ function getChartOption(
         },
         axisLabel: {
           color: "#f40",
-          fontSize: 14,
+          fontSize: fontSize,
           rotate: 0,
         },
       },
@@ -133,6 +150,10 @@ function getChartOption(
         type: "line",
         smooth: 0,
         data: YData,
+        lineStyle: {
+          width: 2, // 线条的宽度
+          type: "solid", // 线条类型：'solid', 'dashed', 'dotted'
+        },
         emphasis: {
           focus: "series", // Focus on the series when hovering
         },
@@ -152,7 +173,7 @@ function getChartOption(
         },
         {
           min: Number(threshold),
-          max: Math.max(...YData),
+          max: 1000,
         },
       ],
       inRange: {
@@ -192,11 +213,11 @@ function getChartOption(
               ]
             : [], // If no threshold is provided, do not display the line
           symbol: "none",
-          symbolSize: 2,
+          symbolSize: 1,
         })
     );
   }
-  if (range?.length) {
+ else  if (range?.length) {
     option.visualMap = {
       show: false,
       pieces: range,
@@ -234,6 +255,7 @@ function getChartOption(
 }
 
 let boxHeight = ref(0);
+let boxWidth = ref(0);
 const dateTrend = ref<HTMLDivElement>();
 
 // Initialize chart on mounted
@@ -241,6 +263,11 @@ onMounted(() => {
   const { bottom } = (dateTrend as any).value.getBoundingClientRect();
   boxHeight.value =
     window.innerHeight - bottom < 356 ? 356 : window.innerHeight - bottom;
+
+  // 计算总宽度
+  boxWidth.value = 12 * fontSize * itemLength.value;
+
+  console.log("X轴总宽度2:", boxWidth.value);
 
   nextTick(() => {
     chart = echarts.init(dateTrend.value as HTMLDivElement);
@@ -259,3 +286,33 @@ onMounted(() => {
   });
 });
 </script>
+
+<style lang="scss">
+.el-scrollbar {
+  --el-scrollbar-opacity: 0.3;
+  --el-scrollbar-bg-color: pink;
+  --el-scrollbar-hover-opacity: 0.3;
+  --el-scrollbar-hover-bg-color: #000;
+  .el-scrollbar__bar {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    z-index: 1;
+    border-radius: 4px;
+    &.is-horizontal {
+      height: 2px;
+      left: 18px;
+      .el-scrollbar__thumb {
+        height: 4px;
+      }
+    }
+    &.is-horizontal {
+      height: 2px;
+      left: 18px;
+      .el-scrollbar__thumb {
+        height: 4px;
+      }
+    }
+  }
+}
+</style> -->
