@@ -1,8 +1,8 @@
-<!-- <template>
-  <el-scrollbar wrap-class="scrollbar" :min-size="20" :always="true">
+<template>
+  <el-scrollbar>
     <div
       ref="dateTrend"
-      :style="{ height: `${boxHeight}px`, width: '2500px' }"
+      :style="{ height: `${boxHeight}px`, width: `${boxWidth}px` }"
     ></div>
   </el-scrollbar>
 </template>
@@ -30,7 +30,7 @@ const props = defineProps({
 let chart: echarts.ECharts | null = null;
 // 字体大小
 const fontSize = 14;
-const itemLength = computed(() => props.arrData[0]?.date_time?.length);
+const itemLength = computed(() => props.arrData[0]?.date_time.length);
 
 // Watch for changes in arrData and threshold
 watch(
@@ -59,7 +59,7 @@ watch(
 );
 function processData(arrData: Array<any>) {
   const XData: string[] = [];
-  const YData: {}[] = [];
+  const YData: number[] = [];
 
   arrData.forEach((it) => {
     XData.push(it.date_time);
@@ -73,11 +73,11 @@ function getChartOption(
   XData: string[],
   YData: number[],
   threshold: number | null,
-  range: {}[] | null
+  range: object[] | null
 ) {
   const option: echarts.EChartOption = {
     title: {
-      text: "健康数据趋势22",
+      text: "健康数据趋势baseline",
       top: "0",
     },
     tooltip: {
@@ -173,7 +173,7 @@ function getChartOption(
         },
         {
           min: Number(threshold),
-          max: 1000,
+          max: Infinity,
         },
       ],
       inRange: {
@@ -216,8 +216,7 @@ function getChartOption(
           symbolSize: 1,
         })
     );
-  }
- else  if (range?.length) {
+  } else if (range?.length) {
     option.visualMap = {
       show: false,
       pieces: range,
@@ -315,4 +314,4 @@ onMounted(() => {
     }
   }
 }
-</style> -->
+</style>
