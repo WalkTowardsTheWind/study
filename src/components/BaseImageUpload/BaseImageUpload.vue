@@ -5,31 +5,33 @@
 -->
 
 <template>
-  <el-upload
-    v-model:file-list="fileList"
-    list-type="picture-card"
-    :before-upload="handleBeforeUpload"
-    :on-exceed="handleExceed"
-    :http-request="handleUpload"
-    :on-remove="handleRemove"
-    :on-preview="previewImg"
-    :limit="props.limit"
-    v-bind="$attrs"
-    class="multi-upload"
-  >
-    <i-ep-plus style="width: 3em; height: 3em" />
-  </el-upload>
-  <el-image-viewer
-    v-if="dialogVisible"
-    :zoom-rate="1.2"
-    :zoomable="false"
-    :url-list="[previewImgUrl]"
-    :initial-index="0"
-    z-index="999"
-    @close="closeImgViewer"
-    @rotate="rotate"
-    :teleported="true"
-  />
+  <div class="ImageUpload">
+    <el-upload
+      v-model:file-list="fileList"
+      list-type="picture-card"
+      :before-upload="handleBeforeUpload"
+      :on-exceed="handleExceed"
+      :http-request="handleUpload"
+      :on-remove="handleRemove"
+      :on-preview="previewImg"
+      :limit="props.limit"
+      v-bind="$attrs"
+      class="multi-upload"
+    >
+      <i-ep-plus style="width: 3em; height: 3em" />
+    </el-upload>
+    <el-image-viewer
+      v-if="dialogVisible"
+      :zoom-rate="1.2"
+      :zoomable="false"
+      :url-list="[previewImgUrl]"
+      :initial-index="0"
+      z-index="999"
+      @close="closeImgViewer"
+      @rotate="rotate"
+      :teleported="true"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -39,12 +41,11 @@ import {
   UploadFile,
   UploadProps,
 } from "element-plus";
-import { uploadFileApi } from "@/api/file";
 import { useEventListener } from "@vueuse/core";
 import { isImage, isPdf, isBase64 } from "@/utils/is";
 import pdfImg from "@/assets/pdf.png";
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "change"]);
 
 const props = defineProps({
   /**
@@ -74,10 +75,22 @@ const previewImgUrl = ref("");
 const dialogVisible = ref(false);
 
 const fileList = ref([]);
+const isShow = ref("flex");
 watch(
   () => props.modelValue,
   (newVal: string[]) => {
     const filePaths = fileList.value.map((file) => file.baseUrl);
+    if (fileList?.value?.length < props.limit) {
+      console.log(
+        fileList?.value?.length,
+        "fileList?.value?.length",
+        props.limit
+      );
+      isShow.value = "flex";
+    } else {
+      isShow.value = "none";
+    }
+
     // 监听modelValue文件集合值未变化时，跳过赋值
     if (
       filePaths.length > 0 &&
@@ -102,27 +115,6 @@ watch(
   },
   { immediate: true }
 );
-
-/**
- * 将图片文件直接转为 Base64
- * @param file 上传的图片文件
- * @returns Base64 字符串
- */
-function convertToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      resolve(reader.result as string); // 这里返回 Base64 数据
-    };
-
-    reader.onerror = (error) => {
-      reject(error); // 如果读取失败，返回错误
-    };
-
-    reader.readAsDataURL(file); // 将文件转换为 Base64
-  });
-}
 
 /**
  * 图片压缩并转为 Base64
@@ -182,8 +174,6 @@ async function handleUpload(options: UploadRequestOptions): Promise<any> {
   // 将图片转换为 Base64
   const base64Data = await compressAndConvertToBase64(file);
 
-  console.log("base64Data", base64Data);
-
   // 手动更新文件列表，将 URL 替换为 Base64 数据
   const fileIndex = fileList.value.findIndex(
     (file) => file.uid == (options.file as any).uid
@@ -197,18 +187,13 @@ async function handleUpload(options: UploadRequestOptions): Promise<any> {
     "update:modelValue",
     fileList.value.map((file) => file.baseUrl)
   );
+  emit("change");
 }
 /**
  * 图片上传限制
  */
 const handleExceed: UploadProps["onExceed"] = (files) => {
-  console.log(files);
-
   ElMessage.warning(`上传图片不能超过${props.limit}张`);
-  //   upload.value!.clearFiles()
-  //   const file = files[0] as UploadRawFile
-  //   file.uid = genFileId()
-  //   upload.value!.handleStart(file)
 };
 
 /**
@@ -218,13 +203,11 @@ function handleRemove(removeFile: UploadFile) {
   const filePath = removeFile.url;
 
   if (filePath) {
-    // deleteFileApi(filePath).then(() => {
-    // 删除成功回调
     emit(
       "update:modelValue",
       fileList.value.map((file) => file.baseUrl)
     );
-    // });
+    emit("change");
   }
 }
 
@@ -281,28 +264,27 @@ const closeImgViewer = () => {
 };
 </script>
 <style lang="scss" scoped>
-//修改图片上传样式
-.el-upload-list--picture-card .el-upload-list__item {
-  padding: 8px;
+.ImageUpload {
+  :deep(.el-upload-list) {
+    //修改图片上传样式
+    .el-upload-list__item {
+      padding: 8px;
+      width: 108px;
+      height: 108px;
+    }
+    //
+    .el-upload-list__item-status-label {
+      //去右上角图标
+      display: none;
+    }
 
-  width: 106px;
-  height: 106px;
-}
-//
-
-// .el-upload-list--picture-card .el-upload-list__item-actions{
-
-// }
-//
-.el-upload-list__item.is-success .el-upload-list__item-status-label {
-  display: none;
-}
-
-.el-upload--picture-card {
-  --el-upload-picture-card-size: 88px;
-
-  background: #e5e5e5;
-  border: 1px solid #e5e5e5;
-  border-radius: 4px;
+    .el-upload--picture-card {
+      --el-upload-picture-card-size: 106px;
+      background: #e5e5e5;
+      border: 1px solid #e5e5e5;
+      border-radius: 4px;
+      display: v-bind(isShow);
+    }
+  }
 }
 </style>
